@@ -24,7 +24,8 @@
 # misc
 .DS_Store
 *.pem
-  Thumbs.db
+Thumbs.db
+cambios.txt
 
 # debug
 npm-debug.log*
@@ -58,3 +59,6 @@ next-env.d.ts
   # Database
   *.db
   *.db-journal
+
+  # Husky
+  .husky/_
