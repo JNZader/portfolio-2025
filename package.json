@@ -12,7 +12,11 @@
     "lint": "biome lint .",
     "type-check": "tsc --noEmit",
     "verify": "npm run type-check && npm run check",
-    "prepare": "husky"
+    "prepare": "husky",
+    "release": "standard-version",
+    "release:minor": "standard-version --release-as minor",
+    "release:major": "standard-version --release-as major",
+    "release:patch": "standard-version --release-as patch"
   },
   "dependencies": {
     "next": "16.0.1",
@@ -30,6 +34,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.11",
+    "standard-version": "^9.5.0",
     "typescript": "^5.9.3"
   },
   "engines": {
