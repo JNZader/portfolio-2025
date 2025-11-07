@@ -12,13 +12,13 @@
       "components/**",
       "lib/**",
       "**/*.config.js",
-      "!node_modules/**",
-      "!.next/**",
-      "!out/**",
-      "!build/**",
-      "!dist/**",
-      "!.vercel/**",
-      "!coverage/**",
+      "!node_modules",
+      "!.next",
+      "!out",
+      "!build",
+      "!dist",
+      "!.vercel",
+      "!coverage",
       "!*.min.js",
       "!*.min.css"
     ]
@@ -55,6 +55,18 @@
     "formatter": {
       "enabled": true,
       "indentWidth": 2
+    }
+  },
+  "css": {
+    "parser": {
+      "cssModules": false,
+      "allowWrongLineComments": false,
+      "tailwindDirectives": true
+    },
+    "formatter": {
+      "enabled": true,
+      "indentWidth": 2,
+      "quoteStyle": "single"
     }
   }
 }
