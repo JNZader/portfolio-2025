@@ -16,13 +16,13 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-foreground/10 bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 w-full border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
       <Container>
         <nav className="flex h-16 items-center justify-between" aria-label="Global">
           {/* Logo */}
           <div className="flex">
             <Link href="/" className="-m-1.5 p-1.5">
-              <span className="text-xl font-bold text-primary">Portfolio</span>
+              <span className="text-xl font-bold text-blue-600 dark:text-blue-400">JZ</span>
             </Link>
           </div>
 
@@ -32,7 +32,7 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+                className="text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors hover:text-gray-900 dark:hover:text-gray-100"
               >
                 {item.name}
               </Link>
@@ -43,7 +43,7 @@ export default function Header() {
           <div className="flex md:hidden">
             <button
               type="button"
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-foreground"
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-900 dark:text-gray-100"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Abrir menú"
             >

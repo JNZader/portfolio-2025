@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import type React from 'react';
 import Container from '@/components/ui/Container';
 
 const navigation = {
@@ -12,7 +11,7 @@ const navigation = {
   social: [
     {
       name: 'GitHub',
-      href: 'https://github.com/JNZader',
+      href: 'https://github.com/tuusuario',
       icon: (props: React.SVGProps<SVGSVGElement>) => (
         <svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" {...props}>
           <path
@@ -25,7 +24,7 @@ const navigation = {
     },
     {
       name: 'LinkedIn',
-      href: 'https://www.linkedin.com/in/jnzader/',
+      href: 'https://linkedin.com/in/tuusuario',
       icon: (props: React.SVGProps<SVGSVGElement>) => (
         <svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" {...props}>
           <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -39,7 +38,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-foreground/10 bg-background">
+    <footer className="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
       <Container>
         <div className="py-12 md:py-16">
           {/* Navigation Links */}
@@ -48,7 +47,7 @@ export default function Footer() {
               <div key={item.name} className="px-5 py-2">
                 <Link
                   href={item.href}
-                  className="text-sm text-foreground/60 hover:text-foreground transition-colors"
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                 >
                   {item.name}
                 </Link>
@@ -64,7 +63,7 @@ export default function Footer() {
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-foreground/60 hover:text-foreground transition-colors"
+                className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                 aria-label={item.name}
               >
                 <span className="sr-only">{item.name}</span>
@@ -74,8 +73,8 @@ export default function Footer() {
           </div>
 
           {/* Copyright */}
-          <p className="mt-8 text-center text-sm text-foreground/60">
-            &copy; {currentYear} Tu Nombre. Todos los derechos reservados.
+          <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
+            &copy; {currentYear} Javier Zader. Todos los derechos reservados.
           </p>
         </div>
       </Container>
