@@ -48,17 +48,17 @@ yarn-error.log*
 next-env.d.ts
 
  # IDE
- /.idea
- .vscode/*
- !.vscode/settings.json
- !.vscode/extensions.json
+.idea/*
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 
-  # Sanity
-  sanity/dist
+# Sanity
+sanity/dist
 
-  # Database
-  *.db
-  *.db-journal
+# Database
+*.db
+*.db-journal
 
-  # Husky
-  .husky/_
+# Husky
+.husky/_
