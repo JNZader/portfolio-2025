@@ -1,34 +1,68 @@
+import Container from '@/components/ui/Container';
+import Section from '@/components/ui/Section';
+
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8">
-      <div className="text-center space-y-6">
-        <h1 className="text-6xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-          Portfolio 2025
-        </h1>
-
-        <p className="text-xl text-foreground/80 max-w-2xl">
-          Next.js 16.0 • React 19.2 • TypeScript 5.9 • Tailwind CSS 4.1
-        </p>
-
-        <div className="flex gap-4 justify-center mt-8">
-          <div className="px-4 py-2 bg-primary/10 rounded-lg">
-            <p className="text-sm font-mono">✓ Setup completo</p>
+    <>
+      {/* Hero Section */}
+      <Section className="pt-32 pb-16 sm:pt-40 sm:pb-24">
+        <Container>
+          <div className="text-center">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
+              Hola, soy{' '}
+              <span className="bg-gradient-to-r from-blue-600 dark:from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                Javier Zader
+              </span>
+            </h1>
+            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto sm:text-xl">
+              Backend Java Developer y Full Stack especializado en crear soluciones robustas con
+              Spring Boot, React y arquitecturas modernas.
+            </p>
+            <div className="mt-10 flex items-center justify-center gap-x-6">
+              <a
+                href="/proyectos"
+                className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-colors"
+              >
+                Ver Proyectos
+              </a>
+              <a
+                href="/contacto"
+                className="rounded-lg border border-gray-300 dark:border-gray-700 px-6 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                Contactar
+              </a>
+            </div>
           </div>
-          <div className="px-4 py-2 bg-green-500/10 rounded-lg">
-            <p className="text-sm font-mono">✓ TypeScript estricto</p>
-          </div>
-          <div className="px-4 py-2 bg-blue-500/10 rounded-lg">
-            <p className="text-sm font-mono">✓ Tailwind 4</p>
-          </div>
-        </div>
+        </Container>
+      </Section>
 
-        <div className="mt-12 p-6 border border-foreground/10 rounded-lg max-w-md mx-auto">
-          <h2 className="text-2xl font-semibold mb-4">Prueba de Dark Mode</h2>
-          <p className="text-sm text-foreground/60">
-            Cambia el modo de tu sistema operativo para ver el dark mode en acción.
-          </p>
-        </div>
-      </div>
-    </main>
+      {/* Quick Stats */}
+      <Section className="bg-gray-100 dark:bg-gray-800">
+        <Container>
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">20+</div>
+              <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                Años en Tecnología
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">15+</div>
+              <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                Proyectos Completados
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">4+</div>
+              <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Certificaciones</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">100%</div>
+              <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Compromiso</div>
+            </div>
+          </div>
+        </Container>
+      </Section>
+    </>
   );
 }

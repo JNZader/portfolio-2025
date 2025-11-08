@@ -7,20 +7,20 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Javier Zader - Portfolio',
-    template: '%s | Javier Zader',
+    default: 'Tu Nombre - Portfolio',
+    template: '%s | Tu Nombre',
   },
-  description: 'Portfolio profesional de desarrollo hecho con Next.js 16 y React 19',
+  description: 'Portfolio profesional de desarrollo web con Next.js 16 y React 19',
   keywords: ['portfolio', 'desarrollo web', 'next.js', 'react', 'typescript'],
-  authors: [{ name: 'Javier Zader' }],
-  creator: 'Javier Zader',
+  authors: [{ name: 'Tu Nombre' }],
+  creator: 'Tu Nombre',
   openGraph: {
     type: 'website',
     locale: 'es_ES',
     url: 'https://tudominio.com',
-    title: 'Javier Zader - Portfolio',
-    description: 'Portfolio profesional de desarrollo',
-    siteName: 'Javier Zader Portfolio',
+    title: 'Tu Nombre - Portfolio',
+    description: 'Portfolio profesional de desarrollo web',
+    siteName: 'Tu Nombre Portfolio',
   },
 };
 
