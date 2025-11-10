@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/JNZader/portfolio-2025/compare/v0.2.0...v0.3.0) (2025-11-10)
+
+
+### Features
+
+* **types:** add advanced TypeScript types ([8fa63b9](https://github.com/JNZader/portfolio-2025/commits/8fa63b9987cadbdd1dce1aa520535c49b3798b35))
+* **utils:** add formatting utilities ([9cde194](https://github.com/JNZader/portfolio-2025/commits/9cde194447da4ee7466a19b68c08d1e28d6fbced))
+* **utils:** add string manipulation utilities ([fcd8f42](https://github.com/JNZader/portfolio-2025/commits/fcd8f42875a4260c4bb53939f7fb18edbdab6bd2))
+* **utils:** add type guard utilities ([07b5f79](https://github.com/JNZader/portfolio-2025/commits/07b5f79a9e44dba34d9c770f97c483054bd23d2d))
+* **utils:** update barrel exports and add global constants ([ad2b179](https://github.com/JNZader/portfolio-2025/commits/ad2b179756cd57775325daf58bef7c352fd08ac8))
+
+
+### Code Refactoring
+
+* **lib:** migrate utils to folder structure ([60bc087](https://github.com/JNZader/portfolio-2025/commits/60bc0879dc44cd1981183f804bad991d42fc0ff3))
+
 ## [0.2.0](https://github.com/JNZader/portfolio-2025/compare/v0.1.0...v0.2.0) (2025-11-10)
 
 
