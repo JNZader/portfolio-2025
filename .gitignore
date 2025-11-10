@@ -27,6 +27,7 @@
 Thumbs.db
 cambios.txt
 CLAUDE.md
+/nul
 
 # debug
 npm-debug.log*
@@ -50,6 +51,7 @@ next-env.d.ts
 
  # IDE
 .idea/*
+.idea
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
