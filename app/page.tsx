@@ -1,3 +1,4 @@
+import { HeroSection } from '@/components/sections/hero-section';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
 
@@ -5,36 +6,25 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <Section className="pt-32 pb-16 sm:pt-40 sm:pb-24">
-        <Container>
-          <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
-              Hola, soy{' '}
-              <span className="bg-gradient-to-r from-blue-600 dark:from-blue-400 to-purple-600 bg-clip-text text-transparent">
-                Javier Zader
-              </span>
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto sm:text-xl">
-              Backend Java Developer y Full Stack especializado en crear soluciones robustas con
-              Spring Boot, React y arquitecturas modernas.
-            </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a
-                href="/proyectos"
-                className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-colors"
-              >
-                Ver Proyectos
-              </a>
-              <a
-                href="/contacto"
-                className="rounded-lg border border-gray-300 dark:border-gray-700 px-6 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                Contactar
-              </a>
-            </div>
-          </div>
-        </Container>
-      </Section>
+      <HeroSection
+        greeting="👋 ¡Hola! Soy Javier Zader"
+        title="Backend Java Developer"
+        subtitle="especializado en Spring Boot"
+        description="Creo soluciones robustas y escalables combinando más de 20 años de experiencia en tecnología con frameworks modernos. Especializado en Java, Spring Boot, React y arquitecturas de microservicios."
+        primaryCta={{
+          text: 'Ver Proyectos',
+          href: '/proyectos',
+        }}
+        secondaryCta={{
+          text: 'Contactar',
+          href: '/contacto',
+        }}
+        socialLinks={{
+          github: 'https://github.com/JNZader',
+          linkedin: 'https://www.linkedin.com/in/jnzader/',
+          email: 'jnzader@gmail.com',
+        }}
+      />
 
       {/* Quick Stats */}
       <Section className="bg-gray-100 dark:bg-gray-800">
