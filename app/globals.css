@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+/*
+ * Tailwind CSS v4 usa @theme en lugar de tailwind.config.js
+ * Todos los tokens de diseño se definen aquí directamente en CSS
+ */
+
 @theme {
   /* Colores base (los expandiremos en iteración 03) */
   --color-primary: oklch(0.6 0.2 250);
@@ -7,7 +12,7 @@
   --color-foreground: oklch(0.1 0 0);
 }
 
-/* Dark mode */
+/* Dark mode - Auto detecta preferencia del sistema */
 @media (prefers-color-scheme: dark) {
   @theme {
     --color-background: oklch(0.15 0 0);
@@ -15,20 +20,44 @@
   }
 }
 
-/* Reset básico */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ===================================
+   Global Resets & Base Styles
+   =================================== */
+
+/*
+ * Nota: Tailwind CSS v4 Preflight ya incluye:
+ * - box-sizing: border-box
+ * - margin/padding reset
+ * - font smoothing
+ * Solo agregamos customizaciones adicionales
+ */
 
 html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
 body {
   min-height: 100vh;
   background-color: var(--color-background);
   color: var(--color-foreground);
+}
+
+/* ===================================
+   Custom Animations
+   =================================== */
+
+/* Fade-in animation para Hero Section */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out;
 }
