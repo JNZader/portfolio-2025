@@ -12,25 +12,29 @@ export default function SobreMiPage() {
     <Section>
       <Container>
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-4xl font-bold mb-8">Sobre mí</h1>
+          <h1 className="text-4xl font-bold mb-8 text-gray-900 dark:text-gray-100">Sobre mí</h1>
 
-          <div className="prose prose-lg max-w-none">
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-6">
+          <div className="space-y-8">
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
               Técnico en Desarrollo de Software y Backend Java Developer con más de 20 años de
               experiencia en tecnología. Combino expertise técnico con gestión empresarial,
               enfocándome en construir soluciones robustas que resuelven desafíos reales de negocio.
             </p>
 
-            <h2 className="text-2xl font-semibold mt-12 mb-4">Experiencia</h2>
-            <p className="text-gray-600 dark:text-gray-300">
+            <h2 className="text-2xl font-semibold mt-12 mb-4 text-gray-900 dark:text-gray-100">
+              Experiencia
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
               Con más de 20 años en tecnología y 11 años como productor agropecuario, he
               desarrollado una perspectiva única que combina conocimiento técnico profundo con
               experiencia en gestión empresarial. Mi enfoque está en construir soluciones escalables
               y mantenibles utilizando arquitecturas modernas y mejores prácticas.
             </p>
 
-            <h2 className="text-2xl font-semibold mt-12 mb-4">Stack Tecnológico</h2>
-            <div className="grid grid-cols-2 gap-4 not-prose">
+            <h2 className="text-2xl font-semibold mt-12 mb-4 text-gray-900 dark:text-gray-100">
+              Stack Tecnológico
+            </h2>
+            <div className="grid grid-cols-2 gap-4">
               {[
                 'Java / Spring Boot',
                 'React / Next.js',
@@ -62,8 +66,10 @@ export default function SobreMiPage() {
               ))}
             </div>
 
-            <h2 className="text-2xl font-semibold mt-12 mb-4">Educación</h2>
-            <ul className="text-gray-600 dark:text-gray-300 space-y-2">
+            <h2 className="text-2xl font-semibold mt-12 mb-4 text-gray-900 dark:text-gray-100">
+              Educación
+            </h2>
+            <ul className="text-gray-600 dark:text-gray-300 space-y-3 leading-relaxed">
               <li>
                 <strong>Técnico en Desarrollo de Software</strong> | Universidad Gastón Dachary |
                 2023-2025
@@ -79,8 +85,10 @@ export default function SobreMiPage() {
               </li>
             </ul>
 
-            <h2 className="text-2xl font-semibold mt-12 mb-4">Áreas de Expertise</h2>
-            <ul className="text-gray-600 dark:text-gray-300 space-y-2">
+            <h2 className="text-2xl font-semibold mt-12 mb-4 text-gray-900 dark:text-gray-100">
+              Áreas de Expertise
+            </h2>
+            <ul className="text-gray-600 dark:text-gray-300 space-y-3 leading-relaxed">
               <li>• Desarrollo Full-stack con frameworks modernos</li>
               <li>• Arquitectura de APIs REST con Spring Boot</li>
               <li>• Optimización de PostgreSQL y diseño de bases de datos</li>
