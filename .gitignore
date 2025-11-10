@@ -26,6 +26,7 @@
 *.pem
 Thumbs.db
 cambios.txt
+CLAUDE.md
 
 # debug
 npm-debug.log*
