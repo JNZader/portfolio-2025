@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.7.0](https://github.com/JNZader/portfolio-2025/compare/v0.6.0...v0.7.0) (2025-11-11)
+
+
+### Features
+
+* **blog:** add complete individual post page ([cd4436b](https://github.com/JNZader/portfolio-2025/commits/cd4436becd328f035bf361940acad32eab1d5f51))
+* **blog:** add Portable Text renderer with custom components ([d4739f2](https://github.com/JNZader/portfolio-2025/commits/d4739f2dbd60650583e97d4fdea5afa888f66626))
+* **blog:** add Portable Text support and blog queries ([81e851f](https://github.com/JNZader/portfolio-2025/commits/81e851f4dea3f3d16eaa3e5c28d09bbd78217641))
+* **blog:** add Share buttons and Post header ([edc5cae](https://github.com/JNZader/portfolio-2025/commits/edc5cae113f32b08f0426dad80a86df59e836928))
+* **blog:** add Table of Contents and Related Posts ([9c62e0a](https://github.com/JNZader/portfolio-2025/commits/9c62e0a9742c988013fcd16ab0f2e3476416c842))
+* **blog:** add Table of Contents generator and CodeBlock ([7c345a3](https://github.com/JNZader/portfolio-2025/commits/7c345a38a64ea925a9330788be6a1dbf5cd3633e))
+
+
+### Bug Fixes
+
+* **blog:** prevent build failure with dummy Sanity credentials ([f937b7f](https://github.com/JNZader/portfolio-2025/commits/f937b7f456aeb809cd1d1a24bbac9b1acd268906))
+
 ## [0.6.0](https://github.com/JNZader/portfolio-2025/compare/v0.5.2...v0.6.0) (2025-11-11)
 
 
