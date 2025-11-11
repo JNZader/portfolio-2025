@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.1](https://github.com/JNZader/portfolio-2025/compare/v0.5.0...v0.5.1) (2025-11-11)
+
+
+### Features
+
+* **cms:** improve GitHub API, enhance Sanity Studio, and update docs ([8ef5ee3](https://github.com/JNZader/portfolio-2025/commits/8ef5ee356397fc556ee3db79a10d04a70f9cc29b))
+
 ## [0.5.0](https://github.com/JNZader/portfolio-2025/compare/v0.4.0...v0.5.0) (2025-11-11)
 
 
