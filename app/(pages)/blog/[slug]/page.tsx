@@ -67,14 +67,25 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
  * Generate static params (SSG)
  */
 export async function generateStaticParams() {
-  const slugs = await sanityFetch<string[]>({
-    query: allPostSlugsQuery,
-    tags: ['post'],
-  });
+  // Skip static generation in CI with dummy credentials
+  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+  if (!projectId || projectId === 'dummy-project-id') {
+    return [];
+  }
 
-  return slugs.map((slug) => ({
-    slug,
-  }));
+  try {
+    const slugs = await sanityFetch<string[]>({
+      query: allPostSlugsQuery,
+      tags: ['post'],
+    });
+
+    return slugs.map((slug) => ({
+      slug,
+    }));
+  } catch (error) {
+    console.warn('Failed to fetch post slugs for static generation:', error);
+    return [];
+  }
 }
 
 /**
