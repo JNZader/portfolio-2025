@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import ProjectsClient from '@/components/projects/ProjectsClient';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
@@ -65,7 +66,9 @@ export default async function ProyectosPage() {
           </p>
         </div>
 
-        <ProjectsClient projects={allProjects} />
+        <Suspense fallback={<div className="text-center py-12">Cargando proyectos...</div>}>
+          <ProjectsClient projects={allProjects} />
+        </Suspense>
       </Container>
     </Section>
   );

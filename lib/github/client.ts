@@ -24,7 +24,8 @@ export async function getReposByTopic(topic: string, username?: string): Promise
   const user = username || process.env.NEXT_PUBLIC_GITHUB_USERNAME;
 
   if (!user) {
-    throw new Error('GitHub username not configured');
+    console.warn('GitHub username not configured - skipping GitHub projects');
+    return []; // Fallback silencioso cuando no está configurado
   }
 
   try {
@@ -38,7 +39,7 @@ export async function getReposByTopic(topic: string, username?: string): Promise
     return data.items as GitHubRepo[];
   } catch (error) {
     console.error('Error fetching GitHub repos:', error);
-    throw error;
+    return []; // Fallback silencioso en caso de error
   }
 }
 
@@ -50,7 +51,8 @@ export async function getFeaturedRepos(username?: string): Promise<GitHubRepo[]>
   const user = username || process.env.NEXT_PUBLIC_GITHUB_USERNAME;
 
   if (!user) {
-    throw new Error('GitHub username not configured');
+    console.warn('GitHub username not configured - skipping GitHub projects');
+    return []; // Fallback silencioso cuando no está configurado
   }
 
   try {
