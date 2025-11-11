@@ -22,7 +22,7 @@ export function getCached<T>(key: string): T | null {
     return null;
   }
 
-  return entry.data;
+  return entry.data as T;
 }
 
 /**
