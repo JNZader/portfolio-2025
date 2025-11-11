@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/JNZader/portfolio-2025/compare/v0.3.0...v0.4.0) (2025-11-11)
+
+
+### Features
+
+* **design:** add shadcn/ui CSS variables to globals.css ([7706e83](https://github.com/JNZader/portfolio-2025/commits/7706e83187266dbfa0ed3eca0e89b2947bf17a94))
+* **design:** add ThemeProvider with next-themes ([dfbde21](https://github.com/JNZader/portfolio-2025/commits/dfbde2191e2ee1210e32d1280160adf72317aa50))
+* **design:** create design system documentation page ([bae79fe](https://github.com/JNZader/portfolio-2025/commits/bae79fe07bbd38801d4011c8937b9f1c59be0818))
+* **header:** add theme toggle button ([313a089](https://github.com/JNZader/portfolio-2025/commits/313a0892f0c83405d5ae4df204e71a06fa185221))
+* **layout:** integrate ThemeProvider in root layout ([e1855f5](https://github.com/JNZader/portfolio-2025/commits/e1855f5c0b42a3843ad503cc881cce851b372aa8))
+* **ui:** install Input, Card, and Badge components ([79e1dbb](https://github.com/JNZader/portfolio-2025/commits/79e1dbbddee8148f647e5f89d3cc67b891154cc9))
+
 ## [0.3.0](https://github.com/JNZader/portfolio-2025/compare/v0.2.0...v0.3.0) (2025-11-10)
 
 
