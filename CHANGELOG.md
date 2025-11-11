@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/JNZader/portfolio-2025/compare/v0.4.0...v0.5.0) (2025-11-11)
+
+
+### Features
+
+* **cms:** add GROQ queries and TypeScript types ([8a52f13](https://github.com/JNZader/portfolio-2025/commits/8a52f13e0a40ec870647e8c407fa7e5e4480f10e))
+* **cms:** add Sanity content schemas ([277abea](https://github.com/JNZader/portfolio-2025/commits/277abea14560d5d20a8b0618833b55993a93ac75))
+* **cms:** add Sanity image URL builder ([c432a2a](https://github.com/JNZader/portfolio-2025/commits/c432a2a91b0fa6133b108b166215bd248e952134))
+* **cms:** configure Sanity Studio in Next.js ([e9cc239](https://github.com/JNZader/portfolio-2025/commits/e9cc239964a9900c5786d1265c0e5dfdfefa2c8f))
+* **cms:** setup Sanity CMS configuration ([985b365](https://github.com/JNZader/portfolio-2025/commits/985b36567e08a0207d0d7466d25b6b1627ed5992))
+* **github:** add GitHub API client with Octokit ([6d045c0](https://github.com/JNZader/portfolio-2025/commits/6d045c07d0b05c3b5e08a1c18464554d9201108c))
+* **github:** add in-memory cache for GitHub API ([77c4419](https://github.com/JNZader/portfolio-2025/commits/77c44196c248dab28a310537d56e68f5fdebad7e))
+* **projects:** add interactive search and filtering ([c22009b](https://github.com/JNZader/portfolio-2025/commits/c22009b904e7e4f95daaa6fcabc0f2c00b3698bc))
+
+
+### Bug Fixes
+
+* **build:** resolve production build errors ([d7ab85c](https://github.com/JNZader/portfolio-2025/commits/d7ab85cd1dd32ccf8eae4194ea4bb4d3411a0c35))
+
 ## [0.4.0](https://github.com/JNZader/portfolio-2025/compare/v0.3.0...v0.4.0) (2025-11-11)
 
 
