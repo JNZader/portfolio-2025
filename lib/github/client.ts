@@ -56,16 +56,36 @@ export async function getFeaturedRepos(username?: string): Promise<GitHubRepo[]>
   }
 
   try {
+    // Estrategia: Fetch all repos + filter locally
+    // Más confiable que GitHub Search API topic filter debido a indexing delays
+    const query = `user:${user}`;
+    console.log('🔍 GitHub Search Query:', query);
+
     const { data } = await octokit.rest.search.repos({
-      q: `user:${user} topic:portfolio OR topic:featured`,
-      sort: 'stars',
+      q: query,
+      sort: 'updated',
       order: 'desc',
       per_page: 6,
     });
 
-    return data.items as GitHubRepo[];
+    console.log(`✅ GitHub API Response: Found ${data.total_count} repos`);
+    console.log(
+      '📦 Repos:',
+      data.items.map((r) => ({ name: r.name, topics: r.topics, stars: r.stargazers_count }))
+    );
+
+    // Filtrar localmente por topics (más confiable que Search API)
+    const filtered = data.items.filter(
+      (repo) => repo.topics.includes('portfolio') || repo.topics.includes('featured')
+    );
+
+    console.log(`🎯 Filtered repos with topics: ${filtered.length}`);
+
+    return filtered.length > 0
+      ? (filtered as GitHubRepo[])
+      : (data.items.slice(0, 3) as GitHubRepo[]);
   } catch (error) {
-    console.error('Error fetching featured repos:', error);
+    console.error('❌ Error fetching featured repos:', error);
     return []; // Fallback silencioso
   }
 }

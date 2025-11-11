@@ -1,6 +1,7 @@
 import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
+import { codeInput } from '@sanity/code-input';
 import { schemaTypes } from './schemas';
 import { apiVersion, dataset, projectId } from './env';
 
@@ -46,6 +47,7 @@ export default defineConfig({
                     ]),
         }),
         visionTool({ defaultApiVersion: apiVersion }),
+        codeInput(),
     ],
 
     schema: {
