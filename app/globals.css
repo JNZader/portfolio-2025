@@ -1,63 +1,98 @@
 @import 'tailwindcss';
 
-/*
- * Tailwind CSS v4 usa @theme en lugar de tailwind.config.js
- * Todos los tokens de diseño se definen aquí directamente en CSS
- */
-
 @theme {
-  /* Colores base (los expandiremos en iteración 03) */
-  --color-primary: oklch(0.6 0.2 250);
-  --color-background: oklch(1 0 0);
-  --color-foreground: oklch(0.1 0 0);
+  --color-background: oklch(100% 0 0);
+  --color-foreground: oklch(9% 0 0);
+  --color-card: oklch(100% 0 0);
+  --color-card-foreground: oklch(9% 0 0);
+  --color-popover: oklch(100% 0 0);
+  --color-popover-foreground: oklch(9% 0 0);
+  --color-primary: oklch(9% 0 0);
+  --color-primary-foreground: oklch(98% 0 0);
+  --color-secondary: oklch(96% 0 0);
+  --color-secondary-foreground: oklch(9% 0 0);
+  --color-muted: oklch(96% 0 0);
+  --color-muted-foreground: oklch(45% 0 0);
+  --color-accent: oklch(96% 0 0);
+  --color-accent-foreground: oklch(9% 0 0);
+  --color-destructive: oklch(60% 0.22 27);
+  --color-destructive-foreground: oklch(98% 0 0);
+  --color-border: oklch(90% 0 0);
+  --color-input: oklch(90% 0 0);
+  --color-ring: oklch(9% 0 0);
+  --color-chart-1: oklch(61% 0.19 32);
+  --color-chart-2: oklch(55% 0.15 190);
+  --color-chart-3: oklch(45% 0.12 220);
+  --color-chart-4: oklch(68% 0.18 85);
+  --color-chart-5: oklch(70% 0.2 45);
 }
 
-/* Dark mode - Auto detecta preferencia del sistema */
-@media (prefers-color-scheme: dark) {
-  @theme {
-    --color-background: oklch(0.15 0 0);
-    --color-foreground: oklch(0.95 0 0);
+@layer base {
+  :root {
+    --background: var(--color-background);
+    --foreground: var(--color-foreground);
+    --card: var(--color-card);
+    --card-foreground: var(--color-card-foreground);
+    --popover: var(--color-popover);
+    --popover-foreground: var(--color-popover-foreground);
+    --primary: var(--color-primary);
+    --primary-foreground: var(--color-primary-foreground);
+    --secondary: var(--color-secondary);
+    --secondary-foreground: var(--color-secondary-foreground);
+    --muted: var(--color-muted);
+    --muted-foreground: var(--color-muted-foreground);
+    --accent: var(--color-accent);
+    --accent-foreground: var(--color-accent-foreground);
+    --destructive: var(--color-destructive);
+    --destructive-foreground: var(--color-destructive-foreground);
+    --border: var(--color-border);
+    --input: var(--color-input);
+    --ring: var(--color-ring);
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --color-background: oklch(15% 0 0);
+    --color-foreground: oklch(98% 0 0);
+    --color-card: oklch(15% 0 0);
+    --color-card-foreground: oklch(98% 0 0);
+    --color-popover: oklch(15% 0 0);
+    --color-popover-foreground: oklch(98% 0 0);
+    --color-primary: oklch(98% 0 0);
+    --color-primary-foreground: oklch(9% 0 0);
+    --color-secondary: oklch(20% 0 0);
+    --color-secondary-foreground: oklch(98% 0 0);
+    --color-muted: oklch(20% 0 0);
+    --color-muted-foreground: oklch(64% 0 0);
+    --color-accent: oklch(20% 0 0);
+    --color-accent-foreground: oklch(98% 0 0);
+    --color-destructive: oklch(45% 0.22 27);
+    --color-destructive-foreground: oklch(98% 0 0);
+    --color-border: oklch(20% 0 0);
+    --color-input: oklch(20% 0 0);
+    --color-ring: oklch(83% 0 0);
+    --color-chart-1: oklch(60% 0.2 255);
+    --color-chart-2: oklch(55% 0.18 185);
+    --color-chart-3: oklch(62% 0.22 75);
+    --color-chart-4: oklch(65% 0.18 295);
+    --color-chart-5: oklch(68% 0.2 350);
   }
 }
 
-/* ===================================
-   Global Resets & Base Styles
-   =================================== */
-
-/*
- * Nota: Tailwind CSS v4 Preflight ya incluye:
- * - box-sizing: border-box
- * - margin/padding reset
- * - font smoothing
- * Solo agregamos customizaciones adicionales
- */
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  min-height: 100vh;
-  background-color: var(--color-background);
-  color: var(--color-foreground);
-}
-
-/* ===================================
-   Custom Animations
-   =================================== */
-
-/* Fade-in animation para Hero Section */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+@layer base {
+  * {
+    border-color: var(--border);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-.animate-fade-in {
-  animation: fade-in 0.6s ease-out;
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
 }
