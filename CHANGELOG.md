@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.2](https://github.com/JNZader/portfolio-2025/compare/v0.5.1...v0.5.2) (2025-11-11)
+
+
+### Bug Fixes
+
+* **github:** add optional chaining for undefined topics array ([fde4c27](https://github.com/JNZader/portfolio-2025/commits/fde4c2754fa9a374a4247ff108cecb5bc66ae2a7))
+
 ### [0.5.1](https://github.com/JNZader/portfolio-2025/compare/v0.5.0...v0.5.1) (2025-11-11)
 
 
