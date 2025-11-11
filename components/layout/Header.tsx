@@ -11,6 +11,7 @@ const navigation = [
   { name: 'Inicio', href: '/' },
   { name: 'Sobre mí', href: '/sobre-mi' },
   { name: 'Proyectos', href: '/proyectos' },
+  { name: 'Blog', href: '/blog' },
   { name: 'Contacto', href: '/contacto' },
   { name: 'Design System', href: '/design-system' },
 ];

@@ -151,3 +151,41 @@ export const categoryBySlugQuery = groq`
     color
   }
 `;
+
+/**
+ * Posts con paginación
+ */
+export const paginatedPostsQuery = groq`{
+  "posts": *[_type == "post" && (!defined($category) || $category in categories[]->slug.current)]
+    | order(publishedAt desc) [$start...$end] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      mainImage,
+      publishedAt,
+      readingTime,
+      featured,
+      categories[]-> {
+        _id,
+        title,
+        slug,
+        color
+      },
+      author
+    },
+  "total": count(*[_type == "post" && (!defined($category) || $category in categories[]->slug.current)])
+}`;
+
+/**
+ * Posts destacados para sidebar
+ */
+export const sidebarPostsQuery = groq`
+  *[_type == "post" && featured == true] | order(publishedAt desc) [0...5] {
+    _id,
+    title,
+    slug,
+    publishedAt,
+    readingTime
+  }
+`;
