@@ -76,7 +76,7 @@ export async function getFeaturedRepos(username?: string): Promise<GitHubRepo[]>
 
     // Filtrar localmente por topics (más confiable que Search API)
     const filtered = data.items.filter(
-      (repo) => repo.topics.includes('portfolio') || repo.topics.includes('featured')
+      (repo) => repo.topics?.includes('portfolio') || repo.topics?.includes('featured')
     );
 
     console.log(`🎯 Filtered repos with topics: ${filtered.length}`);
