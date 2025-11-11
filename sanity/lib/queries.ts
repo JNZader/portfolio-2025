@@ -153,29 +153,37 @@ export const categoryBySlugQuery = groq`
 `;
 
 /**
- * Posts con paginación
+ * Posts con paginación Y búsqueda
  */
 export const paginatedPostsQuery = groq`{
-  "posts": *[_type == "post" && (!defined($category) || $category in categories[]->slug.current)]
-    | order(publishedAt desc) [$start...$end] {
+  "posts": *[
+    _type == "post" &&
+    (!defined($category) || $category in categories[]->slug.current) &&
+    (!defined($search) || [title, excerpt, pt::text(body)] match $search)
+  ] | order(publishedAt desc) [$start...$end] {
+    _id,
+    title,
+    slug,
+    excerpt,
+    mainImage,
+    publishedAt,
+    readingTime,
+    featured,
+    categories[]-> {
       _id,
       title,
       slug,
-      excerpt,
-      mainImage,
-      publishedAt,
-      readingTime,
-      featured,
-      categories[]-> {
-        _id,
-        title,
-        slug,
-        color
-      },
-      author
+      color
     },
-  "total": count(*[_type == "post" && (!defined($category) || $category in categories[]->slug.current)])
+    author
+  },
+  "total": count(*[
+    _type == "post" &&
+    (!defined($category) || $category in categories[]->slug.current) &&
+    (!defined($search) || [title, excerpt, pt::text(body)] match $search)
+  ])
 }`;
+
 
 /**
  * Posts destacados para sidebar
