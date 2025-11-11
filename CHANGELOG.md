@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.6.0](https://github.com/JNZader/portfolio-2025/compare/v0.5.2...v0.6.0) (2025-11-11)
+
+
+### Features
+
+* **blog:** add CategoryFilter and Pagination components ([f512b66](https://github.com/JNZader/portfolio-2025/commits/f512b66a9349b250ffd3a6c3d49fb3ed464949f1))
+* **blog:** add loading/error states and navigation ([48b6d38](https://github.com/JNZader/portfolio-2025/commits/48b6d38db204dacf87e588ae545df734f2ff52e4))
+* **blog:** add main blog page with filtering and pagination ([b75dfbd](https://github.com/JNZader/portfolio-2025/commits/b75dfbddb218dc7e5840de5094ab2e246c58d233))
+* **blog:** add PostCard and PostGrid components ([e241e26](https://github.com/JNZader/portfolio-2025/commits/e241e26c7bf32d6ba4843746f462fd4865756910))
+* **blog:** add Sanity queries and blog helpers ([27eb20c](https://github.com/JNZader/portfolio-2025/commits/27eb20cd55810ce940853716e00e40bf7ccc080d))
+
 ### [0.5.2](https://github.com/JNZader/portfolio-2025/compare/v0.5.1...v0.5.2) (2025-11-11)
 
 
