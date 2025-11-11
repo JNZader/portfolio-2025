@@ -189,3 +189,35 @@ export const sidebarPostsQuery = groq`
     readingTime
   }
 `;
+
+/**
+ * Posts relacionados (misma categoría)
+ */
+export const relatedPostsQuery = groq`
+  *[
+    _type == "post" &&
+    slug.current != $slug &&
+    count((categories[]->slug.current)[@ in $categories]) > 0
+  ] | order(publishedAt desc) [0...3] {
+    _id,
+    title,
+    slug,
+    excerpt,
+    mainImage,
+    publishedAt,
+    readingTime,
+    categories[]-> {
+      _id,
+      title,
+      slug,
+      color
+    }
+  }
+`;
+
+/**
+ * Todos los slugs (para generateStaticParams)
+ */
+export const allPostSlugsQuery = groq`
+  *[_type == "post" && defined(slug.current)][].slug.current
+`;
