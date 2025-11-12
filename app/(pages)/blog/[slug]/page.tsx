@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { Comments } from '@/components/blog/Comments';
 import { PortableTextRenderer } from '@/components/blog/PortableTextRenderer';
 import { PostHeader } from '@/components/blog/PostHeader';
 import { RelatedPosts } from '@/components/blog/RelatedPosts';
@@ -146,6 +147,9 @@ export default async function PostPage({ params }: PostPageProps) {
 
               {/* Related posts */}
               {relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} />}
+
+              {/* Comments */}
+              <Comments term={`/blog/${slug}`} />
             </article>
 
             {/* Sidebar (TOC) */}

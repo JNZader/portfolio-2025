@@ -1,0 +1,27 @@
+/**
+ * Custom Giscus Theme
+ * Sincronizado con el portfolio
+ */
+.gsc-comment-box-tabs,
+.gsc-comment-box-main,
+.gsc-reactions,
+.gsc-timeline {
+  border-color: hsl(var(--border)) !important;
+}
+
+.gsc-comment-author {
+  color: hsl(var(--foreground)) !important;
+}
+
+.gsc-comment-content {
+  background-color: hsl(var(--card)) !important;
+  color: hsl(var(--card-foreground)) !important;
+}
+
+.gsc-reply-box-tabs {
+  border-color: hsl(var(--border)) !important;
+}
+
+.gsc-main {
+  background-color: hsl(var(--background)) !important;
+}
