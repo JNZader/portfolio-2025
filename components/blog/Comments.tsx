@@ -1,7 +1,6 @@
 'use client';
 
 import Giscus from '@giscus/react';
-import { useTheme } from 'next-themes';
 
 /**
  * COMPONENTE: Comments con Giscus
@@ -20,8 +19,6 @@ interface CommentsProps {
 }
 
 export function Comments({ term }: CommentsProps) {
-  const { resolvedTheme } = useTheme();
-
   // Verificar que las variables de entorno existan
   const repo = process.env.NEXT_PUBLIC_GISCUS_REPO;
   const repoId = process.env.NEXT_PUBLIC_GISCUS_REPO_ID;
@@ -47,7 +44,7 @@ export function Comments({ term }: CommentsProps) {
         reactionsEnabled="1"
         emitMetadata="1"
         inputPosition="bottom"
-        theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
+        theme={`${process.env.NEXT_PUBLIC_SITE_URL}/giscus-theme.css`}
         lang="es"
         loading="lazy"
       />
