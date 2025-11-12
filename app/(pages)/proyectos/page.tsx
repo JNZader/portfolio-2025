@@ -5,6 +5,9 @@ import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
 import { getCachedFeaturedProjects } from '@/lib/github/queries';
 import type { Project } from '@/lib/github/types';
+import { sanityFetch } from '@/sanity/lib/client';
+import { projectsQuery } from '@/sanity/lib/queries';
+import type { Project as SanityProject } from '@/types/sanity';
 
 export const metadata: Metadata = {
   title: 'Proyectos',
@@ -14,47 +17,47 @@ export const metadata: Metadata = {
 // ISR: Revalidar cada 1 hora
 export const revalidate = 3600;
 
-// Proyectos hardcodeados (o desde Sanity si ya tienes configurado)
-const hardcodedProjects: Project[] = [
-  {
-    id: 'portfolio-2025',
-    title: 'Portfolio 2025',
-    description: 'Portfolio personal con Next.js 16, React 19 y TypeScript',
-    tech: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
-    image: '/projects/portfolio.jpg',
-    url: 'https://portfolio.com',
-    github: 'https://github.com/usuario/portfolio-2025',
-    demo: 'https://portfolio.com',
+/**
+ * Convertir proyectos de Sanity al formato de la aplicación
+ */
+function convertSanityProject(sanityProject: SanityProject): Project {
+  return {
+    id: sanityProject._id,
+    title: sanityProject.title,
+    description: sanityProject.excerpt,
+    tech: sanityProject.technologies || [],
+    image: sanityProject.mainImage ? `/projects/${sanityProject.slug.current}.jpg` : undefined,
+    url: sanityProject.demoUrl || sanityProject.githubUrl || '#',
+    github: sanityProject.githubUrl,
+    demo: sanityProject.demoUrl,
     source: 'sanity',
-    featured: true,
-  },
-  {
-    id: 'ecommerce-app',
-    title: 'E-commerce App',
-    description: 'Tienda online con carrito de compras y pasarela de pago',
-    tech: ['Next.js', 'Stripe', 'PostgreSQL', 'Prisma'],
-    image: '/projects/ecommerce.jpg',
-    url: 'https://shop.com',
-    github: 'https://github.com/usuario/ecommerce',
-    demo: 'https://shop.com',
-    source: 'sanity',
-    featured: true,
-  },
-  // ... más proyectos
-];
+    featured: sanityProject.featured,
+  };
+}
 
 export default async function ProyectosPage() {
+  // Obtener proyectos de Sanity
+  let sanityProjects: Project[] = [];
+  try {
+    const projects = await sanityFetch<SanityProject[]>({
+      query: projectsQuery,
+      tags: ['project'],
+    });
+    sanityProjects = projects.map(convertSanityProject);
+  } catch (error) {
+    console.error('Failed to fetch Sanity projects:', error);
+  }
+
   // Obtener proyectos de GitHub (con fallback)
   let githubProjects: Project[] = [];
   try {
     githubProjects = await getCachedFeaturedProjects();
   } catch (error) {
     console.error('Failed to fetch GitHub projects:', error);
-    // Fallback: continuar sin proyectos de GitHub
   }
 
-  // Combinar proyectos
-  const allProjects = [...hardcodedProjects, ...githubProjects];
+  // Combinar proyectos (Sanity primero, luego GitHub)
+  const allProjects = [...sanityProjects, ...githubProjects];
 
   return (
     <Section>
