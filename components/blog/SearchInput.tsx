@@ -20,16 +20,22 @@ export function SearchInput() {
   // Efecto para actualizar URL cuando cambia el debounced value
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
+    const currentSearch = params.get('search') || '';
 
+    // Solo actualizar si el valor debounced es diferente del actual
     if (debouncedSearch && isValidSearchTerm(debouncedSearch)) {
-      params.set('search', debouncedSearch);
-      params.delete('page'); // Reset a página 1
-    } else {
+      if (currentSearch !== debouncedSearch) {
+        params.set('search', debouncedSearch);
+        params.delete('page'); // Reset a página 1
+        const query = params.toString();
+        router.push(`/blog${query ? `?${query}` : ''}`);
+      }
+    } else if (currentSearch) {
+      // Solo borrar si había búsqueda activa
       params.delete('search');
+      const query = params.toString();
+      router.push(`/blog${query ? `?${query}` : ''}`);
     }
-
-    const query = params.toString();
-    router.push(`/blog${query ? `?${query}` : ''}`);
   }, [debouncedSearch, router, searchParams]);
 
   const handleClear = () => {

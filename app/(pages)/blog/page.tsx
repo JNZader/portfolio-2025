@@ -3,9 +3,12 @@ import { CategoryFilter } from '@/components/blog/CategoryFilter';
 import { EmptyState } from '@/components/blog/EmptyState';
 import { Pagination } from '@/components/blog/Pagination';
 import { PostGrid } from '@/components/blog/PostGrid';
+import { SearchInput } from '@/components/blog/SearchInput';
+import { SearchStats } from '@/components/blog/SearchStats';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
 import { getPaginationRange, getTotalPages } from '@/lib/utils/blog';
+import { isValidSearchTerm, normalizeSearchTerm } from '@/lib/utils/search';
 import { sanityFetch } from '@/sanity/lib/client';
 import { categoriesQuery, paginatedPostsQuery } from '@/sanity/lib/queries';
 import type { Category, Post } from '@/types/sanity';
@@ -19,6 +22,7 @@ interface BlogPageProps {
   searchParams: Promise<{
     page?: string;
     category?: string;
+    search?: string;
   }>;
 }
 
@@ -26,6 +30,11 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const params = await searchParams;
   const currentPage = parseInt(params.page || '1', 10);
   const categorySlug = params.category || null;
+  const searchTerm = params.search || '';
+
+  // Normalizar búsqueda para GROQ
+  const normalizedSearch =
+    searchTerm && isValidSearchTerm(searchTerm) ? normalizeSearchTerm(searchTerm) : null;
 
   // Fetch categories
   const categories = await sanityFetch<Category[]>({
@@ -33,7 +42,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     tags: ['category'],
   });
 
-  // Fetch paginated posts
+  // Fetch paginated posts con búsqueda
   const { start, end } = getPaginationRange(currentPage);
   const { posts, total } = await sanityFetch<{
     posts: Post[];
@@ -44,6 +53,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       start,
       end,
       category: categorySlug,
+      search: normalizedSearch,
     },
     tags: ['post'],
   });
@@ -55,6 +65,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     ? categories.find((cat) => cat.slug.current === categorySlug)
     : null;
 
+  // Determinar si hay búsqueda activa
+  const isSearching = !!normalizedSearch;
+
   return (
     <>
       {/* Hero */}
@@ -64,27 +77,43 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             <h1 className="text-4xl font-bold mb-4">
               {activeCategory ? activeCategory.title : 'Blog'}
             </h1>
-            <p className="text-lg text-[var(--color-muted-foreground)] max-w-2xl">
+            <p className="text-lg text-[var(--color-muted-foreground)] max-w-2xl mb-6">
               {activeCategory
                 ? activeCategory.description ||
                   `Artículos sobre ${activeCategory.title.toLowerCase()}`
                 : 'Artículos sobre desarrollo web, programación y las últimas tecnologías.'}
             </p>
+
+            {/* Search Input */}
+            <div className="max-w-md">
+              <SearchInput />
+            </div>
           </div>
         </Container>
       </Section>
 
       {/* Filters */}
-      <Section>
-        <Container>
-          <div className="mb-8">
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-[var(--color-muted-foreground)]">
-              Categorías
-            </h2>
-            <CategoryFilter categories={categories} />
-          </div>
-        </Container>
-      </Section>
+      {!isSearching && (
+        <Section>
+          <Container>
+            <div className="mb-8">
+              <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-[var(--color-muted-foreground)]">
+                Categorías
+              </h2>
+              <CategoryFilter categories={categories} />
+            </div>
+          </Container>
+        </Section>
+      )}
+
+      {/* Search Stats */}
+      {isSearching && (
+        <Section>
+          <Container>
+            <SearchStats total={total} categoryName={activeCategory?.title} />
+          </Container>
+        </Section>
+      )}
 
       {/* Posts Grid */}
       <Section>
@@ -103,21 +132,31 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           ) : (
             <EmptyState
               title={
-                activeCategory
-                  ? `No hay posts en "${activeCategory.title}"`
-                  : 'No hay posts disponibles'
+                isSearching
+                  ? 'No se encontraron resultados'
+                  : activeCategory
+                    ? `No hay posts en "${activeCategory.title}"`
+                    : 'No hay posts disponibles'
               }
               description={
-                activeCategory ? 'Prueba con otra categoría.' : 'Aún no se han publicado artículos.'
+                isSearching
+                  ? `No hay artículos que coincidan con "${searchTerm}". Intenta con otros términos.`
+                  : activeCategory
+                    ? 'Prueba con otra categoría.'
+                    : 'Aún no se han publicado artículos.'
               }
-              action={activeCategory ? { label: 'Ver todos los posts', href: '/blog' } : undefined}
+              action={
+                isSearching || activeCategory
+                  ? { label: 'Ver todos los posts', href: '/blog' }
+                  : undefined
+              }
             />
           )}
         </Container>
       </Section>
 
       {/* Stats */}
-      {posts.length > 0 && (
+      {posts.length > 0 && !isSearching && (
         <Section className="border-t">
           <Container>
             <div className="flex flex-col items-center justify-center gap-2 py-8 text-center">
