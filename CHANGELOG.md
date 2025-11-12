@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.8.0](https://github.com/JNZader/portfolio-2025/compare/v0.7.0...v0.8.0) (2025-11-12)
+
+
+### Features
+
+* **search:** add GROQ search queries ([a166b90](https://github.com/JNZader/portfolio-2025/commits/a166b90b08cab8ba8a708bfb1fb71794b9664055))
+* **search:** add search stats and highlighted results ([cfe8d65](https://github.com/JNZader/portfolio-2025/commits/cfe8d65691996ddc4eab68a1671727edfa1d8254))
+* **search:** add SearchInput component and search helpers ([dfa4a3d](https://github.com/JNZader/portfolio-2025/commits/dfa4a3d0656b00d96a8dec0109b95434228e791c))
+* **search:** integrate full-text search in blog page ([a86cc17](https://github.com/JNZader/portfolio-2025/commits/a86cc17fa191e9f1270710323ec63f6006567e6e))
+
 ## [0.7.0](https://github.com/JNZader/portfolio-2025/compare/v0.6.0...v0.7.0) (2025-11-11)
 
 
