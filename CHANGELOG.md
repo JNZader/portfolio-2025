@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.9.0](https://github.com/JNZader/portfolio-2025/compare/v0.8.0...v0.9.0) (2025-11-12)
+
+
+### Features
+
+* **blog:** add custom Giscus theme with CSS variables ([cf3ede3](https://github.com/JNZader/portfolio-2025/commits/cf3ede3914fe98fe725dc6affc211a2d0c747700))
+* **blog:** add Giscus comments component ([791dca4](https://github.com/JNZader/portfolio-2025/commits/791dca4209a7d18658106061516193ca29f37705))
+* **blog:** integrate comments in blog posts ([305857d](https://github.com/JNZader/portfolio-2025/commits/305857d1d1a9793e101bff113a693a2e9c97f297))
+* **blog:** integrate comments in blog posts ([2a6433d](https://github.com/JNZader/portfolio-2025/commits/2a6433d2286bb651f8bc12ea49c5b737572cc85a))
+* **data:** add Sanity seed script and remove hardcoded projects ([4ff2785](https://github.com/JNZader/portfolio-2025/commits/4ff2785ebef44afc5b00da74a84e3331c50a1f7b))
+
 ## [0.8.0](https://github.com/JNZader/portfolio-2025/compare/v0.7.0...v0.8.0) (2025-11-12)
 
 
