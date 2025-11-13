@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0](https://github.com/JNZader/portfolio-2025/compare/v0.9.0...v0.10.0) (2025-11-13)
+
+
+### Features
+
+* **contact:** add advanced email validation and anti-scraping protection ([638d438](https://github.com/JNZader/portfolio-2025/commits/638d4382e0cd846938ed4423a89f3b6135bb7d2b))
+* **contact:** add contact page and toast notifications ([0166ef0](https://github.com/JNZader/portfolio-2025/commits/0166ef07a6ed7525684a460e27bc32cbd4f138ba))
+* **contact:** add email templates for contact form ([cdc1911](https://github.com/JNZader/portfolio-2025/commits/cdc191118dcbae3fdbfb044e0f6dd7217ce804d0))
+* **contact:** add server action and form components ([be768f2](https://github.com/JNZader/portfolio-2025/commits/be768f21a13ed05dc8e8e5ffab2c1d963f6ae3ef))
+* **contact:** add validation schemas and email infrastructure ([3562146](https://github.com/JNZader/portfolio-2025/commits/3562146354b9cf11627daf101ec696b4614ddf86))
+
 ## [0.9.0](https://github.com/JNZader/portfolio-2025/compare/v0.8.0...v0.9.0) (2025-11-12)
 
 
