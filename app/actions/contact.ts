@@ -3,10 +3,10 @@
 import DOMPurify from 'isomorphic-dompurify';
 import { headers } from 'next/headers';
 import { emailConfig, resend, validateEmailConfig } from '@/lib/email/resend';
-import ContactConfirm from '@/lib/email/templates/ContactConfirm';
 import ContactEmail from '@/lib/email/templates/ContactEmail';
 import { contactRateLimiter, getClientIdentifier } from '@/lib/rate-limit/redis';
 import { contactSchema, sanitizeContactData } from '@/lib/validations/contact';
+import { validateEmail } from '@/lib/validations/email-validator';
 
 /**
  * Response type para la acción
@@ -52,7 +52,26 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
       message: DOMPurify.sanitize(data.message, { ALLOWED_TAGS: [] }),
     };
 
-    // 6. Rate limiting
+    // 6. Validación avanzada de email (DNS/MX records, dominios desechables)
+    // Nota: Los typos se validan solo en el cliente, el servidor no los rechaza
+    const emailValidation = await validateEmail(sanitizedData.email);
+
+    if (!emailValidation.isValid) {
+      console.log('❌ Email validation failed:', emailValidation.reason);
+      return {
+        success: false,
+        error: emailValidation.suggestion
+          ? `${emailValidation.reason}`
+          : `Email inválido: ${emailValidation.reason}`,
+      };
+    }
+
+    console.log('✅ Email validation passed:', {
+      domain: emailValidation.domain,
+      hasMxRecords: emailValidation.hasMxRecords,
+    });
+
+    // 7. Rate limiting
     const headersList = await headers();
     const request = new Request('http://localhost', {
       headers: headersList,
@@ -68,17 +87,28 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
       };
     }
 
-    // 7. Enviar email al propietario del portfolio
+    // 8. Enviar email al propietario (el email ya fue validado con DNS)
     const ownerEmailResult = await resend.emails.send({
       from: emailConfig.from,
       to: emailConfig.to,
-      subject: `Contacto: ${sanitizedData.subject}`,
+      subject: `✅ Nuevo Contacto: ${sanitizedData.subject}`,
       react: ContactEmail({
         name: sanitizedData.name,
         email: sanitizedData.email,
         subject: sanitizedData.subject,
-        message: sanitizedData.message,
+        message: `✅ Email verificado (dominio: ${emailValidation.domain}, MX records: OK)\n\n${sanitizedData.message}`,
       }),
+      // Tags y headers para facilitar filtrado en Gmail
+      tags: [
+        {
+          name: 'category',
+          value: 'contact-form',
+        },
+      ],
+      headers: {
+        'X-Entity-Ref-ID': 'portfolio-contact-form',
+        'X-Priority': '1', // Alta prioridad
+      },
     });
 
     if (ownerEmailResult.error) {
@@ -89,26 +119,10 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
       };
     }
 
-    // 8. Enviar email de confirmación al usuario
-    try {
-      await resend.emails.send({
-        from: emailConfig.from,
-        to: sanitizedData.email,
-        subject: 'Confirmación de mensaje recibido',
-        react: ContactConfirm({
-          name: sanitizedData.name,
-        }),
-      });
-    } catch (confirmError) {
-      // No fallar si el email de confirmación falla
-      console.error('Error sending confirmation email:', confirmError);
-    }
-
     // 9. Success
     return {
       success: true,
-      message:
-        '¡Mensaje enviado con éxito! Te responderé pronto. Revisa tu email para una confirmación.',
+      message: '¡Mensaje enviado con éxito! ✅ Te responderé en 24-48 horas hábiles.',
     };
   } catch (error) {
     console.error('Contact form error:', error);

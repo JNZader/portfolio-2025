@@ -10,11 +10,12 @@ export const redis = new Redis({
 });
 
 /**
- * Rate limiter: 3 requests por hora por IP
+ * Rate limiter: 3 emails cada 10 minutos por IP
+ * Balance ideal para producción: previene spam sin frustrar usuarios legítimos
  */
 export const contactRateLimiter = new Ratelimit({
   redis,
-  limiter: Ratelimit.slidingWindow(3, '1 h'),
+  limiter: Ratelimit.slidingWindow(3, '10 m'),
   analytics: true,
   prefix: 'ratelimit:contact',
 });

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ContactForm } from '@/components/forms/ContactForm';
 import Container from '@/components/ui/Container';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
 import Section from '@/components/ui/Section';
 
 export const metadata: Metadata = {
@@ -55,12 +56,11 @@ export default function ContactoPage() {
                     <EmailIcon className="h-5 w-5 text-[var(--color-primary)] mt-0.5" />
                     <div>
                       <p className="font-medium">Email</p>
-                      <a
-                        href="mailto:jnzader@gmail.com"
+                      <ObfuscatedEmail
+                        user="jnzader"
+                        domain="gmail.com"
                         className="text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-primary)] transition-colors"
-                      >
-                        jnzader@gmail.com
-                      </a>
+                      />
                     </div>
                   </div>
 

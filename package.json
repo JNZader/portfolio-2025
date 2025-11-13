@@ -61,6 +61,7 @@
     "@types/react-dom": "^19.2.2",
     "@types/react-syntax-highlighter": "^15.5.13",
     "babel-plugin-react-compiler": "1.0.0",
+    "dotenv": "^17.2.3",
     "husky": "^9.1.7",
     "jsdom": "^27.1.0",
     "lint-staged": "^16.2.6",

@@ -7,21 +7,44 @@ import toast from 'react-hot-toast';
 import { sendContactEmail } from '@/app/actions/contact';
 import { Button } from '@/components/ui/button';
 import { type ContactFormData, contactSchema } from '@/lib/validations/contact';
+import { quickValidateEmail } from '@/lib/validations/email-validator-client';
 import { InputField, TextareaField } from './FormField';
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [emailSuggestion, setEmailSuggestion] = useState<string | null>(null);
+  const [pendingData, setPendingData] = useState<ContactFormData | null>(null);
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
   });
 
   const onSubmit = async (data: ContactFormData) => {
+    // Validación rápida del email (typos, desechables)
+    const emailCheck = quickValidateEmail(data.email);
+
+    // Si hay sugerencia de typo, mostrar confirmación
+    if (emailCheck.suggestion && !pendingData) {
+      setEmailSuggestion(emailCheck.suggestion);
+      setPendingData(data);
+      return;
+    }
+
+    // Si hay error (desechable), rechazar
+    if (!emailCheck.isValid && !emailCheck.suggestion) {
+      toast.error(emailCheck.reason || 'Email inválido', {
+        duration: 4000,
+        position: 'bottom-center',
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -41,6 +64,8 @@ export function ContactForm() {
           position: 'bottom-center',
         });
         reset(); // Limpiar formulario
+        setEmailSuggestion(null);
+        setPendingData(null);
       } else {
         toast.error(result.error, {
           duration: 4000,
@@ -58,8 +83,69 @@ export function ContactForm() {
     }
   };
 
+  const useSuggestedEmail = () => {
+    if (!emailSuggestion || !pendingData) return;
+
+    // Actualizar el valor del email con la sugerencia
+    setValue('email', emailSuggestion);
+
+    // Enviar con el email corregido
+    const correctedData = { ...pendingData, email: emailSuggestion };
+    setPendingData(null);
+    setEmailSuggestion(null);
+
+    // Re-enviar el formulario
+    onSubmit(correctedData);
+  };
+
+  const keepOriginalEmail = () => {
+    if (!pendingData) return;
+
+    // Continuar con el email original
+    setEmailSuggestion(null);
+    onSubmit(pendingData);
+    setPendingData(null);
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
+      {/* Sugerencia de email */}
+      {emailSuggestion && (
+        <div className="rounded-lg border-2 border-[var(--color-primary)] bg-[var(--color-primary)]/10 p-4">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">💡</span>
+            <div className="flex-1">
+              <p className="font-medium mb-2">¿Quisiste decir?</p>
+              <p className="text-sm text-[var(--color-muted-foreground)] mb-3">
+                Detectamos un posible error en tu email. ¿Querías escribir:
+              </p>
+              <p className="font-mono font-bold text-[var(--color-primary)] mb-4">
+                {emailSuggestion}
+              </p>
+              <div className="flex gap-2 flex-wrap">
+                <Button
+                  type="button"
+                  onClick={useSuggestedEmail}
+                  size="sm"
+                  className="flex-1 sm:flex-initial"
+                >
+                  ✓ Sí, usar ese email
+                </Button>
+                <Button
+                  type="button"
+                  onClick={keepOriginalEmail}
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 sm:flex-initial"
+                >
+                  No, mi email está bien
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Name */}
       <InputField
         label="Nombre"

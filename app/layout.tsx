@@ -66,7 +66,29 @@ export default function RootLayout({
             </main>
             <Footer />
           </div>
-          <Toaster />
+          <Toaster
+            position="bottom-center"
+            toastOptions={{
+              duration: 5000,
+              style: {
+                background: 'var(--color-background)',
+                color: 'var(--color-foreground)',
+                border: '1px solid var(--color-border)',
+              },
+              success: {
+                iconTheme: {
+                  primary: 'var(--color-primary)',
+                  secondary: 'var(--color-background)',
+                },
+              },
+              error: {
+                iconTheme: {
+                  primary: '#ef4444',
+                  secondary: 'var(--color-background)',
+                },
+              },
+            }}
+          />
         </ThemeProvider>
       </body>
     </html>

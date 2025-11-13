@@ -40,7 +40,7 @@ export default function ContactConfirm({ name }: ContactConfirmProps) {
           <Text style={text}>
             Saludos,
             <br />
-            Tu Nombre
+            Javier Zader
           </Text>
 
           <Text style={footer}>Si no enviaste este mensaje, puedes ignorar este email.</Text>
