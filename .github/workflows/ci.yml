@@ -57,3 +57,8 @@ jobs:
           NEXT_PUBLIC_GISCUS_REPO_ID: dummy-repo-id
           NEXT_PUBLIC_GISCUS_CATEGORY: Announcements
           NEXT_PUBLIC_GISCUS_CATEGORY_ID: dummy-category-id
+          RESEND_API_KEY: re_dummy_api_key_for_ci_build
+          RESEND_FROM_EMAIL: noreply@example.com
+          RESEND_TO_EMAIL: contact@example.com
+          UPSTASH_REDIS_REST_URL: https://dummy-redis.upstash.io
+          UPSTASH_REDIS_REST_TOKEN: dummy_redis_token_for_ci

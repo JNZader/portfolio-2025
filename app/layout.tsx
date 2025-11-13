@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import type { ReactNode } from 'react';
+import { Toaster } from 'react-hot-toast';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import SkipLink from '@/components/ui/SkipLink';
@@ -65,6 +66,29 @@ export default function RootLayout({
             </main>
             <Footer />
           </div>
+          <Toaster
+            position="bottom-center"
+            toastOptions={{
+              duration: 5000,
+              style: {
+                background: 'var(--color-background)',
+                color: 'var(--color-foreground)',
+                border: '1px solid var(--color-border)',
+              },
+              success: {
+                iconTheme: {
+                  primary: 'var(--color-primary)',
+                  secondary: 'var(--color-background)',
+                },
+              },
+              error: {
+                iconTheme: {
+                  primary: '#ef4444',
+                  secondary: 'var(--color-background)',
+                },
+              },
+            }}
+          />
         </ThemeProvider>
       </body>
     </html>
