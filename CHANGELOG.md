@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.0](https://github.com/JNZader/portfolio-2025/compare/v0.10.0...v0.11.0) (2025-11-18)
+
+
+### Features
+
+* **newsletter:** add double opt-in email templates ([546b3f5](https://github.com/JNZader/portfolio-2025/commits/546b3f5817f98c375ca748c7b6608de0766bd22b))
+* **newsletter:** add subscribe action and confirmation API ([4ec8ff3](https://github.com/JNZader/portfolio-2025/commits/4ec8ff365d00034e34beae8ea049f9392e411f3d))
+* **newsletter:** add Supabase PostgreSQL and Prisma ORM setup ([3121ab4](https://github.com/JNZader/portfolio-2025/commits/3121ab49a5713c5045077bf88b83e1ce483935e1))
+* **newsletter:** add unsubscribe API and form component ([dc31435](https://github.com/JNZader/portfolio-2025/commits/dc31435783f0bcb948fba9299b9d2b617b39cde4))
+* **newsletter:** add validation schemas and rate limiting ([9c75305](https://github.com/JNZader/portfolio-2025/commits/9c75305b9b60732065e9b88b88f0b95802543272))
+* **newsletter:** complete newsletter integration with double opt-in ([4ee6862](https://github.com/JNZader/portfolio-2025/commits/4ee686242021ae4db7326ab52b9a3b5ed1299e1c))
+
 ## [0.10.0](https://github.com/JNZader/portfolio-2025/compare/v0.9.0...v0.10.0) (2025-11-13)
 
 
