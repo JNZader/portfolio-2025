@@ -24,6 +24,8 @@ jobs:
 
       - name: Generate Prisma Client
         run: npx prisma generate
+        env:
+          DATABASE_URL: file:./prisma/dev.db
 
       - name: Biome Check(lint+format)
         run: npm run check
@@ -50,6 +52,8 @@ jobs:
 
       - name: Generate Prisma Client
         run: npx prisma generate
+        env:
+          DATABASE_URL: file:./prisma/dev.db
 
       - name: Build
         run: npm run build
