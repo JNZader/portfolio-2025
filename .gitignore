@@ -65,3 +65,4 @@ sanity/dist
 
 # Husky
 .husky/_
+/lib/generated/prisma

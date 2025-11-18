@@ -10,12 +10,12 @@ export const redis = new Redis({
 });
 
 /**
- * Rate limiter: 3 emails cada 10 minutos por IP
+ * Rate limiter: 3 emails cada 10 minutos por IP (100 en dev)
  * Balance ideal para producción: previene spam sin frustrar usuarios legítimos
  */
 export const contactRateLimiter = new Ratelimit({
   redis,
-  limiter: Ratelimit.slidingWindow(3, '10 m'),
+  limiter: Ratelimit.slidingWindow(process.env.NODE_ENV === 'development' ? 100 : 3, '10 m'),
   analytics: true,
   prefix: 'ratelimit:contact',
 });
@@ -33,3 +33,13 @@ export function getClientIdentifier(request: Request): string {
 
   return ip.trim();
 }
+
+/**
+ * Rate limiter para newsletter: 5 suscripciones por hora por IP (100 en dev)
+ */
+export const newsletterRateLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(process.env.NODE_ENV === 'development' ? 100 : 5, '1 h'),
+  analytics: true,
+  prefix: 'ratelimit:newsletter',
+});
