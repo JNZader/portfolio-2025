@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client/extension';
+import { PrismaClient } from '@/lib/generated/prisma/client';
 
 /**
  * Prisma Client Singleton
