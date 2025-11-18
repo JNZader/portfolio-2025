@@ -33,3 +33,13 @@ export function getClientIdentifier(request: Request): string {
 
   return ip.trim();
 }
+
+/**
+ * Rate limiter para newsletter: 5 suscripciones por hora por IP
+ */
+export const newsletterRateLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(5, '1 h'),
+  analytics: true,
+  prefix: 'ratelimit:newsletter',
+});
