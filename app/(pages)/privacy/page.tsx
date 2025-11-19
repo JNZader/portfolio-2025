@@ -168,7 +168,7 @@ export default function PrivacyPage() {
             </ul>
           </div>
 
-          <p>
+          <div className="mb-4">
             Para ejercer estos derechos, visita la{' '}
             <a href="/data-request">página de solicitud de datos</a> o contacta a{' '}
             <ObfuscatedEmail
@@ -176,7 +176,7 @@ export default function PrivacyPage() {
               domain="gmail.com"
               className="text-[var(--color-primary)] hover:underline"
             />
-          </p>
+          </div>
 
           <h2>8. Retención de Datos</h2>
           <ul>

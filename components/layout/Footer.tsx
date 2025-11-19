@@ -15,7 +15,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="border-t bg-background/95 backdrop-blur-sm">
+    <footer id="footer" className="border-t bg-background/95 backdrop-blur-sm">
       <Container>
         {/* Main Footer Content */}
         <div className="py-12">

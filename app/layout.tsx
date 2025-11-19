@@ -2,12 +2,13 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import type { ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { AnnouncerProvider } from '@/components/a11y/ScreenReaderAnnouncer';
+import { SkipLinks } from '@/components/a11y/SkipLinks';
 import { AnimationProvider } from '@/components/animations';
 import { CookieConsent } from '@/components/gdpr/CookieConsent';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { CustomCursor } from '@/components/ui/CustomCursor';
-import SkipLink from '@/components/ui/SkipLink';
 import { ThemeProvider } from '@/lib/design/theme-provider';
 import './globals.css';
 
@@ -62,39 +63,41 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AnimationProvider>
-            <CustomCursor />
-            <div className="relative flex min-h-screen flex-col">
-              <SkipLink />
-              <Header />
-              <main id="main-content" className="flex-1">
-                {children}
-              </main>
-              <Footer />
-            </div>
-            <Toaster
-              position="bottom-center"
-              toastOptions={{
-                duration: 5000,
-                style: {
-                  background: 'var(--color-background)',
-                  color: 'var(--color-foreground)',
-                  border: '1px solid var(--color-border)',
-                },
-                success: {
-                  iconTheme: {
-                    primary: 'var(--color-primary)',
-                    secondary: 'var(--color-background)',
+            <AnnouncerProvider>
+              <CustomCursor />
+              <div className="relative flex min-h-screen flex-col">
+                <SkipLinks />
+                <Header />
+                <main id="main-content" className="flex-1">
+                  {children}
+                </main>
+                <Footer />
+              </div>
+              <Toaster
+                position="bottom-center"
+                toastOptions={{
+                  duration: 5000,
+                  style: {
+                    background: 'var(--color-background)',
+                    color: 'var(--color-foreground)',
+                    border: '1px solid var(--color-border)',
                   },
-                },
-                error: {
-                  iconTheme: {
-                    primary: '#ef4444',
-                    secondary: 'var(--color-background)',
+                  success: {
+                    iconTheme: {
+                      primary: 'var(--color-primary)',
+                      secondary: 'var(--color-background)',
+                    },
                   },
-                },
-              }}
-            />
-            <CookieConsent />
+                  error: {
+                    iconTheme: {
+                      primary: '#ef4444',
+                      secondary: 'var(--color-background)',
+                    },
+                  },
+                }}
+              />
+              <CookieConsent />
+            </AnnouncerProvider>
           </AnimationProvider>
         </ThemeProvider>
       </body>

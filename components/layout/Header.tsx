@@ -37,7 +37,11 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-sm">
       <Container>
-        <nav className="flex h-16 items-center justify-between" aria-label="Global">
+        <nav
+          id="main-navigation"
+          className="flex h-16 items-center justify-between"
+          aria-label="Global"
+        >
           {/* Logo */}
           <div className="flex lg:flex-1">
             <Link href="/" className="-m-1.5 p-1.5">
