@@ -192,7 +192,13 @@ export function ContactForm() {
       />
 
       {/* Submit button */}
-      <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+      <Button
+        type="submit"
+        size="lg"
+        className="w-full"
+        disabled={isSubmitting}
+        aria-busy={isSubmitting}
+      >
         {isSubmitting ? (
           <>
             <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />
@@ -201,7 +207,7 @@ export function ContactForm() {
         ) : (
           <>
             <SendIcon className="mr-2 h-4 w-4" />
-            Enviar Mensaje
+            Enviar
           </>
         )}
       </Button>

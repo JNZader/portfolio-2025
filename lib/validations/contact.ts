@@ -27,7 +27,7 @@ export const contactSchema = z.object({
   message: z
     .string()
     .min(10, 'El mensaje debe tener al menos 10 caracteres')
-    .max(5000, 'El mensaje debe tener máximo 5000 caracteres'),
+    .max(1000, 'El mensaje debe tener máximo 1000 caracteres'),
 });
 
 /**

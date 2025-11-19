@@ -40,7 +40,7 @@ export default function Header() {
         <nav
           id="main-navigation"
           className="flex h-16 items-center justify-between"
-          aria-label="Global"
+          aria-label="Principal"
         >
           {/* Logo */}
           <div className="flex lg:flex-1">
@@ -77,13 +77,13 @@ export default function Header() {
           {/* Desktop theme toggle */}
           <div className="hidden md:flex md:flex-1 md:justify-end">
             {mounted ? (
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
+              <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Tema">
                 {theme === 'dark' ? (
                   <SunIcon className="h-5 w-5" />
                 ) : (
                   <MoonIcon className="h-5 w-5" />
                 )}
-                <span className="sr-only">Toggle theme</span>
+                <span className="sr-only">Cambiar tema</span>
               </Button>
             ) : (
               <div className="size-11" aria-hidden="true" />
@@ -93,13 +93,13 @@ export default function Header() {
           {/* Mobile menu button */}
           <div className="flex md:hidden gap-2">
             {mounted ? (
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
+              <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Tema">
                 {theme === 'dark' ? (
                   <SunIcon className="h-4 w-4" />
                 ) : (
                   <MoonIcon className="h-4 w-4" />
                 )}
-                <span className="sr-only">Toggle theme</span>
+                <span className="sr-only">Cambiar tema</span>
               </Button>
             ) : (
               <div className="size-11" aria-hidden="true" />
@@ -109,7 +109,7 @@ export default function Header() {
               type="button"
               className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               onClick={() => setMobileMenuOpen(true)}
-              aria-label="Abrir menú"
+              aria-label="Menú"
             >
               <MenuIcon className="h-6 w-6" />
             </button>

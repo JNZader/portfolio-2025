@@ -71,7 +71,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         <Container>
           <RevealOnScroll>
             <SectionHeader centered>
-              <SectionTitle size="xl">Blog</SectionTitle>
+              <SectionTitle size="xl" as="h1">
+                Blog
+              </SectionTitle>
               <SectionDescription size="lg" className="mx-auto">
                 Artículos sobre desarrollo web, programación y las últimas tecnologías.
               </SectionDescription>

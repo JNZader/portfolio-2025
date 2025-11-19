@@ -58,8 +58,8 @@ export default function Footer() {
             </div>
 
             {/* Navigation Column */}
-            <div className="space-y-4 md:text-center">
-              <h4 className="font-semibold">Navegación</h4>
+            <nav className="space-y-4 md:text-center" aria-label="Enlaces del pie de página">
+              <p className="font-semibold">Navegación</p>
               <ul className="space-y-2">
                 {navigation.map((item) => (
                   <li key={item.name}>
@@ -72,11 +72,11 @@ export default function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </nav>
 
             {/* Services Column */}
             <div className="space-y-4 md:text-right">
-              <h4 className="font-semibold">Servicios</h4>
+              <p className="font-semibold">Servicios</p>
               <ul className="space-y-2">
                 <li>
                   <span className="text-sm text-muted-foreground">Desarrollo Backend</span>
@@ -115,7 +115,7 @@ export default function Footer() {
                 href="/data-request"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                GDPR
+                Datos GDPR
               </Link>
               <span className="text-xs text-muted-foreground">Construido con Next.js</span>
             </div>

@@ -33,6 +33,7 @@ export function PostCard({ post, priority = false }: PostCardProps) {
       <Link
         href={`/blog/${post.slug.current}`}
         className="relative aspect-[16/9] overflow-hidden bg-[var(--color-muted)]"
+        aria-label={post.title}
       >
         {imageUrl && (
           <Image

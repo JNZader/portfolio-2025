@@ -62,7 +62,7 @@ export default function MobileMenu({ open, onClose, navigation }: MobileMenuProp
             </svg>
           </button>
         </div>
-        <div className="mt-6 flow-root">
+        <nav className="mt-6 flow-root" aria-label="Móvil">
           <div className="-my-6 divide-y divide-border">
             <div className="space-y-2 py-6">
               {navigation.map((item) => {
@@ -86,7 +86,7 @@ export default function MobileMenu({ open, onClose, navigation }: MobileMenuProp
               })}
             </div>
           </div>
-        </div>
+        </nav>
       </div>
     </div>
   );

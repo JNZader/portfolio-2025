@@ -24,7 +24,9 @@ export default function ContactoPage() {
         <Container>
           <RevealOnScroll>
             <SectionHeader centered>
-              <SectionTitle size="xl">Contacto</SectionTitle>
+              <SectionTitle size="xl" as="h1">
+                Contacto
+              </SectionTitle>
               <SectionDescription size="lg" className="mx-auto">
                 ¿Tienes un proyecto en mente o quieres colaborar? Me encantaría escucharte.
               </SectionDescription>
