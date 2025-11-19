@@ -1,6 +1,12 @@
 import type { Metadata } from 'next';
+import { RevealOnScroll } from '@/components/animations';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
-import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
+import Section, {
+  SECTION_BG,
+  SectionDescription,
+  SectionHeader,
+  SectionTitle,
+} from '@/components/ui/Section';
 
 export const metadata: Metadata = {
   title: 'Sobre mí',
@@ -12,13 +18,15 @@ export default function SobreMiPage() {
   return (
     <div className="pt-16">
       {/* Hero Section */}
-      <Section background="gradient" spacing="xl">
-        <SectionHeader centered>
-          <SectionTitle size="xl">Sobre mí</SectionTitle>
-          <SectionDescription size="lg" className="mx-auto">
-            Desarrollador apasionado por crear soluciones tecnológicas robustas y escalables
-          </SectionDescription>
-        </SectionHeader>
+      <Section background={SECTION_BG.GRADIENT} spacing="xl">
+        <RevealOnScroll>
+          <SectionHeader centered>
+            <SectionTitle size="xl">Sobre mí</SectionTitle>
+            <SectionDescription size="lg" className="mx-auto">
+              Desarrollador apasionado por crear soluciones tecnológicas robustas y escalables
+            </SectionDescription>
+          </SectionHeader>
+        </RevealOnScroll>
       </Section>
 
       {/* Main Content */}
@@ -26,7 +34,7 @@ export default function SobreMiPage() {
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Main Content */}
-            <div className="lg:col-span-2 space-y-8">
+            <RevealOnScroll className="lg:col-span-2 space-y-8">
               <div>
                 <h2 className="text-2xl font-bold mb-4">Mi Historia</h2>
                 <div className="space-y-4 text-muted-foreground">
@@ -78,10 +86,10 @@ export default function SobreMiPage() {
                   </ul>
                 </div>
               </div>
-            </div>
+            </RevealOnScroll>
 
             {/* Sidebar */}
-            <div className="space-y-8">
+            <RevealOnScroll delay={0.2} className="space-y-8">
               {/* Skills */}
               <div className="bg-card p-6 rounded-lg border">
                 <h3 className="text-xl font-bold mb-4">Habilidades Técnicas</h3>
@@ -194,7 +202,7 @@ export default function SobreMiPage() {
                   </p>
                 </div>
               </div>
-            </div>
+            </RevealOnScroll>
           </div>
         </div>
       </Section>

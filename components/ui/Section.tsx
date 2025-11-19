@@ -13,6 +13,16 @@ export type SectionBackground =
 
 export type SectionSpacing = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
+/** Background variant constants to avoid WebStorm false positives */
+export const SECTION_BG = {
+  DEFAULT: 'default',
+  MUTED: 'muted',
+  ACCENT: 'accent',
+  PRIMARY: 'primary',
+  GRADIENT: 'gradient',
+  GRADIENT_PRIMARY: 'gradient-primary',
+} as const satisfies Record<string, SectionBackground>;
+
 const sectionVariants = cva('w-full', {
   variants: {
     spacing: {

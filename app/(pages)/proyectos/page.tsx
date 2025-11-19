@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { RevealOnScroll } from '@/components/animations';
 import ProjectsClient from '@/components/projects/ProjectsClient';
 import Container from '@/components/ui/Container';
-import Section from '@/components/ui/Section';
+import Section, { SECTION_BG } from '@/components/ui/Section';
 import { getCachedFeaturedProjects } from '@/lib/github/queries';
 import type { Project } from '@/lib/github/types';
 import { sanityFetch } from '@/sanity/lib/client';
@@ -63,7 +63,7 @@ export default async function ProyectosPage() {
   return (
     <>
       {/* Hero Section */}
-      <Section background="gradient" spacing="xl">
+      <Section background={SECTION_BG.GRADIENT} spacing="xl">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <RevealOnScroll>

@@ -6,6 +6,7 @@ import { AnimationProvider } from '@/components/animations';
 import { CookieConsent } from '@/components/gdpr/CookieConsent';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
+import { CustomCursor } from '@/components/ui/CustomCursor';
 import SkipLink from '@/components/ui/SkipLink';
 import { ThemeProvider } from '@/lib/design/theme-provider';
 import './globals.css';
@@ -61,6 +62,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AnimationProvider>
+            <CustomCursor />
             <div className="relative flex min-h-screen flex-col">
               <SkipLink />
               <Header />

@@ -1,7 +1,12 @@
 import { RevealOnScroll, StaggeredReveal } from '@/components/animations';
 import { NewsletterHero } from '@/components/newsletter/NewsletterHero';
 import { HeroSection } from '@/components/sections/hero-section';
-import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
+import Section, {
+  SECTION_BG,
+  SectionDescription,
+  SectionHeader,
+  SectionTitle,
+} from '@/components/ui/Section';
 
 export default function HomePage() {
   const stats = [
@@ -34,7 +39,7 @@ export default function HomePage() {
       />
 
       {/* Quick Stats */}
-      <Section background="muted" spacing="lg">
+      <Section background={SECTION_BG.MUTED} spacing="lg">
         <StaggeredReveal
           staggerDelay={0.1}
           className="flex flex-wrap justify-center gap-8 md:gap-16"

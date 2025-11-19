@@ -1,10 +1,16 @@
 import type { Metadata } from 'next';
+import { RevealOnScroll } from '@/components/animations';
 import { BlogFilters } from '@/components/blog/BlogFilters';
 import { EmptyState } from '@/components/blog/EmptyState';
 import { Pagination } from '@/components/blog/Pagination';
 import { PostGrid } from '@/components/blog/PostGrid';
 import Container from '@/components/ui/Container';
-import Section from '@/components/ui/Section';
+import Section, {
+  SECTION_BG,
+  SectionDescription,
+  SectionHeader,
+  SectionTitle,
+} from '@/components/ui/Section';
 import { getPaginationRange, getTotalPages } from '@/lib/utils/blog';
 import { isValidSearchTerm, normalizeSearchTerm } from '@/lib/utils/search';
 import { sanityFetch } from '@/sanity/lib/client';
@@ -61,21 +67,25 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   return (
     <>
       {/* Hero */}
-      <Section className="bg-[var(--color-muted)]">
+      <Section background={SECTION_BG.GRADIENT} spacing="xl">
         <Container>
-          <div className="py-12">
-            <h1 className="text-4xl font-bold mb-4">Blog</h1>
-            <p className="text-lg text-[var(--color-muted-foreground)] max-w-2xl">
-              Artículos sobre desarrollo web, programación y las últimas tecnologías.
-            </p>
-          </div>
+          <RevealOnScroll>
+            <SectionHeader centered>
+              <SectionTitle size="xl">Blog</SectionTitle>
+              <SectionDescription size="lg" className="mx-auto">
+                Artículos sobre desarrollo web, programación y las últimas tecnologías.
+              </SectionDescription>
+            </SectionHeader>
+          </RevealOnScroll>
         </Container>
       </Section>
 
       {/* Search and Filters */}
-      <Section>
+      <Section spacing="lg">
         <Container>
-          <BlogFilters categories={categories} totalPosts={total} />
+          <RevealOnScroll>
+            <BlogFilters categories={categories} totalPosts={total} />
+          </RevealOnScroll>
         </Container>
       </Section>
 
