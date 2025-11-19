@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { sendContactEmail } from '@/app/actions/contact';
+import { useAnnouncer } from '@/components/a11y/ScreenReaderAnnouncer';
 import { Button } from '@/components/ui/button';
 import { type ContactFormData, contactSchema } from '@/lib/validations/contact';
 import { quickValidateEmail } from '@/lib/validations/email-validator-client';
@@ -14,6 +15,7 @@ export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [emailSuggestion, setEmailSuggestion] = useState<string | null>(null);
   const [pendingData, setPendingData] = useState<ContactFormData | null>(null);
+  const { announce } = useAnnouncer();
 
   const {
     register,
@@ -63,6 +65,7 @@ export function ContactForm() {
           duration: 5000,
           position: 'bottom-center',
         });
+        announce('Mensaje enviado correctamente', 'polite');
         reset(); // Limpiar formulario
         setEmailSuggestion(null);
         setPendingData(null);
@@ -71,6 +74,7 @@ export function ContactForm() {
           duration: 4000,
           position: 'bottom-center',
         });
+        announce('Error al enviar el mensaje', 'assertive');
       }
     } catch (error) {
       console.error('Form submission error:', error);
@@ -78,6 +82,7 @@ export function ContactForm() {
         duration: 4000,
         position: 'bottom-center',
       });
+      announce('Error inesperado al enviar el mensaje', 'assertive');
     } finally {
       setIsSubmitting(false);
     }
