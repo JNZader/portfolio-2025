@@ -1,12 +1,23 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function CustomCursor() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const rafId = useRef<number>(0);
+
+  // Throttled mouse position update using requestAnimationFrame
+  const updateMousePosition = useCallback((e: MouseEvent) => {
+    if (rafId.current) {
+      cancelAnimationFrame(rafId.current);
+    }
+    rafId.current = requestAnimationFrame(() => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    });
+  }, []);
 
   useEffect(() => {
     // Check if device has fine pointer (desktop)
@@ -18,15 +29,11 @@ export function CustomCursor() {
 
     setIsVisible(true);
 
-    const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
     const handleMouseEnter = () => setIsHovering(true);
     const handleMouseLeave = () => setIsHovering(false);
 
     // Track mouse movement
-    document.addEventListener('mousemove', updateMousePosition);
+    document.addEventListener('mousemove', updateMousePosition, { passive: true });
 
     // Add hover listeners to interactive elements
     const interactiveElements = document.querySelectorAll(
@@ -39,13 +46,16 @@ export function CustomCursor() {
     });
 
     return () => {
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current);
+      }
       document.removeEventListener('mousemove', updateMousePosition);
       interactiveElements.forEach((element) => {
         element.removeEventListener('mouseenter', handleMouseEnter);
         element.removeEventListener('mouseleave', handleMouseLeave);
       });
     };
-  }, []);
+  }, [updateMousePosition]);
 
   if (!isVisible) return null;
 
@@ -53,7 +63,7 @@ export function CustomCursor() {
     <>
       {/* Main cursor */}
       <motion.div
-        className="fixed top-0 left-0 w-4 h-4 pointer-events-none z-[9999] mix-blend-difference"
+        className="fixed top-0 left-0 w-4 h-4 pointer-events-none z-[9999] mix-blend-difference will-change-transform"
         animate={{
           x: mousePosition.x - 8,
           y: mousePosition.y - 8,
@@ -70,7 +80,7 @@ export function CustomCursor() {
 
       {/* Trailing cursor */}
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 pointer-events-none z-[9998] mix-blend-difference border border-white/30 rounded-full"
+        className="fixed top-0 left-0 w-8 h-8 pointer-events-none z-[9998] mix-blend-difference border border-white/30 rounded-full will-change-transform"
         animate={{
           x: mousePosition.x - 16,
           y: mousePosition.y - 16,
