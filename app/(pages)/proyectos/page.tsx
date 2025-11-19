@@ -80,7 +80,15 @@ export default async function ProyectosPage() {
       {/* Projects Section with Search */}
       <Section>
         <Container>
-          <Suspense fallback={<div className="text-center py-12">Cargando proyectos...</div>}>
+          <Suspense
+            fallback={
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {['a', 'b', 'c', 'd', 'e', 'f'].map((id) => (
+                  <div key={id} className="rounded-lg border bg-card h-[420px] animate-pulse" />
+                ))}
+              </div>
+            }
+          >
             <ProjectsClient projects={allProjects} />
           </Suspense>
         </Container>
