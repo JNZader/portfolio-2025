@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.12.0](https://github.com/JNZader/portfolio-2025/compare/v0.11.0...v0.12.0) (2025-11-19)
+
+
+### Features
+
+* **gdpr:** add API routes and complete integration ([405f208](https://github.com/JNZader/portfolio-2025/commits/405f208cbad18885279c32686eb292aac0c348c7))
+* **gdpr:** add consent tracking to subscriber schema ([34065af](https://github.com/JNZader/portfolio-2025/commits/34065afd38219af28c7b71e52f3deee8d0263d37))
+* **gdpr:** add cookie consent banner ([8f1c230](https://github.com/JNZader/portfolio-2025/commits/8f1c230610af461af33cdab3f9c2aa9f5ebf14e0))
+* **gdpr:** add data management services ([a731111](https://github.com/JNZader/portfolio-2025/commits/a7311112d256d5a18121e12334d66ca41e5f181e))
+* **gdpr:** add email verification and security improvements ([47ad21a](https://github.com/JNZader/portfolio-2025/commits/47ad21adbba6e375b68dd14472558cfe829719b3))
+* **gdpr:** add privacy policy and data request pages ([a0da276](https://github.com/JNZader/portfolio-2025/commits/a0da276fc42256ba69a21d02722fc04c4426c918))
+
 ## [0.11.0](https://github.com/JNZader/portfolio-2025/compare/v0.10.0...v0.11.0) (2025-11-18)
 
 
