@@ -30,24 +30,14 @@ export function DataRequestForm() {
         body: JSON.stringify(data),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        const error = await response.json();
-        toast.error(error.message || 'Error al solicitar datos');
+        toast.error(result.message || 'Error al solicitar datos');
         return;
       }
 
-      // Descargar JSON
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `data-export-${data.email}-${Date.now()}.json`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-
-      toast.success('Datos exportados correctamente');
+      toast.success(result.message || 'Revisa tu email para descargar tus datos');
       reset();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Error al exportar datos');
@@ -67,11 +57,11 @@ export function DataRequestForm() {
       </div>
 
       <Button type="submit" disabled={isLoading}>
-        {isLoading ? 'Exportando...' : 'Exportar mis datos'}
+        {isLoading ? 'Enviando...' : 'Solicitar exportación'}
       </Button>
 
       <p className="text-sm text-[var(--color-foreground)]/60">
-        Recibirás un archivo JSON con toda la información que tenemos sobre ti.
+        Recibirás un email con un enlace para descargar tus datos en formato JSON.
       </p>
     </form>
   );

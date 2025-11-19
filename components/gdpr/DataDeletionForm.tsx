@@ -49,7 +49,7 @@ export function DataDeletionForm() {
         return;
       }
 
-      toast.success('Todos tus datos han sido eliminados permanentemente');
+      toast.success(result.message || 'Revisa tu email para confirmar la eliminación');
       reset();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Error al eliminar datos');
@@ -100,7 +100,7 @@ export function DataDeletionForm() {
       {errors.confirmation && <p className="text-sm text-red-600">{errors.confirmation.message}</p>}
 
       <Button type="submit" variant="destructive" disabled={isLoading}>
-        {isLoading ? 'Eliminando...' : 'Eliminar mis datos'}
+        {isLoading ? 'Enviando...' : 'Solicitar eliminación'}
       </Button>
     </form>
   );

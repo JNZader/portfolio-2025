@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Container from '@/components/ui/Container';
+import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
 import Section from '@/components/ui/Section';
 
 export const metadata: Metadata = {
@@ -14,22 +15,23 @@ export default function PrivacyPage() {
         <article className="prose prose-lg dark:prose-invert max-w-none">
           <h1>Política de Privacidad</h1>
           <p className="lead">
-            Última actualización: <time>5 de octubre de 2025</time>
+            Última actualización: <time dateTime="2025-01-01">Enero de 2025</time>
           </p>
 
           <hr />
 
           <h2>1. Introducción</h2>
           <p>
-            Esta política de privacidad explica cómo [TU NOMBRE/EMPRESA] ("nosotros", "nuestro")
-            recopila, usa y protege tu información personal cuando usas nuestro sitio web.
+            Esta política de privacidad explica cómo Javier Norberto Zader ("yo", "mi", "este
+            sitio") recopila, usa y protege tu información personal cuando usas este sitio web.
           </p>
           <p>
-            Nos comprometemos a proteger tu privacidad y cumplir con el Reglamento General de
-            Protección de Datos (GDPR) de la Unión Europea y otras leyes aplicables.
+            Me comprometo a proteger tu privacidad y cumplir con la Ley 25.326 de Protección de
+            Datos Personales de Argentina, así como con el Reglamento General de Protección de Datos
+            (GDPR) de la Unión Europea para visitantes de la UE.
           </p>
 
-          <h2>2. Información que Recopilamos</h2>
+          <h2>2. Información que Recopilo</h2>
 
           <h3>2.1 Información que Proporcionas Directamente</h3>
           <ul>
@@ -56,8 +58,8 @@ export default function PrivacyPage() {
             </li>
           </ul>
 
-          <h2>3. Cómo Usamos tu Información</h2>
-          <p>Usamos tu información personal para:</p>
+          <h2>3. Cómo Uso tu Información</h2>
+          <p>Uso tu información personal para:</p>
           <ul>
             <li>
               <strong>Newsletter:</strong> Enviarte emails con contenido y actualizaciones (solo con
@@ -76,31 +78,38 @@ export default function PrivacyPage() {
             </li>
           </ul>
 
-          <h2>4. Base Legal para el Procesamiento (GDPR)</h2>
-          <p>Procesamos tu información bajo las siguientes bases legales:</p>
+          <h2>4. Base Legal para el Procesamiento</h2>
+          <p>Proceso tu información bajo las siguientes bases legales:</p>
+
+          <h3>4.1 Ley Argentina 25.326</h3>
           <ul>
             <li>
-              <strong>Consentimiento (Art. 6.1.a GDPR):</strong> Para newsletter y cookies no
-              esenciales
+              <strong>Consentimiento (Art. 5):</strong> Para newsletter y cookies no esenciales
             </li>
             <li>
-              <strong>Interés legítimo (Art. 6.1.f GDPR):</strong> Para analytics y mejoras del
-              sitio
+              <strong>Interés legítimo:</strong> Para analytics y mejoras del sitio
+            </li>
+          </ul>
+
+          <h3>4.2 GDPR (para visitantes de la UE)</h3>
+          <ul>
+            <li>
+              <strong>Consentimiento (Art. 6.1.a):</strong> Para newsletter y cookies no esenciales
             </li>
             <li>
-              <strong>Obligación legal (Art. 6.1.c GDPR):</strong> Para cumplir con leyes aplicables
+              <strong>Interés legítimo (Art. 6.1.f):</strong> Para analytics y mejoras del sitio
             </li>
           </ul>
 
           <h2>5. Compartir Información</h2>
           <p>
-            <strong>NO vendemos ni alquilamos tu información personal.</strong>
+            <strong>NO vendo ni alquilo tu información personal.</strong>
           </p>
-          <p>Compartimos información solo con:</p>
+          <p>Comparto información solo con:</p>
           <ul>
             <li>
-              <strong>Proveedores de servicios:</strong> Resend (emails), Supabase (base de datos),
-              Vercel (hosting) - todos certificados GDPR
+              <strong>Proveedores de servicios:</strong> Resend (emails), Upstash (rate limiting),
+              Vercel (hosting)
             </li>
             <li>
               <strong>Obligaciones legales:</strong> Si lo requiere la ley o una orden judicial
@@ -108,58 +117,49 @@ export default function PrivacyPage() {
           </ul>
 
           <h2>6. Cookies</h2>
-          <p>Usamos los siguientes tipos de cookies:</p>
+          <p>Uso los siguientes tipos de cookies:</p>
 
           <h3>6.1 Cookies Esenciales (Requeridas)</h3>
           <ul>
             <li>
               <strong>cookie-consent:</strong> Almacena tus preferencias de cookies (365 días)
             </li>
-            <li>
-              <strong>session:</strong> Mantiene tu sesión activa (hasta que cierres el navegador)
-            </li>
           </ul>
 
           <h3>6.2 Cookies de Analytics (Opcionales)</h3>
           <ul>
-            <li>
-              <strong>_ga, _ga_*:</strong> Google Analytics para análisis de tráfico (si las
-              autorizas)
-            </li>
+            <li>Actualmente no uso cookies de analytics de terceros</li>
           </ul>
 
           <h3>6.3 Cookies de Marketing (Opcionales)</h3>
           <ul>
-            <li>Actualmente no usamos cookies de marketing de terceros</li>
+            <li>Actualmente no uso cookies de marketing de terceros</li>
           </ul>
 
           <p>
-            Puedes gestionar tus preferencias de cookies en cualquier momento en la parte inferior
-            de la página.
+            Puedes gestionar tus preferencias de cookies en cualquier momento mediante el banner que
+            aparece en la parte inferior de la página.
           </p>
 
-          <h2>7. Tus Derechos (GDPR)</h2>
-          <p>Bajo el GDPR, tienes los siguientes derechos:</p>
+          <h2>7. Tus Derechos</h2>
 
           <div className="bg-[var(--color-primary)]/10 border border-[var(--color-primary)] rounded-lg p-6 my-6">
-            <h3 className="mt-0">Derechos del Usuario</h3>
+            <h3 className="mt-0">Derechos del Usuario (Ley 25.326 y GDPR)</h3>
             <ul className="mb-0">
               <li>
-                <strong>Derecho de Acceso (Art. 15):</strong> Solicitar una copia de tus datos
+                <strong>Derecho de Acceso:</strong> Solicitar una copia de tus datos
               </li>
               <li>
-                <strong>Derecho de Rectificación (Art. 16):</strong> Corregir datos incorrectos
+                <strong>Derecho de Rectificación:</strong> Corregir datos incorrectos
               </li>
               <li>
-                <strong>Derecho al Olvido (Art. 17):</strong> Solicitar eliminación de tus datos
+                <strong>Derecho de Supresión:</strong> Solicitar eliminación de tus datos
               </li>
               <li>
-                <strong>Derecho a la Portabilidad (Art. 20):</strong> Recibir tus datos en formato
-                JSON
+                <strong>Derecho a la Portabilidad:</strong> Recibir tus datos en formato JSON
               </li>
               <li>
-                <strong>Derecho de Oposición (Art. 21):</strong> Oponerte al procesamiento de tus
-                datos
+                <strong>Derecho de Oposición:</strong> Oponerte al procesamiento de tus datos
               </li>
               <li>
                 <strong>Derecho a Retirar Consentimiento:</strong> En cualquier momento sin afectar
@@ -169,9 +169,13 @@ export default function PrivacyPage() {
           </div>
 
           <p>
-            Para ejercer estos derechos, visita nuestra{' '}
+            Para ejercer estos derechos, visita la{' '}
             <a href="/data-request">página de solicitud de datos</a> o contacta a{' '}
-            <a href="mailto:privacy@tudominio.com">privacy@tudominio.com</a>
+            <ObfuscatedEmail
+              user="jnzader"
+              domain="gmail.com"
+              className="text-[var(--color-primary)] hover:underline"
+            />
           </p>
 
           <h2>8. Retención de Datos</h2>
@@ -184,12 +188,13 @@ export default function PrivacyPage() {
               <strong>Formulario de contacto:</strong> 24 meses desde el último mensaje
             </li>
             <li>
-              <strong>Consent logs:</strong> 3 años (para cumplir con requisitos de auditoría GDPR)
+              <strong>Registros de consentimiento:</strong> 3 años (para cumplir con requisitos de
+              auditoría)
             </li>
           </ul>
 
           <h2>9. Seguridad</h2>
-          <p>Implementamos las siguientes medidas de seguridad:</p>
+          <p>Implemento las siguientes medidas de seguridad:</p>
           <ul>
             <li>
               <strong>Encriptación:</strong> Todas las comunicaciones usan HTTPS/TLS
@@ -198,74 +203,88 @@ export default function PrivacyPage() {
               <strong>Tokens seguros:</strong> Generados con nanoid (32 caracteres)
             </li>
             <li>
-              <strong>Rate limiting:</strong> Protección contra abuso (3-5 requests/hora)
+              <strong>Rate limiting:</strong> Protección contra abuso (límites por IP y email)
+            </li>
+            <li>
+              <strong>Verificación por email:</strong> Para operaciones sensibles como exportación y
+              eliminación de datos
             </li>
             <li>
               <strong>Sanitización:</strong> Todos los inputs se sanitizan contra XSS
-            </li>
-            <li>
-              <strong>Database:</strong> Base de datos en servidor seguro con backups diarios
             </li>
           </ul>
 
           <h2>10. Transferencias Internacionales</h2>
           <p>
-            Tus datos pueden ser procesados en servidores fuera de la UE. Nuestros proveedores están
-            certificados bajo:
+            Tus datos pueden ser procesados en servidores fuera de Argentina. Los proveedores
+            utilizados cumplen con estándares de protección de datos:
           </p>
           <ul>
             <li>
-              <strong>Supabase:</strong> Infraestructura en AWS (Frankfurt, UE)
+              <strong>Vercel:</strong> Hosting con opción de región cercana
             </li>
             <li>
-              <strong>Resend:</strong> Certificado GDPR, servidores en UE disponibles
+              <strong>Resend:</strong> Servicio de emails con cumplimiento GDPR
             </li>
             <li>
-              <strong>Vercel:</strong> Puedes elegir región UE para deployment
+              <strong>Upstash:</strong> Redis serverless para rate limiting
             </li>
           </ul>
+          <p>
+            Argentina tiene estatus de "adecuación" reconocido por la Unión Europea, lo que permite
+            transferencias de datos desde la UE.
+          </p>
 
           <h2>11. Menores de Edad</h2>
           <p>
-            Nuestro sitio no está dirigido a menores de 16 años. No recopilamos intencionalmente
-            información de menores. Si descubrimos que hemos recopilado datos de un menor, los
-            eliminaremos inmediatamente.
+            Este sitio no está dirigido a menores de 13 años. No recopilo intencionalmente
+            información de menores. Si descubro que he recopilado datos de un menor, los eliminaré
+            inmediatamente.
           </p>
 
           <h2>12. Cambios en esta Política</h2>
           <p>
-            Podemos actualizar esta política ocasionalmente. Te notificaremos de cambios importantes
-            por email (si estás suscrito) o mediante un aviso en el sitio. La versión actual siempre
+            Puedo actualizar esta política ocasionalmente. Te notificaré de cambios importantes por
+            email (si estás suscrito) o mediante un aviso en el sitio. La versión actual siempre
             estará disponible en esta página con la fecha de última actualización.
           </p>
 
           <h2>13. Contacto</h2>
           <p>
-            Para cualquier pregunta sobre esta política o para ejercer tus derechos GDPR, contacta
-            a:
+            Para cualquier pregunta sobre esta política o para ejercer tus derechos de protección de
+            datos, contacta a:
           </p>
           <div className="bg-[var(--color-muted)] rounded-lg p-4 my-4">
             <p className="mb-2">
-              <strong>Responsable de Protección de Datos:</strong>
+              <strong>Responsable del Tratamiento:</strong>
             </p>
-            <p className="mb-1">Email: privacy@tudominio.com</p>
-            <p className="mb-1">Dirección: [TU DIRECCIÓN]</p>
-            <p className="mb-0">Tiempo de respuesta: 30 días (según GDPR Art. 12.3)</p>
+            <p className="mb-1">Javier Norberto Zader</p>
+            <p className="mb-1">
+              Email:{' '}
+              <ObfuscatedEmail
+                user="jnzader"
+                domain="gmail.com"
+                className="text-[var(--color-primary)] hover:underline"
+              />
+            </p>
+            <p className="mb-1">Ubicación: Córdoba, Argentina</p>
+            <p className="mb-0">Tiempo de respuesta: 10 días hábiles (según Ley 25.326 Art. 14)</p>
           </div>
 
           <h2>14. Autoridad de Supervisión</h2>
           <p>
-            Tienes derecho a presentar una queja ante tu autoridad de protección de datos local:
+            Tienes derecho a presentar una queja ante la autoridad de protección de datos
+            correspondiente:
           </p>
           <ul>
             <li>
-              <strong>España:</strong>{' '}
-              <a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">
-                Agencia Española de Protección de Datos (AEPD)
+              <strong>Argentina:</strong>{' '}
+              <a href="https://www.argentina.gob.ar/aaip" target="_blank" rel="noopener noreferrer">
+                Agencia de Acceso a la Información Pública (AAIP)
               </a>
             </li>
             <li>
-              <strong>UE:</strong> Encuentra tu autoridad local en{' '}
+              <strong>Unión Europea:</strong> Encuentra tu autoridad local en{' '}
               <a
                 href="https://edpb.europa.eu/about-edpb/board/members_en"
                 target="_blank"
@@ -279,7 +298,7 @@ export default function PrivacyPage() {
           <hr />
 
           <p className="text-sm text-[var(--color-foreground)]/60">
-            <strong>Versión:</strong> 1.0 | <strong>Fecha efectiva:</strong> 5 de octubre de 2025
+            <strong>Versión:</strong> 1.0 | <strong>Fecha efectiva:</strong> Enero de 2025
           </p>
         </article>
       </Section>
