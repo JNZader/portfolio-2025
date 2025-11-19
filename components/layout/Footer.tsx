@@ -47,13 +47,18 @@ export default function Footer() {
               <h3 className="text-sm font-semibold mb-4">Legal</h3>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="/privacidad" className="hover:text-[var(--color-primary)]">
+                  <Link href="/privacy" className="hover:text-[var(--color-primary)]">
                     Privacidad
                   </Link>
                 </li>
                 <li>
-                  <Link href="/terminos" className="hover:text-[var(--color-primary)]">
-                    Términos
+                  <Link href="/data-request" className="hover:text-[var(--color-primary)]">
+                    Mis Datos (GDPR)
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contacto" className="hover:text-[var(--color-primary)]">
+                    Contacto
                   </Link>
                 </li>
               </ul>

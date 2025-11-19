@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import type { ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { CookieConsent } from '@/components/gdpr/CookieConsent';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import SkipLink from '@/components/ui/SkipLink';
@@ -89,6 +90,7 @@ export default function RootLayout({
               },
             }}
           />
+          <CookieConsent />
         </ThemeProvider>
       </body>
     </html>
