@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
+import { RevealOnScroll } from '@/components/animations';
 import ProjectsClient from '@/components/projects/ProjectsClient';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
@@ -60,19 +61,30 @@ export default async function ProyectosPage() {
   const allProjects = [...sanityProjects, ...githubProjects];
 
   return (
-    <Section>
-      <Container>
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold mb-4">Proyectos</h1>
-          <p className="text-xl text-foreground/80">
-            Explora {allProjects.length} proyectos con búsqueda y filtros interactivos
-          </p>
-        </div>
+    <>
+      {/* Hero Section */}
+      <Section background="gradient" spacing="xl">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <RevealOnScroll>
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">Mis Proyectos</h1>
+              <p className="text-xl text-muted-foreground">
+                Una colección de {allProjects.length} aplicaciones web, herramientas y experimentos
+                que demuestran mis habilidades y experiencia en desarrollo.
+              </p>
+            </RevealOnScroll>
+          </div>
+        </Container>
+      </Section>
 
-        <Suspense fallback={<div className="text-center py-12">Cargando proyectos...</div>}>
-          <ProjectsClient projects={allProjects} />
-        </Suspense>
-      </Container>
-    </Section>
+      {/* Projects Section with Search */}
+      <Section>
+        <Container>
+          <Suspense fallback={<div className="text-center py-12">Cargando proyectos...</div>}>
+            <ProjectsClient projects={allProjects} />
+          </Suspense>
+        </Container>
+      </Section>
+    </>
   );
 }
