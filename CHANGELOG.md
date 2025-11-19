@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.13.0](https://github.com/JNZader/portfolio-2025/compare/v0.12.0...v0.13.0) (2025-11-19)
+
+
+### Features
+
+* **a11y:** add accessible Modal component and form announcements ([4e3cd38](https://github.com/JNZader/portfolio-2025/commits/4e3cd384d634752e565c0d7fa3cafd8cdff7e052))
+* **a11y:** add FocusTrap component and useKeyboardNav hook ([8710691](https://github.com/JNZader/portfolio-2025/commits/8710691aa53a07edc743185b644c931843e655a4))
+* **a11y:** add skip navigation and screen reader announcements ([db3f577](https://github.com/JNZader/portfolio-2025/commits/db3f577f2f22443a2f354ebc9c6d318dc06f2bde))
+* **theme:** add error color, improve contrast and brand primary color ([e93c394](https://github.com/JNZader/portfolio-2025/commits/e93c394a57ad9e3d8b36fba8578f5fa6332a1042))
+* **ui:** add active indicator, focus states and theme toggle placeholder in Header ([4faa73d](https://github.com/JNZader/portfolio-2025/commits/4faa73d5895cbc8d012b1feafaa7093bcb908730))
+* **ui:** add visual improvements and fix style consistency ([fd1a1a4](https://github.com/JNZader/portfolio-2025/commits/fd1a1a4d5d9dabcafdfcb26977850e96a10c8f0c))
+* **ux:** add skeleton loading state for projects page ([b2d9712](https://github.com/JNZader/portfolio-2025/commits/b2d9712bd1fd997629036b3397ce9e76dd0aa9cd))
+* **ux:** add skeleton loading state for projects page ([d82220a](https://github.com/JNZader/portfolio-2025/commits/d82220aa77074e1baca34912af0c14ee184b7dd7))
+
+
+### Bug Fixes
+
+* **a11y:** increase icon button touch targets to 44px for WCAG compliance ([1c445b3](https://github.com/JNZader/portfolio-2025/commits/1c445b3083dff582b0c99513405839464f3c46d5))
+* **deps:** replace deprecated lucide brand icons with react-icons ([1568010](https://github.com/JNZader/portfolio-2025/commits/15680106a861a50ad11f0fc0fdf2c7fb0bd4f7e2))
+* **ui:** replace hardcoded colors and add active indicator in MobileMenu ([66679df](https://github.com/JNZader/portfolio-2025/commits/66679df990af6184a0d5844b14e038ddc9ca7250))
+
+
+### Performance Improvements
+
+* **ui:** optimize CustomCursor with RAF throttling and will-change ([ee5d4e8](https://github.com/JNZader/portfolio-2025/commits/ee5d4e8207c2005aadb98336d14258346f104392))
+* **ui:** optimize ProjectCard images, actions, transitions and typography ([6ad2d0e](https://github.com/JNZader/portfolio-2025/commits/6ad2d0e2f95779e7f193fc9c302ef743ce5340b7))
+
+
+### Code Refactoring
+
+* **ui:** standardize Tailwind color classes in FormField component ([37fa3f1](https://github.com/JNZader/portfolio-2025/commits/37fa3f1e2d3c413cbef4a6f1df915939284d3986))
+
 ## [0.12.0](https://github.com/JNZader/portfolio-2025/compare/v0.11.0...v0.12.0) (2025-11-19)
 
 
