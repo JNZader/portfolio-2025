@@ -1,14 +1,22 @@
 import * as matchers from '@testing-library/jest-dom/matchers';
 import { cleanup } from '@testing-library/react';
-import { afterEach, expect, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, expect, vi } from 'vitest';
+import { server } from '@/mocks/server';
 
 // Extend Vitest matchers
 expect.extend(matchers);
 
+// Start MSW server
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+
 // Cleanup después de cada test
 afterEach(() => {
   cleanup();
+  server.resetHandlers();
 });
+
+// Close MSW server
+afterAll(() => server.close());
 
 // Mock de Next.js router
 vi.mock('next/navigation', () => ({

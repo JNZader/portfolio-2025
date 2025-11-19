@@ -14,12 +14,14 @@ export default defineConfig({
       exclude: [
         'node_modules/',
         '__tests__/',
+        'mocks/**', // Excluir infraestructura de tests
         '*.config.*',
         'app/**/*.tsx', // Excluir páginas (se testean con E2E)
         '.next/',
         'coverage/',
         'lib/generated/**', // Excluir código generado de Prisma
         'sanity/**', // Excluir configuración de Sanity
+        '**/index.ts', // Excluir barrel exports
       ],
       thresholds: {
         lines: 80,
