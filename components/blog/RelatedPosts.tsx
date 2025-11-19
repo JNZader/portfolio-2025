@@ -37,7 +37,7 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
                     src={imageUrl}
                     alt={post.mainImage.alt || post.title}
                     fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="object-cover transition-transform duration-200 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 </div>

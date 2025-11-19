@@ -60,4 +60,5 @@ export interface Project {
   stars?: number;
   source: 'sanity' | 'github';
   featured?: boolean;
+  readme?: string;
 }

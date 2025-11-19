@@ -110,6 +110,29 @@ export async function getRepo(owner: string, repo: string): Promise<GitHubRepo |
 }
 
 /**
+ * Obtener el README de un repositorio
+ */
+export async function getRepoReadme(owner: string, repo: string): Promise<string | null> {
+  const octokit = getOctokit();
+
+  try {
+    const { data } = await octokit.rest.repos.getReadme({
+      owner,
+      repo,
+      mediaType: {
+        format: 'raw',
+      },
+    });
+
+    // El contenido viene como string cuando usamos format: 'raw'
+    return data as unknown as string;
+  } catch (error) {
+    console.error(`Error fetching README for ${owner}/${repo}:`, error);
+    return null;
+  }
+}
+
+/**
  * Obtener rate limit actual
  */
 export async function getRateLimit(): Promise<GitHubRateLimit> {

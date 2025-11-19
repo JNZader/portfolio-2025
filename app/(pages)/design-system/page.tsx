@@ -1,3 +1,4 @@
+import { RevealOnScroll } from '@/components/animations';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
@@ -10,7 +11,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import Section from '@/components/ui/Section';
+import Section, {
+  SECTION_BG,
+  SectionDescription,
+  SectionHeader,
+  SectionTitle,
+} from '@/components/ui/Section';
 
 export const metadata = {
   title: 'Design System',
@@ -21,21 +27,25 @@ export default function DesignSystemPage() {
   return (
     <>
       {/* Hero */}
-      <Section className="bg-muted">
+      <Section background={SECTION_BG.GRADIENT} spacing="xl">
         <Container>
-          <div className="py-12">
-            <h1 className="text-4xl font-bold mb-4">Design System</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl">
-              Componentes instalados con shadcn/ui CLI. Sistema profesional con dark mode.
-            </p>
-          </div>
+          <RevealOnScroll>
+            <SectionHeader centered>
+              <SectionTitle size="xl">Design System</SectionTitle>
+              <SectionDescription size="lg" className="mx-auto">
+                Componentes instalados con shadcn/ui CLI. Sistema profesional con dark mode.
+              </SectionDescription>
+            </SectionHeader>
+          </RevealOnScroll>
         </Container>
       </Section>
 
       {/* Colors */}
       <Section>
         <Container>
-          <h2 className="text-3xl font-bold mb-6">Semantic Colors</h2>
+          <RevealOnScroll>
+            <h2 className="text-3xl font-bold mb-6">Semantic Colors</h2>
+          </RevealOnScroll>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <ColorSwatch name="Background" className="bg-background text-foreground border" />
@@ -54,9 +64,11 @@ export default function DesignSystemPage() {
       </Section>
 
       {/* Typography */}
-      <Section className="bg-muted">
+      <Section background={SECTION_BG.MUTED}>
         <Container>
-          <h2 className="text-3xl font-bold mb-6">Typography</h2>
+          <RevealOnScroll>
+            <h2 className="text-3xl font-bold mb-6">Typography</h2>
+          </RevealOnScroll>
           <div className="space-y-4">
             {[
               { size: 'text-5xl', label: '5xl' },
@@ -81,7 +93,9 @@ export default function DesignSystemPage() {
       {/* Buttons */}
       <Section>
         <Container>
-          <h2 className="text-3xl font-bold mb-6">Buttons</h2>
+          <RevealOnScroll>
+            <h2 className="text-3xl font-bold mb-6">Buttons</h2>
+          </RevealOnScroll>
 
           <div className="space-y-8">
             {/* Variants */}
@@ -123,9 +137,11 @@ export default function DesignSystemPage() {
       </Section>
 
       {/* Inputs */}
-      <Section className="bg-muted">
+      <Section background={SECTION_BG.MUTED}>
         <Container>
-          <h2 className="text-3xl font-bold mb-6">Inputs</h2>
+          <RevealOnScroll>
+            <h2 className="text-3xl font-bold mb-6">Inputs</h2>
+          </RevealOnScroll>
 
           <div className="max-w-md space-y-6">
             <div>
@@ -155,7 +171,9 @@ export default function DesignSystemPage() {
       {/* Badges */}
       <Section>
         <Container>
-          <h2 className="text-3xl font-bold mb-6">Badges</h2>
+          <RevealOnScroll>
+            <h2 className="text-3xl font-bold mb-6">Badges</h2>
+          </RevealOnScroll>
 
           <div className="space-y-6">
             <div>
@@ -182,9 +200,11 @@ export default function DesignSystemPage() {
       </Section>
 
       {/* Cards */}
-      <Section className="bg-muted">
+      <Section background={SECTION_BG.MUTED}>
         <Container>
-          <h2 className="text-3xl font-bold mb-6">Cards</h2>
+          <RevealOnScroll>
+            <h2 className="text-3xl font-bold mb-6">Cards</h2>
+          </RevealOnScroll>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl">
             {/* Simple Card */}
@@ -265,7 +285,9 @@ export default function DesignSystemPage() {
       {/* Component Composition */}
       <Section>
         <Container>
-          <h2 className="text-3xl font-bold mb-6">Component Composition</h2>
+          <RevealOnScroll>
+            <h2 className="text-3xl font-bold mb-6">Component Composition</h2>
+          </RevealOnScroll>
 
           <Card className="max-w-2xl">
             <CardHeader>

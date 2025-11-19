@@ -19,12 +19,9 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
 
     return (
       <div className="space-y-2">
-        <label
-          htmlFor={fieldId}
-          className="block text-sm font-medium text-[var(--color-foreground)]"
-        >
+        <label htmlFor={fieldId} className="block text-sm font-medium text-foreground">
           {label}
-          {required && <span className="ml-1 text-[var(--color-error)]">*</span>}
+          {required && <span className="ml-1 text-error">*</span>}
         </label>
 
         <input
@@ -32,17 +29,17 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           id={fieldId}
           className={cn(
             'flex h-10 w-full rounded-md border px-3 py-2',
-            'bg-[var(--color-background)]',
+            'bg-background',
             'text-sm',
-            'placeholder:text-[var(--color-muted-foreground)]',
+            'placeholder:text-muted-foreground',
             'focus-visible:outline-none',
             'focus-visible:ring-2',
             'focus-visible:ring-offset-2',
             'disabled:cursor-not-allowed',
             'disabled:opacity-50',
             error
-              ? 'border-[var(--color-error)] focus-visible:ring-[var(--color-error)]'
-              : 'border-[var(--color-input)] focus-visible:ring-[var(--color-ring)]',
+              ? 'border-error focus-visible:ring-error'
+              : 'border-input focus-visible:ring-ring',
             className
           )}
           aria-invalid={!!error}
@@ -52,7 +49,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         />
 
         {error && (
-          <p id={`${fieldId}-error`} className="text-sm text-[var(--color-error)]" role="alert">
+          <p id={`${fieldId}-error`} className="text-sm text-error" role="alert">
             {error}
           </p>
         )}
@@ -72,12 +69,9 @@ export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>
 
     return (
       <div className="space-y-2">
-        <label
-          htmlFor={fieldId}
-          className="block text-sm font-medium text-[var(--color-foreground)]"
-        >
+        <label htmlFor={fieldId} className="block text-sm font-medium text-foreground">
           {label}
-          {required && <span className="ml-1 text-[var(--color-error)]">*</span>}
+          {required && <span className="ml-1 text-error">*</span>}
         </label>
 
         <textarea
@@ -85,17 +79,17 @@ export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>
           id={fieldId}
           className={cn(
             'flex min-h-[120px] w-full rounded-md border px-3 py-2',
-            'bg-[var(--color-background)]',
+            'bg-background',
             'text-sm',
-            'placeholder:text-[var(--color-muted-foreground)]',
+            'placeholder:text-muted-foreground',
             'focus-visible:outline-none',
             'focus-visible:ring-2',
             'focus-visible:ring-offset-2',
             'disabled:cursor-not-allowed',
             'disabled:opacity-50',
             error
-              ? 'border-[var(--color-error)] focus-visible:ring-[var(--color-error)]'
-              : 'border-[var(--color-input)] focus-visible:ring-[var(--color-ring)]',
+              ? 'border-error focus-visible:ring-error'
+              : 'border-input focus-visible:ring-ring',
             className
           )}
           aria-invalid={!!error}
@@ -105,7 +99,7 @@ export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>
         />
 
         {error && (
-          <p id={`${fieldId}-error`} className="text-sm text-[var(--color-error)]" role="alert">
+          <p id={`${fieldId}-error`} className="text-sm text-error" role="alert">
             {error}
           </p>
         )}

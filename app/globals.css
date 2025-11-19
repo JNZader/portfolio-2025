@@ -7,19 +7,21 @@
   --color-card-foreground: oklch(9% 0 0);
   --color-popover: oklch(100% 0 0);
   --color-popover-foreground: oklch(9% 0 0);
-  --color-primary: oklch(9% 0 0);
-  --color-primary-foreground: oklch(98% 0 0);
+  --color-primary: oklch(55% 0.18 250);
+  --color-primary-foreground: oklch(100% 0 0);
   --color-secondary: oklch(96% 0 0);
   --color-secondary-foreground: oklch(9% 0 0);
   --color-muted: oklch(96% 0 0);
-  --color-muted-foreground: oklch(45% 0 0);
+  --color-muted-foreground: oklch(40% 0 0);
   --color-accent: oklch(96% 0 0);
   --color-accent-foreground: oklch(9% 0 0);
   --color-destructive: oklch(60% 0.22 27);
   --color-destructive-foreground: oklch(98% 0 0);
+  --color-error: oklch(60% 0.22 27);
+  --color-error-foreground: oklch(98% 0 0);
   --color-border: oklch(90% 0 0);
   --color-input: oklch(90% 0 0);
-  --color-ring: oklch(9% 0 0);
+  --color-ring: oklch(55% 0.18 250);
   --color-chart-1: oklch(61% 0.19 32);
   --color-chart-2: oklch(55% 0.15 190);
   --color-chart-3: oklch(45% 0.12 220);
@@ -45,6 +47,8 @@
     --accent-foreground: var(--color-accent-foreground);
     --destructive: var(--color-destructive);
     --destructive-foreground: var(--color-destructive-foreground);
+    --error: var(--color-error);
+    --error-foreground: var(--color-error-foreground);
     --border: var(--color-border);
     --input: var(--color-input);
     --ring: var(--color-ring);
@@ -58,7 +62,7 @@
     --color-card-foreground: oklch(98% 0 0);
     --color-popover: oklch(15% 0 0);
     --color-popover-foreground: oklch(98% 0 0);
-    --color-primary: oklch(98% 0 0);
+    --color-primary: oklch(70% 0.18 250);
     --color-primary-foreground: oklch(9% 0 0);
     --color-secondary: oklch(20% 0 0);
     --color-secondary-foreground: oklch(98% 0 0);
@@ -68,9 +72,11 @@
     --color-accent-foreground: oklch(98% 0 0);
     --color-destructive: oklch(45% 0.22 27);
     --color-destructive-foreground: oklch(98% 0 0);
+    --color-error: oklch(65% 0.22 27);
+    --color-error-foreground: oklch(98% 0 0);
     --color-border: oklch(20% 0 0);
     --color-input: oklch(20% 0 0);
-    --color-ring: oklch(83% 0 0);
+    --color-ring: oklch(70% 0.18 250);
     --color-chart-1: oklch(60% 0.2 255);
     --color-chart-2: oklch(55% 0.18 185);
     --color-chart-3: oklch(62% 0.22 75);
@@ -94,5 +100,147 @@
 
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--muted-foreground);
+  }
+
+  /* Selection color */
+  ::selection {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  /* Focus visible styles */
+  *:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /* Glass effect */
+  .glass {
+    backdrop-filter: blur(12px);
+    background-color: color-mix(in oklch, var(--background) 80%, transparent);
+    border: 1px solid color-mix(in oklch, var(--border) 50%, transparent);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(
+      to right,
+      var(--primary),
+      color-mix(in oklch, var(--primary) 60%, transparent)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Gradient text alternative (blue to purple) */
+  .gradient-text-accent {
+    background: linear-gradient(to right, oklch(55% 0.25 260), oklch(55% 0.25 300));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Custom animations */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.6s ease-out forwards;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.6s ease-out forwards;
+  }
+
+  /* Line clamp utilities */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
+
+/* Keyframe animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto;
   }
 }

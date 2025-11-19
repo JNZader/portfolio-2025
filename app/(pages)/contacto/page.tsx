@@ -1,9 +1,15 @@
 import type { Metadata } from 'next';
+import { RevealOnScroll } from '@/components/animations';
 import { ContactForm } from '@/components/forms/ContactForm';
 import Container from '@/components/ui/Container';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
-import Section from '@/components/ui/Section';
+import Section, {
+  SECTION_BG,
+  SectionDescription,
+  SectionHeader,
+  SectionTitle,
+} from '@/components/ui/Section';
 
 export const metadata: Metadata = {
   title: 'Contacto',
@@ -14,14 +20,16 @@ export default function ContactoPage() {
   return (
     <>
       {/* Hero */}
-      <Section className="bg-[var(--color-muted)]">
+      <Section background={SECTION_BG.GRADIENT} spacing="xl">
         <Container>
-          <div className="py-12 text-center">
-            <h1 className="text-4xl font-bold mb-4">Contacto</h1>
-            <p className="text-lg text-[var(--color-muted-foreground)] max-w-2xl mx-auto">
-              ¿Tienes un proyecto en mente o quieres colaborar? Me encantaría escucharte.
-            </p>
-          </div>
+          <RevealOnScroll>
+            <SectionHeader centered>
+              <SectionTitle size="xl">Contacto</SectionTitle>
+              <SectionDescription size="lg" className="mx-auto">
+                ¿Tienes un proyecto en mente o quieres colaborar? Me encantaría escucharte.
+              </SectionDescription>
+            </SectionHeader>
+          </RevealOnScroll>
         </Container>
       </Section>
 
@@ -30,7 +38,7 @@ export default function ContactoPage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[1fr_400px]">
             {/* Form */}
-            <div>
+            <RevealOnScroll>
               <Card>
                 <CardHeader>
                   <CardTitle>Envíame un mensaje</CardTitle>
@@ -42,10 +50,10 @@ export default function ContactoPage() {
                   <ContactForm />
                 </CardContent>
               </Card>
-            </div>
+            </RevealOnScroll>
 
             {/* Sidebar */}
-            <aside className="space-y-6">
+            <RevealOnScroll delay={0.2} className="space-y-6">
               {/* Contact info */}
               <Card>
                 <CardHeader>
@@ -113,7 +121,7 @@ export default function ContactoPage() {
                   </a>
                 </CardContent>
               </Card>
-            </aside>
+            </RevealOnScroll>
           </div>
         </Container>
       </Section>
