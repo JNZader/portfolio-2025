@@ -1,10 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
+import { cn } from '@/lib/utils';
 import MobileMenu from './MobileMenu';
 
 const navigation = [
@@ -20,6 +22,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  const pathname = usePathname();
 
   // Evitar hydration mismatch
   useEffect(() => {
@@ -44,20 +47,32 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:gap-x-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-sm font-semibold text-foreground/80 hover:text-primary transition-colors"
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navigation.map((item) => {
+              const isActive =
+                pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={cn(
+                    'text-sm font-semibold transition-colors relative py-1',
+                    isActive ? 'text-primary' : 'text-foreground/80 hover:text-primary'
+                  )}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {item.name}
+                  {isActive && (
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full" />
+                  )}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Desktop theme toggle */}
           <div className="hidden md:flex md:flex-1 md:justify-end">
-            {mounted && (
+            {mounted ? (
               <Button variant="ghost" size="icon" onClick={toggleTheme}>
                 {theme === 'dark' ? (
                   <SunIcon className="h-5 w-5" />
@@ -66,12 +81,14 @@ export default function Header() {
                 )}
                 <span className="sr-only">Toggle theme</span>
               </Button>
+            ) : (
+              <div className="size-11" aria-hidden="true" />
             )}
           </div>
 
           {/* Mobile menu button */}
           <div className="flex md:hidden gap-2">
-            {mounted && (
+            {mounted ? (
               <Button variant="ghost" size="icon" onClick={toggleTheme}>
                 {theme === 'dark' ? (
                   <SunIcon className="h-4 w-4" />
@@ -80,11 +97,13 @@ export default function Header() {
                 )}
                 <span className="sr-only">Toggle theme</span>
               </Button>
+            ) : (
+              <div className="size-11" aria-hidden="true" />
             )}
 
             <button
               type="button"
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5"
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Abrir menú"
             >
