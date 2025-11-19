@@ -11,11 +11,12 @@ import type { Project } from '@/lib/github/types';
 
 interface ProjectCardProps {
   project: Project;
+  priority?: boolean;
 }
 
-export default function ProjectCard({ project }: ProjectCardProps) {
+export default function ProjectCard({ project, priority = false }: ProjectCardProps) {
   return (
-    <Card className="group overflow-hidden hover:shadow-lg transition-all duration-300 h-full flex flex-col">
+    <Card className="group overflow-hidden hover:shadow-lg transition-all duration-200 h-full flex flex-col">
       {/* Project Image */}
       <div className="relative h-48 overflow-hidden bg-muted">
         {project.image ? (
@@ -23,7 +24,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             src={project.image}
             alt={project.title}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            priority={priority}
+            className="object-cover group-hover:scale-105 transition-transform duration-200"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-muted-foreground">
@@ -54,42 +57,12 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             )}
           </Badge>
         </div>
-
-        {/* Quick Actions - appear on hover */}
-        <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-2">
-          {project.github && (
-            <Button size="icon" variant="secondary" asChild className="h-8 w-8 shadow-md">
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Ver código en GitHub"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <FaGithub className="h-4 w-4" />
-              </a>
-            </Button>
-          )}
-          {project.demo && (
-            <Button size="icon" variant="secondary" asChild className="h-8 w-8 shadow-md">
-              <a
-                href={project.demo}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Ver demo"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <ExternalLink className="h-4 w-4" />
-              </a>
-            </Button>
-          )}
-        </div>
       </div>
 
       {/* Project Content */}
       <CardContent className="flex-1 flex flex-col p-6">
         {/* Title */}
-        <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors line-clamp-2">
+        <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors line-clamp-2">
           <Link href={`/proyectos/${project.id}`}>{project.title}</Link>
         </h3>
 
