@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.15.0](https://github.com/JNZader/portfolio-2025/compare/v0.14.0...v0.15.0) (2025-11-20)
+
+
+### Features
+
+* **components:** add premium variants and micro-interactions ([0ebe2d5](https://github.com/JNZader/portfolio-2025/commits/0ebe2d5784507b407c92f5cfafa42135b1e975d6))
+* **design-system:** enrich color palette and improve accessibility ([65edc5c](https://github.com/JNZader/portfolio-2025/commits/65edc5ca8b848d45e351fad30940a7b91ace010a))
+* **ui:** add premium visual effects across all pages ([5fd68b9](https://github.com/JNZader/portfolio-2025/commits/5fd68b9272086c4167b6cc7a944a783a3d07d54d))
+* **ui:** enhance visual design with premium components and effects ([3d8cd5a](https://github.com/JNZader/portfolio-2025/commits/3d8cd5a61f5acff5a41cba96084ad2eacc0c5af9))
+
+
+### Bug Fixes
+
+* **a11y:** improve accessibility and ARIA compliance for e2e tests ([63141d6](https://github.com/JNZader/portfolio-2025/commits/63141d6cbf63736d1d8bcc50cb48133d4048cafd))
+* **a11y:** improve accessibility and E2E test reliability ([ec06d84](https://github.com/JNZader/portfolio-2025/commits/ec06d840fc9ee9872ba753f9a852b556e12ebd8e))
+* **ci:** downgrade to Node.js 22 LTS for dependency compatibility ([eb614b1](https://github.com/JNZader/portfolio-2025/commits/eb614b14bf8cb564398b11315a29ce5fc3a3d1ae))
+* **deps:** resolve magicast dependency conflict for CI ([878fb38](https://github.com/JNZader/portfolio-2025/commits/878fb389385dec71b8b702bb291413fbc1e3bb0c))
+* **prisma:** correct generator provider and import path ([7610f4f](https://github.com/JNZader/portfolio-2025/commits/7610f4fba1b345c990f3d5d3199a7baa677ead37))
+* **prisma:** correct generator provider to prisma-client-js ([dc97944](https://github.com/JNZader/portfolio-2025/commits/dc97944c8c2459c3678503db12a2fa0c0d58b3a2))
+* **tests:** correct Button test expectations and exclude e2e from vitest ([19cd15f](https://github.com/JNZader/portfolio-2025/commits/19cd15f356628dc43611111187aeb852c03e6db4))
+
+
+### Performance Improvements
+
+* **analytics:** implement Web Vitals tracking ([ba555c7](https://github.com/JNZader/portfolio-2025/commits/ba555c75e6ecab4a94b295dff7d2263a25c79b23))
+* **bundle:** implement code splitting and bundle analysis ([2a04f32](https://github.com/JNZader/portfolio-2025/commits/2a04f32adac68280ed53c15800c2a8f85960cb0b))
+* **cache:** implement multi-layer caching strategy ([60a8826](https://github.com/JNZader/portfolio-2025/commits/60a882633849855e48a207770cba6d4a1a462d5c))
+* **database:** optimize database queries and add indexes ([2078dcf](https://github.com/JNZader/portfolio-2025/commits/2078dcfdfc26cf833e9ea2f1d96293e758545e80))
+* **images:** optimize image and font loading ([15ccf35](https://github.com/JNZader/portfolio-2025/commits/15ccf350a4618003c87d4a3a42402ac39aecf0ab))
+* **loading:** implement lazy loading and resource hints ([dd16e80](https://github.com/JNZader/portfolio-2025/commits/dd16e80b11cdc89314cc0c24167183578dce9bca))
+* **scripts:** optimize third-party script loading ([18a7b57](https://github.com/JNZader/portfolio-2025/commits/18a7b57d6da2fc4de1cea97633a46c434aeac5af))
+
 ## [0.14.0](https://github.com/JNZader/portfolio-2025/compare/v0.13.0...v0.14.0) (2025-11-19)
 
 ## [0.13.0](https://github.com/JNZader/portfolio-2025/compare/v0.12.0...v0.13.0) (2025-11-19)
