@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.16.0](https://github.com/JNZader/portfolio-2025/compare/v0.15.0...v0.16.0) (2025-11-20)
+
+
+### Features
+
+* **seo:** complete blog post SEO with schemas and OG images ([3985c1b](https://github.com/JNZader/portfolio-2025/commits/3985c1bbfd97caedfb1ab8e396f2d3f3db6f1c87))
+* **seo:** implement advanced SEO with structured data ([7062931](https://github.com/JNZader/portfolio-2025/commits/7062931ab857b7ca80fcb0017de6efd7ce21e519))
+
 ## [0.15.0](https://github.com/JNZader/portfolio-2025/compare/v0.14.0...v0.15.0) (2025-11-20)
 
 
