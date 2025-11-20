@@ -15,6 +15,7 @@ import { Suspense } from 'react';
 import { RevealOnScroll, StaggeredReveal } from '@/components/animations';
 import { NewsletterSkeleton } from '@/components/newsletter/NewsletterSkeleton';
 import { HeroSection } from '@/components/sections/hero-section';
+import { JsonLd } from '@/components/seo/JsonLd';
 import Section, {
   SECTION_BG,
   SectionDescription,
@@ -22,6 +23,7 @@ import Section, {
   SectionTitle,
 } from '@/components/ui/Section';
 import { SectionDivider } from '@/components/ui/SectionDivider';
+import { generatePersonSchema, generateWebSiteSchema } from '@/lib/seo/schema';
 
 // Lazy load newsletter component (below the fold)
 const NewsletterHero = dynamic(
@@ -36,6 +38,10 @@ const NewsletterHero = dynamic(
 );
 
 export default function HomePage() {
+  // Generate structured data schemas
+  const personSchema = generatePersonSchema();
+  const websiteSchema = generateWebSiteSchema();
+
   const stats = [
     { value: '20+', label: 'Años en Tecnología', icon: TrendingUp },
     { value: '15+', label: 'Proyectos Completados', icon: Briefcase },
@@ -66,6 +72,10 @@ export default function HomePage() {
 
   return (
     <>
+      {/* Structured Data */}
+      <JsonLd data={personSchema} />
+      <JsonLd data={websiteSchema} />
+
       {/* Hero Section */}
       <HeroSection
         greeting="Hola! Soy Javier Zader"

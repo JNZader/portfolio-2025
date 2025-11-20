@@ -6,6 +6,7 @@ import { groq } from 'next-sanity';
 export const projectsQuery = groq`
   *[_type == "project"] | order(publishedAt desc) {
     _id,
+    _updatedAt,
     title,
     slug,
     excerpt,
@@ -53,6 +54,7 @@ export const projectBySlugQuery = groq`
 export const postsQuery = groq`
   *[_type == "post"] | order(publishedAt desc) {
     _id,
+    _updatedAt,
     title,
     slug,
     excerpt,
