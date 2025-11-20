@@ -27,45 +27,47 @@ export interface Author {
  * Project
  */
 export interface Project {
-    _id: string;
-    title: string;
-    slug: {
-        current: string;
-    };
-    excerpt: string;
-    mainImage: Image & {
-        alt: string;
-    };
-    technologies?: string[];
-    demoUrl?: string;
-    githubUrl?: string;
-    featured: boolean;
-    publishedAt: string;
-    body?: PortableTextBlock[];
+	_id: string;
+	_updatedAt?: string;
+	title: string;
+	slug: {
+		current: string;
+	};
+	excerpt: string;
+	mainImage: Image & {
+		alt: string;
+	};
+	technologies?: string[];
+	demoUrl?: string;
+	githubUrl?: string;
+	featured: boolean;
+	publishedAt: string;
+	body?: PortableTextBlock[];
 }
 
 /**
  * Blog Post
  */
 export interface Post {
-    _id: string;
-    title: string;
-    slug: {
-        current: string;
-    };
-    excerpt: string;
-    mainImage: Image & {
-        alt: string;
-    };
-    categories: Category[];
-    author?: Author;
-    publishedAt: string;
-    readingTime?: number;
-    featured: boolean;
-    seo?: {
-        metaTitle?: string;
-        metaDescription?: string;
-        keywords?: string[];
-    };
-    body: PortableTextBlock[];
+	_id: string;
+	_updatedAt?: string;
+	title: string;
+	slug: {
+		current: string;
+	};
+	excerpt: string;
+	mainImage: Image & {
+		alt: string;
+	};
+	categories: Category[];
+	author?: Author;
+	publishedAt: string;
+	readingTime?: number;
+	featured: boolean;
+	seo?: {
+		metaTitle?: string;
+		metaDescription?: string;
+		keywords?: string[];
+	};
+	body: PortableTextBlock[];
 }

@@ -6,7 +6,10 @@ import { PostHeader } from '@/components/blog/PostHeader';
 import { RelatedPosts } from '@/components/blog/RelatedPosts';
 import { ShareButtons } from '@/components/blog/ShareButtons';
 import { TableOfContents } from '@/components/blog/TableOfContents';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { JsonLd } from '@/components/seo/JsonLd';
 import Container from '@/components/ui/Container';
+import { generateBlogPostingSchema, generateBreadcrumbSchema } from '@/lib/seo/schema';
 import { generateTableOfContents } from '@/lib/utils/toc';
 import { sanityFetch } from '@/sanity/lib/client';
 import { getImageUrl } from '@/sanity/lib/image';
@@ -123,8 +126,40 @@ export default async function PostPage({ params }: PostPageProps) {
   // Full URL for share buttons
   const fullUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'}/blog/${slug}`;
 
+  // Generate schemas
+  const blogPostingSchema = generateBlogPostingSchema({
+    title: post.title,
+    description: post.excerpt,
+    slug: post.slug.current,
+    publishedAt: post.publishedAt,
+    updatedAt: post._updatedAt,
+    image: getImageUrl(post.mainImage, 1200, 630),
+    keywords: post.categories?.map((cat) => cat.title),
+  });
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Inicio', url: '/' },
+    { name: 'Blog', url: '/blog' },
+    { name: post.title, url: `/blog/${post.slug.current}` },
+  ]);
+
   return (
     <>
+      {/* JSON-LD Structured Data */}
+      <JsonLd data={blogPostingSchema} />
+      <JsonLd data={breadcrumbSchema} />
+
+      {/* Breadcrumbs */}
+      <Container className="pt-8 pb-4">
+        <Breadcrumbs
+          items={[
+            { name: 'Inicio', href: '/' },
+            { name: 'Blog', href: '/blog' },
+            { name: post.title, href: `/blog/${post.slug.current}` },
+          ]}
+        />
+      </Container>
+
       {/* Header with hero */}
       <PostHeader post={post} />
 
