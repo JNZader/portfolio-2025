@@ -1,12 +1,19 @@
+import {
+  Award,
+  BookOpen,
+  Code2,
+  Database,
+  GitBranch,
+  GraduationCap,
+  Layers,
+  Palette,
+  Server,
+  Target,
+} from 'lucide-react';
 import type { Metadata } from 'next';
 import { RevealOnScroll } from '@/components/animations';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
-import Section, {
-  SECTION_BG,
-  SectionDescription,
-  SectionHeader,
-  SectionTitle,
-} from '@/components/ui/Section';
+import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
 
 export const metadata: Metadata = {
   title: 'Sobre mí',
@@ -15,19 +22,73 @@ export const metadata: Metadata = {
 };
 
 export default function SobreMiPage() {
+  const skillsData = {
+    backend: [
+      { name: 'Java', icon: Code2, color: 'text-orange-600 dark:text-orange-400' },
+      { name: 'Spring Boot', icon: Layers, color: 'text-green-600 dark:text-green-400' },
+      { name: 'Node.js', icon: Server, color: 'text-green-600 dark:text-green-400' },
+      { name: 'Python', icon: Code2, color: 'text-blue-600 dark:text-blue-400' },
+      { name: 'APIs REST', icon: Server, color: 'text-purple-600 dark:text-purple-400' },
+    ],
+    frontend: [
+      { name: 'React', icon: Code2, color: 'text-cyan-600 dark:text-cyan-400' },
+      { name: 'Next.js', icon: Layers, color: 'text-gray-900 dark:text-white' },
+      { name: 'TypeScript', icon: Code2, color: 'text-blue-600 dark:text-blue-400' },
+      { name: 'Tailwind CSS', icon: Palette, color: 'text-teal-600 dark:text-teal-400' },
+    ],
+    databases: [
+      { name: 'PostgreSQL', icon: Database, color: 'text-blue-600 dark:text-blue-400' },
+      { name: 'MySQL', icon: Database, color: 'text-orange-600 dark:text-orange-400' },
+      { name: 'MongoDB', icon: Database, color: 'text-green-600 dark:text-green-400' },
+    ],
+    devops: [
+      { name: 'Docker', icon: Server, color: 'text-blue-600 dark:text-blue-400' },
+      { name: 'Git', icon: GitBranch, color: 'text-orange-600 dark:text-orange-400' },
+      { name: 'GitHub', icon: GitBranch, color: 'text-gray-900 dark:text-white' },
+      { name: 'Linux', icon: Server, color: 'text-yellow-600 dark:text-yellow-400' },
+      { name: 'CI/CD', icon: Target, color: 'text-green-600 dark:text-green-400' },
+    ],
+  };
+
   return (
     <div className="pt-16">
       {/* Hero Section */}
-      <Section background={SECTION_BG.GRADIENT} spacing="xl">
-        <RevealOnScroll>
-          <SectionHeader centered>
-            <SectionTitle size="xl">Sobre mí</SectionTitle>
-            <SectionDescription size="lg" className="mx-auto">
-              Desarrollador apasionado por crear soluciones tecnológicas robustas y escalables
-            </SectionDescription>
-          </SectionHeader>
-        </RevealOnScroll>
-      </Section>
+      <section className="relative py-20 md:py-32 overflow-hidden">
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-tertiary/5" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.15),rgba(255,255,255,0))]" />
+        </div>
+
+        {/* Animated blobs */}
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-float" />
+        <div
+          className="absolute -bottom-40 -left-40 w-80 h-80 bg-tertiary/10 rounded-full blur-3xl animate-float"
+          style={{ animationDelay: '1s' }}
+        />
+
+        {/* Dot pattern overlay */}
+        <div className="absolute inset-0 -z-10 opacity-[0.02] dark:opacity-[0.03]">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
+              backgroundSize: '50px 50px',
+            }}
+          />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <RevealOnScroll>
+            <SectionHeader centered>
+              <SectionTitle size="xl">Sobre mí</SectionTitle>
+              <SectionDescription size="lg" className="mx-auto">
+                Desarrollador apasionado por crear soluciones tecnológicas robustas y escalables
+              </SectionDescription>
+            </SectionHeader>
+          </RevealOnScroll>
+        </div>
+      </section>
 
       {/* Main Content */}
       <Section>
@@ -97,87 +158,121 @@ export default function SobreMiPage() {
                   <div>
                     <h4 className="font-semibold mb-2">Backend</h4>
                     <div className="flex flex-wrap gap-2">
-                      {['Java', 'Spring Boot', 'Node.js', 'Python', 'APIs REST'].map((skill) => (
-                        <span
-                          key={skill}
-                          className="px-2 py-1 bg-primary/10 text-primary text-sm rounded"
-                        >
-                          {skill}
-                        </span>
-                      ))}
+                      {skillsData.backend.map((skill) => {
+                        const SkillIcon = skill.icon;
+                        return (
+                          <span
+                            key={skill.name}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs rounded-full transition-all duration-200 hover:scale-105"
+                          >
+                            <SkillIcon className={`w-3.5 h-3.5 ${skill.color}`} />
+                            {skill.name}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
 
                   <div>
                     <h4 className="font-semibold mb-2">Frontend</h4>
                     <div className="flex flex-wrap gap-2">
-                      {['React', 'Next.js', 'TypeScript', 'Tailwind CSS'].map((skill) => (
-                        <span
-                          key={skill}
-                          className="px-2 py-1 bg-primary/10 text-primary text-sm rounded"
-                        >
-                          {skill}
-                        </span>
-                      ))}
+                      {skillsData.frontend.map((skill) => {
+                        const SkillIcon = skill.icon;
+                        return (
+                          <span
+                            key={skill.name}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs rounded-full transition-all duration-200 hover:scale-105"
+                          >
+                            <SkillIcon className={`w-3.5 h-3.5 ${skill.color}`} />
+                            {skill.name}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
 
                   <div>
                     <h4 className="font-semibold mb-2">Bases de Datos</h4>
                     <div className="flex flex-wrap gap-2">
-                      {['PostgreSQL', 'MySQL', 'MongoDB'].map((skill) => (
-                        <span
-                          key={skill}
-                          className="px-2 py-1 bg-primary/10 text-primary text-sm rounded"
-                        >
-                          {skill}
-                        </span>
-                      ))}
+                      {skillsData.databases.map((skill) => {
+                        const SkillIcon = skill.icon;
+                        return (
+                          <span
+                            key={skill.name}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs rounded-full transition-all duration-200 hover:scale-105"
+                          >
+                            <SkillIcon className={`w-3.5 h-3.5 ${skill.color}`} />
+                            {skill.name}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
 
                   <div>
                     <h4 className="font-semibold mb-2">DevOps & Tools</h4>
                     <div className="flex flex-wrap gap-2">
-                      {['Docker', 'Git', 'GitHub', 'Linux', 'CI/CD'].map((skill) => (
-                        <span
-                          key={skill}
-                          className="px-2 py-1 bg-primary/10 text-primary text-sm rounded"
-                        >
-                          {skill}
-                        </span>
-                      ))}
+                      {skillsData.devops.map((skill) => {
+                        const SkillIcon = skill.icon;
+                        return (
+                          <span
+                            key={skill.name}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs rounded-full transition-all duration-200 hover:scale-105"
+                          >
+                            <SkillIcon className={`w-3.5 h-3.5 ${skill.color}`} />
+                            {skill.name}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Education */}
+              {/* Education - Timeline */}
               <div className="bg-card p-6 rounded-lg border">
-                <h3 className="text-xl font-bold mb-4">Educación</h3>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold">Técnico en Desarrollo de Software</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Universidad Gastón Dachary • 2023 - 2025
+                <h3 className="text-xl font-bold mb-6">Educación</h3>
+                <div className="space-y-6 relative">
+                  {/* Timeline line */}
+                  <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-border" />
+
+                  {/* Timeline items */}
+                  <div className="relative pl-8">
+                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center">
+                      <GraduationCap className="w-3 h-3 text-primary" />
+                    </div>
+                    <h4 className="font-semibold text-sm">Técnico en Desarrollo de Software</h4>
+                    <p className="text-xs text-muted-foreground mt-1">Universidad Gastón Dachary</p>
+                    <p className="text-xs text-muted-foreground">2023 - 2025</p>
+                  </div>
+
+                  <div className="relative pl-8">
+                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-orange-500/10 border-2 border-orange-500 flex items-center justify-center">
+                      <Code2 className="w-3 h-3 text-orange-500" />
+                    </div>
+                    <h4 className="font-semibold text-sm">Java Oriented Object Development</h4>
+                    <p className="text-xs text-muted-foreground mt-1">Alura LATAM</p>
+                    <p className="text-xs text-muted-foreground">2024</p>
+                  </div>
+
+                  <div className="relative pl-8">
+                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-green-500/10 border-2 border-green-500 flex items-center justify-center">
+                      <BookOpen className="w-3 h-3 text-green-500" />
+                    </div>
+                    <h4 className="font-semibold text-sm">Argentina Programa</h4>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Intermediate Java Developer
                     </p>
+                    <p className="text-xs text-muted-foreground">2022 - 2023</p>
                   </div>
 
-                  <div>
-                    <h4 className="font-semibold">Java Oriented Object Development</h4>
-                    <p className="text-sm text-muted-foreground">Alura LATAM • 2024</p>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold">Argentina Programa</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Intermediate Java Developer • 2022 - 2023
-                    </p>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold">CCNA Certification</h4>
-                    <p className="text-sm text-muted-foreground">Fundación Proydesa • 2009</p>
+                  <div className="relative pl-8">
+                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-blue-500/10 border-2 border-blue-500 flex items-center justify-center">
+                      <Award className="w-3 h-3 text-blue-500" />
+                    </div>
+                    <h4 className="font-semibold text-sm">CCNA Certification</h4>
+                    <p className="text-xs text-muted-foreground mt-1">Fundación Proydesa</p>
+                    <p className="text-xs text-muted-foreground">2009</p>
                   </div>
                 </div>
               </div>

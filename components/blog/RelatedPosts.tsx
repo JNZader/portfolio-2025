@@ -16,8 +16,8 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
   }
 
   return (
-    <section className="mt-16 border-t pt-12">
-      <h2 className="mb-6 text-2xl font-bold">Artículos relacionados</h2>
+    <section className="mt-16 border-t border-border pt-12">
+      <h2 className="mb-6 text-2xl font-bold text-foreground">Artículos relacionados</h2>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => {
@@ -28,11 +28,11 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
             <Link
               key={post._id}
               href={`/blog/${post.slug.current}`}
-              className="group block overflow-hidden rounded-lg border bg-[var(--color-background)] transition-shadow hover:shadow-md"
+              className="group block overflow-hidden rounded-lg border border-border bg-card transition-shadow hover:shadow-md hover:border-primary/30"
             >
               {/* Image */}
               {imageUrl && (
-                <div className="relative aspect-video overflow-hidden bg-[var(--color-muted)]">
+                <div className="relative aspect-video overflow-hidden bg-muted">
                   <Image
                     src={imageUrl}
                     alt={post.mainImage.alt || post.title}
@@ -50,19 +50,19 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
                     variant="outline"
                     className="mb-2"
                     style={{
-                      borderColor: primaryCategory.color || 'var(--color-border)',
-                      color: primaryCategory.color || 'var(--color-foreground)',
+                      borderColor: primaryCategory.color || undefined,
+                      color: primaryCategory.color || undefined,
                     }}
                   >
                     {primaryCategory.title}
                   </Badge>
                 )}
 
-                <h3 className="mb-2 line-clamp-2 font-semibold group-hover:text-[var(--color-primary)]">
+                <h3 className="mb-2 line-clamp-2 font-semibold text-foreground group-hover:text-primary transition-colors">
                   {post.title}
                 </h3>
 
-                <p className="text-sm text-[var(--color-muted-foreground)]">
+                <p className="text-sm text-muted-foreground">
                   {formatDate(post.publishedAt, 'short')}
                   {post.readingTime && ` • ${post.readingTime} min`}
                 </p>

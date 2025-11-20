@@ -155,7 +155,6 @@ export function ContactForm() {
       <InputField
         label="Nombre"
         type="text"
-        placeholder="Juan Pérez"
         error={errors.name?.message}
         required
         {...register('name')}
@@ -165,7 +164,6 @@ export function ContactForm() {
       <InputField
         label="Email"
         type="email"
-        placeholder="juan@example.com"
         error={errors.email?.message}
         required
         {...register('email')}
@@ -175,7 +173,6 @@ export function ContactForm() {
       <InputField
         label="Asunto"
         type="text"
-        placeholder="Consulta sobre desarrollo web"
         error={errors.subject?.message}
         required
         {...register('subject')}
@@ -184,7 +181,6 @@ export function ContactForm() {
       {/* Message */}
       <TextareaField
         label="Mensaje"
-        placeholder="Escribe tu mensaje aquí..."
         rows={6}
         error={errors.message?.message}
         required
@@ -192,7 +188,13 @@ export function ContactForm() {
       />
 
       {/* Submit button */}
-      <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+      <Button
+        type="submit"
+        size="lg"
+        className="w-full"
+        disabled={isSubmitting}
+        aria-busy={isSubmitting}
+      >
         {isSubmitting ? (
           <>
             <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />
@@ -201,7 +203,7 @@ export function ContactForm() {
         ) : (
           <>
             <SendIcon className="mr-2 h-4 w-4" />
-            Enviar Mensaje
+            Enviar
           </>
         )}
       </Button>

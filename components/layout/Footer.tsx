@@ -2,23 +2,25 @@ import { Heart } from 'lucide-react';
 import Link from 'next/link';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import Container from '@/components/ui/Container';
+import { MAIN_NAVIGATION } from '@/lib/constants/navigation';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
-  const navigation = [
-    { name: 'Inicio', href: '/' },
-    { name: 'Sobre mí', href: '/sobre-mi' },
-    { name: 'Proyectos', href: '/proyectos' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Contacto', href: '/contacto' },
-  ];
-
   return (
-    <footer id="footer" className="border-t bg-background/95 backdrop-blur-sm">
+    <footer
+      id="footer"
+      className="relative border-t bg-background/95 backdrop-blur-sm overflow-hidden"
+    >
+      {/* Decorative gradient background */}
+      <div className="absolute inset-0 -z-10 opacity-40 dark:opacity-20">
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-tertiary/5 rounded-full blur-3xl" />
+      </div>
+
       <Container>
         {/* Main Footer Content */}
-        <div className="py-12">
+        <div className="py-12 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Brand & Contact Column */}
             <div className="space-y-4">
@@ -34,7 +36,7 @@ export default function Footer() {
                   href="https://github.com/JNZader"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-110 hover:-translate-y-1"
                   aria-label="GitHub"
                 >
                   <FaGithub className="h-5 w-5" />
@@ -43,7 +45,7 @@ export default function Footer() {
                   href="https://www.linkedin.com/in/jnzader/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-110 hover:-translate-y-1"
                   aria-label="LinkedIn"
                 >
                   <FaLinkedin className="h-5 w-5" />
@@ -58,10 +60,10 @@ export default function Footer() {
             </div>
 
             {/* Navigation Column */}
-            <div className="space-y-4 md:text-center">
-              <h4 className="font-semibold">Navegación</h4>
+            <nav className="space-y-4 md:text-center" aria-label="Enlaces del pie de página">
+              <p className="font-semibold">Navegación</p>
               <ul className="space-y-2">
-                {navigation.map((item) => (
+                {MAIN_NAVIGATION.map((item) => (
                   <li key={item.name}>
                     <Link
                       href={item.href}
@@ -72,11 +74,11 @@ export default function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </nav>
 
             {/* Services Column */}
             <div className="space-y-4 md:text-right">
-              <h4 className="font-semibold">Servicios</h4>
+              <p className="font-semibold">Servicios</p>
               <ul className="space-y-2">
                 <li>
                   <span className="text-sm text-muted-foreground">Desarrollo Backend</span>
@@ -115,7 +117,7 @@ export default function Footer() {
                 href="/data-request"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                GDPR
+                Datos GDPR
               </Link>
               <span className="text-xs text-muted-foreground">Construido con Next.js</span>
             </div>

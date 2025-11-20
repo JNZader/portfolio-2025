@@ -2,6 +2,7 @@ import { ArrowRight, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
+import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
 
 interface HeroSectionProps {
   greeting?: string;
@@ -35,18 +36,40 @@ export function HeroSection({
   showScrollIndicator = true,
 }: HeroSectionProps) {
   return (
-    <section
-      className="relative min-h-screen flex items-center justify-center"
-      style={{ backgroundColor: 'var(--color-background)' }}
-    >
-      <Container className="text-center">
-        <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-tertiary/5" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.15),rgba(255,255,255,0))]" />
+      </div>
+
+      {/* Animated blobs */}
+      <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-float" />
+      <div
+        className="absolute -bottom-40 -left-40 w-80 h-80 bg-tertiary/10 rounded-full blur-3xl animate-float"
+        style={{ animationDelay: '1s' }}
+      />
+
+      {/* Dot pattern overlay */}
+      <div className="absolute inset-0 -z-10 opacity-[0.02] dark:opacity-[0.03]">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
+            backgroundSize: '50px 50px',
+          }}
+        />
+      </div>
+
+      <Container className="text-center relative z-10">
+        <div className="max-w-4xl mx-auto space-y-8 animate-fade-in pb-20">
           {/* Greeting Badge */}
           {greeting && (
-            <div
-              className="inline-block px-4 py-2 rounded-full border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 text-sm
-   font-medium"
-            >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm text-sm font-medium animate-scale-in">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+              </span>
               {greeting}
             </div>
           )}
@@ -130,9 +153,7 @@ export function HeroSection({
           {/* Scroll Indicator */}
           {showScrollIndicator && (
             <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-              <div className="w-6 h-10 border-2 border-gray-300 dark:border-gray-700 rounded-full flex justify-center">
-                <div className="w-1 h-3 bg-blue-600 dark:bg-blue-400 rounded-full mt-2 animate-bounce"></div>
-              </div>
+              <ScrollIndicator targetId="content" />
             </div>
           )}
         </div>

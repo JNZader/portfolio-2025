@@ -5,12 +5,7 @@ import { EmptyState } from '@/components/blog/EmptyState';
 import { Pagination } from '@/components/blog/Pagination';
 import { PostGrid } from '@/components/blog/PostGrid';
 import Container from '@/components/ui/Container';
-import Section, {
-  SECTION_BG,
-  SectionDescription,
-  SectionHeader,
-  SectionTitle,
-} from '@/components/ui/Section';
+import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
 import { getPaginationRange, getTotalPages } from '@/lib/utils/blog';
 import { isValidSearchTerm, normalizeSearchTerm } from '@/lib/utils/search';
 import { sanityFetch } from '@/sanity/lib/client';
@@ -67,18 +62,44 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   return (
     <>
       {/* Hero */}
-      <Section background={SECTION_BG.GRADIENT} spacing="xl">
-        <Container>
+      <section className="relative py-20 md:py-32 overflow-hidden">
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-tertiary/5" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.15),rgba(255,255,255,0))]" />
+        </div>
+
+        {/* Animated blobs */}
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-float" />
+        <div
+          className="absolute -bottom-40 -left-40 w-80 h-80 bg-tertiary/10 rounded-full blur-3xl animate-float"
+          style={{ animationDelay: '1s' }}
+        />
+
+        {/* Dot pattern overlay */}
+        <div className="absolute inset-0 -z-10 opacity-[0.02] dark:opacity-[0.03]">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
+              backgroundSize: '50px 50px',
+            }}
+          />
+        </div>
+
+        <Container className="relative z-10">
           <RevealOnScroll>
             <SectionHeader centered>
-              <SectionTitle size="xl">Blog</SectionTitle>
+              <SectionTitle size="xl" as="h1">
+                Blog
+              </SectionTitle>
               <SectionDescription size="lg" className="mx-auto">
                 Artículos sobre desarrollo web, programación y las últimas tecnologías.
               </SectionDescription>
             </SectionHeader>
           </RevealOnScroll>
         </Container>
-      </Section>
+      </section>
 
       {/* Search and Filters */}
       <Section spacing="lg">

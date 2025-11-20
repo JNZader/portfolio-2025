@@ -19,26 +19,36 @@ export function ShareButtons({ url }: ShareButtonsProps) {
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-sm font-medium text-[var(--color-muted-foreground)]">Compartir:</span>
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-2">
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
+        <span className="text-sm font-medium text-muted-foreground">Compartir este artículo</span>
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
+      </div>
 
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => handleShare('linkedin')}
-        aria-label="Compartir en LinkedIn"
-      >
-        <LinkedInIcon className="h-4 w-4" />
-      </Button>
+      <div className="flex items-center justify-center gap-3">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleShare('linkedin')}
+          aria-label="Compartir en LinkedIn"
+          className="hover:bg-[#0077B5]/10 hover:text-[#0077B5] hover:border-[#0077B5]/30 transition-all duration-200 hover:scale-110"
+        >
+          <LinkedInIcon className="h-4 w-4 mr-2" />
+          LinkedIn
+        </Button>
 
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => handleShare('facebook')}
-        aria-label="Compartir en Facebook"
-      >
-        <FacebookIcon className="h-4 w-4" />
-      </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleShare('facebook')}
+          aria-label="Compartir en Facebook"
+          className="hover:bg-[#1877F2]/10 hover:text-[#1877F2] hover:border-[#1877F2]/30 transition-all duration-200 hover:scale-110"
+        >
+          <FacebookIcon className="h-4 w-4 mr-2" />
+          Facebook
+        </Button>
+      </div>
     </div>
   );
 }

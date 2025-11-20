@@ -84,9 +84,11 @@ function SectionHeader({
 function SectionTitle({
   className,
   size = 'lg',
+  as: Component = 'h2',
   ...props
 }: React.HTMLAttributes<HTMLHeadingElement> & {
   size?: 'sm' | 'md' | 'lg' | 'xl';
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 }) {
   const sizeClasses = {
     sm: 'text-2xl font-bold',
@@ -95,7 +97,7 @@ function SectionTitle({
     xl: 'text-4xl md:text-5xl font-bold',
   };
 
-  return <h2 className={cn(sizeClasses[size], 'mb-4', className)} {...props} />;
+  return <Component className={cn(sizeClasses[size], 'mb-4', className)} {...props} />;
 }
 
 function SectionDescription({

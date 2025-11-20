@@ -1,27 +1,197 @@
 /**
- * Custom Giscus Theme
- * Sincronizado con el portfolio
+ * Custom Giscus Theme - Premium Portfolio
+ * Customizes native Giscus themes (light/dark) with portfolio styles
  */
-.gsc-comment-box-tabs,
-.gsc-comment-box-main,
-.gsc-reactions,
-.gsc-timeline {
-  border-color: hsl(var(--border)) !important;
-}
 
-.gsc-comment-author {
-  color: hsl(var(--foreground)) !important;
-}
-
-.gsc-comment-content {
-  background-color: hsl(var(--card)) !important;
-  color: hsl(var(--card-foreground)) !important;
-}
-
-.gsc-reply-box-tabs {
-  border-color: hsl(var(--border)) !important;
-}
-
+/* ===== GENERAL IMPROVEMENTS ===== */
 .gsc-main {
-  background-color: hsl(var(--background)) !important;
+  background-color: transparent !important;
+}
+
+.gsc-comments {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.gsc-timeline {
+  border: none !important;
+  background: transparent !important;
+}
+
+/* ===== COMMENT CARDS ===== */
+.gsc-comment {
+  border-radius: 0.75rem !important;
+  padding: 1.5rem !important;
+  margin-bottom: 1rem !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  transition: all 0.2s ease !important;
+}
+
+.gsc-comment:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ===== COMMENT BOX (NEW COMMENT) ===== */
+.gsc-comment-box {
+  border-radius: 0.75rem !important;
+  padding: 1.5rem !important;
+  margin-bottom: 1.5rem !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.gsc-comment-box-tabs {
+  margin-bottom: 1rem !important;
+}
+
+.gsc-comment-box-tab {
+  padding: 0.5rem 1rem !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+.gsc-comment-box-textarea,
+.gsc-comment-box-preview {
+  border-radius: 0.5rem !important;
+  padding: 0.75rem !important;
+  font-size: 0.9375rem !important;
+  line-height: 1.6 !important;
+  min-height: 120px !important;
+}
+
+.gsc-comment-box-textarea:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2) !important;
+}
+
+/* ===== BUTTONS ===== */
+.gsc-comment-box-submit-btn,
+.gsc-comment-replies-btn,
+.gsc-upvote-btn,
+.gsc-reply-btn {
+  border-radius: 0.5rem !important;
+  padding: 0.5rem 1rem !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.gsc-comment-box-submit-btn:hover,
+.gsc-comment-replies-btn:hover,
+.gsc-upvote-btn:hover,
+.gsc-reply-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* ===== REACTIONS - FIX VERTICAL ALIGNMENT ===== */
+.gsc-reactions {
+  padding-top: 1rem !important;
+  margin-top: 1rem !important;
+}
+
+.gsc-social-reaction-summary-item {
+  margin-right: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.375rem 0.75rem !important;
+  border-radius: 0.5rem !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Fix emoji/icon vertical centering */
+.gsc-social-reaction-summary-item .gsc-emoji {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  line-height: 1 !important;
+  margin-right: 0.25rem !important;
+}
+
+.gsc-social-reaction-summary-item span {
+  display: inline-flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+}
+
+.gsc-social-reaction-summary-item:hover {
+  transform: scale(1.05) !important;
+}
+
+/* ===== REPLIES ===== */
+.gsc-reply {
+  border-radius: 0 0.5rem 0.5rem 0 !important;
+  padding: 1rem !important;
+  margin-top: 0.75rem !important;
+  margin-left: 2rem !important;
+}
+
+.gsc-reply-box {
+  border-radius: 0.5rem !important;
+  padding: 1rem !important;
+  margin-top: 1rem !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ===== PAGINATION ===== */
+.gsc-pagination-button {
+  border-radius: 0.5rem !important;
+  padding: 0.5rem 1rem !important;
+  margin: 0 0.25rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.gsc-pagination-button:hover:not(:disabled) {
+  transform: translateY(-1px) !important;
+}
+
+/* ===== SIGN IN BUTTON ===== */
+.gsc-comment-box-sign-in-github {
+  border-radius: 0.5rem !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+  font-size: 0.9375rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.gsc-comment-box-sign-in-github:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ===== MARKDOWN PREVIEW ===== */
+.gsc-comment-box-preview {
+  min-height: 120px !important;
+}
+
+.gsc-comment-box-preview h1,
+.gsc-comment-box-preview h2,
+.gsc-comment-box-preview h3 {
+  font-weight: 700 !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.gsc-comment-box-preview ul,
+.gsc-comment-box-preview ol {
+  margin-left: 1.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+/* ===== SCROLLBAR CUSTOMIZATION ===== */
+.gsc-comments::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+.gsc-comments::-webkit-scrollbar-track {
+  border-radius: 4px !important;
+}
+
+.gsc-comments::-webkit-scrollbar-thumb {
+  border-radius: 4px !important;
 }

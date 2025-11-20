@@ -134,14 +134,14 @@ export default async function PostPage({ params }: PostPageProps) {
           <div className="grid gap-12 lg:grid-cols-[1fr_300px]">
             {/* Main content */}
             <article className="min-w-0">
-              {/* Body */}
-              <div className="mb-12">
+              {/* Body - Card estilizado con MEJOR OPACIDAD */}
+              <div className="mb-12 bg-card backdrop-blur-sm rounded-xl border-2 border-border p-8 md:p-12 shadow-md">
                 {/* biome-ignore lint/suspicious/noExplicitAny: Type incompatibility between Sanity and Portable Text library */}
                 <PortableTextRenderer value={post.body as any} />
               </div>
 
-              {/* Share buttons */}
-              <div className="border-t pt-8">
+              {/* Share buttons - Card con MEJOR OPACIDAD */}
+              <div className="mb-12 bg-card backdrop-blur-sm rounded-xl border-2 border-border p-6 shadow-md">
                 <ShareButtons url={fullUrl} />
               </div>
 

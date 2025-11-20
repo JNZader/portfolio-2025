@@ -1,6 +1,9 @@
 'use client';
 
 import Giscus from '@giscus/react';
+import { MessageSquare } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { SectionDivider } from '@/components/ui/SectionDivider';
 
 /**
  * COMPONENTE: Comments con Giscus
@@ -25,29 +28,76 @@ export function Comments({ term }: CommentsProps) {
   const category = process.env.NEXT_PUBLIC_GISCUS_CATEGORY;
   const categoryId = process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID;
 
+  // Detectar tema del sistema
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    // Función para detectar el tema
+    const detectTheme = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      setTheme(isDark ? 'dark' : 'light');
+    };
+
+    // Detectar tema inicial
+    detectTheme();
+
+    // Observar cambios en la clase 'dark' del html
+    const observer = new MutationObserver(detectTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   if (!repo || !repoId || !category || !categoryId) {
     console.error('Giscus: Missing environment variables');
     return null;
   }
 
   return (
-    <div className="mt-12 pt-8 border-t">
-      <h2 className="text-2xl font-bold mb-6">Comentarios</h2>
-      <Giscus
-        id="comments"
-        repo={repo as `${string}/${string}`}
-        repoId={repoId}
-        category={category}
-        categoryId={categoryId}
-        mapping="pathname"
-        term={term}
-        reactionsEnabled="1"
-        emitMetadata="1"
-        inputPosition="bottom"
-        theme={`${process.env.NEXT_PUBLIC_SITE_URL}/giscus-theme.css`}
-        lang="es"
-        loading="lazy"
-      />
-    </div>
+    <section className="mt-16">
+      {/* Divider decorativo */}
+      <SectionDivider variant="gradient" />
+
+      {/* Card de comentarios - AUMENTADA OPACIDAD para mejor visibilidad */}
+      <div className="relative rounded-xl border-2 border-border bg-card backdrop-blur-sm p-8 shadow-lg">
+        {/* Background decorativo */}
+        <div className="absolute inset-0 -z-10 opacity-30 dark:opacity-15 rounded-xl overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-0 w-64 h-64 bg-tertiary/10 rounded-full blur-3xl" />
+        </div>
+
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <MessageSquare className="w-6 h-6 text-primary" />
+            <h2 className="text-2xl font-bold text-foreground">Comentarios</h2>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Inicia sesión con GitHub para dejar tu comentario
+          </p>
+        </div>
+
+        {/* Giscus widget */}
+        <Giscus
+          key={theme}
+          id="comments"
+          repo={repo as `${string}/${string}`}
+          repoId={repoId}
+          category={category}
+          categoryId={categoryId}
+          mapping="pathname"
+          term={term}
+          reactionsEnabled="1"
+          emitMetadata="1"
+          inputPosition="bottom"
+          theme={theme === 'dark' ? 'dark' : 'light'}
+          lang="es"
+          loading="lazy"
+        />
+      </div>
+    </section>
   );
 }

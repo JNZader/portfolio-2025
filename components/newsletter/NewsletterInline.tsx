@@ -44,7 +44,11 @@ export function NewsletterInline() {
 
   return (
     <form onSubmit={handleSubmit} className="flex gap-2">
+      <label htmlFor="footer-newsletter-email" className="sr-only">
+        Correo electrónico para newsletter
+      </label>
       <input
+        id="footer-newsletter-email"
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -54,7 +58,7 @@ export function NewsletterInline() {
         required
       />
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Enviando...' : 'Suscribir'}
+        {isSubmitting ? 'Enviando...' : 'Suscribirse'}
       </Button>
     </form>
   );

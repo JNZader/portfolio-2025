@@ -6,17 +6,11 @@ import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
+import { MAIN_NAVIGATION } from '@/lib/constants/navigation';
 import { cn } from '@/lib/utils';
 import MobileMenu from './MobileMenu';
 
-const navigation = [
-  { name: 'Inicio', href: '/' },
-  { name: 'Sobre mí', href: '/sobre-mi' },
-  { name: 'Proyectos', href: '/proyectos' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'Contacto', href: '/contacto' },
-  { name: 'Design System', href: '/design-system' },
-];
+const navigation = [...MAIN_NAVIGATION, { name: 'Design System', href: '/design-system' }];
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -35,12 +29,12 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 w-full border-b bg-background/60 backdrop-blur-xl backdrop-saturate-150 shadow-sm supports-[backdrop-filter]:bg-background/60">
       <Container>
         <nav
           id="main-navigation"
           className="flex h-16 items-center justify-between"
-          aria-label="Global"
+          aria-label="Principal"
         >
           {/* Logo */}
           <div className="flex lg:flex-1">
@@ -60,14 +54,20 @@ export default function Header() {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    'text-sm font-semibold transition-colors relative py-1',
+                    'text-sm font-semibold transition-all duration-200 relative py-1 group',
                     isActive ? 'text-primary' : 'text-foreground/80 hover:text-primary'
                   )}
                   aria-current={isActive ? 'page' : undefined}
                 >
                   {item.name}
+                  <span
+                    className={cn(
+                      'absolute bottom-0 left-0 h-0.5 bg-primary rounded-full transition-all duration-300',
+                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    )}
+                  />
                   {isActive && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full" />
+                    <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary blur-sm opacity-50" />
                   )}
                 </Link>
               );
@@ -77,13 +77,21 @@ export default function Header() {
           {/* Desktop theme toggle */}
           <div className="hidden md:flex md:flex-1 md:justify-end">
             {mounted ? (
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTheme}
+                aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+                aria-pressed={theme === 'dark'}
+              >
                 {theme === 'dark' ? (
                   <SunIcon className="h-5 w-5" />
                 ) : (
                   <MoonIcon className="h-5 w-5" />
                 )}
-                <span className="sr-only">Toggle theme</span>
+                <span className="sr-only">
+                  Tema actual: {theme === 'dark' ? 'oscuro' : 'claro'}
+                </span>
               </Button>
             ) : (
               <div className="size-11" aria-hidden="true" />
@@ -93,13 +101,21 @@ export default function Header() {
           {/* Mobile menu button */}
           <div className="flex md:hidden gap-2">
             {mounted ? (
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTheme}
+                aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+                aria-pressed={theme === 'dark'}
+              >
                 {theme === 'dark' ? (
                   <SunIcon className="h-4 w-4" />
                 ) : (
                   <MoonIcon className="h-4 w-4" />
                 )}
-                <span className="sr-only">Toggle theme</span>
+                <span className="sr-only">
+                  Tema actual: {theme === 'dark' ? 'oscuro' : 'claro'}
+                </span>
               </Button>
             ) : (
               <div className="size-11" aria-hidden="true" />
@@ -109,7 +125,7 @@ export default function Header() {
               type="button"
               className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               onClick={() => setMobileMenuOpen(true)}
-              aria-label="Abrir menú"
+              aria-label="Abrir menú de navegación"
             >
               <MenuIcon className="h-6 w-6" />
             </button>
@@ -127,7 +143,7 @@ export default function Header() {
   );
 }
 
-// SVG Icons
+// SVG Icons - Decorative (button has aria-label)
 function MenuIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -136,8 +152,8 @@ function MenuIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
+      aria-hidden="true"
     >
-      <title>Menu</title>
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -155,8 +171,8 @@ function MoonIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
+      aria-hidden="true"
     >
-      <title>Dark mode</title>
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -174,8 +190,8 @@ function SunIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
+      aria-hidden="true"
     >
-      <title>Light mode</title>
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
