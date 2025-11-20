@@ -76,6 +76,7 @@
     "remark-gfm": "^4.0.1",
     "resend": "^6.4.2",
     "sharp": "^0.34.5",
+    "swr": "^2.3.6",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "4.1.17",
     "use-debounce": "^10.0.6",

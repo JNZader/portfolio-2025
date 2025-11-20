@@ -41,11 +41,11 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react', 'date-fns'],
   },
 
-  // Headers for caching
+  // Headers for caching and CORS
   async headers() {
     return [
+      // CORS for Giscus comments
       {
-        // Allow Giscus iframe to load the custom theme CSS
         source: '/giscus-theme.css',
         headers: [
           {
@@ -58,6 +58,8 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+
+      // Static assets - Cache forever (immutable)
       {
         source: '/images/:path*',
         headers: [
@@ -73,6 +75,28 @@ const nextConfig: NextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+
+      // API routes - Short cache with stale-while-revalidate
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60, s-maxage=300, stale-while-revalidate=600',
+          },
+        ],
+      },
+
+      // HTML pages - Always revalidate
+      {
+        source: '/((?!api|_next/static|_next/image|images|giscus-theme.css).*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
           },
         ],
       },
