@@ -43,8 +43,11 @@ model Subscriber {
   allowAnalytics  Boolean  @default(false)
   allowMarketing  Boolean  @default(true)
 
-  @@index([email])
-  @@index([status])
+  // Indexes for performance optimization
+  @@index([email])              // Fast lookup by email
+  @@index([status])             // Filter by subscription status
+  @@index([subscribedAt])       // Sort/filter by subscription date
+  @@index([status, subscribedAt]) // Compound index for common queries
   @@map("subscribers")
 }
 
@@ -67,8 +70,11 @@ model ConsentLog {
   userAgent     String?
   version       String   @default("1.0")
 
-  @@index([email])
-  @@index([consentDate])
+  // Indexes for performance optimization
+  @@index([email])                    // Lookup consent by email
+  @@index([consentDate])              // Sort by date
+  @@index([email, consentType])       // Compound index for user-specific consent queries
+  @@index([consentType, consentDate]) // Filter by type and sort by date
   @@map("consent_logs")
 }
 
