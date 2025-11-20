@@ -67,7 +67,12 @@ test.describe('Newsletter Subscription', () => {
     for (let i = 0; i < 6; i++) {
       await form.getByRole('textbox', { name: /email/i }).fill(email);
       await form.getByRole('button', { name: /suscribirse/i }).click();
-      await page.waitForTimeout(500);
+
+      // Wait for either success or error message before next submission
+      await Promise.race([
+        page.getByText(/email de confirmación/i).waitFor({ timeout: 2000 }).catch(() => {}),
+        page.getByText(/demasiado.*intent/i).waitFor({ timeout: 2000 }).catch(() => {}),
+      ]);
     }
 
     // Should show rate limit error

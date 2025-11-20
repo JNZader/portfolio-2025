@@ -45,7 +45,7 @@ export function NewsletterInline() {
   return (
     <form onSubmit={handleSubmit} className="flex gap-2">
       <label htmlFor="footer-newsletter-email" className="sr-only">
-        Email Newsletter
+        Correo electrónico para newsletter
       </label>
       <input
         id="footer-newsletter-email"
@@ -56,7 +56,6 @@ export function NewsletterInline() {
         className="flex h-10 flex-1 rounded-md border border-[var(--color-input)] bg-[var(--color-background)] px-3 py-2 text-sm placeholder:text-[var(--color-muted-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2"
         disabled={isSubmitting}
         required
-        aria-label="Email Newsletter"
       />
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? 'Enviando...' : 'Suscribirse'}

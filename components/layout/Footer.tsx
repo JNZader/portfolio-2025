@@ -2,17 +2,10 @@ import { Heart } from 'lucide-react';
 import Link from 'next/link';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import Container from '@/components/ui/Container';
+import { MAIN_NAVIGATION } from '@/lib/constants/navigation';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-
-  const navigation = [
-    { name: 'Inicio', href: '/' },
-    { name: 'Sobre mí', href: '/sobre-mi' },
-    { name: 'Proyectos', href: '/proyectos' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Contacto', href: '/contacto' },
-  ];
 
   return (
     <footer id="footer" className="border-t bg-background/95 backdrop-blur-sm">
@@ -61,7 +54,7 @@ export default function Footer() {
             <nav className="space-y-4 md:text-center" aria-label="Enlaces del pie de página">
               <p className="font-semibold">Navegación</p>
               <ul className="space-y-2">
-                {navigation.map((item) => (
+                {MAIN_NAVIGATION.map((item) => (
                   <li key={item.name}>
                     <Link
                       href={item.href}

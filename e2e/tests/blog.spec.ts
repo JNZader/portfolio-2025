@@ -69,11 +69,8 @@ test.describe('Blog', () => {
     // Search for "React"
     await searchInput.fill(testData.search.validQuery);
 
-    // Wait for debounce
-    await page.waitForTimeout(600);
-
-    // URL should have search param
-    await expect(page).toHaveURL(/search=/);
+    // Wait for URL to update (indicates search completed)
+    await page.waitForURL(/search=/, { timeout: 3000 });
 
     // Should show search results
     const posts = page.getByRole('article');
@@ -87,7 +84,8 @@ test.describe('Blog', () => {
     const searchInput = page.getByRole('textbox', { name: /buscar/i });
     await searchInput.fill(testData.search.noResultsQuery);
 
-    await page.waitForTimeout(600);
+    // Wait for URL to update (indicates search completed)
+    await page.waitForURL(/search=/, { timeout: 3000 });
 
     // Should show empty state
     await expect(page.getByText(/no se encontraron/i)).toBeVisible();
@@ -140,10 +138,13 @@ test.describe('Blog Post', () => {
     if (await toc.isVisible()) {
       // Click first TOC link
       const firstLink = toc.getByRole('link').first();
+      const href = await firstLink.getAttribute('href');
       await firstLink.click();
 
-      // Should scroll to section
-      await page.waitForTimeout(500);
+      // Wait for scroll to complete by checking URL hash
+      if (href) {
+        await expect(page).toHaveURL(new RegExp(href.replace('#', '#')));
+      }
     }
   });
 

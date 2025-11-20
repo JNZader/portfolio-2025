@@ -29,18 +29,20 @@ export const testData = {
  * Cookie consent helper - dismisses the cookie banner
  */
 export async function dismissCookieConsent(page: import('@playwright/test').Page) {
-  // Wait a bit for the cookie banner to appear (it shows after 1 second)
-  await page.waitForTimeout(1500);
-
-  // Try to find and click the "Solo esenciales" button to dismiss
+  // Wait for cookie banner to appear
   const cookieBanner = page.locator('text=Usamos cookies');
-  if (await cookieBanner.isVisible({ timeout: 1000 }).catch(() => false)) {
+
+  try {
+    // Wait for banner to be visible (max 3 seconds)
+    await cookieBanner.waitFor({ state: 'visible', timeout: 3000 });
+
     // Click "Solo esenciales" to dismiss without tracking
     const dismissButton = page.getByRole('button', { name: /solo esenciales/i });
-    if (await dismissButton.isVisible({ timeout: 1000 }).catch(() => false)) {
-      await dismissButton.click();
-      // Wait for banner to disappear
-      await page.waitForTimeout(500);
-    }
+    await dismissButton.click();
+
+    // Wait for banner to actually disappear
+    await cookieBanner.waitFor({ state: 'hidden', timeout: 3000 });
+  } catch (error) {
+    // Cookie banner didn't appear or couldn't be dismissed - that's fine
   }
 }
