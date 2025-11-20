@@ -15,26 +15,33 @@ export function PostHeader({ post }: PostHeaderProps) {
 
   return (
     <header className="relative">
-      {/* Hero Image */}
-      <div className="relative aspect-[16/9] max-h-[600px] overflow-hidden bg-[var(--color-muted)]">
+      {/* Hero Image Container */}
+      <div className="relative w-full aspect-[16/9] max-h-[600px] overflow-hidden bg-muted">
         {imageUrl && (
-          <Image
-            src={imageUrl}
-            alt={post.mainImage.alt || post.title}
-            fill
-            className="object-cover"
-            priority
-            placeholder={blurUrl ? 'blur' : 'empty'}
-            blurDataURL={blurUrl}
-            sizes="100vw"
-          />
+          <>
+            {/* Image */}
+            <Image
+              src={imageUrl}
+              alt={post.mainImage.alt || post.title}
+              fill
+              className="object-cover"
+              priority
+              placeholder={blurUrl ? 'blur' : 'empty'}
+              blurDataURL={blurUrl}
+              sizes="100vw"
+            />
+
+            {/* FIXED: Overlay mejorado con mejor cobertura */}
+            {/* Base darkening layer - cubre TODA la imagen */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/30" />
+
+            {/* Additional gradient for extra text protection at bottom */}
+            <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-black via-black/70 to-transparent" />
+          </>
         )}
 
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-
-        {/* Title overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
+        {/* Title overlay - positioned at bottom */}
+        <div className="absolute inset-x-0 bottom-0 p-6 md:p-12 z-10">
           <div className="mx-auto max-w-4xl">
             {/* Categories */}
             <div className="mb-4 flex flex-wrap gap-2">
@@ -42,8 +49,10 @@ export function PostHeader({ post }: PostHeaderProps) {
                 <Link key={category._id} href={`/blog?category=${category.slug.current}`}>
                   <Badge
                     variant="default"
+                    className="shadow-lg"
                     style={{
                       backgroundColor: category.color || 'var(--color-primary)',
+                      color: 'white',
                     }}
                   >
                     {category.title}
@@ -52,17 +61,17 @@ export function PostHeader({ post }: PostHeaderProps) {
               ))}
             </div>
 
-            {/* Title */}
-            <h1 className="mb-4 text-4xl font-bold text-white md:text-5xl lg:text-6xl">
+            {/* Title - ALWAYS white for maximum contrast */}
+            <h1 className="mb-4 text-4xl font-bold text-white md:text-5xl lg:text-6xl drop-shadow-lg">
               {post.title}
             </h1>
 
-            {/* Meta */}
-            <div className="flex flex-wrap items-center gap-4 text-sm text-white/90">
+            {/* Meta - ALWAYS white/light for maximum contrast */}
+            <div className="flex flex-wrap items-center gap-4 text-sm text-white/95">
               {post.author && (
                 <div className="flex items-center gap-2">
                   {post.author.image && (
-                    <div className="relative h-8 w-8 overflow-hidden rounded-full">
+                    <div className="relative h-8 w-8 overflow-hidden rounded-full ring-2 ring-white/30">
                       <Image
                         src={getImageUrl(post.author.image, 32, 32)}
                         alt={post.author.name}
@@ -71,18 +80,20 @@ export function PostHeader({ post }: PostHeaderProps) {
                       />
                     </div>
                   )}
-                  <span className="font-medium">{post.author.name}</span>
+                  <span className="font-medium drop-shadow">{post.author.name}</span>
                 </div>
               )}
 
-              <span>•</span>
+              <span className="text-white/70">•</span>
 
-              <time dateTime={post.publishedAt}>{formatDate(post.publishedAt, 'long')}</time>
+              <time dateTime={post.publishedAt} className="drop-shadow">
+                {formatDate(post.publishedAt, 'long')}
+              </time>
 
               {post.readingTime && (
                 <>
-                  <span>•</span>
-                  <span>{post.readingTime} min lectura</span>
+                  <span className="text-white/70">•</span>
+                  <span className="drop-shadow">{post.readingTime} min lectura</span>
                 </>
               )}
             </div>
@@ -90,13 +101,11 @@ export function PostHeader({ post }: PostHeaderProps) {
         </div>
       </div>
 
-      {/* Excerpt */}
+      {/* Excerpt - con mejor contraste */}
       {post.excerpt && (
-        <div className="border-b bg-[var(--color-muted)] py-8">
+        <div className="border-b border-border bg-muted/80 backdrop-blur-sm py-8">
           <div className="mx-auto max-w-4xl px-6">
-            <p className="text-xl leading-relaxed text-[var(--color-muted-foreground)]">
-              {post.excerpt}
-            </p>
+            <p className="text-xl leading-relaxed text-foreground">{post.excerpt}</p>
           </div>
         </div>
       )}

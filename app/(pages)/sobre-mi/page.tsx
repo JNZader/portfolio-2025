@@ -1,4 +1,15 @@
-import { Code2, Database, GitBranch, Layers, Palette, Server, Target } from 'lucide-react';
+import {
+  Award,
+  BookOpen,
+  Code2,
+  Database,
+  GitBranch,
+  GraduationCap,
+  Layers,
+  Palette,
+  Server,
+  Target,
+} from 'lucide-react';
 import type { Metadata } from 'next';
 import { RevealOnScroll } from '@/components/animations';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
@@ -218,32 +229,50 @@ export default function SobreMiPage() {
                 </div>
               </div>
 
-              {/* Education */}
+              {/* Education - Timeline */}
               <div className="bg-card p-6 rounded-lg border">
-                <h3 className="text-xl font-bold mb-4">Educación</h3>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold">Técnico en Desarrollo de Software</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Universidad Gastón Dachary • 2023 - 2025
+                <h3 className="text-xl font-bold mb-6">Educación</h3>
+                <div className="space-y-6 relative">
+                  {/* Timeline line */}
+                  <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-border" />
+
+                  {/* Timeline items */}
+                  <div className="relative pl-8">
+                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center">
+                      <GraduationCap className="w-3 h-3 text-primary" />
+                    </div>
+                    <h4 className="font-semibold text-sm">Técnico en Desarrollo de Software</h4>
+                    <p className="text-xs text-muted-foreground mt-1">Universidad Gastón Dachary</p>
+                    <p className="text-xs text-muted-foreground">2023 - 2025</p>
+                  </div>
+
+                  <div className="relative pl-8">
+                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-orange-500/10 border-2 border-orange-500 flex items-center justify-center">
+                      <Code2 className="w-3 h-3 text-orange-500" />
+                    </div>
+                    <h4 className="font-semibold text-sm">Java Oriented Object Development</h4>
+                    <p className="text-xs text-muted-foreground mt-1">Alura LATAM</p>
+                    <p className="text-xs text-muted-foreground">2024</p>
+                  </div>
+
+                  <div className="relative pl-8">
+                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-green-500/10 border-2 border-green-500 flex items-center justify-center">
+                      <BookOpen className="w-3 h-3 text-green-500" />
+                    </div>
+                    <h4 className="font-semibold text-sm">Argentina Programa</h4>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Intermediate Java Developer
                     </p>
+                    <p className="text-xs text-muted-foreground">2022 - 2023</p>
                   </div>
 
-                  <div>
-                    <h4 className="font-semibold">Java Oriented Object Development</h4>
-                    <p className="text-sm text-muted-foreground">Alura LATAM • 2024</p>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold">Argentina Programa</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Intermediate Java Developer • 2022 - 2023
-                    </p>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold">CCNA Certification</h4>
-                    <p className="text-sm text-muted-foreground">Fundación Proydesa • 2009</p>
+                  <div className="relative pl-8">
+                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-blue-500/10 border-2 border-blue-500 flex items-center justify-center">
+                      <Award className="w-3 h-3 text-blue-500" />
+                    </div>
+                    <h4 className="font-semibold text-sm">CCNA Certification</h4>
+                    <p className="text-xs text-muted-foreground mt-1">Fundación Proydesa</p>
+                    <p className="text-xs text-muted-foreground">2009</p>
                   </div>
                 </div>
               </div>

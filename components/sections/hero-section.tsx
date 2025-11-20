@@ -2,6 +2,7 @@ import { ArrowRight, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
+import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
 
 interface HeroSectionProps {
   greeting?: string;
@@ -61,7 +62,7 @@ export function HeroSection({
       </div>
 
       <Container className="text-center relative z-10">
-        <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
+        <div className="max-w-4xl mx-auto space-y-8 animate-fade-in pb-20">
           {/* Greeting Badge */}
           {greeting && (
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm text-sm font-medium animate-scale-in">
@@ -152,9 +153,7 @@ export function HeroSection({
           {/* Scroll Indicator */}
           {showScrollIndicator && (
             <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-              <div className="w-6 h-10 border-2 border-gray-300 dark:border-gray-700 rounded-full flex justify-center">
-                <div className="w-1 h-3 bg-blue-600 dark:bg-blue-400 rounded-full mt-2 animate-bounce"></div>
-              </div>
+              <ScrollIndicator targetId="content" />
             </div>
           )}
         </div>

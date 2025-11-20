@@ -1,0 +1,32 @@
+'use client';
+
+import { ChevronDown } from 'lucide-react';
+
+interface ScrollIndicatorProps {
+  targetId?: string;
+  className?: string;
+}
+
+export function ScrollIndicator({ targetId = 'content', className = '' }: ScrollIndicatorProps) {
+  const handleScroll = () => {
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleScroll}
+      className={`group flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors duration-300 ${className}`}
+      aria-label="Desplazar hacia abajo"
+    >
+      <span className="text-xs font-medium uppercase tracking-wider">Explorar</span>
+      <div className="relative">
+        <ChevronDown className="w-6 h-6 animate-bounce" />
+        <div className="absolute inset-0 bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+    </button>
+  );
+}

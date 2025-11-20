@@ -22,11 +22,8 @@ const components: PortableTextComponents = {
       const id = slugifyHeading(text);
 
       return (
-        <h2 id={id} className="mt-12 mb-4 scroll-mt-24 text-3xl font-bold">
-          <a
-            href={`#${id}`}
-            className="group flex items-center gap-2 hover:text-[var(--color-primary)]"
-          >
+        <h2 id={id} className="mt-12 mb-4 scroll-mt-24 text-3xl font-bold text-foreground">
+          <a href={`#${id}`} className="group flex items-center gap-2 hover:text-primary">
             {children}
             <span className="opacity-0 transition-opacity group-hover:opacity-100">#</span>
           </a>
@@ -40,11 +37,8 @@ const components: PortableTextComponents = {
       const id = slugifyHeading(text);
 
       return (
-        <h3 id={id} className="mt-8 mb-3 scroll-mt-24 text-2xl font-semibold">
-          <a
-            href={`#${id}`}
-            className="group flex items-center gap-2 hover:text-[var(--color-primary)]"
-          >
+        <h3 id={id} className="mt-8 mb-3 scroll-mt-24 text-2xl font-semibold text-foreground">
+          <a href={`#${id}`} className="group flex items-center gap-2 hover:text-primary">
             {children}
             <span className="opacity-0 transition-opacity group-hover:opacity-100">#</span>
           </a>
@@ -52,16 +46,16 @@ const components: PortableTextComponents = {
       );
     },
 
-    h4: ({ children }) => <h4 className="mt-6 mb-2 text-xl font-semibold">{children}</h4>,
+    h4: ({ children }) => (
+      <h4 className="mt-6 mb-2 text-xl font-semibold text-foreground">{children}</h4>
+    ),
 
     // Párrafos
-    normal: ({ children }) => (
-      <p className="mb-6 leading-relaxed text-[var(--color-foreground)]">{children}</p>
-    ),
+    normal: ({ children }) => <p className="mb-6 leading-relaxed text-foreground">{children}</p>,
 
     // Blockquotes
     blockquote: ({ children }) => (
-      <blockquote className="my-6 border-l-4 border-[var(--color-primary)] bg-[var(--color-muted)] py-4 pl-6 pr-4 italic">
+      <blockquote className="my-6 border-l-4 border-primary bg-muted py-4 pl-6 pr-4 italic text-foreground">
         {children}
       </blockquote>
     ),
@@ -70,22 +64,18 @@ const components: PortableTextComponents = {
   list: {
     // Listas desordenadas
     bullet: ({ children }) => (
-      <ul className="mb-6 ml-6 list-disc space-y-2 marker:text-[var(--color-primary)]">
-        {children}
-      </ul>
+      <ul className="mb-6 ml-6 list-disc space-y-2 marker:text-primary">{children}</ul>
     ),
 
     // Listas ordenadas
     number: ({ children }) => (
-      <ol className="mb-6 ml-6 list-decimal space-y-2 marker:text-[var(--color-primary)]">
-        {children}
-      </ol>
+      <ol className="mb-6 ml-6 list-decimal space-y-2 marker:text-primary">{children}</ol>
     ),
   },
 
   listItem: {
-    bullet: ({ children }) => <li className="leading-relaxed">{children}</li>,
-    number: ({ children }) => <li className="leading-relaxed">{children}</li>,
+    bullet: ({ children }) => <li className="leading-relaxed text-foreground">{children}</li>,
+    number: ({ children }) => <li className="leading-relaxed text-foreground">{children}</li>,
   },
 
   marks: {
@@ -99,7 +89,7 @@ const components: PortableTextComponents = {
           href={value?.href || '#'}
           rel={rel}
           target={target}
-          className="font-medium text-[var(--color-primary)] underline decoration-[var(--color-primary)]/30 underline-offset-4 transition-colors hover:decoration-[var(--color-primary)]"
+          className="font-medium text-primary underline decoration-primary/30 underline-offset-4 transition-colors hover:decoration-primary"
         >
           {children}
         </Link>
@@ -108,22 +98,22 @@ const components: PortableTextComponents = {
 
     // Code inline
     code: ({ children }) => (
-      <code className="rounded bg-[var(--color-muted)] px-1.5 py-0.5 font-mono text-sm text-[var(--color-error)]">
+      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm text-error">
         {children}
       </code>
     ),
 
     // Strong
-    strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+    strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
 
     // Emphasis
-    em: ({ children }) => <em className="italic">{children}</em>,
+    em: ({ children }) => <em className="italic text-foreground">{children}</em>,
 
     // Underline
-    underline: ({ children }) => <u className="underline">{children}</u>,
+    underline: ({ children }) => <u className="underline text-foreground">{children}</u>,
 
     // Strike-through
-    'strike-through': ({ children }) => <s className="line-through">{children}</s>,
+    'strike-through': ({ children }) => <s className="line-through text-foreground">{children}</s>,
   },
 
   types: {
@@ -140,7 +130,7 @@ const components: PortableTextComponents = {
 
       return (
         <figure className="my-8">
-          <div className="relative aspect-video overflow-hidden rounded-lg border bg-[var(--color-muted)]">
+          <div className="relative aspect-video overflow-hidden rounded-lg border border-border bg-muted">
             <Image
               src={imageUrl}
               alt={imageValue.alt || 'Post image'}
@@ -150,7 +140,7 @@ const components: PortableTextComponents = {
             />
           </div>
           {imageValue.caption && (
-            <figcaption className="mt-2 text-center text-sm text-[var(--color-muted-foreground)]">
+            <figcaption className="mt-2 text-center text-sm text-muted-foreground">
               {imageValue.caption}
             </figcaption>
           )}

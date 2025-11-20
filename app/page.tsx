@@ -19,6 +19,7 @@ import Section, {
   SectionHeader,
   SectionTitle,
 } from '@/components/ui/Section';
+import { SectionDivider } from '@/components/ui/SectionDivider';
 
 export default function HomePage() {
   const stats = [
@@ -96,8 +97,11 @@ export default function HomePage() {
         </StaggeredReveal>
       </Section>
 
+      {/* Decorative Divider */}
+      <SectionDivider variant="gradient" />
+
       {/* About Preview */}
-      <Section>
+      <Section id="content">
         <RevealOnScroll>
           <SectionHeader centered>
             <SectionTitle>Sobre Mí</SectionTitle>
@@ -222,6 +226,9 @@ export default function HomePage() {
           </div>
         </div>
       </Section>
+
+      {/* Decorative Divider */}
+      <SectionDivider variant="dots" />
 
       {/* Newsletter Section */}
       <NewsletterHero />

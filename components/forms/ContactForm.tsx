@@ -155,7 +155,6 @@ export function ContactForm() {
       <InputField
         label="Nombre"
         type="text"
-        placeholder="Juan Pérez"
         error={errors.name?.message}
         required
         {...register('name')}
@@ -165,7 +164,6 @@ export function ContactForm() {
       <InputField
         label="Email"
         type="email"
-        placeholder="juan@example.com"
         error={errors.email?.message}
         required
         {...register('email')}
@@ -175,7 +173,6 @@ export function ContactForm() {
       <InputField
         label="Asunto"
         type="text"
-        placeholder="Consulta sobre desarrollo web"
         error={errors.subject?.message}
         required
         {...register('subject')}
@@ -184,7 +181,6 @@ export function ContactForm() {
       {/* Message */}
       <TextareaField
         label="Mensaje"
-        placeholder="Escribe tu mensaje aquí..."
         rows={6}
         error={errors.message?.message}
         required

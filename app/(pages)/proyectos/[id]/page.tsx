@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FaGithub } from 'react-icons/fa';
-import ReactMarkdown from 'react-markdown';
+import { MarkdownContent } from '@/components/markdown/MarkdownContent';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
@@ -12,6 +12,7 @@ import Section from '@/components/ui/Section';
 import { getRepoReadme } from '@/lib/github/client';
 import { getCachedFeaturedProjects } from '@/lib/github/queries';
 import type { Project } from '@/lib/github/types';
+import { getTechIcon } from '@/lib/utils/tech-icons';
 import { sanityFetch } from '@/sanity/lib/client';
 import { projectsQuery } from '@/sanity/lib/queries';
 import type { Project as SanityProject } from '@/types/sanity';
@@ -189,33 +190,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
               {/* Main Content */}
               <div className="lg:col-span-2">
-                <div className="prose prose-gray dark:prose-invert max-w-none">
-                  <h2>Descripción del Proyecto</h2>
-                  {readme ? (
-                    <ReactMarkdown
-                      components={{
-                        // Evitar renderizar imágenes muy grandes
-                        img: ({ alt, ...props }) => (
-                          // biome-ignore lint/performance/noImgElement: external images from README need native img
-                          <img
-                            {...props}
-                            alt={alt || ''}
-                            className="max-w-full h-auto rounded-lg"
-                            loading="lazy"
-                          />
-                        ),
-                        // Links externos
-                        a: ({ ...props }) => (
-                          <a {...props} target="_blank" rel="noopener noreferrer" />
-                        ),
-                      }}
-                    >
-                      {readme}
-                    </ReactMarkdown>
-                  ) : (
-                    <p>{project.description}</p>
-                  )}
-                </div>
+                <h2 className="text-2xl font-bold mb-6">Descripción del Proyecto</h2>
+                {readme ? (
+                  <MarkdownContent content={readme} />
+                ) : (
+                  <div className="prose prose-gray dark:prose-invert max-w-none">
+                    <p className="text-muted-foreground leading-relaxed">{project.description}</p>
+                  </div>
+                )}
               </div>
 
               {/* Sidebar */}
@@ -224,14 +206,18 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <div className="bg-card p-6 rounded-lg border border-border">
                   <h3 className="text-lg font-semibold mb-4">Tecnologías</h3>
                   <div className="flex flex-wrap gap-2">
-                    {project.tech.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                    {project.tech.map((tech) => {
+                      const { icon: TechIcon, color } = getTechIcon(tech);
+                      return (
+                        <span
+                          key={tech}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs rounded-full transition-all duration-200 hover:scale-105"
+                        >
+                          <TechIcon className={`w-3.5 h-3.5 ${color}`} />
+                          {tech}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
 
