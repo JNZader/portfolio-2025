@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 @theme {
+  /* Color system */
   --color-background: oklch(100% 0 0);
   --color-foreground: oklch(9% 0 0);
   --color-card: oklch(96% 0 0);
@@ -51,6 +52,10 @@
 
 @layer base {
   :root {
+    /* Font family fallbacks (overridden by next/font at runtime) */
+    --font-inter: system-ui, -apple-system, sans-serif;
+    --font-mono: 'Courier New', monospace;
+
     --background: var(--color-background);
     --foreground: var(--color-foreground);
     --card: var(--color-card);
@@ -147,9 +152,18 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
+    font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
     font-feature-settings:
       'rlig' 1,
       'calt' 1;
+  }
+
+  /* Monospace font for code elements */
+  code,
+  pre,
+  kbd,
+  samp {
+    font-family: var(--font-mono), 'Courier New', monospace;
   }
 
   html {
