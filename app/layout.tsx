@@ -1,21 +1,36 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 import type { ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { AnnouncerProvider } from '@/components/a11y/ScreenReaderAnnouncer';
 import { SkipLinks } from '@/components/a11y/SkipLinks';
+import { ThirdPartyScripts } from '@/components/analytics/ThirdPartyScripts';
+import { WebVitals } from '@/components/analytics/WebVitals';
 import { AnimationProvider } from '@/components/animations';
 import { CookieConsent } from '@/components/gdpr/CookieConsent';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { CustomCursor } from '@/components/ui/CustomCursor';
 import { ThemeProvider } from '@/lib/design/theme-provider';
+import { ResourceHints } from '@/lib/performance/resource-hints';
 import './globals.css';
 
+// Variable font with subsetting
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
+});
+
+// Monospace for code blocks
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-mono',
+  preload: true,
+  fallback: ['Courier New', 'monospace'],
 });
 
 export const metadata: Metadata = {
@@ -54,7 +69,12 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning className={inter.variable}>
+    <html
+      lang="es"
+      suppressHydrationWarning
+      className={`${inter.variable} ${jetbrainsMono.variable}`}
+    >
+      <ResourceHints />
       <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
@@ -97,6 +117,8 @@ export default function RootLayout({
                 }}
               />
               <CookieConsent />
+              <WebVitals />
+              <ThirdPartyScripts />
             </AnnouncerProvider>
           </AnimationProvider>
         </ThemeProvider>
