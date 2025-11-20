@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { AnnouncerProvider } from '@/components/a11y/ScreenReaderAnnouncer';
 import { SkipLinks } from '@/components/a11y/SkipLinks';
+import { ThirdPartyScripts } from '@/components/analytics/ThirdPartyScripts';
 import { WebVitals } from '@/components/analytics/WebVitals';
 import { AnimationProvider } from '@/components/animations';
 import { CookieConsent } from '@/components/gdpr/CookieConsent';
@@ -117,6 +118,7 @@ export default function RootLayout({
               />
               <CookieConsent />
               <WebVitals />
+              <ThirdPartyScripts />
             </AnnouncerProvider>
           </AnimationProvider>
         </ThemeProvider>
