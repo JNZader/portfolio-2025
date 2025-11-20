@@ -29,7 +29,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 w-full border-b bg-background/60 backdrop-blur-xl backdrop-saturate-150 shadow-sm supports-[backdrop-filter]:bg-background/60">
       <Container>
         <nav
           id="main-navigation"
@@ -54,14 +54,20 @@ export default function Header() {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    'text-sm font-semibold transition-colors relative py-1',
+                    'text-sm font-semibold transition-all duration-200 relative py-1 group',
                     isActive ? 'text-primary' : 'text-foreground/80 hover:text-primary'
                   )}
                   aria-current={isActive ? 'page' : undefined}
                 >
                   {item.name}
+                  <span
+                    className={cn(
+                      'absolute bottom-0 left-0 h-0.5 bg-primary rounded-full transition-all duration-300',
+                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    )}
+                  />
                   {isActive && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full" />
+                    <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary blur-sm opacity-50" />
                   )}
                 </Link>
               );

@@ -35,18 +35,40 @@ export function HeroSection({
   showScrollIndicator = true,
 }: HeroSectionProps) {
   return (
-    <section
-      className="relative min-h-screen flex items-center justify-center"
-      style={{ backgroundColor: 'var(--color-background)' }}
-    >
-      <Container className="text-center">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-tertiary/5" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.15),rgba(255,255,255,0))]" />
+      </div>
+
+      {/* Animated blobs */}
+      <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-float" />
+      <div
+        className="absolute -bottom-40 -left-40 w-80 h-80 bg-tertiary/10 rounded-full blur-3xl animate-float"
+        style={{ animationDelay: '1s' }}
+      />
+
+      {/* Dot pattern overlay */}
+      <div className="absolute inset-0 -z-10 opacity-[0.02] dark:opacity-[0.03]">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
+            backgroundSize: '50px 50px',
+          }}
+        />
+      </div>
+
+      <Container className="text-center relative z-10">
         <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
           {/* Greeting Badge */}
           {greeting && (
-            <div
-              className="inline-block px-4 py-2 rounded-full border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 text-sm
-   font-medium"
-            >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm text-sm font-medium animate-scale-in">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+              </span>
               {greeting}
             </div>
           )}
