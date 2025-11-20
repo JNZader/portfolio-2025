@@ -10,8 +10,10 @@ import {
   Target,
   TrendingUp,
 } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 import { RevealOnScroll, StaggeredReveal } from '@/components/animations';
-import { NewsletterHero } from '@/components/newsletter/NewsletterHero';
+import { NewsletterSkeleton } from '@/components/newsletter/NewsletterSkeleton';
 import { HeroSection } from '@/components/sections/hero-section';
 import Section, {
   SECTION_BG,
@@ -20,6 +22,18 @@ import Section, {
   SectionTitle,
 } from '@/components/ui/Section';
 import { SectionDivider } from '@/components/ui/SectionDivider';
+
+// Lazy load newsletter component (below the fold)
+const NewsletterHero = dynamic(
+  () =>
+    import('@/components/newsletter/NewsletterHero').then((mod) => ({
+      default: mod.NewsletterHero,
+    })),
+  {
+    loading: () => <NewsletterSkeleton />,
+    ssr: true,
+  }
+);
 
 export default function HomePage() {
   const stats = [
@@ -231,7 +245,9 @@ export default function HomePage() {
       <SectionDivider variant="dots" />
 
       {/* Newsletter Section */}
-      <NewsletterHero />
+      <Suspense fallback={<NewsletterSkeleton />}>
+        <NewsletterHero />
+      </Suspense>
     </>
   );
 }
