@@ -10,6 +10,7 @@ import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { CustomCursor } from '@/components/ui/CustomCursor';
 import { ThemeProvider } from '@/lib/design/theme-provider';
+import { ResourceHints } from '@/lib/performance/resource-hints';
 import './globals.css';
 
 // Variable font with subsetting
@@ -71,6 +72,7 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${jetbrainsMono.variable}`}
     >
+      <ResourceHints />
       <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"

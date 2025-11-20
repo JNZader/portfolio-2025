@@ -44,6 +44,7 @@ export function PostCard({ post, priority = false }: PostCardProps) {
               className="object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               priority={priority}
+              loading={priority ? 'eager' : 'lazy'}
               placeholder={blurUrl ? 'blur' : 'empty'}
               blurDataURL={blurUrl}
             />
@@ -116,6 +117,8 @@ export function PostCard({ post, priority = false }: PostCardProps) {
                 alt={post.author.name}
                 fill
                 className="object-cover"
+                loading="lazy"
+                sizes="40px"
               />
             </div>
           )}
