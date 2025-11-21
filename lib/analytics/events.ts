@@ -1,3 +1,5 @@
+import '@/lib/analytics/types';
+
 /**
  * Track custom event
  */
@@ -93,16 +95,4 @@ export function trackSearch(query: string, results: number) {
     search_term: query,
     results_count: results,
   });
-}
-
-// Type declarations
-declare global {
-  interface Window {
-    va?: (event: string, eventName: string, eventParams?: Record<string, unknown>) => void;
-    gtag?: (
-      command: 'config' | 'event' | 'js' | 'set',
-      targetId: string | Date,
-      config?: Record<string, unknown>
-    ) => void;
-  }
 }
