@@ -1,0 +1,41 @@
+# <type>(<scope>): <subject>
+#
+# <body>
+#
+# <footer>
+#
+# --- COMMIT TEMPLATE ---
+#
+# Types:
+#   feat:     New feature
+#   fix:      Bug fix
+#   docs:     Documentation changes
+#   style:    Code style changes (formatting, no logic change)
+#   refactor: Code refactoring (no functional change)
+#   perf:     Performance improvements
+#   test:     Add or update tests
+#   build:    Build system or dependencies
+#   ci:       CI/CD configuration changes
+#   chore:    Other changes (tooling, configs)
+#
+# Scope:
+#   Optional, can be component, page, api, feature name, etc.
+#
+# Subject:
+#   - Use imperative mood ("add" not "added" or "adds")
+#   - Don't capitalize first letter
+#   - No period at the end
+#   - Max 72 characters
+#
+# Body (optional):
+#   - Explain WHAT and WHY (not HOW)
+#   - Wrap at 100 characters per line
+#
+# Footer (optional):
+#   - Reference issues: "Closes #123" or "Fixes #456"
+#   - Breaking changes: "BREAKING CHANGE: description"
+#
+# Examples:
+#   feat(auth): add JWT authentication
+#   fix(api): resolve race condition in data fetching
+#   docs(readme): update installation instructions

@@ -1,0 +1,7 @@
+echo "🧪 Running tests before push..."
+npm run test:run
+
+echo "🔍 Running verification checks..."
+npm run verify
+
+echo "✅ All checks passed! Ready to push."
