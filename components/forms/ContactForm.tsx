@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import { sendContactEmail } from '@/app/actions/contact';
 import { useAnnouncer } from '@/components/a11y/ScreenReaderAnnouncer';
 import { Button } from '@/components/ui/button';
+import { trackContactSubmit } from '@/lib/analytics/events';
 import { type ContactFormData, contactSchema } from '@/lib/validations/contact';
 import { quickValidateEmail } from '@/lib/validations/email-validator-client';
 import { InputField, TextareaField } from './FormField';
@@ -61,6 +62,9 @@ export function ContactForm() {
       const result = await sendContactEmail(formData);
 
       if (result.success) {
+        // Track contact form submission
+        trackContactSubmit();
+
         toast.success(result.message, {
           duration: 5000,
           position: 'bottom-center',
