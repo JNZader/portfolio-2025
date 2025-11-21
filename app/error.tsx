@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { ErrorFeedback } from '@/components/error/ErrorFeedback';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
 import { trackError } from '@/lib/analytics/errors';
@@ -13,13 +14,16 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const [eventId, setEventId] = useState<string | undefined>();
+
   useEffect(() => {
-    // Track error to analytics
-    trackError(error, {
+    // Track error to analytics and capture Sentry eventId
+    const id = trackError(error, {
       digest: error.digest,
       page: window.location.pathname,
       timestamp: new Date().toISOString(),
     });
+    setEventId(id);
   }, [error]);
 
   return (
@@ -73,6 +77,13 @@ export default function Error({
             Volver al inicio
           </Button>
         </div>
+
+        {/* User Feedback Widget */}
+        {eventId && (
+          <div className="mt-4">
+            <ErrorFeedback eventId={eventId} />
+          </div>
+        )}
 
         {/* Help text */}
         <p className="text-sm text-[var(--color-muted-foreground)]">
