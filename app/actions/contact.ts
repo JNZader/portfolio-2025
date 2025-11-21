@@ -5,6 +5,7 @@ import { headers } from 'next/headers';
 import { emailConfig, resend, validateEmailConfig } from '@/lib/email/resend';
 import ContactEmail from '@/lib/email/templates/ContactEmail';
 import { logger } from '@/lib/monitoring/logger';
+import { measureAsync, trackEmailSend } from '@/lib/monitoring/performance';
 import { contactRateLimiter, getClientIdentifier } from '@/lib/rate-limit/redis';
 import { contactSchema, sanitizeContactData } from '@/lib/validations/contact';
 import { validateEmail } from '@/lib/validations/email-validator';
@@ -59,7 +60,11 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
 
     // 6. Validación avanzada de email (DNS/MX records, dominios desechables)
     // Nota: Los typos se validan solo en el cliente, el servidor no los rechaza
-    const emailValidation = await validateEmail(sanitizedData.email);
+    const emailValidation = await measureAsync(
+      'email_validation',
+      () => validateEmail(sanitizedData.email),
+      { email: sanitizedData.email }
+    );
 
     if (!emailValidation.isValid) {
       logger.warn('Email validation failed', {
@@ -102,28 +107,30 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
     }
 
     // 8. Enviar email al propietario (el email ya fue validado con DNS)
-    const ownerEmailResult = await resend.emails.send({
-      from: emailConfig.from,
-      to: emailConfig.to,
-      subject: `✅ Nuevo Contacto: ${sanitizedData.subject}`,
-      react: ContactEmail({
-        name: sanitizedData.name,
-        email: sanitizedData.email,
-        subject: sanitizedData.subject,
-        message: `✅ Email verificado (dominio: ${emailValidation.domain}, MX records: OK)\n\n${sanitizedData.message}`,
-      }),
-      // Tags y headers para facilitar filtrado en Gmail
-      tags: [
-        {
-          name: 'category',
-          value: 'contact-form',
+    const ownerEmailResult = await trackEmailSend('contact', () =>
+      resend.emails.send({
+        from: emailConfig.from,
+        to: emailConfig.to,
+        subject: `✅ Nuevo Contacto: ${sanitizedData.subject}`,
+        react: ContactEmail({
+          name: sanitizedData.name,
+          email: sanitizedData.email,
+          subject: sanitizedData.subject,
+          message: `✅ Email verificado (dominio: ${emailValidation.domain}, MX records: OK)\n\n${sanitizedData.message}`,
+        }),
+        // Tags y headers para facilitar filtrado en Gmail
+        tags: [
+          {
+            name: 'category',
+            value: 'contact-form',
+          },
+        ],
+        headers: {
+          'X-Entity-Ref-ID': 'portfolio-contact-form',
+          'X-Priority': '1', // Alta prioridad
         },
-      ],
-      headers: {
-        'X-Entity-Ref-ID': 'portfolio-contact-form',
-        'X-Priority': '1', // Alta prioridad
-      },
-    });
+      })
+    );
 
     if (ownerEmailResult.error) {
       logger.error('Failed to send contact email', ownerEmailResult.error as Error, {

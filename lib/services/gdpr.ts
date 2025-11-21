@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/db/prisma';
 import type { ConsentLog, ConsentType } from '@/lib/generated/prisma/client';
 import { logger } from '@/lib/monitoring/logger';
+import { trackDatabaseQuery } from '@/lib/monitoring/performance';
 
 /**
  * Exportar todos los datos de un usuario
@@ -10,9 +11,11 @@ export async function exportUserData(email: string) {
     email,
   });
 
-  const subscriber = await prisma.subscriber.findUnique({
-    where: { email },
-  });
+  const subscriber = await trackDatabaseQuery('subscriber.findUnique', () =>
+    prisma.subscriber.findUnique({
+      where: { email },
+    })
+  );
 
   if (!subscriber) {
     logger.warn('GDPR data export failed - user not found', {
@@ -22,10 +25,12 @@ export async function exportUserData(email: string) {
   }
 
   // Buscar consent logs
-  const consentLogs = await prisma.consentLog.findMany({
-    where: { email },
-    orderBy: { consentDate: 'desc' },
-  });
+  const consentLogs = await trackDatabaseQuery('consentLog.findMany', () =>
+    prisma.consentLog.findMany({
+      where: { email },
+      orderBy: { consentDate: 'desc' },
+    })
+  );
 
   // Estructura de datos exportable
   const exportData = {
@@ -76,9 +81,11 @@ export async function deleteUserData(email: string) {
   });
 
   // Verificar que existe
-  const subscriber = await prisma.subscriber.findUnique({
-    where: { email },
-  });
+  const subscriber = await trackDatabaseQuery('subscriber.findUnique', () =>
+    prisma.subscriber.findUnique({
+      where: { email },
+    })
+  );
 
   if (!subscriber) {
     logger.warn('GDPR data deletion failed - user not found', {
@@ -89,14 +96,18 @@ export async function deleteUserData(email: string) {
 
   try {
     // Eliminar consent logs
-    await prisma.consentLog.deleteMany({
-      where: { email },
-    });
+    await trackDatabaseQuery('consentLog.deleteMany', () =>
+      prisma.consentLog.deleteMany({
+        where: { email },
+      })
+    );
 
     // Eliminar subscriber
-    await prisma.subscriber.delete({
-      where: { email },
-    });
+    await trackDatabaseQuery('subscriber.delete', () =>
+      prisma.subscriber.delete({
+        where: { email },
+      })
+    );
 
     logger.info('GDPR data deletion completed successfully', {
       email,
@@ -135,16 +146,18 @@ export async function logConsent(data: {
     version: data.version || '1.0',
   });
 
-  await prisma.consentLog.create({
-    data: {
-      email: data.email,
-      consentType: data.consentType,
-      consentGiven: data.consentGiven,
-      ipAddress: data.ipAddress,
-      userAgent: data.userAgent,
-      version: data.version || '1.0',
-    },
-  });
+  await trackDatabaseQuery('consentLog.create', () =>
+    prisma.consentLog.create({
+      data: {
+        email: data.email,
+        consentType: data.consentType,
+        consentGiven: data.consentGiven,
+        ipAddress: data.ipAddress,
+        userAgent: data.userAgent,
+        version: data.version || '1.0',
+      },
+    })
+  );
 }
 
 /**
@@ -163,11 +176,13 @@ export async function updatePrivacySettings(
     allowMarketing: settings.allowMarketing,
   });
 
-  await prisma.subscriber.update({
-    where: { email },
-    data: {
-      allowAnalytics: settings.allowAnalytics,
-      allowMarketing: settings.allowMarketing,
-    },
-  });
+  await trackDatabaseQuery('subscriber.update', () =>
+    prisma.subscriber.update({
+      where: { email },
+      data: {
+        allowAnalytics: settings.allowAnalytics,
+        allowMarketing: settings.allowMarketing,
+      },
+    })
+  );
 }

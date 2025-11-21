@@ -6,6 +6,7 @@ import { prisma } from '@/lib/db/prisma';
 import { emailConfig, resend } from '@/lib/email/resend';
 import NewsletterConfirm from '@/lib/email/templates/NewsletterConfirm';
 import { logger } from '@/lib/monitoring/logger';
+import { trackDatabaseQuery, trackEmailSend } from '@/lib/monitoring/performance';
 import { getClientIdentifier, newsletterRateLimiter } from '@/lib/rate-limit/redis';
 import { newsletterSchema } from '@/lib/validations/newsletter';
 
@@ -64,9 +65,9 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
     const userAgent = headersList.get('user-agent') || null;
 
     // 4. Verificar si ya existe
-    const existing = await prisma.subscriber.findUnique({
-      where: { email },
-    });
+    const existing = await trackDatabaseQuery('subscriber.findUnique', () =>
+      prisma.subscriber.findUnique({ where: { email } })
+    );
 
     if (existing) {
       // Si ya está activo
@@ -100,12 +101,14 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
         // Enviar email de confirmación
         const confirmUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/newsletter/confirm?token=${confirmToken}`;
 
-        await resend.emails.send({
-          from: emailConfig.from,
-          to: email,
-          subject: 'Confirma tu suscripción',
-          react: NewsletterConfirm({ confirmUrl }),
-        });
+        await trackEmailSend('newsletter_confirm', () =>
+          resend.emails.send({
+            from: emailConfig.from,
+            to: email,
+            subject: 'Confirma tu suscripción',
+            react: NewsletterConfirm({ confirmUrl }),
+          })
+        );
 
         return {
           success: true,
@@ -136,12 +139,14 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
 
         const confirmUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/newsletter/confirm?token=${confirmToken}`;
 
-        await resend.emails.send({
-          from: emailConfig.from,
-          to: email,
-          subject: 'Confirma tu suscripción',
-          react: NewsletterConfirm({ confirmUrl }),
-        });
+        await trackEmailSend('newsletter_confirm', () =>
+          resend.emails.send({
+            from: emailConfig.from,
+            to: email,
+            subject: 'Confirma tu suscripción',
+            react: NewsletterConfirm({ confirmUrl }),
+          })
+        );
 
         return {
           success: true,
@@ -159,27 +164,31 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
     const confirmTokenExp = new Date(Date.now() + 24 * 60 * 60 * 1000);
     const unsubToken = nanoid(32);
 
-    await prisma.subscriber.create({
-      data: {
-        email,
-        status: 'PENDING',
-        confirmToken,
-        confirmTokenExp,
-        unsubToken,
-        ipAddress,
-        userAgent,
-      },
-    });
+    await trackDatabaseQuery('subscriber.create', () =>
+      prisma.subscriber.create({
+        data: {
+          email,
+          status: 'PENDING',
+          confirmToken,
+          confirmTokenExp,
+          unsubToken,
+          ipAddress,
+          userAgent,
+        },
+      })
+    );
 
     // 6. Enviar email de confirmación
     const confirmUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/newsletter/confirm?token=${confirmToken}`;
 
-    const emailResult = await resend.emails.send({
-      from: emailConfig.from,
-      to: email,
-      subject: 'Confirma tu suscripción',
-      react: NewsletterConfirm({ confirmUrl }),
-    });
+    const emailResult = await trackEmailSend('newsletter_confirm', () =>
+      resend.emails.send({
+        from: emailConfig.from,
+        to: email,
+        subject: 'Confirma tu suscripción',
+        react: NewsletterConfirm({ confirmUrl }),
+      })
+    );
 
     if (emailResult.error) {
       logger.error('Failed to send newsletter confirmation email', emailResult.error as Error, {
