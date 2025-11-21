@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { GoogleAnalytics } from './GoogleAnalytics';
 
 /**
@@ -10,8 +11,10 @@ import { GoogleAnalytics } from './GoogleAnalytics';
 export function ThirdPartyScripts() {
   return (
     <>
-      {/* Google Analytics */}
-      <GoogleAnalytics />
+      {/* Google Analytics - wrapped in Suspense for useSearchParams */}
+      <Suspense fallback={null}>
+        <GoogleAnalytics />
+      </Suspense>
 
       {/*
         Add more third-party services here:
