@@ -5,6 +5,7 @@ import { headers } from 'next/headers';
 import { prisma } from '@/lib/db/prisma';
 import { emailConfig, resend } from '@/lib/email/resend';
 import NewsletterConfirm from '@/lib/email/templates/NewsletterConfirm';
+import { logger } from '@/lib/monitoring/logger';
 import { getClientIdentifier, newsletterRateLimiter } from '@/lib/rate-limit/redis';
 import { newsletterSchema } from '@/lib/validations/newsletter';
 
@@ -16,15 +17,20 @@ export type NewsletterActionResponse =
  * Suscribir a newsletter (Step 1: Enviar email de confirmación)
  */
 export async function subscribeToNewsletter(formData: FormData): Promise<NewsletterActionResponse> {
+  // 1. Extraer email (fuera del try para estar disponible en catch)
+  const rawData = {
+    email: formData.get('email') as string,
+  };
+
   try {
-    // 1. Extraer y validar email
-    const rawData = {
-      email: formData.get('email') as string,
-    };
+    // 2. Validar email
 
     const validationResult = newsletterSchema.safeParse(rawData);
 
     if (!validationResult.success) {
+      logger.warn('Newsletter validation failed', {
+        error: validationResult.error.issues[0].message,
+      });
       return {
         success: false,
         error: validationResult.error.issues[0].message,
@@ -43,6 +49,10 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
     const { success: rateLimitSuccess } = await newsletterRateLimiter.limit(identifier);
 
     if (!rateLimitSuccess) {
+      logger.warn('Newsletter rate limit exceeded', {
+        identifier,
+        email,
+      });
       return {
         success: false,
         error: 'Demasiados intentos. Por favor, intenta más tarde.',
@@ -61,6 +71,9 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
     if (existing) {
       // Si ya está activo
       if (existing.status === 'ACTIVE') {
+        logger.info('Newsletter subscription attempt for active subscriber', {
+          email,
+        });
         return {
           success: false,
           error: 'Este email ya está suscrito.',
@@ -69,6 +82,9 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
 
       // Si está pending, reenviar confirmación
       if (existing.status === 'PENDING') {
+        logger.info('Resending newsletter confirmation', {
+          email,
+        });
         // Generar nuevo token
         const confirmToken = nanoid(32);
         const confirmTokenExp = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 horas
@@ -99,6 +115,10 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
 
       // Si se dio de baja antes, permitir re-suscripción
       if (existing.status === 'UNSUBSCRIBED') {
+        logger.info('Re-subscribing previously unsubscribed user', {
+          email,
+        });
+
         const confirmToken = nanoid(32);
         const confirmTokenExp = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
@@ -131,6 +151,10 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
     }
 
     // 5. Crear nuevo suscriptor
+    logger.info('Creating new newsletter subscriber', {
+      email,
+    });
+
     const confirmToken = nanoid(32);
     const confirmTokenExp = new Date(Date.now() + 24 * 60 * 60 * 1000);
     const unsubToken = nanoid(32);
@@ -158,19 +182,28 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
     });
 
     if (emailResult.error) {
-      console.error('Error sending confirmation email:', emailResult.error);
+      logger.error('Failed to send newsletter confirmation email', emailResult.error as Error, {
+        email,
+      });
       return {
         success: false,
         error: 'Error al enviar el email. Por favor, intenta más tarde.',
       };
     }
 
+    logger.info('Newsletter confirmation email sent successfully', {
+      email,
+      emailId: emailResult.data?.id,
+    });
+
     return {
       success: true,
       message: '¡Revisa tu email! Te hemos enviado un link de confirmación.',
     };
   } catch (error) {
-    console.error('Newsletter subscribe error:', error);
+    logger.error('Unexpected error in newsletter subscription', error as Error, {
+      email: rawData?.email,
+    });
     return {
       success: false,
       error: 'Error inesperado. Por favor, intenta más tarde.',

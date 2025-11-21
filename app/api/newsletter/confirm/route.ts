@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import { emailConfig, resend } from '@/lib/email/resend';
 import NewsletterWelcome from '@/lib/email/templates/NewsletterWelcome';
+import { logger } from '@/lib/monitoring/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -9,6 +10,7 @@ export async function GET(request: NextRequest) {
     const token = searchParams.get('token');
 
     if (!token) {
+      logger.warn('Newsletter confirmation attempted without token');
       return new NextResponse(
         `
         <!DOCTYPE html>
@@ -39,6 +41,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!subscriber) {
+      logger.warn('Newsletter confirmation with invalid token', { token });
       return new NextResponse(
         `
         <!DOCTYPE html>
@@ -65,6 +68,10 @@ export async function GET(request: NextRequest) {
 
     // Verificar expiración
     if (subscriber.confirmTokenExp && subscriber.confirmTokenExp < new Date()) {
+      logger.warn('Newsletter confirmation with expired token', {
+        email: subscriber.email,
+        expiredAt: subscriber.confirmTokenExp,
+      });
       return new NextResponse(
         `
         <!DOCTYPE html>
@@ -127,6 +134,10 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    logger.info('Newsletter subscription confirmed successfully', {
+      email: subscriber.email,
+    });
+
     // Enviar email de bienvenida
     const unsubscribeUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/newsletter/unsubscribe?token=${subscriber.unsubToken}`;
 
@@ -138,7 +149,9 @@ export async function GET(request: NextRequest) {
         react: NewsletterWelcome({ unsubscribeUrl }),
       });
     } catch (emailError) {
-      console.error('Error sending welcome email:', emailError);
+      logger.error('Failed to send welcome email', emailError as Error, {
+        email: subscriber.email,
+      });
       // No fallar si el email de bienvenida falla
     }
 
@@ -168,7 +181,7 @@ export async function GET(request: NextRequest) {
       { headers: { 'Content-Type': 'text/html' } }
     );
   } catch (error) {
-    console.error('Newsletter confirm error:', error);
+    logger.error('Unexpected error in newsletter confirmation', error as Error);
 
     return new NextResponse(
       `
