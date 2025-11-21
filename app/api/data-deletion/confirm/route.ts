@@ -1,9 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { Resend } from 'resend';
+import { resend } from '@/lib/email/resend';
 import { redis } from '@/lib/rate-limit/redis';
 import { deleteUserData } from '@/lib/services/gdpr';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function GET(request: NextRequest) {
   try {

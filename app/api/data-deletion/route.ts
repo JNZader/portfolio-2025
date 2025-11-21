@@ -1,12 +1,10 @@
 import { Ratelimit } from '@upstash/ratelimit';
 import { nanoid } from 'nanoid';
 import { type NextRequest, NextResponse } from 'next/server';
-import { Resend } from 'resend';
 import { prisma } from '@/lib/db/prisma';
+import { resend } from '@/lib/email/resend';
 import { redis } from '@/lib/rate-limit/redis';
 import { dataDeletionSchema } from '@/lib/validations/gdpr';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Rate limiter por email: 2 solicitudes por día
 const deletionRateLimiter = new Ratelimit({
