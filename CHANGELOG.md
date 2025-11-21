@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.17.0](https://github.com/JNZader/portfolio-2025/compare/v0.16.0...v0.17.0) (2025-11-21)
+
+
+### Features
+
+* **analytics:** add comprehensive Web Vitals tracking ([0b9ce38](https://github.com/JNZader/portfolio-2025/commits/0b9ce3898c19ee95138bbae55b7c4baa12b5df9c))
+* **analytics:** add custom event tracking helpers ([0572faf](https://github.com/JNZader/portfolio-2025/commits/0572faf73c2469e771a01e88a75577e66ac7d329))
+* **analytics:** add custom Web Vitals API endpoint ([4236667](https://github.com/JNZader/portfolio-2025/commits/4236667d9a6eac72095e8d44435dc4b27805aed5))
+* **analytics:** add development debug panel and fix API endpoint ([d471c48](https://github.com/JNZader/portfolio-2025/commits/d471c48861b6bead577c9f2e35a86ae8c7cfd662))
+* **analytics:** add error tracking and global error boundary ([04f14be](https://github.com/JNZader/portfolio-2025/commits/04f14be7f5f38ff630bb77e429a7e2e6bf8194fe))
+* **analytics:** add GDPR-compliant consent management and fix hydration error ([dd8cdcb](https://github.com/JNZader/portfolio-2025/commits/dd8cdcb7cb72f83ce5f20ecd645cf534ec21233e))
+* **analytics:** add Google Analytics 4 with automatic pageview tracking ([ab02b92](https://github.com/JNZader/portfolio-2025/commits/ab02b92162d8aa1769ff0a99b0afd3d4ddfaf5d2))
+* **analytics:** add search query tracking ([8ae0e15](https://github.com/JNZader/portfolio-2025/commits/8ae0e15f46a908546f2d7561762140a0b201fa09))
+* **analytics:** integrate event tracking in components ([0202331](https://github.com/JNZader/portfolio-2025/commits/02023316152761001362d49e79981dc495f61da0))
+* **analytics:** integrate Vercel Analytics and Speed Insights ([4f2fd5e](https://github.com/JNZader/portfolio-2025/commits/4f2fd5e15f787befc9a565845382352774f04a9e))
+
 ## [0.16.0](https://github.com/JNZader/portfolio-2025/compare/v0.15.0...v0.16.0) (2025-11-20)
 
 
