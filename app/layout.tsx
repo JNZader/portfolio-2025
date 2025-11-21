@@ -11,6 +11,7 @@ import { CookieConsent } from '@/components/gdpr/CookieConsent';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { CustomCursor } from '@/components/ui/CustomCursor';
+import { AnalyticsDebugPanel } from '@/lib/analytics/debug';
 import { VercelAnalyticsProvider } from '@/lib/analytics/vercel';
 import { ThemeProvider } from '@/lib/design/theme-provider';
 import { ResourceHints } from '@/lib/performance/resource-hints';
@@ -121,6 +122,7 @@ export default function RootLayout({
               <WebVitals />
               <ThirdPartyScripts />
               <VercelAnalyticsProvider />
+              <AnalyticsDebugPanel />
             </AnnouncerProvider>
           </AnimationProvider>
         </ThemeProvider>
