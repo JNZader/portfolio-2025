@@ -1,5 +1,6 @@
 import type { NextConfig } from 'next';
 import withBundleAnalyzer from '@next/bundle-analyzer';
+import { withSentryConfig } from '@sentry/nextjs';
 
 const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
@@ -33,6 +34,17 @@ const nextConfig: NextConfig = {
   // Compiler options
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
+  },
+
+  // Sentry source maps
+  productionBrowserSourceMaps: true,
+
+  // Webpack config for source maps
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.devtool = 'source-map';
+    }
+    return config;
   },
 
   // Experimental features
@@ -104,4 +116,17 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default bundleAnalyzer(nextConfig);
+// Sentry configuration options
+const sentryWebpackPluginOptions = {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  silent: true,
+  widenClientFileUpload: true,
+  hideSourceMaps: true,
+  disableLogger: true,
+};
+
+// Wrap with Sentry first, then bundle analyzer
+export default bundleAnalyzer(
+  withSentryConfig(nextConfig, sentryWebpackPluginOptions)
+);

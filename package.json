@@ -46,6 +46,7 @@
     "@sanity/client": "^7.12.1",
     "@sanity/code-input": "^6.0.3",
     "@sanity/image-url": "^1.2.0",
+    "@sentry/nextjs": "^10.26.0",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/postcss": "^4.1.17",
     "@upstash/ratelimit": "^2.0.7",
