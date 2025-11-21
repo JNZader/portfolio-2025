@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.21.0](https://github.com/JNZader/portfolio-2025/compare/v0.20.0...v0.21.0) (2025-11-21)
+
+
+### Features
+
+* **monitoring:** add error boundary pages with Sentry integration ([13fee91](https://github.com/JNZader/portfolio-2025/commits/13fee918f13a3f0a7c26b75e304e86e3379134ca))
+* **monitoring:** add health check endpoint for uptime monitoring ([135bfc9](https://github.com/JNZader/portfolio-2025/commits/135bfc938e74f5c5bcf178b0035acd88e6b75734))
+* **monitoring:** add performance tracking for critical operations ([1d82ad5](https://github.com/JNZader/portfolio-2025/commits/1d82ad51a6f157b73be6c89f54feef4526ea862d))
+* **monitoring:** add user error feedback widget ([70e6bcf](https://github.com/JNZader/portfolio-2025/commits/70e6bcf55304f25717e81bba42e61ddbaaa05c49))
+* **monitoring:** configure Sentry error tracking ([35e776f](https://github.com/JNZader/portfolio-2025/commits/35e776feac70df79e28f57298ea5c7dca6847947))
+* **monitoring:** implement structured logging across the application ([22121c7](https://github.com/JNZader/portfolio-2025/commits/22121c7466d7917f17409a5c0b5b69cdcdd968f7))
+
+
+### Bug Fixes
+
+* **api:** use shared Resend client to prevent build failures ([4ddab48](https://github.com/JNZader/portfolio-2025/commits/4ddab4854beb2e1f62449d10be62a858e43161b1))
+
 ## [0.20.0](https://github.com/JNZader/portfolio-2025/compare/v0.18.1...v0.20.0) (2025-11-21)
 
 
