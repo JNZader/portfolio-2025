@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.18.0](https://github.com/JNZader/portfolio-2025/compare/v0.17.0...v0.18.0) (2025-11-21)
+
+
+### Features
+
+* **git:** add commit message template ([4c805fb](https://github.com/JNZader/portfolio-2025/commits/4c805fb557fd73e33654274043f5341c040cf0f8))
+* **git:** add pre-push hook for automated testing ([ed9dfaf](https://github.com/JNZader/portfolio-2025/commits/ed9dfaffc8ba5a6cb690c62034ff36a1b567015c))
+* **git:** add pull request template ([4442a94](https://github.com/JNZader/portfolio-2025/commits/4442a94eda130b83cfb6af0b49e72b032bb3fb88))
+
 ## [0.17.0](https://github.com/JNZader/portfolio-2025/compare/v0.16.0...v0.17.0) (2025-11-21)
 
 
