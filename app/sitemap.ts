@@ -41,28 +41,38 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Dynamic blog posts
-  const posts = await sanityFetch<Post[]>({
-    query: postsQuery,
-    tags: ['post'],
-  });
-  const blogPages: MetadataRoute.Sitemap = posts.map((post) => ({
-    url: `${SITE_URL}/blog/${post.slug.current}`,
-    lastModified: new Date(post._updatedAt || post.publishedAt),
-    changeFrequency: 'monthly',
-    priority: 0.7,
-  }));
+  let blogPages: MetadataRoute.Sitemap = [];
+  try {
+    const posts = await sanityFetch<Post[]>({
+      query: postsQuery,
+      tags: ['post'],
+    });
+    blogPages = posts.map((post) => ({
+      url: `${SITE_URL}/blog/${post.slug.current}`,
+      lastModified: new Date(post._updatedAt || post.publishedAt),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    }));
+  } catch (error) {
+    console.warn('Failed to fetch blog posts for sitemap:', error);
+  }
 
   // Dynamic projects (opcional, si quieres incluir proyectos individuales)
-  const projects = await sanityFetch<Project[]>({
-    query: projectsQuery,
-    tags: ['project'],
-  });
-  const projectPages: MetadataRoute.Sitemap = projects.map((project) => ({
-    url: `${SITE_URL}/proyectos/${project.slug.current}`,
-    lastModified: new Date(project._updatedAt || project.publishedAt),
-    changeFrequency: 'monthly',
-    priority: 0.6,
-  }));
+  let projectPages: MetadataRoute.Sitemap = [];
+  try {
+    const projects = await sanityFetch<Project[]>({
+      query: projectsQuery,
+      tags: ['project'],
+    });
+    projectPages = projects.map((project) => ({
+      url: `${SITE_URL}/proyectos/${project.slug.current}`,
+      lastModified: new Date(project._updatedAt || project.publishedAt),
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    }));
+  } catch (error) {
+    console.warn('Failed to fetch projects for sitemap:', error);
+  }
 
   return [...staticPages, ...blogPages, ...projectPages];
 }

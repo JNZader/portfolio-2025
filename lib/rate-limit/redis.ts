@@ -3,10 +3,11 @@ import { Redis } from '@upstash/redis';
 
 /**
  * Cliente Redis de Upstash
+ * Falls back to dummy values for CI builds
  */
 export const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+  url: process.env.UPSTASH_REDIS_REST_URL || 'https://dummy-redis.upstash.io',
+  token: process.env.UPSTASH_REDIS_REST_TOKEN || 'dummy_token_for_ci_build',
 });
 
 /**

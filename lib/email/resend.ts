@@ -1,13 +1,11 @@
 import { Resend } from 'resend';
 
-if (!process.env.RESEND_API_KEY) {
-  throw new Error('RESEND_API_KEY is not defined');
-}
-
 /**
  * Cliente Resend configurado
+ * Falls back to a dummy key for CI builds, but will throw error on actual usage
  */
-export const resend = new Resend(process.env.RESEND_API_KEY);
+const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_dummy_key_for_ci_build';
+export const resend = new Resend(RESEND_API_KEY);
 
 /**
  * Configuración de emails
