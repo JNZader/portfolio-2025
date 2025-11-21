@@ -791,11 +791,22 @@ Browsers soportados:
 ### CI/CD Testing
 
 GitHub Actions ejecuta automáticamente:
-- Unit tests en cada push/PR
-- E2E tests en cada push/PR
-- Accessibility tests
-- Visual regression tests
-- Lighthouse CI para performance
+- **CI Workflow**: Quality checks (Biome + TypeScript) + Build
+- **Tests Workflow**: Unit tests con coverage (Codecov)
+- **E2E Workflow**: E2E tests multi-browser con Playwright
+- **Lighthouse Workflow**: Performance audits con budgets
+- **Security Workflow**: CodeQL, dependency review, npm audit
+
+**Características:**
+- 🚀 Cache multi-capa para ejecución rápida (~30-60% más rápido)
+- 🔒 Security scanning semanal automático
+- 📊 Coverage reports y performance budgets
+- 🤖 Dependabot para actualizaciones automáticas
+- ⚡ Ejecución paralela de workflows (~8-12 min total)
+
+**Documentación completa:**
+- 📖 [CI/CD Documentation](docs/CI_CD_DOCUMENTATION.md) - Guía completa
+- 🚀 [CI/CD Quick Reference](docs/CI_CD_QUICK_REFERENCE.md) - Guía rápida
 
 ## ⚡ Performance
 
