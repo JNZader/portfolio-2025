@@ -1,7 +1,8 @@
 import '@/lib/analytics/types';
+import * as Sentry from '@sentry/nextjs';
 
 /**
- * Track error
+ * Track error - Envía a múltiples servicios de tracking
  */
 export function trackError(error: Error, context?: Record<string, unknown>) {
   // Log in development
@@ -9,7 +10,10 @@ export function trackError(error: Error, context?: Record<string, unknown>) {
     console.error('❌ Error tracked:', error, context);
   }
 
-  // Send to Google Analytics
+  // 1. Sentry (principal para debugging con stack traces completos)
+  Sentry.captureException(error, { extra: context });
+
+  // 2. Google Analytics (para métricas de errores)
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'exception', {
       description: error.message,
@@ -18,7 +22,7 @@ export function trackError(error: Error, context?: Record<string, unknown>) {
     });
   }
 
-  // Send to Vercel Analytics (custom event)
+  // 3. Vercel Analytics (custom event para dashboard de Vercel)
   if (typeof window !== 'undefined' && window.va) {
     window.va('track', 'error', {
       message: error.message,
@@ -27,9 +31,4 @@ export function trackError(error: Error, context?: Record<string, unknown>) {
       ...context,
     });
   }
-
-  // Send to error tracking service (Sentry, etc.)
-  // if (typeof window !== 'undefined' && window.Sentry) {
-  //   window.Sentry.captureException(error, { extra: context });
-  // }
 }

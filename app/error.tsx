@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
 import { trackError } from '@/lib/analytics/errors';
 
-export default function GlobalError({
+// biome-ignore lint/suspicious/noShadowRestrictedNames: Next.js requires this exact name for error boundaries
+export default function Error({
   error,
   reset,
 }: {
