@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.3](https://github.com/JNZader/portfolio-2025/compare/v0.21.2...v0.21.3) (2025-11-21)
+
+
+### Bug Fixes
+
+* **ci:** configure E2E workflow to use Sanity production data via secrets ([f3be359](https://github.com/JNZader/portfolio-2025/commits/f3be359942924aaeb8aee17310448b41b2d4b536))
+
 ### [0.21.2](https://github.com/JNZader/portfolio-2025/compare/v0.21.1...v0.21.2) (2025-11-21)
 
 
