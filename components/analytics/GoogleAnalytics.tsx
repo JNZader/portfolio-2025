@@ -60,14 +60,3 @@ export function GoogleAnalytics() {
 
   return <GoogleAnalyticsScript gaId={GA_MEASUREMENT_ID} />;
 }
-
-// Type declaration for gtag
-declare global {
-  interface Window {
-    gtag: (
-      command: 'config' | 'event' | 'js' | 'set',
-      targetId: string | Date,
-      config?: Record<string, unknown>
-    ) => void;
-  }
-}
