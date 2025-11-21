@@ -1,5 +1,6 @@
 import type { NextConfig } from 'next';
 import withBundleAnalyzer from '@next/bundle-analyzer';
+import { withSentryConfig } from '@sentry/nextjs';
 
 const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
@@ -34,6 +35,9 @@ const nextConfig: NextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+
+  // Sentry source maps
+  productionBrowserSourceMaps: true,
 
   // Experimental features
   experimental: {
@@ -104,4 +108,21 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default bundleAnalyzer(nextConfig);
+// Sentry configuration options
+const sentryWebpackPluginOptions = {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  silent: true,
+  widenClientFileUpload: true,
+  hideSourceMaps: true,
+  disableLogger: true,
+  // Disable sourcemaps upload in development
+  sourcemaps: {
+    disable: process.env.NODE_ENV === 'development',
+  },
+};
+
+// Wrap with Sentry first, then bundle analyzer
+export default bundleAnalyzer(
+  withSentryConfig(nextConfig, sentryWebpackPluginOptions)
+);
