@@ -6,20 +6,24 @@ import { type NextRequest, NextResponse } from 'next/server';
  */
 export async function POST(request: NextRequest) {
   try {
-    const metric = await request.json();
+    const data = await request.json();
+
+    // Support both formats: { name, value } and { metric, value }
+    const metricName = data.name || data.metric;
+    const metricValue = data.value;
 
     // Validate metric structure
-    if (!metric.name || typeof metric.value === 'undefined') {
+    if (!metricName || typeof metricValue === 'undefined') {
       return NextResponse.json({ success: false, error: 'Invalid metric' }, { status: 400 });
     }
 
     // Log metrics in development
     if (process.env.NODE_ENV === 'development') {
       console.log('[Analytics] Web Vital:', {
-        name: metric.name,
-        value: metric.value,
-        rating: metric.rating,
-        delta: metric.delta,
+        name: metricName,
+        value: metricValue,
+        rating: data.rating,
+        delta: data.delta,
       });
     }
 

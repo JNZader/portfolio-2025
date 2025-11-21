@@ -1,35 +1,47 @@
 import { type Metric, onCLS, onFCP, onINP, onLCP, onTTFB } from 'web-vitals';
+import '@/lib/analytics/types';
 
 /**
- * Send Web Vitals to analytics
+ * Send metric to analytics
  */
 function sendToAnalytics(metric: Metric) {
-  // Log to console in development
+  const { name, value, rating, delta, id } = metric;
+
+  // Log in development
   if (process.env.NODE_ENV === 'development') {
-    console.log('Web Vital:', {
-      name: metric.name,
-      value: metric.value,
-      rating: metric.rating,
-      delta: metric.delta,
+    console.log('📊 Web Vital:', {
+      name,
+      value: Math.round(value),
+      rating,
+      delta: Math.round(delta),
     });
   }
 
-  // Send to analytics service (Vercel, GA, etc.)
-  const body = JSON.stringify(metric);
-
-  if (navigator.sendBeacon) {
-    navigator.sendBeacon('/api/analytics', body);
-  } else {
-    fetch('/api/analytics', {
-      body,
-      method: 'POST',
-      keepalive: true,
-    }).catch((error) => {
-      // Silently fail in production
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Failed to send web vital:', error);
-      }
+  // Send to Vercel Analytics
+  if (typeof window !== 'undefined' && window.va) {
+    window.va('track', 'web-vital', {
+      metric: name,
+      value: Math.round(value),
+      rating,
+      delta: Math.round(delta),
+      id,
     });
+  }
+
+  // Send to Google Analytics
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', name, {
+      value: Math.round(value),
+      metric_rating: rating,
+      metric_delta: Math.round(delta),
+      metric_id: id,
+    });
+  }
+
+  // Send to custom endpoint (optional)
+  if (navigator.sendBeacon) {
+    const body = JSON.stringify({ metric: name, value, rating, delta, id });
+    navigator.sendBeacon('/api/analytics', body);
   }
 }
 

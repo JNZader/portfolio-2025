@@ -21,7 +21,7 @@ export function ObfuscatedEmail({
 }: ObfuscatedEmailProps) {
   const [showMenu, setShowMenu] = useState(false);
   const [copied, setCopied] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLSpanElement>(null);
 
   // Cerrar menú al hacer clic fuera
   useEffect(() => {
@@ -59,7 +59,7 @@ export function ObfuscatedEmail({
   };
 
   return (
-    <div className="relative inline-block" ref={menuRef}>
+    <span className="relative inline-block" ref={menuRef}>
       {/* Botón - NO muestra el email */}
       <button
         type="button"
@@ -74,8 +74,8 @@ export function ObfuscatedEmail({
 
       {/* Menú desplegable */}
       {showMenu && (
-        <div className="absolute z-50 mt-2 w-56 rounded-lg border border-[var(--color-border)] bg-[var(--color-background)] shadow-lg">
-          <div className="p-2">
+        <span className="absolute z-50 mt-2 w-56 rounded-lg border border-[var(--color-border)] bg-[var(--color-background)] shadow-lg block">
+          <span className="p-2 block">
             <button
               type="button"
               onClick={handleMailto}
@@ -102,10 +102,10 @@ export function ObfuscatedEmail({
                 </>
               )}
             </button>
-          </div>
-        </div>
+          </span>
+        </span>
       )}
-    </div>
+    </span>
   );
 }
 

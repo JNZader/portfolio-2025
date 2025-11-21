@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import { subscribeToNewsletter } from '@/app/actions/newsletter';
 import { InputField } from '@/components/forms/FormField';
 import { Button } from '@/components/ui/button';
+import { trackNewsletterSignup } from '@/lib/analytics/events';
 import { type NewsletterFormData, newsletterSchema } from '@/lib/validations/newsletter';
 
 export function NewsletterForm() {
@@ -31,6 +32,9 @@ export function NewsletterForm() {
       const result = await subscribeToNewsletter(formData);
 
       if (result.success) {
+        // Track newsletter signup
+        trackNewsletterSignup(data.email);
+
         toast.success(result.message, {
           duration: 5000,
           position: 'bottom-center',

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { BlogPostTracker } from '@/components/blog/BlogPostTracker';
 import { Comments } from '@/components/blog/Comments';
 import { PortableTextRenderer } from '@/components/blog/PortableTextRenderer';
 import { PostHeader } from '@/components/blog/PostHeader';
@@ -145,6 +146,9 @@ export default async function PostPage({ params }: PostPageProps) {
 
   return (
     <>
+      {/* Track blog post view */}
+      <BlogPostTracker slug={post.slug.current} title={post.title} />
+
       {/* JSON-LD Structured Data */}
       <JsonLd data={blogPostingSchema} />
       <JsonLd data={breadcrumbSchema} />
