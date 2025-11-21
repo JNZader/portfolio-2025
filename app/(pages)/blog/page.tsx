@@ -4,6 +4,7 @@ import { BlogFilters } from '@/components/blog/BlogFilters';
 import { EmptyState } from '@/components/blog/EmptyState';
 import { Pagination } from '@/components/blog/Pagination';
 import { PostGrid } from '@/components/blog/PostGrid';
+import { SearchTracker } from '@/components/blog/SearchTracker';
 import Container from '@/components/ui/Container';
 import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
 import { getPaginationRange, getTotalPages } from '@/lib/utils/blog';
@@ -61,6 +62,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   return (
     <>
+      {/* Track search query */}
+      {searchTerm && normalizedSearch && <SearchTracker query={searchTerm} results={total} />}
+
       {/* Hero */}
       <section className="relative py-20 md:py-32 overflow-hidden">
         {/* Animated gradient background */}
