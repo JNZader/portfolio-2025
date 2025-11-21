@@ -15,8 +15,8 @@ declare global {
      * https://developers.google.com/analytics/devguides/collection/gtagjs
      */
     gtag?: (
-      command: 'config' | 'event' | 'js' | 'set',
-      targetId: string | Date,
+      command: 'config' | 'event' | 'js' | 'set' | 'consent',
+      targetId: string | Date | 'default' | 'update',
       config?: Record<string, unknown>
     ) => void;
   }

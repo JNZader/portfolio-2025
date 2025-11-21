@@ -3,6 +3,7 @@
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { setDefaultGAConsent, updateGAConsent } from '@/lib/analytics/consent';
 import { cn } from '@/lib/utils';
 
 const COOKIE_CONSENT_KEY = 'cookie-consent';
@@ -26,6 +27,9 @@ export function CookieConsent() {
   });
 
   useEffect(() => {
+    // Set default GA consent (denied) on page load
+    setDefaultGAConsent();
+
     // Verificar si ya dio consentimiento
     const consent = Cookies.get(COOKIE_CONSENT_KEY);
 
@@ -35,11 +39,14 @@ export function CookieConsent() {
       return () => clearTimeout(timer);
     }
 
-    // Si existe, verificar versión
+    // Si existe, verificar versión y actualizar consent
     try {
       const parsed = JSON.parse(consent);
       if (parsed.version !== COOKIE_CONSENT_VERSION) {
         setShow(true); // Mostrar si cambió la política
+      } else {
+        // Update GA consent based on saved preferences
+        updateGAConsent(parsed.analytics);
       }
     } catch {
       setShow(true);
@@ -52,12 +59,8 @@ export function CookieConsent() {
     // Guardar en cookie (365 días)
     Cookies.set(COOKIE_CONSENT_KEY, JSON.stringify(prefs), { expires: 365 });
 
-    // Opcional: Enviar a analytics si está permitido
-    if (prefs.analytics && typeof window !== 'undefined') {
-      // window.gtag?.('consent', 'update', {
-      //   analytics_storage: 'granted',
-      // });
-    }
+    // Update GA consent
+    updateGAConsent(prefs.analytics);
 
     setShow(false);
   };
