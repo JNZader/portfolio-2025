@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.20.0](https://github.com/JNZader/portfolio-2025/compare/v0.18.0...v0.20.0) (2025-11-21)
+
+
+### Bug Fixes
+
+* **ci:** add fallbacks for missing env vars in build ([bed6389](https://github.com/JNZader/portfolio-2025/commits/bed6389e378b5d169ae13431c4528e828504e588))
+* **ci:** add Prisma Client generation to all workflows and hooks ([0dcad9f](https://github.com/JNZader/portfolio-2025/commits/0dcad9fee1215678f06034c9f762a0510c7b875b))
+* **deps:** restore Prisma 7 for CI compatibility ([6b8329d](https://github.com/JNZader/portfolio-2025/commits/6b8329de9a686bc40f8cfe47608243c8a94f87d7))
+* **husky:** show Prisma generation errors in pre-push hook ([78ab493](https://github.com/JNZader/portfolio-2025/commits/78ab49339b910e88692a27f4ea01435b6e04dd68))
+* **prisma:** downgrade to v6 for SQLite compatibility ([4f4e67c](https://github.com/JNZader/portfolio-2025/commits/4f4e67c383d5a367941990eaedfaeacc237a8ecd))
+* **prisma:** remove engine property for Prisma 7 compatibility ([48d04ed](https://github.com/JNZader/portfolio-2025/commits/48d04edadc535898813d2f0e7cb65e4453c05c8f))
+* **prisma:** remove url from schema for Prisma 7 compatibility ([a62393c](https://github.com/JNZader/portfolio-2025/commits/a62393c4f2ce65df75cf87aafb9e18e13e8f7981))
+
+
+### Performance Improvements
+
+* **ci:** optimize workflows with advanced caching ([453dc74](https://github.com/JNZader/portfolio-2025/commits/453dc7493fcb52f45538b1aa3eb78a2b707760e9))
+
+
+### Documentation
+
+* **ci:** add comprehensive CI/CD documentation ([4fbd8ff](https://github.com/JNZader/portfolio-2025/commits/4fbd8ffda35dfd651a42dc692113c2c094a7574c))
+* **readme:** add status badges and update documentation ([7c3a5e3](https://github.com/JNZader/portfolio-2025/commits/7c3a5e37e7cf3ba8090a30f368bc6c3847eea726))
+
 ## [0.18.0](https://github.com/JNZader/portfolio-2025/compare/v0.17.0...v0.18.0) (2025-11-21)
 
 
