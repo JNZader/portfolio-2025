@@ -39,6 +39,14 @@ const nextConfig: NextConfig = {
   // Sentry source maps
   productionBrowserSourceMaps: true,
 
+  // Webpack config for source maps
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.devtool = 'source-map';
+    }
+    return config;
+  },
+
   // Experimental features
   experimental: {
     optimizeCss: true,
@@ -116,10 +124,6 @@ const sentryWebpackPluginOptions = {
   widenClientFileUpload: true,
   hideSourceMaps: true,
   disableLogger: true,
-  // Disable sourcemaps upload in development
-  sourcemaps: {
-    disable: process.env.NODE_ENV === 'development',
-  },
 };
 
 // Wrap with Sentry first, then bundle analyzer
