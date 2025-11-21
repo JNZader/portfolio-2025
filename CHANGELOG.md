@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.2](https://github.com/JNZader/portfolio-2025/compare/v0.21.1...v0.21.2) (2025-11-21)
+
+
+### Bug Fixes
+
+* **ci:** add missing env vars to E2E workflow build step ([6cf1fa6](https://github.com/JNZader/portfolio-2025/commits/6cf1fa66c68dd8ca42c25d874d8664f31b9d3cc7))
+
 ### [0.21.1](https://github.com/JNZader/portfolio-2025/compare/v0.21.0...v0.21.1) (2025-11-21)
 
 ### [0.20.1](https://github.com/JNZader/portfolio-2025/compare/v0.20.0...v0.20.1) (2025-11-21)
