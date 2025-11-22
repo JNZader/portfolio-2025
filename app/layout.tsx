@@ -11,6 +11,7 @@ import { CookieConsent } from '@/components/gdpr/CookieConsent';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { CustomCursor } from '@/components/ui/CustomCursor';
+import { ScrollProgress } from '@/components/ui/ScrollProgress';
 import { AnalyticsDebugPanel } from '@/lib/analytics/debug';
 import { VercelAnalyticsProvider } from '@/lib/analytics/vercel';
 import { ThemeProvider } from '@/lib/design/theme-provider';
@@ -96,6 +97,7 @@ export default function RootLayout({
         >
           <AnimationProvider>
             <AnnouncerProvider>
+              <ScrollProgress />
               <CustomCursor />
               <div className="relative flex min-h-screen flex-col">
                 <SkipLinks />

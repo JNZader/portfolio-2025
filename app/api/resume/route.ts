@@ -108,9 +108,9 @@ export async function GET() {
 
       doc.setFontSize(10);
       doc.setTextColor(...textColor);
-      doc.setFont(undefined, 'bold');
+      doc.setFont('helvetica', 'bold');
       doc.text(job.position, 20, yPos);
-      doc.setFont(undefined, 'normal');
+      doc.setFont('helvetica', 'normal');
       yPos += 5;
 
       doc.setFontSize(9);
@@ -142,9 +142,9 @@ export async function GET() {
 
       doc.setFontSize(10);
       doc.setTextColor(...textColor);
-      doc.setFont(undefined, 'bold');
+      doc.setFont('helvetica', 'bold');
       doc.text(edu.degree, 20, yPos);
-      doc.setFont(undefined, 'normal');
+      doc.setFont('helvetica', 'normal');
       yPos += 5;
 
       doc.setFontSize(8);
@@ -165,9 +165,9 @@ export async function GET() {
 
       doc.setFontSize(9);
       doc.setTextColor(...textColor);
-      doc.setFont(undefined, 'bold');
+      doc.setFont('helvetica', 'bold');
       doc.text(`${category}:`, 20, yPos);
-      doc.setFont(undefined, 'normal');
+      doc.setFont('helvetica', 'normal');
 
       doc.setTextColor(...lightGray);
       const skillsText = skills.join(', ');
@@ -187,9 +187,9 @@ export async function GET() {
     for (const lang of data.languages) {
       doc.setFontSize(9);
       doc.setTextColor(...textColor);
-      doc.setFont(undefined, 'bold');
+      doc.setFont('helvetica', 'bold');
       doc.text(`${lang.name}:`, 20, yPos);
-      doc.setFont(undefined, 'normal');
+      doc.setFont('helvetica', 'normal');
       doc.setTextColor(...lightGray);
       doc.text(lang.level, 55, yPos);
       yPos += 5;
