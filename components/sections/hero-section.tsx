@@ -1,4 +1,4 @@
-import { ArrowRight, Mail } from 'lucide-react';
+import { ArrowRight, FileText, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
@@ -21,6 +21,7 @@ interface HeroSectionProps {
     github?: string;
     linkedin?: string;
     email?: string;
+    cv?: string;
   };
   showScrollIndicator?: boolean;
 }
@@ -137,6 +138,13 @@ export function HeroSection({
                     aria-label="LinkedIn"
                   >
                     <LinkedinIcon className="h-5 w-5" />
+                  </a>
+                </Button>
+              )}
+              {socialLinks.cv && (
+                <Button size="icon" variant="outline" asChild>
+                  <a href={socialLinks.cv} aria-label="Descargar CV">
+                    <FileText className="h-5 w-5" />
                   </a>
                 </Button>
               )}

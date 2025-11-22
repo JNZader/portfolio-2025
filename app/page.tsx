@@ -78,9 +78,9 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <HeroSection
-        greeting="Hola! Soy Javier Zader"
-        title="Backend Java Developer"
-        subtitle="especializado en Spring Boot"
+        greeting="¡Hola! 👋"
+        title="Javier Zader"
+        subtitle="Backend Java Developer"
         description="Creo soluciones robustas y escalables combinando más de 20 años de experiencia en tecnología con frameworks modernos. Especializado en Java, Spring Boot, React y arquitecturas de microservicios."
         primaryCta={{
           text: 'Ver Proyectos',
@@ -93,6 +93,7 @@ export default function HomePage() {
         socialLinks={{
           github: 'https://github.com/JNZader',
           linkedin: 'https://www.linkedin.com/in/jnzader/',
+          cv: '/api/resume',
         }}
       />
 

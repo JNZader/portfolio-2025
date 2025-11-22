@@ -1,0 +1,160 @@
+{
+  "personalInfo": {
+    "name": "Javier Norberto Zader",
+    "title": "Técnico en Desarrollo de Software · Backend Java Developer",
+    "email": "jnzader@gmail.com",
+    "phone": "",
+    "location": "Córdoba, Argentina",
+    "website": "https://javierzader.com",
+    "linkedin": "https://linkedin.com/in/jnzader",
+    "github": "https://github.com/jnzader"
+  },
+  "summary": "Técnico en Desarrollo de Software especializado en backend Java (Spring Boot), con experiencia en el desarrollo de APIs REST, aplicaciones móviles (Java/XML para Android) y soluciones de ciencia de datos y machine learning. Formado en ETL, modelado de datos, estadística aplicada y ML (Alura ONE), con proyectos que resolvieron problemas de negocio y salud. Certificado en redes (CCNA). Orientado a resultados, aplico buenas prácticas de arquitectura, pruebas y metodologías ágiles para crear software escalable y eficiente.",
+  "experience": [
+    {
+      "company": "Proyectos Personales & Freelance",
+      "position": "Desarrollador Backend y Ciencia de Datos",
+      "location": "Córdoba, Argentina",
+      "startDate": "2024",
+      "endDate": "Presente",
+      "highlights": []
+    }
+  ],
+  "projects": [
+    {
+      "name": "FiveStock -- Sistema de Gestión de Inventarios",
+      "description": "Plataforma web para PyMEs que centraliza gestión de productos, categorías, marcas y personal.",
+      "highlights": [
+        "Autenticación con roles y permisos, Kardex de inventario, y reportes PDF de stock.",
+        "Implementación de temas (claro/oscuro) y formularios con validación.",
+        "Stack: React 19, Vite, Supabase (PostgreSQL), TanStack Query, Zustand, Styled Components."
+      ]
+    },
+    {
+      "name": "ApiGen -- Generador de APIs REST Genéricas",
+      "description": "Plantilla reusable para acelerar en un 40% la creación de servicios CRUD con arquitectura robusta.",
+      "highlights": [
+        "Incluye auditoría con Hibernate Envers, validación de datos, mapeo DTO automático y paginación nativa.",
+        "Manejo centralizado de excepciones y controladores genéricos.",
+        "Stack: Java 21, Spring Boot 3.2.3, JPA, MySQL, Maven, Lombok."
+      ]
+    },
+    {
+      "name": "TelecomX -- Análisis de Evasión de Clientes (EDA)",
+      "description": "Análisis exploratorio para identificar factores de churn y preparar dataset modelable.",
+      "highlights": [
+        "Extracción JSON, normalización y limpieza; visualizaciones para contrato, antigüedad, cargos y fibra óptica.",
+        "Hallazgos: contratos mes a mes y mayor cargo mensual correlacionan fuertemente con churn.",
+        "Stack: Python, Pandas, Matplotlib, Seaborn, Jupyter."
+      ]
+    },
+    {
+      "name": "TelecomX -- Predicción de Churn (ML)",
+      "description": "Modelado supervisado para anticipar cancelaciones y priorizar retención.",
+      "highlights": [
+        "Entrené Random Forest, Logistic Regression, SVM, KNN y Decision Tree con One-Hot Encoding, normalización y SMOTE.",
+        "Mejor modelo: Random Forest con F1-Score 84.55% y AUC-ROC 92.15%; recomendaciones de negocio para reducir churn.",
+        "Stack: Scikit-learn, Pandas, NumPy, imbalanced-learn."
+      ]
+    },
+    {
+      "name": "ForoHub -- API REST de Foro de Discusión",
+      "description": "Backend seguro con CRUD de tópicos y gestión de usuarios.",
+      "highlights": [
+        "Spring Security + JWT para autenticación/autorización; migraciones con Flyway.",
+        "Arquitectura en capas (entity, repository, service, controller, config) y pruebas básicas.",
+        "Stack: Java 21, Spring Boot 3.3.x, Spring Data JPA, MySQL, Lombok, Maven."
+      ]
+    },
+    {
+      "name": "Predictor de Diabetes (TP14)",
+      "description": "Aplicación de escritorio para diagnóstico temprano mediante regresión logística.",
+      "highlights": [
+        "Procesa 8 indicadores clínicos y muestra resultados en tiempo real con probabilidad porcentual.",
+        "Interfaz gráfica con Tkinter y manejo de validaciones.",
+        "Stack: Python, Pandas, NumPy, Scikit-learn, Tkinter."
+      ]
+    },
+    {
+      "name": "Sistema de Gestión Nutricional (colaborativo)",
+      "description": "Aplicación de escritorio para administración de pacientes, planes y dietas personalizadas.",
+      "highlights": [
+        "Base de datos normalizada con relaciones complejas.",
+        "Interfaz desarrollada en Swing con trabajo ágil en equipo.",
+        "Stack: Java, Swing, MySQL."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Alura Latam",
+      "degree": "ONE Tech Foundation G8 -- Data Science, ETL y ML",
+      "location": "Online",
+      "startDate": "2024",
+      "endDate": "2025",
+      "details": [
+        "Estadísticas y Machine Learning (68h)",
+        "Aprendiendo a hacer ETL con Pandas/NumPy y visualización (61h)",
+        "Modelado de datos con Python (40h)",
+        "Principiante en Programación (70h)",
+        "Emprendimiento, Agilidad y Desarrollo Personal"
+      ]
+    },
+    {
+      "institution": "Alura Latam",
+      "degree": "Java y Spring Boot G6 -- ONE",
+      "location": "Online",
+      "startDate": "2024",
+      "endDate": "2024",
+      "details": [
+        "Java y Spring Boot G6 (104h): Spring Boot 3 (API REST, seguridad, documentación), JPA/Hibernate, Streams/Lambdas.",
+        "Java Orientado a Objetos (45h) y Java Web con Spring (34h).",
+        "Principiante en Programación (58h), Desarrollo Personal y Agilidad (70h+).",
+        "Data/SQL (36h): SQL con MySQL (DML, Procedures)."
+      ]
+    },
+    {
+      "institution": "Universidad Gastón Dachary",
+      "degree": "Técnico en Desarrollo de Software",
+      "location": "Posadas, Misiones, Argentina",
+      "startDate": "2023-12",
+      "endDate": "2025-07",
+      "details": []
+    },
+    {
+      "institution": "Argentina Programa",
+      "degree": "Desarrollador Java Intermedio",
+      "location": "Online",
+      "startDate": "2022-10",
+      "endDate": "2023-11",
+      "details": []
+    },
+    {
+      "institution": "Fundación Proydesa",
+      "degree": "Cisco Certified Network Associate (CCNA)",
+      "location": "Argentina",
+      "startDate": "2009",
+      "endDate": "2009",
+      "details": []
+    }
+  ],
+  "skills": {
+    "Lenguajes": ["Java", "Python", "JavaScript", "SQL", "TypeScript", "XML"],
+    "Frameworks": ["Spring Boot", "Hibernate", "React", "React Native"],
+    "Bases de Datos": ["PostgreSQL", "MySQL", "SQLite", "MariaDB"],
+    "Data/ML": ["Pandas", "NumPy", "Matplotlib", "Scikit-learn"],
+    "Testing": ["JUnit", "Mockito"],
+    "DevOps": ["Git", "GitHub", "GitHub Actions"],
+    "Herramientas": ["IntelliJ", "Eclipse", "NetBeans", "Android Studio"],
+    "Metodologías": ["Scrum", "SOLID", "POO", "UML"]
+  },
+  "softSkills": [
+    "Trabajo en equipo y comunicación efectiva.",
+    "Liderazgo de proyectos y gestión de tiempos.",
+    "Adaptabilidad y aprendizaje continuo."
+  ],
+  "languages": [
+    { "name": "Español", "level": "Nativo" },
+    { "name": "Inglés", "level": "Intermedio (lectura técnica fluida)" }
+  ]
+}
