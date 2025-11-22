@@ -17,6 +17,21 @@ All notable changes to this project will be documented in this file. See [standa
 
 * **ci:** configure E2E workflow to use Sanity production data via secrets ([f3be359](https://github.com/JNZader/portfolio-2025/commits/f3be359942924aaeb8aee17310448b41b2d4b536))
 
+## [0.22.0](https://github.com/JNZader/portfolio-2025/compare/v0.21.2...v0.22.0) (2025-11-22)
+
+
+### Features
+
+* **resume:** add PDF resume generator ([348be8e](https://github.com/JNZader/portfolio-2025/commits/348be8e87f51165f1daeb6a270172323d929d9ce))
+* **rss:** add RSS feed for blog posts ([cf6ce14](https://github.com/JNZader/portfolio-2025/commits/cf6ce1415734b1fd0d17c1171ddf56975e369796))
+* **ui:** add easter eggs system and optimize layout ([7c0ce5c](https://github.com/JNZader/portfolio-2025/commits/7c0ce5ce7763fc49adf70f7c483316f2e85db3fd))
+* **ui:** add scroll progress indicator to all pages ([0793fdf](https://github.com/JNZader/portfolio-2025/commits/0793fdfed225704135a073c595a92e760c0d1231))
+
+
+### Bug Fixes
+
+* **ci:** configure E2E workflow to use Sanity production data via secrets ([f3be359](https://github.com/JNZader/portfolio-2025/commits/f3be359942924aaeb8aee17310448b41b2d4b536))
+
 ### [0.21.4](https://github.com/JNZader/portfolio-2025/compare/v0.21.3...v0.21.4) (2025-11-22)
 
 
