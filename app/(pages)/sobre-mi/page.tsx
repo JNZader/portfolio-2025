@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 import type { Metadata } from 'next';
 import { RevealOnScroll } from '@/components/animations';
+import { ClickableAvatar } from '@/components/features/ClickableAvatar';
+import { DownloadCVButton } from '@/components/ui/DownloadCVButton';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
 import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
 
@@ -81,6 +83,13 @@ export default function SobreMiPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <RevealOnScroll>
             <SectionHeader centered>
+              <div className="flex flex-col items-center gap-8 mb-6">
+                <ClickableAvatar
+                  src="https://media.licdn.com/dms/image/v2/D4D03AQE7TmC2O6j21g/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1699301363482?e=1765411200&v=beta&t=iKb1tXsTUVK5R62jF_Owebju8_oScP6J3ulMO0NepSE"
+                  alt="Javier Zader"
+                  size={160}
+                />
+              </div>
               <SectionTitle size="xl">Sobre mí</SectionTitle>
               <SectionDescription size="lg" className="mx-auto">
                 Desarrollador apasionado por crear soluciones tecnológicas robustas y escalables
@@ -295,6 +304,9 @@ export default function SobreMiPage() {
                   <p>
                     <strong>Disponibilidad:</strong> Abierto a nuevos proyectos
                   </p>
+                </div>
+                <div className="mt-6">
+                  <DownloadCVButton className="w-full justify-center" />
                 </div>
               </div>
             </RevealOnScroll>

@@ -7,6 +7,10 @@ import { SkipLinks } from '@/components/a11y/SkipLinks';
 import { ThirdPartyScripts } from '@/components/analytics/ThirdPartyScripts';
 import { WebVitals } from '@/components/analytics/WebVitals';
 import { AnimationProvider } from '@/components/animations';
+import { CursorTracer } from '@/components/features/CursorTracer';
+import { EasterEggs } from '@/components/features/EasterEggs';
+import { MatrixRain } from '@/components/features/MatrixRain';
+import { TypingEasterEgg } from '@/components/features/TypingEasterEgg';
 import { CookieConsent } from '@/components/gdpr/CookieConsent';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
@@ -85,6 +89,7 @@ export default function RootLayout({
     <html
       lang="es"
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
       className={`${inter.variable} ${jetbrainsMono.variable}`}
     >
       <ResourceHints />
@@ -135,6 +140,10 @@ export default function RootLayout({
               <ThirdPartyScripts />
               <VercelAnalyticsProvider />
               <AnalyticsDebugPanel />
+              <EasterEggs />
+              <TypingEasterEgg />
+              <CursorTracer />
+              <MatrixRain />
             </AnnouncerProvider>
           </AnimationProvider>
         </ThemeProvider>

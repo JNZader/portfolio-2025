@@ -33,7 +33,7 @@ export default function Header() {
       <Container>
         <nav
           id="main-navigation"
-          className="flex h-16 items-center justify-between"
+          className="flex h-16 items-center justify-between gap-8"
           aria-label="Principal"
         >
           {/* Logo */}
