@@ -1,0 +1,83 @@
+{
+  "personalInfo": {
+    "name": "Javier Zader",
+    "title": "Backend Java Developer",
+    "email": "jnzader@gmail.com",
+    "phone": "",
+    "location": "Córdoba, Argentina",
+    "website": "https://javierzader.com",
+    "linkedin": "https://www.linkedin.com/in/jnzader/",
+    "github": "https://github.com/JNZader"
+  },
+  "summary": "Backend Java Developer con más de 20 años de experiencia en tecnología. Técnico en Desarrollo de Software especializado en Spring Boot, React y arquitecturas modernas. Combino expertise técnico profundo con 11 años de experiencia en gestión empresarial como productor agropecuario, enfocándome en construir soluciones robustas, escalables y mantenibles que resuelven desafíos reales de negocio.",
+  "experience": [
+    {
+      "company": "Proyectos Personales & Freelance",
+      "position": "Backend Java Developer",
+      "location": "Córdoba, Argentina",
+      "startDate": "2022",
+      "endDate": "presente",
+      "highlights": [
+        "Desarrollo de aplicaciones Full-stack con Spring Boot, React y Next.js",
+        "Arquitectura de APIs REST con patrones de diseño modernos y mejores prácticas",
+        "Implementación de soluciones escalables con PostgreSQL y optimización de consultas",
+        "Aplicación de patrones de arquitectura: Atomic Design, SOLID, Clean Code",
+        "Integración de modelos de Machine Learning en aplicaciones web"
+      ]
+    },
+    {
+      "company": "Gestión Empresarial",
+      "position": "Productor Agropecuario",
+      "location": "Córdoba, Argentina",
+      "startDate": "2013",
+      "endDate": "2024",
+      "highlights": [
+        "Gestión integral de producción agropecuaria durante 11 años",
+        "Liderazgo de equipos y toma de decisiones estratégicas",
+        "Optimización de procesos y recursos para maximizar eficiencia",
+        "Desarrollo de habilidades de planificación y gestión de proyectos"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Universidad Gastón Dachary",
+      "degree": "Técnico en Desarrollo de Software",
+      "location": "Posadas, Misiones, Argentina",
+      "startDate": "2023",
+      "endDate": "2025"
+    },
+    {
+      "institution": "Alura LATAM",
+      "degree": "Java Oriented Object Development",
+      "location": "Online",
+      "startDate": "2024",
+      "endDate": "2024"
+    },
+    {
+      "institution": "Argentina Programa",
+      "degree": "Intermediate Java Developer",
+      "location": "Online",
+      "startDate": "2022",
+      "endDate": "2023"
+    },
+    {
+      "institution": "Fundación Proydesa",
+      "degree": "CCNA Certification",
+      "location": "Argentina",
+      "startDate": "2009",
+      "endDate": "2009"
+    }
+  ],
+  "skills": {
+    "Backend": ["Java", "Spring Boot", "Node.js", "Python", "APIs REST"],
+    "Frontend": ["React", "Next.js", "TypeScript", "Tailwind CSS"],
+    "Databases": ["PostgreSQL", "MySQL", "MongoDB"],
+    "DevOps": ["Docker", "Git", "GitHub", "Linux", "CI/CD"],
+    "Arquitectura": ["SOLID", "Clean Code", "Atomic Design", "Microservices"]
+  },
+  "languages": [
+    { "name": "Español", "level": "Nativo" },
+    { "name": "Inglés", "level": "Intermedio" }
+  ]
+}
