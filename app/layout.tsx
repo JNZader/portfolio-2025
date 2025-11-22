@@ -63,6 +63,16 @@ export const metadata: Metadata = {
       'Backend Java Developer especializado en Spring Boot, React y arquitecturas modernas. Más de 20 años de experiencia en tecnología.',
     siteName: 'Javier Zader Portfolio',
   },
+  alternates: {
+    types: {
+      'application/rss+xml': [
+        {
+          url: '/feed.xml',
+          title: 'RSS Feed - Javier Zader Blog',
+        },
+      ],
+    },
+  },
 };
 
 export default function RootLayout({
