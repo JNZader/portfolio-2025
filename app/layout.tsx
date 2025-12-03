@@ -1,26 +1,67 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import { Inter, JetBrains_Mono } from 'next/font/google';
-import type { ReactNode } from 'react';
+import { type ReactNode, Suspense } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { AnnouncerProvider } from '@/components/a11y/ScreenReaderAnnouncer';
 import { SkipLinks } from '@/components/a11y/SkipLinks';
 import { ThirdPartyScripts } from '@/components/analytics/ThirdPartyScripts';
 import { WebVitals } from '@/components/analytics/WebVitals';
 import { AnimationProvider } from '@/components/animations';
-import { CursorTracer } from '@/components/features/CursorTracer';
-import { EasterEggs } from '@/components/features/EasterEggs';
-import { MatrixRain } from '@/components/features/MatrixRain';
-import { TypingEasterEgg } from '@/components/features/TypingEasterEgg';
 import { CookieConsent } from '@/components/gdpr/CookieConsent';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
-import { CustomCursor } from '@/components/ui/CustomCursor';
-import { ScrollProgress } from '@/components/ui/ScrollProgress';
-import { AnalyticsDebugPanel } from '@/lib/analytics/debug';
 import { VercelAnalyticsProvider } from '@/lib/analytics/vercel';
 import { ThemeProvider } from '@/lib/design/theme-provider';
 import { ResourceHints } from '@/lib/performance/resource-hints';
 import './globals.css';
+
+// =========================================
+// LAZY LOADED COMPONENTS (Client-side only)
+// These components are not critical for initial render
+// and will be loaded asynchronously to reduce bundle size
+// =========================================
+
+// Easter Eggs - Only load when user interacts
+const EasterEggs = dynamic(
+  () => import('@/components/features/EasterEggs').then((m) => m.EasterEggs),
+  { ssr: false }
+);
+
+const TypingEasterEgg = dynamic(
+  () => import('@/components/features/TypingEasterEgg').then((m) => m.TypingEasterEgg),
+  { ssr: false }
+);
+
+const CursorTracer = dynamic(
+  () => import('@/components/features/CursorTracer').then((m) => m.CursorTracer),
+  { ssr: false }
+);
+
+const MatrixRain = dynamic(
+  () => import('@/components/features/MatrixRain').then((m) => m.MatrixRain),
+  { ssr: false }
+);
+
+// Custom Cursor - Includes framer-motion (~60KB)
+const CustomCursor = dynamic(
+  () => import('@/components/ui/CustomCursor').then((m) => m.CustomCursor),
+  { ssr: false }
+);
+
+// Scroll Progress - Client only
+const ScrollProgress = dynamic(
+  () => import('@/components/ui/ScrollProgress').then((m) => m.ScrollProgress),
+  { ssr: false }
+);
+
+// Analytics Debug Panel - Only in development
+const AnalyticsDebugPanel =
+  process.env.NODE_ENV === 'development'
+    ? dynamic(() => import('@/lib/analytics/debug').then((m) => m.AnalyticsDebugPanel), {
+        ssr: false,
+      })
+    : () => null;
 
 // Variable font with subsetting
 const inter = Inter({
@@ -102,8 +143,14 @@ export default function RootLayout({
         >
           <AnimationProvider>
             <AnnouncerProvider>
-              <ScrollProgress />
-              <CustomCursor />
+              {/* UI Components - Lazy loaded */}
+              <Suspense fallback={null}>
+                <ScrollProgress />
+              </Suspense>
+              <Suspense fallback={null}>
+                <CustomCursor />
+              </Suspense>
+
               <div className="relative flex min-h-screen flex-col">
                 <SkipLinks />
                 <Header />
@@ -112,6 +159,7 @@ export default function RootLayout({
                 </main>
                 <Footer />
               </div>
+
               <Toaster
                 position="bottom-center"
                 toastOptions={{
@@ -140,10 +188,20 @@ export default function RootLayout({
               <ThirdPartyScripts />
               <VercelAnalyticsProvider />
               <AnalyticsDebugPanel />
-              <EasterEggs />
-              <TypingEasterEgg />
-              <CursorTracer />
-              <MatrixRain />
+
+              {/* Easter Eggs - Lazy loaded on demand */}
+              <Suspense fallback={null}>
+                <EasterEggs />
+              </Suspense>
+              <Suspense fallback={null}>
+                <TypingEasterEgg />
+              </Suspense>
+              <Suspense fallback={null}>
+                <CursorTracer />
+              </Suspense>
+              <Suspense fallback={null}>
+                <MatrixRain />
+              </Suspense>
             </AnnouncerProvider>
           </AnimationProvider>
         </ThemeProvider>
