@@ -1,7 +1,9 @@
 {
   "ci": {
     "collect": {
-      "startServerCommand": "npm run build && npm run start",
+      "startServerCommand": "npm run start",
+      "startServerReadyPattern": "Ready|started server|localhost",
+      "startServerReadyTimeout": 60000,
       "url": [
         "http://localhost:3000",
         "http://localhost:3000/blog",
@@ -9,7 +11,10 @@
         "http://localhost:3000/contacto",
         "http://localhost:3000/sobre-mi"
       ],
-      "numberOfRuns": 3
+      "numberOfRuns": 3,
+      "settings": {
+        "chromeFlags": "--no-sandbox --disable-dev-shm-usage"
+      }
     },
     "assert": {
       "preset": "lighthouse:recommended",
