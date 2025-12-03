@@ -11,10 +11,14 @@ on:
 
 jobs:
   # ===== Dependency Review =====
+  # Note: Requires "Dependency graph" to be enabled in repository settings:
+  # Settings > Security > Code security and analysis > Dependency graph
   dependency-review:
     name: Dependency Review
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    # Continue even if dependency graph is not enabled
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v6
 
@@ -22,6 +26,7 @@ jobs:
         uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: high
+          comment-summary-in-pr: on-failure
 
   # ===== CodeQL Analysis =====
   codeql:

@@ -56,11 +56,32 @@ jobs:
       - name: Push Prisma schema to database
         run: npx prisma db push --skip-generate
 
+      - name: Build Next.js application
+        run: npm run build
+        env:
+          CI: true
+          DATABASE_URL: file:./prisma/dev.db
+          SKIP_ENV_VALIDATION: true
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
+          NEXT_PUBLIC_SANITY_PROJECT_ID: dummy-project-id
+          NEXT_PUBLIC_SANITY_DATASET: production
+          NEXT_PUBLIC_SANITY_API_VERSION: 2024-01-01
+          NEXT_PUBLIC_GISCUS_REPO: dummy-user/dummy-repo
+          NEXT_PUBLIC_GISCUS_REPO_ID: dummy-repo-id
+          NEXT_PUBLIC_GISCUS_CATEGORY: Announcements
+          NEXT_PUBLIC_GISCUS_CATEGORY_ID: dummy-category-id
+          RESEND_API_KEY: re_dummy_api_key_for_ci_build
+          RESEND_FROM_EMAIL: noreply@example.com
+          RESEND_TO_EMAIL: contact@example.com
+          UPSTASH_REDIS_REST_URL: https://dummy-redis.upstash.io
+          UPSTASH_REDIS_REST_TOKEN: dummy_redis_token_for_ci
+
       - name: Run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.14.x
           lhci autorun
         env:
+          CI: true
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
       - name: Upload Lighthouse results
