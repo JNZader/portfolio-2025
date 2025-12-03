@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.22.2](https://github.com/JNZader/portfolio-2025/compare/v0.22.1...v0.22.2) (2025-12-03)
+
+
+### Features
+
+* **security:** add middleware with CSRF protection and security config ([9e6fb0d](https://github.com/JNZader/portfolio-2025/commits/9e6fb0d4a5b2929a8459d043ddac65a85bd8ffc6))
+* **security:** add security headers (CSP, X-Frame-Options, HSTS) ([ba99297](https://github.com/JNZader/portfolio-2025/commits/ba99297aa811ca4e8cec02d63cf747c108c104b3))
+
+
+### Bug Fixes
+
+* **ci:** add env vars to Lighthouse workflow and fix vulnerabilities ([a406a26](https://github.com/JNZader/portfolio-2025/commits/a406a26a1a2dfc47c9920655fa2888cacdc6391c))
+* **ci:** resolve Lighthouse and Dependency Review workflow failures ([8056fbd](https://github.com/JNZader/portfolio-2025/commits/8056fbd733602945483c21cec376f0d51a3e4a8b))
+
 ### [0.22.1](https://github.com/JNZader/portfolio-2025/compare/v0.21.4...v0.22.1) (2025-11-24)
 
 ## [0.22.0](https://github.com/JNZader/portfolio-2025/compare/v0.21.2...v0.22.0) (2025-11-22)
