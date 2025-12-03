@@ -56,11 +56,17 @@ jobs:
       - name: Push Prisma schema to database
         run: npx prisma db push --skip-generate
 
+      - name: Build Next.js application
+        run: npm run build
+        env:
+          CI: true
+
       - name: Run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.14.x
           lhci autorun
         env:
+          CI: true
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
       - name: Upload Lighthouse results

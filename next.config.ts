@@ -101,9 +101,14 @@ const nextConfig: NextConfig = {
               "form-action 'self'",
               // Prevenir que el sitio sea embedido en iframes
               "frame-ancestors 'none'",
-              // Upgrade insecure requests a HTTPS
-              "upgrade-insecure-requests",
-            ].join('; '),
+              // Upgrade insecure requests a HTTPS (solo en producción, no en CI/localhost)
+              ...(process.env.NODE_ENV === 'production' &&
+              !process.env.CI
+                ? ['upgrade-insecure-requests']
+                : []),
+            ]
+              .filter(Boolean)
+              .join('; '),
           },
 
           // X-Frame-Options - Previene clickjacking (backup de frame-ancestors)
