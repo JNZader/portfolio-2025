@@ -2,12 +2,24 @@ import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface SkillBadgeProps {
+  /** Skill name to display */
   name: string;
+  /** Lucide icon component */
   icon: LucideIcon;
+  /** Optional color class for the icon */
   color?: string;
+  /** Additional CSS classes */
   className?: string;
 }
 
+/**
+ * Displays a single skill as a badge with icon
+ *
+ * @example
+ * ```tsx
+ * <SkillBadge name="React" icon={Code2} color="text-cyan-500" />
+ * ```
+ */
 export function SkillBadge({ name, icon: Icon, color, className }: SkillBadgeProps) {
   return (
     <span

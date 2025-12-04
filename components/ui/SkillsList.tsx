@@ -2,11 +2,22 @@ import type { Skill } from '@/lib/constants/skills';
 import { SkillBadge } from './SkillBadge';
 
 interface SkillsListProps {
+  /** Section title displayed above the skills */
   title: string;
+  /** Array of skills to display */
   skills: Skill[];
+  /** Additional CSS classes */
   className?: string;
 }
 
+/**
+ * Displays a titled list of skill badges
+ *
+ * @example
+ * ```tsx
+ * <SkillsList title="Backend" skills={SKILLS_DATA.backend} />
+ * ```
+ */
 export function SkillsList({ title, skills, className }: SkillsListProps) {
   return (
     <div className={className}>
