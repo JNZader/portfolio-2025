@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
+import { logger } from '@/lib/monitoring/logger';
 
 export async function GET(request: NextRequest) {
   try {
@@ -122,7 +123,10 @@ export async function GET(request: NextRequest) {
       { headers: { 'Content-Type': 'text/html' } }
     );
   } catch (error) {
-    console.error('Newsletter unsubscribe error:', error);
+    logger.error('Newsletter unsubscribe failed', error as Error, {
+      path: '/api/newsletter/unsubscribe',
+      method: 'GET',
+    });
 
     return new NextResponse(
       `

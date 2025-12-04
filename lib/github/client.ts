@@ -1,4 +1,5 @@
 import { Octokit } from 'octokit';
+import { logger } from '@/lib/monitoring/logger';
 import type { GitHubRateLimit, GitHubRepo, Project } from './types';
 
 // Singleton pattern para reutilizar instancia
@@ -24,8 +25,12 @@ export async function getReposByTopic(topic: string, username?: string): Promise
   const user = username || process.env.NEXT_PUBLIC_GITHUB_USERNAME;
 
   if (!user) {
-    console.warn('GitHub username not configured - skipping GitHub projects');
-    return []; // Fallback silencioso cuando no está configurado
+    logger.warn('GitHub username not configured', {
+      service: 'github',
+      action: 'getReposByTopic',
+      fallback: 'empty_array',
+    });
+    return [];
   }
 
   try {
@@ -38,8 +43,12 @@ export async function getReposByTopic(topic: string, username?: string): Promise
 
     return data.items as GitHubRepo[];
   } catch (error) {
-    console.error('Error fetching GitHub repos:', error);
-    return []; // Fallback silencioso en caso de error
+    logger.error('Error fetching GitHub repos', error as Error, {
+      service: 'github',
+      action: 'getReposByTopic',
+      topic,
+    });
+    return [];
   }
 }
 
@@ -51,15 +60,17 @@ export async function getFeaturedRepos(username?: string): Promise<GitHubRepo[]>
   const user = username || process.env.NEXT_PUBLIC_GITHUB_USERNAME;
 
   if (!user) {
-    console.warn('GitHub username not configured - skipping GitHub projects');
-    return []; // Fallback silencioso cuando no está configurado
+    logger.warn('GitHub username not configured', {
+      service: 'github',
+      action: 'getFeaturedRepos',
+      fallback: 'empty_array',
+    });
+    return [];
   }
 
   try {
-    // Estrategia: Fetch all repos + filter locally
-    // Más confiable que GitHub Search API topic filter debido a indexing delays
     const query = `user:${user}`;
-    console.log('🔍 GitHub Search Query:', query);
+    logger.debug('GitHub Search Query', { service: 'github', query });
 
     const { data } = await octokit.rest.search.repos({
       q: query,
@@ -68,25 +79,31 @@ export async function getFeaturedRepos(username?: string): Promise<GitHubRepo[]>
       per_page: 6,
     });
 
-    console.log(`✅ GitHub API Response: Found ${data.total_count} repos`);
-    console.log(
-      '📦 Repos:',
-      data.items.map((r) => ({ name: r.name, topics: r.topics, stars: r.stargazers_count }))
-    );
+    logger.info('GitHub repos fetched', {
+      service: 'github',
+      totalCount: data.total_count,
+      returned: data.items.length,
+    });
 
     // Filtrar localmente por topics (más confiable que Search API)
     const filtered = data.items.filter(
       (repo) => repo.topics?.includes('portfolio') || repo.topics?.includes('featured')
     );
 
-    console.log(`🎯 Filtered repos with topics: ${filtered.length}`);
+    logger.debug('Filtered repos by topics', {
+      service: 'github',
+      filteredCount: filtered.length,
+    });
 
     return filtered.length > 0
       ? (filtered as GitHubRepo[])
       : (data.items.slice(0, 3) as GitHubRepo[]);
   } catch (error) {
-    console.error('❌ Error fetching featured repos:', error);
-    return []; // Fallback silencioso
+    logger.error('Error fetching featured repos', error as Error, {
+      service: 'github',
+      action: 'getFeaturedRepos',
+    });
+    return [];
   }
 }
 
@@ -104,7 +121,12 @@ export async function getRepo(owner: string, repo: string): Promise<GitHubRepo |
 
     return data as GitHubRepo;
   } catch (error) {
-    console.error(`Error fetching repo ${owner}/${repo}:`, error);
+    logger.error('Error fetching repo', error as Error, {
+      service: 'github',
+      action: 'getRepo',
+      owner,
+      repo,
+    });
     return null;
   }
 }
@@ -127,7 +149,12 @@ export async function getRepoReadme(owner: string, repo: string): Promise<string
     // El contenido viene como string cuando usamos format: 'raw'
     return data as unknown as string;
   } catch (error) {
-    console.error(`Error fetching README for ${owner}/${repo}:`, error);
+    logger.error('Error fetching README', error as Error, {
+      service: 'github',
+      action: 'getRepoReadme',
+      owner,
+      repo,
+    });
     return null;
   }
 }
@@ -142,7 +169,10 @@ export async function getRateLimit(): Promise<GitHubRateLimit> {
     const { data } = await octokit.rest.rateLimit.get();
     return data.rate;
   } catch (error) {
-    console.error('Error fetching rate limit:', error);
+    logger.error('Error fetching rate limit', error as Error, {
+      service: 'github',
+      action: 'getRateLimit',
+    });
     throw error;
   }
 }

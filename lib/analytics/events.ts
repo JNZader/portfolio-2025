@@ -1,4 +1,5 @@
 import '@/lib/analytics/types';
+import { logger } from '@/lib/monitoring/logger';
 
 /**
  * Track custom event
@@ -28,9 +29,11 @@ export function trackEvent(
   }
 
   // Development logging
-  if (process.env.NODE_ENV === 'development') {
-    console.log('📊 Event tracked:', eventName, eventParams);
-  }
+  logger.debug('Event tracked', {
+    service: 'analytics',
+    eventName,
+    ...eventParams,
+  });
 }
 
 /**
