@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.22.3](https://github.com/JNZader/portfolio-2025/compare/v0.22.2...v0.22.3) (2025-12-04)
+
+
+### Bug Fixes
+
+* **studio:** add 'use client' for dynamic import with ssr:false ([86ad962](https://github.com/JNZader/portfolio-2025/commits/86ad962279acce5c14fbfac0012f13dfe927374b))
+
+
+### Performance Improvements
+
+* **bundle:** add lazy loading for client-only components ([6f1bcba](https://github.com/JNZader/portfolio-2025/commits/6f1bcba7edfdb7d9f3bf26dc7a740322b261e221))
+* **bundle:** lazy load Sanity Studio and replace framer-motion ([143d3e1](https://github.com/JNZader/portfolio-2025/commits/143d3e15f7d33abc0c715e65f4c5dc59d76b0f39))
+* **header:** refactor Header to Server Component ([7125914](https://github.com/JNZader/portfolio-2025/commits/712591448fc1940515767c96d5fc10deeee444f7))
+* **images:** add priority loading for above-fold images ([665371a](https://github.com/JNZader/portfolio-2025/commits/665371a8f03cc32f512d6cbf0d0bb5280ac4901c))
+
 ### [0.22.2](https://github.com/JNZader/portfolio-2025/compare/v0.22.1...v0.22.2) (2025-12-03)
 
 
