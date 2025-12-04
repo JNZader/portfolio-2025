@@ -7,16 +7,10 @@ import { SkipLinks } from '@/components/a11y/SkipLinks';
 import { ThirdPartyScripts } from '@/components/analytics/ThirdPartyScripts';
 import { WebVitals } from '@/components/analytics/WebVitals';
 import { AnimationProvider } from '@/components/animations';
-import { CursorTracer } from '@/components/features/CursorTracer';
-import { EasterEggs } from '@/components/features/EasterEggs';
-import { MatrixRain } from '@/components/features/MatrixRain';
-import { TypingEasterEgg } from '@/components/features/TypingEasterEgg';
 import { CookieConsent } from '@/components/gdpr/CookieConsent';
+import { ClientComponents } from '@/components/layout/ClientComponents';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
-import { CustomCursor } from '@/components/ui/CustomCursor';
-import { ScrollProgress } from '@/components/ui/ScrollProgress';
-import { AnalyticsDebugPanel } from '@/lib/analytics/debug';
 import { VercelAnalyticsProvider } from '@/lib/analytics/vercel';
 import { ThemeProvider } from '@/lib/design/theme-provider';
 import { ResourceHints } from '@/lib/performance/resource-hints';
@@ -102,8 +96,9 @@ export default function RootLayout({
         >
           <AnimationProvider>
             <AnnouncerProvider>
-              <ScrollProgress />
-              <CustomCursor />
+              {/* Client-only components (lazy loaded) */}
+              <ClientComponents />
+
               <div className="relative flex min-h-screen flex-col">
                 <SkipLinks />
                 <Header />
@@ -112,6 +107,7 @@ export default function RootLayout({
                 </main>
                 <Footer />
               </div>
+
               <Toaster
                 position="bottom-center"
                 toastOptions={{
@@ -139,11 +135,6 @@ export default function RootLayout({
               <WebVitals />
               <ThirdPartyScripts />
               <VercelAnalyticsProvider />
-              <AnalyticsDebugPanel />
-              <EasterEggs />
-              <TypingEasterEgg />
-              <CursorTracer />
-              <MatrixRain />
             </AnnouncerProvider>
           </AnimationProvider>
         </ThemeProvider>

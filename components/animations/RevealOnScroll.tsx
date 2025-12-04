@@ -1,8 +1,17 @@
 'use client';
 
-import { motion, useAnimation, useInView, type Variants } from 'framer-motion';
-import { type ReactNode, useEffect, useRef } from 'react';
-import { useAnimation as useAnimationContext } from './AnimationProvider';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
+import { useAnimation } from './AnimationProvider';
+
+/**
+ * Animation variants type (kept for backwards compatibility)
+ * Now maps to CSS animations instead of framer-motion
+ */
+export interface Variants {
+  hidden: { opacity?: number; y?: number; x?: number; scale?: number };
+  visible: { opacity?: number; y?: number; x?: number; scale?: number };
+}
 
 interface RevealOnScrollProps {
   children: ReactNode;
@@ -12,11 +21,17 @@ interface RevealOnScrollProps {
   once?: boolean;
 }
 
+// Default variants (backwards compatible)
 const defaultVariants: Variants = {
   hidden: { opacity: 0, y: 75 },
   visible: { opacity: 1, y: 0 },
 };
 
+/**
+ * CSS-based reveal animation on scroll
+ * Replaced framer-motion implementation for better performance (~60KB saved)
+ * Uses IntersectionObserver + CSS transitions
+ */
 export function RevealOnScroll({
   children,
   className,
@@ -24,21 +39,42 @@ export function RevealOnScroll({
   delay = 0,
   once = true,
 }: RevealOnScrollProps) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once, margin: '0px 0px -100px 0px' });
-  const controls = useAnimation();
-  const { prefersReducedMotion } = useAnimationContext();
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const { prefersReducedMotion } = useAnimation();
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
-
-    if (isInView) {
-      controls.start('visible');
-    } else {
-      controls.start('hidden');
+    if (prefersReducedMotion) {
+      setIsVisible(true);
+      return;
     }
-  }, [isInView, controls, prefersReducedMotion]);
 
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          if (once) {
+            observer.unobserve(element);
+          }
+        } else if (!once) {
+          setIsVisible(false);
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px',
+      }
+    );
+
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, [once, prefersReducedMotion]);
+
+  // Skip animation for reduced motion
   if (prefersReducedMotion) {
     return (
       <div ref={ref} className={className}>
@@ -47,24 +83,45 @@ export function RevealOnScroll({
     );
   }
 
+  // Convert variants to CSS transform values
+  const getTransformStyle = (variant: Variants['hidden'] | Variants['visible']) => {
+    const transforms: string[] = [];
+
+    if (variant.y !== undefined && variant.y !== 0) {
+      transforms.push(`translateY(${variant.y}px)`);
+    }
+    if (variant.x !== undefined && variant.x !== 0) {
+      transforms.push(`translateX(${variant.x}px)`);
+    }
+    if (variant.scale !== undefined && variant.scale !== 1) {
+      transforms.push(`scale(${variant.scale})`);
+    }
+
+    return transforms.length > 0 ? transforms.join(' ') : 'none';
+  };
+
+  const currentVariant = isVisible ? variants.visible : variants.hidden;
+
   return (
-    <motion.div
+    <div
       ref={ref}
-      animate={controls}
-      initial="hidden"
-      transition={{
-        duration: 0.6,
-        delay,
-        ease: [0.6, -0.05, 0.01, 0.99],
+      className={cn('transition-all duration-600 ease-out', className)}
+      style={{
+        opacity: currentVariant.opacity ?? 1,
+        transform: getTransformStyle(currentVariant),
+        transitionDelay: `${delay * 1000}ms`,
+        transitionDuration: '600ms',
+        transitionTimingFunction: 'cubic-bezier(0.6, -0.05, 0.01, 0.99)',
       }}
-      variants={variants}
-      className={className}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
+/**
+ * Staggered reveal for multiple children
+ */
 interface StaggeredRevealProps {
   children: ReactNode[];
   className?: string;
@@ -75,8 +132,11 @@ export function StaggeredReveal({ children, className, staggerDelay = 0.1 }: Sta
   return (
     <div className={className}>
       {children.map((child, index) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: Children are stable and won't reorder
-        <RevealOnScroll key={index} delay={index * staggerDelay}>
+        <RevealOnScroll
+          // biome-ignore lint/suspicious/noArrayIndexKey: Children are stable and won't reorder
+          key={index}
+          delay={index * staggerDelay}
+        >
           {child}
         </RevealOnScroll>
       ))}
@@ -84,7 +144,7 @@ export function StaggeredReveal({ children, className, staggerDelay = 0.1 }: Sta
   );
 }
 
-// Specific animation variants
+// Specific animation variants (backwards compatible exports)
 export const slideUpVariants: Variants = {
   hidden: { opacity: 0, y: 60 },
   visible: { opacity: 1, y: 0 },
