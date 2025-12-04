@@ -22,7 +22,10 @@ export default function Header() {
         >
           {/* Logo - Static */}
           <div className="flex lg:flex-1">
-            <Link href="/" className="-m-1.5 p-1.5">
+            <Link
+              href="/"
+              className="-m-1.5 p-1.5 rounded-md focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            >
               <span className="text-xl font-bold text-primary">JZ</span>
             </Link>
           </div>

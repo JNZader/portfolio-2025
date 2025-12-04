@@ -22,7 +22,8 @@ export function NavLink({ href, children }: NavLinkProps) {
     <Link
       href={href}
       className={cn(
-        'text-sm font-semibold transition-all duration-200 relative py-1 group',
+        'text-sm font-semibold transition-all duration-200 relative py-1 px-2 -mx-2 rounded-md group',
+        'focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
         isActive ? 'text-primary' : 'text-foreground/80 hover:text-primary'
       )}
       aria-current={isActive ? 'page' : undefined}
