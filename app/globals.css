@@ -17,7 +17,7 @@
   --color-secondary: oklch(94% 0 0);
   --color-secondary-foreground: oklch(9% 0 0);
   --color-muted: oklch(94% 0 0);
-  --color-muted-foreground: oklch(40% 0 0);
+  --color-muted-foreground: oklch(47% 0 0); /* Improved contrast: 40% → 47% for WCAG AA (4.5:1) */
   --color-accent: oklch(94% 0 0);
   --color-accent-foreground: oklch(9% 0 0);
   --color-accent-warm: oklch(68% 0.18 45);
@@ -110,7 +110,7 @@
     --color-secondary: oklch(18% 0 0);
     --color-secondary-foreground: oklch(98% 0 0);
     --color-muted: oklch(18% 0 0);
-    --color-muted-foreground: oklch(64% 0 0);
+    --color-muted-foreground: oklch(72% 0 0); /* Improved contrast: 64% → 72% for WCAG AA (4.5:1) */
     --color-accent: oklch(18% 0 0);
     --color-accent-foreground: oklch(98% 0 0);
     --color-accent-warm: oklch(70% 0.18 45);
@@ -195,11 +195,12 @@
     color: var(--primary-foreground);
   }
 
-  /* Focus visible styles */
+  /* Focus visible styles - Enhanced for WCAG 2.1 AA */
   *:focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
     border-radius: 4px;
+    box-shadow: 0 0 0 4px color-mix(in oklch, var(--ring) 25%, transparent);
   }
 }
 
