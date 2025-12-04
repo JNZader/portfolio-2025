@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.22.5](https://github.com/JNZader/portfolio-2025/compare/v0.22.4...v0.22.5) (2025-12-04)
+
+
+### Code Refactoring
+
+* centralize skills data and site config ([9b30e35](https://github.com/JNZader/portfolio-2025/commits/9b30e35f886371e065cfafa7f3b8d6b25e2687e9))
+* create HeroBackground and update pages ([24cb484](https://github.com/JNZader/portfolio-2025/commits/24cb484a2f87046ae8438d3cd751e2d06faa1e63))
+* replace inline SVGs with icon libraries and use cn() consistently ([5c7e488](https://github.com/JNZader/portfolio-2025/commits/5c7e488c0f648edd5f08ccced2a5873a3e59fe73))
+
+
+### Documentation
+
+* add TSDoc and create cleanup scripts ([17659f1](https://github.com/JNZader/portfolio-2025/commits/17659f125e0179d885d7e09a7b62dbf1ed4d173b))
+
 ### [0.22.4](https://github.com/JNZader/portfolio-2025/compare/v0.22.3...v0.22.4) (2025-12-04)
 
 
