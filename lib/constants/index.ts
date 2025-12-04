@@ -2,19 +2,15 @@
  * Constantes globales del proyecto
  */
 
+import { SITE_CONFIG } from '../config/site-config';
+
+export type { SiteConfig } from '../config/site-config';
+export type { Skill, SkillsData } from './skills';
+// Skills
+export { SKILLS_DATA, SKILLS_DATA_HOME } from './skills';
+
 // Site Config
-export const SITE_CONFIG = {
-  name: 'Javier Zader',
-  title: 'Javier Zader - Backend Java Developer',
-  description: 'Backend Java Developer especializado en Spring Boot y microservicios',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-  author: {
-    name: 'Javier Zader',
-    email: 'jnzader@gmail.com',
-    github: 'https://github.com/JNZader',
-    linkedin: 'https://www.linkedin.com/in/jnzader/',
-  },
-} as const;
+export { SITE_CONFIG };
 
 // Reading time
 export const WORDS_PER_MINUTE = 200;

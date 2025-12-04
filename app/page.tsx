@@ -1,15 +1,4 @@
-import {
-  Award,
-  Briefcase,
-  Code2,
-  Database,
-  GitBranch,
-  Layers,
-  Palette,
-  Server,
-  Target,
-  TrendingUp,
-} from 'lucide-react';
+import { Award, Briefcase, Target, TrendingUp } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { RevealOnScroll, StaggeredReveal } from '@/components/animations';
@@ -23,6 +12,8 @@ import Section, {
   SectionTitle,
 } from '@/components/ui/Section';
 import { SectionDivider } from '@/components/ui/SectionDivider';
+import { SkillsList } from '@/components/ui/SkillsList';
+import { SKILLS_DATA_HOME } from '@/lib/constants';
 import { generatePersonSchema, generateWebSiteSchema } from '@/lib/seo/schema';
 
 // Lazy load newsletter component (below the fold)
@@ -48,27 +39,6 @@ export default function HomePage() {
     { value: '4+', label: 'Certificaciones', icon: Award },
     { value: '100%', label: 'Compromiso', icon: Target },
   ];
-
-  const skillsData = {
-    backend: [
-      { name: 'Java', icon: Code2, color: 'text-orange-600 dark:text-orange-400' },
-      { name: 'Spring Boot', icon: Layers, color: 'text-green-600 dark:text-green-400' },
-      { name: 'PostgreSQL', icon: Database, color: 'text-blue-600 dark:text-blue-400' },
-      { name: 'APIs REST', icon: Server, color: 'text-purple-600 dark:text-purple-400' },
-    ],
-    frontend: [
-      { name: 'React', icon: Code2, color: 'text-cyan-600 dark:text-cyan-400' },
-      { name: 'Next.js', icon: Layers, color: 'text-gray-900 dark:text-white' },
-      { name: 'TypeScript', icon: Code2, color: 'text-blue-600 dark:text-blue-400' },
-      { name: 'Tailwind', icon: Palette, color: 'text-teal-600 dark:text-teal-400' },
-    ],
-    devops: [
-      { name: 'Docker', icon: Server, color: 'text-blue-600 dark:text-blue-400' },
-      { name: 'Git', icon: GitBranch, color: 'text-orange-600 dark:text-orange-400' },
-      { name: 'CI/CD', icon: Target, color: 'text-green-600 dark:text-green-400' },
-      { name: 'Linux', icon: Server, color: 'text-yellow-600 dark:text-yellow-400' },
-    ],
-  };
 
   return (
     <>
@@ -176,59 +146,9 @@ export default function HomePage() {
                 <div className="bg-card p-6 rounded-lg border">
                   <h3 className="text-lg font-bold mb-4">Habilidades Técnicas</h3>
                   <div className="space-y-4">
-                    <div>
-                      <h4 className="font-semibold text-sm mb-2">Backend</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {skillsData.backend.map((skill) => {
-                          const SkillIcon = skill.icon;
-                          return (
-                            <span
-                              key={skill.name}
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs rounded-full transition-all duration-200 hover:scale-105"
-                            >
-                              <SkillIcon className={`w-3.5 h-3.5 ${skill.color}`} />
-                              {skill.name}
-                            </span>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold text-sm mb-2">Frontend</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {skillsData.frontend.map((skill) => {
-                          const SkillIcon = skill.icon;
-                          return (
-                            <span
-                              key={skill.name}
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs rounded-full transition-all duration-200 hover:scale-105"
-                            >
-                              <SkillIcon className={`w-3.5 h-3.5 ${skill.color}`} />
-                              {skill.name}
-                            </span>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold text-sm mb-2">DevOps</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {skillsData.devops.map((skill) => {
-                          const SkillIcon = skill.icon;
-                          return (
-                            <span
-                              key={skill.name}
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs rounded-full transition-all duration-200 hover:scale-105"
-                            >
-                              <SkillIcon className={`w-3.5 h-3.5 ${skill.color}`} />
-                              {skill.name}
-                            </span>
-                          );
-                        })}
-                      </div>
-                    </div>
+                    <SkillsList title="Backend" skills={SKILLS_DATA_HOME.backend} />
+                    <SkillsList title="Frontend" skills={SKILLS_DATA_HOME.frontend} />
+                    <SkillsList title="DevOps" skills={SKILLS_DATA_HOME.devops} />
                   </div>
                 </div>
 
