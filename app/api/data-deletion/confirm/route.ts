@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { resend } from '@/lib/email/resend';
+import { logger } from '@/lib/monitoring/logger';
 import { redis } from '@/lib/rate-limit/redis';
 import { deleteUserData } from '@/lib/services/gdpr';
 
@@ -61,14 +62,20 @@ export async function GET(request: NextRequest) {
         `,
       });
     } catch (emailError) {
-      console.error('Failed to send deletion confirmation email:', emailError);
+      logger.error('Failed to send deletion confirmation email', emailError as Error, {
+        path: '/api/data-deletion/confirm',
+        email,
+      });
     }
 
     // 7. Redirigir a página de confirmación
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
     return NextResponse.redirect(`${siteUrl}/data-request?deleted=true`);
   } catch (error) {
-    console.error('Data deletion confirm error:', error);
+    logger.error('Data deletion confirm failed', error as Error, {
+      path: '/api/data-deletion/confirm',
+      method: 'GET',
+    });
     return NextResponse.json(
       { message: 'Error al eliminar datos. Intenta de nuevo más tarde.' },
       { status: 500 }

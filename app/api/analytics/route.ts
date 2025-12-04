@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/monitoring/logger';
 
 /**
  * Analytics API endpoint for Web Vitals
@@ -17,15 +18,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Invalid metric' }, { status: 400 });
     }
 
-    // Log metrics in development
-    if (process.env.NODE_ENV === 'development') {
-      console.log('[Analytics] Web Vital:', {
-        name: metricName,
-        value: metricValue,
-        rating: data.rating,
-        delta: data.delta,
-      });
-    }
+    // Log metrics
+    logger.debug('Web Vital received', {
+      service: 'analytics',
+      name: metricName,
+      value: metricValue,
+      rating: data.rating,
+      delta: data.delta,
+    });
 
     // In production, send to analytics service
     // Examples:
@@ -35,7 +35,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('[Analytics] Error processing metric:', error);
+    logger.error('Error processing metric', error as Error, {
+      path: '/api/analytics',
+      service: 'analytics',
+    });
     return NextResponse.json({ success: false, error: 'Internal error' }, { status: 500 });
   }
 }

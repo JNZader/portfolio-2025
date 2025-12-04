@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import { type NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import { resend } from '@/lib/email/resend';
+import { logger } from '@/lib/monitoring/logger';
 import { redis } from '@/lib/rate-limit/redis';
 import { dataExportSchema } from '@/lib/validations/gdpr';
 
@@ -120,7 +121,10 @@ export async function POST(request: NextRequest) {
       message: 'Te enviamos un email de verificación. Revisa tu bandeja de entrada.',
     });
   } catch (error) {
-    console.error('Data export request error:', error);
+    logger.error('Data export request failed', error as Error, {
+      path: '/api/data-export',
+      method: 'POST',
+    });
     return NextResponse.json(
       { message: 'Error al procesar la solicitud. Intenta de nuevo más tarde.' },
       { status: 500 }

@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import { type NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import { resend } from '@/lib/email/resend';
+import { logger } from '@/lib/monitoring/logger';
 import { redis } from '@/lib/rate-limit/redis';
 import { dataDeletionSchema } from '@/lib/validations/gdpr';
 
@@ -130,7 +131,10 @@ export async function POST(request: NextRequest) {
       message: 'Te enviamos un email de verificación. Revisa tu bandeja de entrada.',
     });
   } catch (error) {
-    console.error('Data deletion request error:', error);
+    logger.error('Data deletion request failed', error as Error, {
+      path: '/api/data-deletion',
+      method: 'POST',
+    });
     return NextResponse.json(
       { message: 'Error al procesar la solicitud. Intenta de nuevo más tarde.' },
       { status: 500 }
