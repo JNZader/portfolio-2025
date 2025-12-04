@@ -2,6 +2,7 @@ import { ArrowRight, FileText, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
+import { HeroBackground } from '@/components/ui/HeroBackground';
 import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
 
 interface HeroSectionProps {
@@ -38,29 +39,7 @@ export function HeroSection({
 }: HeroSectionProps) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-tertiary/5" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.15),rgba(255,255,255,0))]" />
-      </div>
-
-      {/* Animated blobs */}
-      <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-float" />
-      <div
-        className="absolute -bottom-40 -left-40 w-80 h-80 bg-tertiary/10 rounded-full blur-3xl animate-float"
-        style={{ animationDelay: '1s' }}
-      />
-
-      {/* Dot pattern overlay */}
-      <div className="absolute inset-0 -z-10 opacity-[0.02] dark:opacity-[0.03]">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
-            backgroundSize: '50px 50px',
-          }}
-        />
-      </div>
+      <HeroBackground />
 
       <Container className="text-center relative z-10">
         <div className="max-w-4xl mx-auto space-y-8 animate-fade-in pb-20">
