@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Sanity Studio
  * Accesible en /studio
