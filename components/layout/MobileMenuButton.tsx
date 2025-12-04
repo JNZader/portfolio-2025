@@ -1,5 +1,6 @@
 'use client';
 
+import { Menu } from 'lucide-react';
 import { useState } from 'react';
 import MobileMenu from './MobileMenu';
 
@@ -25,7 +26,7 @@ export function MobileMenuButton({ navigation }: MobileMenuButtonProps) {
         aria-expanded={mobileMenuOpen}
         aria-controls="mobile-menu"
       >
-        <MenuIcon className="h-6 w-6" />
+        <Menu className="h-6 w-6" aria-hidden="true" />
       </button>
 
       <MobileMenu
@@ -34,24 +35,5 @@ export function MobileMenuButton({ navigation }: MobileMenuButtonProps) {
         navigation={navigation}
       />
     </>
-  );
-}
-
-function MenuIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.5"
-      stroke="currentColor"
-      aria-hidden="true"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-      />
-    </svg>
   );
 }

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { unlockAchievement } from '@/lib/achievements';
+import { cn } from '@/lib/utils';
 
 interface ClickableAvatarProps {
   src: string;
@@ -48,13 +49,11 @@ export function ClickableAvatar({ src, alt, size = 200, priority = false }: Clic
       <button
         type="button"
         onClick={handleClick}
-        className={`
-            relative cursor-pointer border-0 p-0 bg-transparent
-            transition-all duration-500
-            ${isSpinning ? 'animate-spin' : ''}
-            ${clickCount > 0 ? 'scale-105' : 'scale-100'}
-            hover:scale-110
-          `}
+        className={cn(
+          'relative cursor-pointer border-0 p-0 bg-transparent transition-all duration-500 hover:scale-110',
+          isSpinning && 'animate-spin',
+          clickCount > 0 ? 'scale-105' : 'scale-100'
+        )}
         style={{
           width: size,
           height: size,

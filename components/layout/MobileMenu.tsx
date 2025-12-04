@@ -1,5 +1,6 @@
 'use client';
 
+import { X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
@@ -50,16 +51,7 @@ export default function MobileMenu({ open, onClose, navigation }: MobileMenuProp
             onClick={onClose}
             aria-label="Cerrar menú"
           >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <X className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
         <nav className="mt-6 flow-root" aria-label="Móvil">
