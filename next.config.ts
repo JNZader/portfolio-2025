@@ -79,16 +79,16 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              // Scripts: permitir Vercel Live, Giscus, Google Analytics
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://*.giscus.app https://www.googletagmanager.com https://www.google-analytics.com",
+              // Scripts: permitir Vercel Live, Giscus, Google Analytics, Vercel Analytics
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://*.vercel-scripts.com https://*.giscus.app https://www.googletagmanager.com https://www.google-analytics.com",
               // Estilos: permitir inline styles (necesario para Tailwind) y Google Fonts
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               // Imágenes: permitir todas las fuentes (para blog y proyectos)
               "img-src 'self' data: blob: https: http:",
               // Fuentes: Google Fonts
               "font-src 'self' https://fonts.gstatic.com data:",
-              // Conexiones: Sanity, Upstash, Analytics
-              "connect-src 'self' https://*.sanity.io https://cdn.sanity.io https://*.upstash.io https://vitals.vercel-insights.com https://www.google-analytics.com https://analytics.google.com",
+              // Conexiones: Sanity, Upstash, Analytics, Vercel Analytics
+              "connect-src 'self' https://*.sanity.io https://cdn.sanity.io https://*.upstash.io https://vitals.vercel-insights.com https://*.vercel-scripts.com https://www.google-analytics.com https://analytics.google.com",
               // Frames: solo Giscus comments
               "frame-src 'self' https://giscus.app",
               // Media: solo self

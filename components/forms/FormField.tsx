@@ -68,9 +68,9 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           {required && <span className="ml-1">*</span>}
         </label>
 
-        {/* Validation icons */}
+        {/* Validation icons - decorative, hidden from AT */}
         {(error || success) && (
-          <div className="absolute right-3 top-4">
+          <div className="absolute right-3 top-4" aria-hidden="true">
             {error ? (
               <X className="w-5 h-5 text-error" />
             ) : (
@@ -85,8 +85,11 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             id={`${fieldId}-error`}
             className="mt-1.5 text-sm text-error flex items-start gap-1"
             role="alert"
+            aria-live="assertive"
           >
-            <X className="w-4 h-4 mt-0.5 flex-shrink-0" />
+            <span aria-hidden="true">
+              <X className="w-4 h-4 mt-0.5 flex-shrink-0" />
+            </span>
             {error}
           </p>
         )}
@@ -154,9 +157,9 @@ export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>
           {required && <span className="ml-1">*</span>}
         </label>
 
-        {/* Validation icons */}
+        {/* Validation icons - decorative, hidden from AT */}
         {(error || success) && (
-          <div className="absolute right-3 top-4">
+          <div className="absolute right-3 top-4" aria-hidden="true">
             {error ? (
               <X className="w-5 h-5 text-error" />
             ) : (
@@ -171,8 +174,11 @@ export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>
             id={`${fieldId}-error`}
             className="mt-1.5 text-sm text-error flex items-start gap-1"
             role="alert"
+            aria-live="assertive"
           >
-            <X className="w-4 h-4 mt-0.5 flex-shrink-0" />
+            <span aria-hidden="true">
+              <X className="w-4 h-4 mt-0.5 flex-shrink-0" />
+            </span>
             {error}
           </p>
         )}
