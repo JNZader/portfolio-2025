@@ -1,5 +1,6 @@
 import { jsPDF } from 'jspdf';
 import { NextResponse } from 'next/server';
+import { logger } from '@/lib/monitoring/logger';
 import resumeData from '@/public/resume.json';
 
 interface ResumeData {
@@ -279,7 +280,10 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error('Error generando PDF:', error);
+    logger.error('Error generating PDF resume', error as Error, {
+      path: '/api/resume',
+      method: 'GET',
+    });
     return new NextResponse('Error generando PDF', { status: 500 });
   }
 }

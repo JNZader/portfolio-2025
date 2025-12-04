@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/monitoring/logger';
 import { redis } from '@/lib/rate-limit/redis';
 import { exportUserData } from '@/lib/services/gdpr';
 
@@ -44,7 +45,10 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Data export confirm error:', error);
+    logger.error('Data export confirm failed', error as Error, {
+      path: '/api/data-export/confirm',
+      method: 'GET',
+    });
     return NextResponse.json(
       { message: 'Error al exportar datos. Intenta de nuevo más tarde.' },
       { status: 500 }

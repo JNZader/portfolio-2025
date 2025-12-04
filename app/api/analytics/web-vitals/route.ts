@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/monitoring/logger';
 
 interface WebVitalData {
   metric: string;
@@ -43,7 +44,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('[Analytics] Error storing web vital:', error);
+    logger.error('Error storing web vital', error as Error, {
+      path: '/api/analytics/web-vitals',
+      service: 'analytics',
+    });
     return NextResponse.json({ success: false, error: 'Internal error' }, { status: 500 });
   }
 }
@@ -65,7 +69,10 @@ export async function GET() {
 
     return NextResponse.json(stats);
   } catch (error) {
-    console.error('[Analytics] Error retrieving stats:', error);
+    logger.error('Error retrieving stats', error as Error, {
+      path: '/api/analytics/web-vitals',
+      service: 'analytics',
+    });
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }
