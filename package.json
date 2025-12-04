@@ -13,6 +13,8 @@
     "lint": "biome lint .",
     "type-check": "tsc --noEmit",
     "verify": "npm run type-check && npm run check",
+    "cleanup": "pwsh scripts/cleanup.ps1",
+    "cleanup:bash": "bash scripts/cleanup.sh",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",

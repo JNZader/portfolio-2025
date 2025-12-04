@@ -1,21 +1,13 @@
-import {
-  Award,
-  BookOpen,
-  Code2,
-  Database,
-  GitBranch,
-  GraduationCap,
-  Layers,
-  Palette,
-  Server,
-  Target,
-} from 'lucide-react';
+import { Award, BookOpen, Code2, GraduationCap } from 'lucide-react';
 import type { Metadata } from 'next';
 import { RevealOnScroll } from '@/components/animations';
 import { ClickableAvatar } from '@/components/features/ClickableAvatar';
 import { DownloadCVButton } from '@/components/ui/DownloadCVButton';
+import { HeroBackground } from '@/components/ui/HeroBackground';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
 import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
+import { SkillsList } from '@/components/ui/SkillsList';
+import { SKILLS_DATA } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: 'Sobre mí',
@@ -24,61 +16,11 @@ export const metadata: Metadata = {
 };
 
 export default function SobreMiPage() {
-  const skillsData = {
-    backend: [
-      { name: 'Java', icon: Code2, color: 'text-orange-600 dark:text-orange-400' },
-      { name: 'Spring Boot', icon: Layers, color: 'text-green-600 dark:text-green-400' },
-      { name: 'Node.js', icon: Server, color: 'text-green-600 dark:text-green-400' },
-      { name: 'Python', icon: Code2, color: 'text-blue-600 dark:text-blue-400' },
-      { name: 'APIs REST', icon: Server, color: 'text-purple-600 dark:text-purple-400' },
-    ],
-    frontend: [
-      { name: 'React', icon: Code2, color: 'text-cyan-600 dark:text-cyan-400' },
-      { name: 'Next.js', icon: Layers, color: 'text-gray-900 dark:text-white' },
-      { name: 'TypeScript', icon: Code2, color: 'text-blue-600 dark:text-blue-400' },
-      { name: 'Tailwind CSS', icon: Palette, color: 'text-teal-600 dark:text-teal-400' },
-    ],
-    databases: [
-      { name: 'PostgreSQL', icon: Database, color: 'text-blue-600 dark:text-blue-400' },
-      { name: 'MySQL', icon: Database, color: 'text-orange-600 dark:text-orange-400' },
-      { name: 'MongoDB', icon: Database, color: 'text-green-600 dark:text-green-400' },
-    ],
-    devops: [
-      { name: 'Docker', icon: Server, color: 'text-blue-600 dark:text-blue-400' },
-      { name: 'Git', icon: GitBranch, color: 'text-orange-600 dark:text-orange-400' },
-      { name: 'GitHub', icon: GitBranch, color: 'text-gray-900 dark:text-white' },
-      { name: 'Linux', icon: Server, color: 'text-yellow-600 dark:text-yellow-400' },
-      { name: 'CI/CD', icon: Target, color: 'text-green-600 dark:text-green-400' },
-    ],
-  };
-
   return (
     <div className="pt-16">
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">
-        {/* Animated gradient background */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-tertiary/5" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.15),rgba(255,255,255,0))]" />
-        </div>
-
-        {/* Animated blobs */}
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-float" />
-        <div
-          className="absolute -bottom-40 -left-40 w-80 h-80 bg-tertiary/10 rounded-full blur-3xl animate-float"
-          style={{ animationDelay: '1s' }}
-        />
-
-        {/* Dot pattern overlay */}
-        <div className="absolute inset-0 -z-10 opacity-[0.02] dark:opacity-[0.03]">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
-              backgroundSize: '50px 50px',
-            }}
-          />
-        </div>
+        <HeroBackground />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <RevealOnScroll>
@@ -165,77 +107,12 @@ export default function SobreMiPage() {
               <div className="bg-card p-6 rounded-lg border">
                 <h3 className="text-xl font-bold mb-4">Habilidades Técnicas</h3>
                 <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold mb-2">Backend</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {skillsData.backend.map((skill) => {
-                        const SkillIcon = skill.icon;
-                        return (
-                          <span
-                            key={skill.name}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs rounded-full transition-all duration-200 hover:scale-105"
-                          >
-                            <SkillIcon className={`w-3.5 h-3.5 ${skill.color}`} />
-                            {skill.name}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold mb-2">Frontend</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {skillsData.frontend.map((skill) => {
-                        const SkillIcon = skill.icon;
-                        return (
-                          <span
-                            key={skill.name}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs rounded-full transition-all duration-200 hover:scale-105"
-                          >
-                            <SkillIcon className={`w-3.5 h-3.5 ${skill.color}`} />
-                            {skill.name}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold mb-2">Bases de Datos</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {skillsData.databases.map((skill) => {
-                        const SkillIcon = skill.icon;
-                        return (
-                          <span
-                            key={skill.name}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs rounded-full transition-all duration-200 hover:scale-105"
-                          >
-                            <SkillIcon className={`w-3.5 h-3.5 ${skill.color}`} />
-                            {skill.name}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold mb-2">DevOps & Tools</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {skillsData.devops.map((skill) => {
-                        const SkillIcon = skill.icon;
-                        return (
-                          <span
-                            key={skill.name}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs rounded-full transition-all duration-200 hover:scale-105"
-                          >
-                            <SkillIcon className={`w-3.5 h-3.5 ${skill.color}`} />
-                            {skill.name}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
+                  <SkillsList title="Backend" skills={SKILLS_DATA.backend} />
+                  <SkillsList title="Frontend" skills={SKILLS_DATA.frontend} />
+                  {SKILLS_DATA.databases && (
+                    <SkillsList title="Bases de Datos" skills={SKILLS_DATA.databases} />
+                  )}
+                  <SkillsList title="DevOps & Tools" skills={SKILLS_DATA.devops} />
                 </div>
               </div>
 
