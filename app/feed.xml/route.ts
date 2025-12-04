@@ -1,3 +1,4 @@
+import { logger } from '@/lib/monitoring/logger';
 import { sanityFetch } from '@/sanity/lib/client';
 import { urlForImage } from '@/sanity/lib/image';
 import { postsQuery } from '@/sanity/lib/queries';
@@ -64,7 +65,9 @@ ${post.readingTime ? `      <content:encoded><![CDATA[<p>Tiempo de lectura: ${po
       },
     });
   } catch (error) {
-    console.error('Error generando RSS feed:', error);
+    logger.error('Error generating RSS feed', error as Error, {
+      path: '/feed.xml',
+    });
     return new Response('Error generando RSS feed', { status: 500 });
   }
 }
