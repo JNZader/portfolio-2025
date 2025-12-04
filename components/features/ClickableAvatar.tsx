@@ -8,9 +8,10 @@ interface ClickableAvatarProps {
   src: string;
   alt: string;
   size?: number;
+  priority?: boolean;
 }
 
-export function ClickableAvatar({ src, alt, size = 200 }: ClickableAvatarProps) {
+export function ClickableAvatar({ src, alt, size = 200, priority = false }: ClickableAvatarProps) {
   const [clickCount, setClickCount] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
 
@@ -65,6 +66,7 @@ export function ClickableAvatar({ src, alt, size = 200 }: ClickableAvatarProps) 
           alt={alt}
           width={size}
           height={size}
+          priority={priority}
           className="rounded-full ring-4 ring-primary/20 group-hover:ring-primary/40 transition-all"
         />
 
