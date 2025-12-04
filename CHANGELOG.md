@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.22.4](https://github.com/JNZader/portfolio-2025/compare/v0.22.3...v0.22.4) (2025-12-04)
+
+
+### Bug Fixes
+
+* **a11y:** improve muted-foreground color contrast for WCAG AA ([3ae89fe](https://github.com/JNZader/portfolio-2025/commits/3ae89feadc467f844889f10c5d1cdca79111376f))
+
 ### [0.22.3](https://github.com/JNZader/portfolio-2025/compare/v0.22.2...v0.22.3) (2025-12-04)
 
 
