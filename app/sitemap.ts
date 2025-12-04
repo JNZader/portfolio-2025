@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { logger } from '@/lib/monitoring/logger';
 import { sanityFetch } from '@/sanity/lib/client';
 import { postsQuery, projectsQuery } from '@/sanity/lib/queries';
 import type { Post, Project } from '@/types/sanity';
@@ -54,7 +55,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }));
   } catch (error) {
-    console.warn('Failed to fetch blog posts for sitemap:', error);
+    logger.warn('Failed to fetch blog posts for sitemap', {
+      service: 'sitemap',
+      error: (error as Error).message,
+    });
   }
 
   // Dynamic projects (opcional, si quieres incluir proyectos individuales)
@@ -71,7 +75,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     }));
   } catch (error) {
-    console.warn('Failed to fetch projects for sitemap:', error);
+    logger.warn('Failed to fetch projects for sitemap', {
+      service: 'sitemap',
+      error: (error as Error).message,
+    });
   }
 
   return [...staticPages, ...blogPages, ...projectPages];

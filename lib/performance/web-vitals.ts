@@ -1,5 +1,6 @@
 import { type Metric, onCLS, onFCP, onINP, onLCP, onTTFB } from 'web-vitals';
 import '@/lib/analytics/types';
+import { logger } from '@/lib/monitoring/logger';
 
 /**
  * Send metric to analytics
@@ -7,15 +8,14 @@ import '@/lib/analytics/types';
 function sendToAnalytics(metric: Metric) {
   const { name, value, rating, delta, id } = metric;
 
-  // Log in development
-  if (process.env.NODE_ENV === 'development') {
-    console.log('📊 Web Vital:', {
-      name,
-      value: Math.round(value),
-      rating,
-      delta: Math.round(delta),
-    });
-  }
+  // Log web vital
+  logger.debug('Web Vital', {
+    service: 'web-vitals',
+    name,
+    value: Math.round(value),
+    rating,
+    delta: Math.round(delta),
+  });
 
   // Send to Vercel Analytics
   if (typeof window !== 'undefined' && window.va) {

@@ -1,3 +1,5 @@
+import { logger } from '@/lib/monitoring/logger';
+
 interface CacheEntry<T> {
   data: T;
   timestamp: number;
@@ -49,11 +51,11 @@ export async function withCache<T>(key: string, fetcher: () => Promise<T>): Prom
   const cached = getCached<T>(key);
 
   if (cached) {
-    console.log(`✅ Cache HIT: ${key}`);
+    logger.debug('Cache HIT', { service: 'cache', key });
     return cached;
   }
 
-  console.log(`❌ Cache MISS: ${key}`);
+  logger.debug('Cache MISS', { service: 'cache', key });
   const data = await fetcher();
   setCached(key, data);
 

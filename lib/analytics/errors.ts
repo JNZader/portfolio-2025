@@ -1,15 +1,17 @@
 import '@/lib/analytics/types';
 import * as Sentry from '@sentry/nextjs';
+import { logger } from '@/lib/monitoring/logger';
 
 /**
  * Track error - Envía a múltiples servicios de tracking
  * @returns eventId de Sentry para user feedback
  */
 export function trackError(error: Error, context?: Record<string, unknown>): string | undefined {
-  // Log in development
-  if (process.env.NODE_ENV === 'development') {
-    console.error('❌ Error tracked:', error, context);
-  }
+  // Log error
+  logger.error('Error tracked', error, {
+    service: 'analytics',
+    ...context,
+  });
 
   // 1. Sentry (principal para debugging con stack traces completos)
   const eventId = Sentry.captureException(error, { extra: context });

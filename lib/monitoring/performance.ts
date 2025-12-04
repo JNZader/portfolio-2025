@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
+import { logger } from '@/lib/monitoring/logger';
 
 /**
  * Track custom performance metric
@@ -18,10 +19,8 @@ export function trackPerformance(
     ...(tags && { tags }),
   });
 
-  // Log in development
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`⚡ Performance: ${name} took ${duration}ms`, context);
-  }
+  // Log performance metric
+  logger.performance(name, duration, context);
 }
 
 /**
