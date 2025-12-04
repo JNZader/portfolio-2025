@@ -41,8 +41,26 @@ export function ObfuscatedEmail({
   const getEmail = () => `${user}@${domain}`;
 
   const handleCopy = async () => {
+    const email = getEmail();
+
     try {
-      await navigator.clipboard.writeText(getEmail());
+      // Modern Clipboard API (requires secure context)
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(email);
+      } else {
+        // Fallback for non-secure contexts or older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = email;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        textArea.style.top = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+
       setCopied(true);
       setTimeout(() => {
         setCopied(false);
@@ -150,8 +168,7 @@ function EmailIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      role="img"
-      aria-label="Email"
+      aria-hidden="true"
     >
       <path
         strokeLinecap="round"
@@ -170,8 +187,7 @@ function ChevronIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       strokeWidth="2"
       stroke="currentColor"
-      role="img"
-      aria-label="Expandir"
+      aria-hidden="true"
     >
       <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
     </svg>
@@ -186,8 +202,7 @@ function SendIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      role="img"
-      aria-label="Enviar"
+      aria-hidden="true"
     >
       <path
         strokeLinecap="round"
@@ -206,8 +221,7 @@ function CopyIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      role="img"
-      aria-label="Copiar"
+      aria-hidden="true"
     >
       <path
         strokeLinecap="round"
@@ -226,8 +240,7 @@ function CheckIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       strokeWidth="2"
       stroke="currentColor"
-      role="img"
-      aria-label="Completado"
+      aria-hidden="true"
     >
       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
     </svg>
