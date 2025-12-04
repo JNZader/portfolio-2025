@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.22.6](https://github.com/JNZader/portfolio-2025/compare/v0.22.5...v0.22.6) (2025-12-04)
+
+
+### Code Refactoring
+
+* **logging:** migrate API routes to centralized logger ([61ac583](https://github.com/JNZader/portfolio-2025/commits/61ac5834f74a15b5542aabce4698717c816ab79a))
+* **logging:** migrate services to centralized logger ([7ad49e9](https://github.com/JNZader/portfolio-2025/commits/7ad49e9898086a7f6e8a27ce24e6ccffc20d6d30))
+
 ### [0.22.5](https://github.com/JNZader/portfolio-2025/compare/v0.22.4...v0.22.5) (2025-12-04)
 
 
