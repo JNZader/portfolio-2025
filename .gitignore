@@ -12,7 +12,14 @@
 
 # testing
 /coverage
-  .nyc_output
+.nyc_output
+/test-results
+/playwright-report
+/blob-report
+/playwright/.cache
+
+# lighthouse ci
+.lighthouseci
 
 # next.js
 /.next/
@@ -26,6 +33,8 @@
 *.pem
 Thumbs.db
 cambios.txt
+CLAUDE.md
+/nul
 
 # debug
 npm-debug.log*
@@ -33,7 +42,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files (ninguno se commitea, solo .env.example)
+# .env = produccion
+# .env.local = desarrollo (override local)
 .env
 .env.local
 .env.development.local
@@ -48,17 +59,21 @@ yarn-error.log*
 next-env.d.ts
 
  # IDE
- /.idea
- .vscode/*
- !.vscode/settings.json
- !.vscode/extensions.json
+.idea/*
+.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 
-  # Sanity
-  sanity/dist
+# Sanity
+sanity/dist
 
-  # Database
-  *.db
-  *.db-journal
+# Database
+*.db
+*.db-journal
 
-  # Husky
-  .husky/_
+# Husky
+.husky/_
+/lib/generated/prisma
+/tests/manual/csrf-test.html
+/lighthouse-mobile-after.json

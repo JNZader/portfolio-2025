@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Modelo de suscriptor
+model Subscriber {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  status          SubscriptionStatus @default(PENDING)
+
+  // Tokens
+  confirmToken    String?  @unique
+  confirmTokenExp DateTime?
+  unsubToken      String   @unique @default(cuid())
+
+  // Timestamps
+  subscribedAt    DateTime @default(now())
+  confirmedAt     DateTime?
+  unsubscribedAt  DateTime?
+
+  // Metadata
+  ipAddress       String?
+  userAgent       String?
+
+  // GDPR Consent tracking
+  consentGiven    Boolean  @default(false)
+  consentDate     DateTime?
+  consentVersion  String?  @default("1.0")
+
+  // Privacy settings
+  allowAnalytics  Boolean  @default(false)
+  allowMarketing  Boolean  @default(true)
+
+  // Indexes for performance optimization
+  @@index([email])              // Fast lookup by email
+  @@index([status])             // Filter by subscription status
+  @@index([subscribedAt])       // Sort/filter by subscription date
+  @@index([status, subscribedAt]) // Compound index for common queries
+  @@map("subscribers")
+}
+
+enum SubscriptionStatus {
+  PENDING
+  ACTIVE
+  UNSUBSCRIBED
+  BOUNCED
+  COMPLAINED
+}
+
+// Consent Log model
+model ConsentLog {
+  id            String   @id @default(cuid())
+  email         String
+  consentType   ConsentType
+  consentGiven  Boolean
+  consentDate   DateTime @default(now())
+  ipAddress     String?
+  userAgent     String?
+  version       String   @default("1.0")
+
+  // Indexes for performance optimization
+  @@index([email])                    // Lookup consent by email
+  @@index([consentDate])              // Sort by date
+  @@index([email, consentType])       // Compound index for user-specific consent queries
+  @@index([consentType, consentDate]) // Filter by type and sort by date
+  @@map("consent_logs")
+}
+
+enum ConsentType {
+  NEWSLETTER
+  COOKIES_ESSENTIAL
+  COOKIES_ANALYTICS
+  COOKIES_MARKETING
+}

@@ -1,0 +1,91 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    # Evitar loop infinito: solo ejecutar si NO es un commit de release
+    if: "!contains(github.event.head_commit.message, 'chore(release)')"
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+        env:
+          DATABASE_URL: file:./prisma/dev.db
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Generate release
+        run: npm run release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get current branch
+        id: branch
+        run: |
+          BRANCH=${GITHUB_REF#refs/heads/}
+          echo "BRANCH=${BRANCH}" >> $GITHUB_OUTPUT
+
+      - name: Push changes and tags
+        run: |
+          git push --follow-tags origin ${{ steps.branch.outputs.BRANCH }}
+
+      - name: Extract version from package.json
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+          echo "TAG=v${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Extract changelog for current version
+        id: changelog
+        run: |
+          VERSION=${{ steps.version.outputs.VERSION }}
+          # Extraer sección del CHANGELOG para esta versión
+          sed -n "/## \[${VERSION}\]/,/## \[/p" CHANGELOG.md | sed '$d' > current-changelog.md
+
+          # Si está vacío, usar un mensaje por defecto
+          if [ ! -s current-changelog.md ]; then
+            echo "Release ${VERSION}" > current-changelog.md
+          fi
+
+      - name: Create GitHub Release
+        # Solo crear GitHub Release en main (producción)
+        if: steps.branch.outputs.BRANCH == 'main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.TAG }}
+          name: Release ${{ steps.version.outputs.TAG }}
+          body_path: current-changelog.md
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
