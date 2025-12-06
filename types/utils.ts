@@ -40,7 +40,7 @@ export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 /**
  * Tipo para objetos con keys dinámicas
  */
-export type Dictionary<T = any> = Record<string, T>;
+export type Dictionary<T = unknown> = Record<string, T>;
 
 /**
  * Tipo para valores de un enum/objeto
@@ -50,4 +50,6 @@ export type ValueOf<T> = T[keyof T];
 /**
  * Tipo para funciones async
  */
-export type AsyncFunction<T = any> = (...args: any[]) => Promise<T>;
+export type AsyncFunction<TArgs extends unknown[] = unknown[], TReturn = unknown> = (
+  ...args: TArgs
+) => Promise<TReturn>;
