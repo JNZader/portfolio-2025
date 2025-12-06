@@ -75,3 +75,5 @@ sanity/dist
 # Husky
 .husky/_
 /lib/generated/prisma
+/tests/manual/csrf-test.html
+/lighthouse-mobile-after.json
