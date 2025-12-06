@@ -1,27 +1,18 @@
-import { Ratelimit } from '@upstash/ratelimit';
 import { nanoid } from 'nanoid';
 import { type NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import { resend } from '@/lib/email/resend';
 import { logger } from '@/lib/monitoring/logger';
-import { redis } from '@/lib/rate-limit/redis';
+import { createRateLimiter, safeRedisOp } from '@/lib/rate-limit/redis';
 import { CSRF_ERROR_RESPONSE, verifyCsrf } from '@/lib/security/security-config';
 import { escapeHtml } from '@/lib/utils/string';
 import { dataDeletionSchema } from '@/lib/validations/gdpr';
 
 // Rate limiter por email: 2 solicitudes por día
-const deletionRateLimiter = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(process.env.NODE_ENV === 'development' ? 100 : 2, '24 h'),
-  prefix: 'ratelimit:data-deletion',
-});
+const deletionRateLimiter = createRateLimiter('data-deletion', 2, '24 h');
 
 // Rate limiter por IP: 5 solicitudes por hora (más restrictivo)
-const ipRateLimiter = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(process.env.NODE_ENV === 'development' ? 100 : 5, '1 h'),
-  prefix: 'ratelimit:data-deletion-ip',
-});
+const ipRateLimiter = createRateLimiter('data-deletion-ip', 5, '1 h');
 
 export async function POST(request: NextRequest) {
   try {
@@ -92,7 +83,9 @@ export async function POST(request: NextRequest) {
     const token = nanoid(32);
 
     // Guardar token y razón en Redis (expira en 15 minutos)
-    await redis.set(`data-deletion:${token}`, JSON.stringify({ email, reason }), { ex: 900 });
+    await safeRedisOp((client) =>
+      client.set(`data-deletion:${token}`, JSON.stringify({ email, reason }), { ex: 900 })
+    );
 
     // 7. Enviar email de verificación
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';

@@ -64,7 +64,12 @@ function NewsletterCard({ className, size = 'lg' }: NewsletterCardProps) {
         className
       )}
     >
-      <form onSubmit={handleSubmit(onSubmit)} className={currentSize.form} aria-label="Newsletter">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={currentSize.form}
+        aria-label="Newsletter"
+        noValidate
+      >
         <label htmlFor="newsletter-email" className="sr-only">
           Email para newsletter
         </label>

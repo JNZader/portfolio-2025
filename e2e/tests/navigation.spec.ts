@@ -50,15 +50,18 @@ test.describe('Navigation', () => {
     if (viewport && viewport.width < 768) {
       await page.goto('/');
 
-      // Mobile menu button should be visible
-      const menuButton = page.getByRole('button', { name: /menú/i });
+      // Mobile menu button should be visible - matches "Abrir menú de navegación"
+      const menuButton = page.getByRole('button', { name: /menú|abrir/i });
       await expect(menuButton).toBeVisible();
 
       // Click to open
       await menuButton.click();
 
-      // Menu should be visible
-      const mobileMenu = page.getByRole('navigation', { name: /móvil/i });
+      // Wait for menu to appear
+      await page.waitForTimeout(300);
+
+      // Menu should be visible - matches "Navegación móvil"
+      const mobileMenu = page.getByRole('navigation', { name: /móvil|navegación/i });
       await expect(mobileMenu).toBeVisible();
 
       // Click link

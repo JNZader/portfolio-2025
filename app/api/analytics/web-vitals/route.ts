@@ -1,7 +1,6 @@
-import { Ratelimit } from '@upstash/ratelimit';
 import { type NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/monitoring/logger';
-import { redis } from '@/lib/rate-limit/redis';
+import { createRateLimiter } from '@/lib/rate-limit/redis';
 import { CSRF_ERROR_RESPONSE, verifyCsrf } from '@/lib/security/security-config';
 
 interface WebVitalData {
@@ -15,11 +14,7 @@ interface WebVitalData {
 }
 
 // Rate limiter: 100 requests per minute per IP
-const vitalsRateLimiter = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(100, '1 m'),
-  prefix: 'ratelimit:web-vitals',
-});
+const vitalsRateLimiter = createRateLimiter('web-vitals', 100, '1 m');
 
 // Simple in-memory storage (en producción usar DB)
 const vitalsData: WebVitalData[] = [];

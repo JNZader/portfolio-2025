@@ -35,6 +35,28 @@ const noopRateLimiter = {
 };
 
 /**
+ * Helper to get Redis client or throw if not configured
+ * Use this when Redis is required (not for rate limiting)
+ */
+export function getRedisClient() {
+  if (!redis) {
+    throw new Error(
+      'Redis is not configured. Set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN.'
+    );
+  }
+  return redis;
+}
+
+/**
+ * Helper to safely use Redis operations
+ * Returns null if Redis is not configured
+ */
+export async function safeRedisOp<T>(operation: (client: Redis) => Promise<T>): Promise<T | null> {
+  if (!redis) return null;
+  return operation(redis);
+}
+
+/**
  * Rate limiter: 3 emails cada 10 minutos por IP (100 en dev)
  * Balance ideal para producción: previene spam sin frustrar usuarios legítimos
  */

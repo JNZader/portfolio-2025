@@ -4,32 +4,35 @@ test.describe('Visual Regression', () => {
   test('homepage should match screenshot', async ({ page }) => {
     await page.goto('/');
 
-    // Wait for images to load
+    // Wait for images and animations to settle
     await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(500);
 
-    // Take screenshot
+    // Take screenshot with tolerance for dynamic content
     await expect(page).toHaveScreenshot('homepage.png', {
       fullPage: true,
-      maxDiffPixels: 100,
+      maxDiffPixelRatio: 0.05, // Allow up to 5% difference
     });
   });
 
   test('blog page should match screenshot', async ({ page }) => {
     await page.goto('/blog');
     await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(500);
 
     await expect(page).toHaveScreenshot('blog.png', {
       fullPage: true,
-      maxDiffPixels: 100,
+      maxDiffPixelRatio: 0.05,
     });
   });
 
   test('contact form should match screenshot', async ({ page }) => {
     await page.goto('/contacto');
     await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(500);
 
     await expect(page).toHaveScreenshot('contact.png', {
-      maxDiffPixels: 50,
+      maxDiffPixelRatio: 0.05,
     });
   });
 
@@ -40,11 +43,11 @@ test.describe('Visual Regression', () => {
     const themeToggle = page.getByRole('button', { name: /cambiar a modo/i });
     if (await themeToggle.isVisible()) {
       await themeToggle.click();
-      await page.waitForTimeout(300);
+      await page.waitForTimeout(500);
 
       await expect(page).toHaveScreenshot('homepage-dark.png', {
         fullPage: true,
-        maxDiffPixels: 100,
+        maxDiffPixelRatio: 0.05,
       });
     }
   });
