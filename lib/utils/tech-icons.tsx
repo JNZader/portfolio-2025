@@ -25,8 +25,8 @@ const techIconMap: Record<string, TechIconMapping> = {
   nodejs: { icon: Server, color: 'text-green-600 dark:text-green-400' },
   python: { icon: Code2, color: 'text-blue-600 dark:text-blue-400' },
   django: { icon: Server, color: 'text-green-600 dark:text-green-400' },
-  flask: { icon: Server, color: 'text-gray-600 dark:text-gray-400' },
-  express: { icon: Server, color: 'text-gray-600 dark:text-gray-400' },
+  flask: { icon: Server, color: 'text-muted-foreground' },
+  express: { icon: Server, color: 'text-muted-foreground' },
   fastapi: { icon: Server, color: 'text-teal-600 dark:text-teal-400' },
   'api rest': { icon: Server, color: 'text-purple-600 dark:text-purple-400' },
   rest: { icon: Server, color: 'text-purple-600 dark:text-purple-400' },
@@ -35,8 +35,8 @@ const techIconMap: Record<string, TechIconMapping> = {
   // Frontend
   react: { icon: Code2, color: 'text-cyan-600 dark:text-cyan-400' },
   'react.js': { icon: Code2, color: 'text-cyan-600 dark:text-cyan-400' },
-  'next.js': { icon: Layers, color: 'text-gray-900 dark:text-white' },
-  nextjs: { icon: Layers, color: 'text-gray-900 dark:text-white' },
+  'next.js': { icon: Layers, color: 'text-foreground' },
+  nextjs: { icon: Layers, color: 'text-foreground' },
   vue: { icon: Code2, color: 'text-green-600 dark:text-green-400' },
   'vue.js': { icon: Code2, color: 'text-green-600 dark:text-green-400' },
   angular: { icon: Code2, color: 'text-red-600 dark:text-red-400' },
@@ -71,7 +71,7 @@ const techIconMap: Record<string, TechIconMapping> = {
   kubernetes: { icon: Server, color: 'text-blue-600 dark:text-blue-400' },
   k8s: { icon: Server, color: 'text-blue-600 dark:text-blue-400' },
   git: { icon: GitBranch, color: 'text-orange-600 dark:text-orange-400' },
-  github: { icon: GitBranch, color: 'text-gray-900 dark:text-white' },
+  github: { icon: GitBranch, color: 'text-foreground' },
   gitlab: { icon: GitBranch, color: 'text-orange-600 dark:text-orange-400' },
   'ci/cd': { icon: GitBranch, color: 'text-green-600 dark:text-green-400' },
   jenkins: { icon: Server, color: 'text-red-600 dark:text-red-400' },
@@ -93,7 +93,7 @@ export function getTechIcon(tech: string): TechIconMapping {
   return (
     techIconMap[normalized] || {
       icon: Code2,
-      color: 'text-gray-600 dark:text-gray-400',
+      color: 'text-muted-foreground',
     }
   );
 }

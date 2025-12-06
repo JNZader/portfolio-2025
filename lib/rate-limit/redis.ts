@@ -44,3 +44,42 @@ export const newsletterRateLimiter = new Ratelimit({
   analytics: true,
   prefix: 'ratelimit:newsletter',
 });
+
+/**
+ * Rate limiter para unsubscribe: 10 requests por hora por IP
+ * Previene enumeración de tokens
+ */
+export const unsubscribeRateLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(process.env.NODE_ENV === 'development' ? 100 : 10, '1 h'),
+  analytics: true,
+  prefix: 'ratelimit:unsubscribe',
+});
+
+/**
+ * Rate limiter para resume/CV download: 10 por hora por IP
+ * Previene DoS en endpoint de generación de PDF
+ */
+export const resumeRateLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(process.env.NODE_ENV === 'development' ? 100 : 10, '1 h'),
+  analytics: true,
+  prefix: 'ratelimit:resume',
+});
+
+/**
+ * Factory function para crear rate limiters personalizados
+ * Centraliza la configuración y facilita mantenimiento
+ */
+export function createRateLimiter(
+  prefix: string,
+  max: number,
+  window: `${number} ${'s' | 'm' | 'h' | 'd'}`
+): Ratelimit {
+  return new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(process.env.NODE_ENV === 'development' ? 100 : max, window),
+    analytics: true,
+    prefix: `ratelimit:${prefix}`,
+  });
+}
