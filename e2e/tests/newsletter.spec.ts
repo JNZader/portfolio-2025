@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { testData } from '../fixtures/test-data';
+import { testData, dismissCookieConsent } from '../fixtures/test-data';
 
 test.describe('Newsletter Subscription', () => {
   test('should show newsletter form on homepage', async ({ page }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     const form = page.getByRole('form', { name: /newsletter/i });
     await expect(form).toBeVisible();
@@ -17,6 +18,7 @@ test.describe('Newsletter Subscription', () => {
 
   test('should submit form and show response', async ({ page }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     const email = testData.newsletter.validEmail();
     const form = page.getByRole('form', { name: /newsletter/i });
@@ -41,6 +43,7 @@ test.describe('Newsletter Subscription', () => {
 
   test('should show error for invalid email', async ({ page }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     const form = page.getByRole('form', { name: /newsletter/i });
 
@@ -59,6 +62,7 @@ test.describe('Newsletter Subscription', () => {
 
   test('should show error for empty email', async ({ page }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     const form = page.getByRole('form', { name: /newsletter/i });
 
@@ -71,6 +75,7 @@ test.describe('Newsletter Subscription', () => {
 
   test('should disable button during submission', async ({ page }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     // Block the API request indefinitely until we verify the loading state
     let resolveRoute: (() => void) | undefined;

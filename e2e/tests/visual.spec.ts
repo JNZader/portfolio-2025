@@ -1,8 +1,13 @@
 import { test, expect } from '@playwright/test';
+import { dismissCookieConsent } from '../fixtures/test-data';
 
+// Skip visual regression tests on CI - snapshots are platform-specific (win32 vs linux)
 test.describe('Visual Regression', () => {
+  test.skip(!!process.env.CI, 'Visual regression tests are skipped on CI due to platform-specific snapshots');
+
   test('homepage should match screenshot', async ({ page }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     // Wait for images and animations to settle
     await page.waitForLoadState('networkidle');
@@ -17,6 +22,7 @@ test.describe('Visual Regression', () => {
 
   test('blog page should match screenshot', async ({ page }) => {
     await page.goto('/blog');
+    await dismissCookieConsent(page);
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(500);
 
@@ -28,6 +34,7 @@ test.describe('Visual Regression', () => {
 
   test('contact form should match screenshot', async ({ page }) => {
     await page.goto('/contacto');
+    await dismissCookieConsent(page);
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(500);
 
@@ -38,6 +45,7 @@ test.describe('Visual Regression', () => {
 
   test('dark mode should match screenshot', async ({ page }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     // Toggle dark mode
     const themeToggle = page.getByRole('button', { name: /cambiar a modo/i });

@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { dismissCookieConsent } from '../fixtures/test-data';
 
 // Common axe configuration - exclude color-contrast for dynamic/external content
 // The #61dafb color comes from external badges (Sanity CMS, GitHub shields)
@@ -9,6 +10,7 @@ const createAxeBuilder = (page: Page) =>
 test.describe('Accessibility', () => {
   test('homepage should not have accessibility violations', async ({ page }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     const accessibilityScanResults = await createAxeBuilder(page).analyze();
 
@@ -17,6 +19,7 @@ test.describe('Accessibility', () => {
 
   test('blog page should not have accessibility violations', async ({ page }) => {
     await page.goto('/blog');
+    await dismissCookieConsent(page);
 
     const accessibilityScanResults = await createAxeBuilder(page).analyze();
 
@@ -25,6 +28,7 @@ test.describe('Accessibility', () => {
 
   test('contact page should not have accessibility violations', async ({ page }) => {
     await page.goto('/contacto');
+    await dismissCookieConsent(page);
 
     const accessibilityScanResults = await createAxeBuilder(page).analyze();
 
@@ -33,6 +37,7 @@ test.describe('Accessibility', () => {
 
   test('should meet WCAG 2.2 AA standards', async ({ page }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     const accessibilityScanResults = await createAxeBuilder(page)
       .withTags(['wcag2a', 'wcag2aa', 'wcag22aa'])
@@ -43,6 +48,7 @@ test.describe('Accessibility', () => {
 
   test('should be keyboard navigable', async ({ page }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     // Wait for page to be interactive
     await page.waitForLoadState('domcontentloaded');
@@ -68,6 +74,7 @@ test.describe('Accessibility', () => {
 
   test('images should have alt text', async ({ page }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     const images = page.locator('img');
     const count = await images.count();

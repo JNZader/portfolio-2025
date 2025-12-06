@@ -1,9 +1,13 @@
 import { test, expect } from '@playwright/test';
-import { testData } from '../fixtures/test-data';
+import { testData, dismissCookieConsent } from '../fixtures/test-data';
 
 test.describe('Blog', () => {
-  test('should navigate to blog page', async ({ page }) => {
+  test('should navigate to blog page', async ({ page, viewport }) => {
+    // Skip on mobile - nav is hidden in hamburger menu (tested in navigation.spec.ts)
+    test.skip(!!viewport && viewport.width < 768, 'Desktop navigation test - skipped on mobile');
+
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     // Click blog link in main navigation (use nav context to avoid ambiguity)
     const nav = page.getByRole('navigation', { name: /principal/i });
@@ -16,6 +20,7 @@ test.describe('Blog', () => {
 
   test('should display blog posts or empty state', async ({ page }) => {
     await page.goto('/blog');
+    await dismissCookieConsent(page);
 
     // Check if posts exist or empty state is shown
     const posts = page.getByRole('article');
@@ -37,6 +42,7 @@ test.describe('Blog', () => {
 
   test('should navigate to individual post if posts exist', async ({ page }) => {
     await page.goto('/blog');
+    await dismissCookieConsent(page);
 
     // Check if posts exist
     const posts = page.getByRole('article');
@@ -59,6 +65,7 @@ test.describe('Blog', () => {
 
   test('should filter by category if posts exist', async ({ page }) => {
     await page.goto('/blog');
+    await dismissCookieConsent(page);
 
     // Check if posts exist first
     const posts = page.getByRole('article');
@@ -84,6 +91,7 @@ test.describe('Blog', () => {
 
   test('should have search input', async ({ page }) => {
     await page.goto('/blog');
+    await dismissCookieConsent(page);
 
     // Find search input - should always be visible
     const searchInput = page.getByRole('textbox', { name: /buscar/i });
@@ -92,6 +100,7 @@ test.describe('Blog', () => {
 
   test('should show empty state for no results', async ({ page }) => {
     await page.goto('/blog');
+    await dismissCookieConsent(page);
 
     const searchInput = page.getByRole('textbox', { name: /buscar/i });
     await searchInput.fill(testData.search.noResultsQuery);
@@ -112,6 +121,7 @@ test.describe('Blog', () => {
 
   test('should paginate results if enough posts', async ({ page }) => {
     await page.goto('/blog');
+    await dismissCookieConsent(page);
 
     // Check if pagination exists
     const pagination = page.locator('[role="navigation"]').filter({ hasText: /página/i });
@@ -133,6 +143,7 @@ test.describe('Blog Post', () => {
   test('should display post content if posts exist', async ({ page }) => {
     // Navigate to blog first to check if posts exist
     await page.goto('/blog');
+    await dismissCookieConsent(page);
 
     const posts = page.getByRole('article');
     const postCount = await posts.count();
@@ -156,6 +167,7 @@ test.describe('Blog Post', () => {
 
   test('should have table of contents if post has headings', async ({ page }) => {
     await page.goto('/blog');
+    await dismissCookieConsent(page);
 
     const posts = page.getByRole('article');
     const postCount = await posts.count();
@@ -185,6 +197,7 @@ test.describe('Blog Post', () => {
 
   test('should show related posts if available', async ({ page }) => {
     await page.goto('/blog');
+    await dismissCookieConsent(page);
 
     const posts = page.getByRole('article');
     const postCount = await posts.count();

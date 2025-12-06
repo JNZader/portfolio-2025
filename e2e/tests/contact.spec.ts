@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { testData } from '../fixtures/test-data';
+import { testData, dismissCookieConsent } from '../fixtures/test-data';
 
 test.describe('Contact Form', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/contacto');
+    await dismissCookieConsent(page);
   });
 
   test('should render contact form', async ({ page }) => {
