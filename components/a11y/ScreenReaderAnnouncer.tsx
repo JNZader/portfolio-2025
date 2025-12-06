@@ -23,7 +23,7 @@ export function AnnouncerProvider({ children }: { children: ReactNode }) {
   return (
     <AnnouncerContext.Provider value={{ announce }}>
       {children}
-      {/* Live region para screen readers */}
+      {/* Live region para screen readers - visually hidden but accessible */}
       <output aria-live={priority} aria-atomic="true" className="sr-only">
         {message}
       </output>

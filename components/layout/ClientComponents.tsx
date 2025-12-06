@@ -2,12 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
-
-// Easter Eggs - Only load when user interacts
-const EasterEggs = dynamic(
-  () => import('@/components/features/EasterEggs').then((m) => m.EasterEggs),
-  { ssr: false }
-);
+import { EasterEggs } from '@/components/features/EasterEggs';
 
 const TypingEasterEgg = dynamic(
   () => import('@/components/features/TypingEasterEgg').then((m) => m.TypingEasterEgg),
@@ -21,12 +16,6 @@ const CursorTracer = dynamic(
 
 const MatrixRain = dynamic(
   () => import('@/components/features/MatrixRain').then((m) => m.MatrixRain),
-  { ssr: false }
-);
-
-// Custom Cursor - Includes framer-motion (~60KB)
-const CustomCursor = dynamic(
-  () => import('@/components/ui/CustomCursor').then((m) => m.CustomCursor),
   { ssr: false }
 );
 
@@ -56,14 +45,9 @@ export function ClientComponents() {
       <Suspense fallback={null}>
         <ScrollProgress />
       </Suspense>
-      <Suspense fallback={null}>
-        <CustomCursor />
-      </Suspense>
 
-      {/* Easter Eggs - Lazy loaded on demand */}
-      <Suspense fallback={null}>
-        <EasterEggs />
-      </Suspense>
+      {/* Easter Eggs */}
+      <EasterEggs />
       <Suspense fallback={null}>
         <TypingEasterEgg />
       </Suspense>

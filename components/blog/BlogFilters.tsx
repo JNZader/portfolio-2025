@@ -2,7 +2,7 @@
 
 import { Filter, Search, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useId, useState, useTransition } from 'react';
 import { useDebounce } from 'use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,6 +17,8 @@ interface BlogFiltersProps {
 export function BlogFilters({ categories, totalPosts }: BlogFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const filtersPanelId = useId();
+  const [isPending, startTransition] = useTransition();
 
   // Estado local
   const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
@@ -38,35 +40,46 @@ export function BlogFilters({ categories, totalPosts }: BlogFiltersProps) {
       if (urlSearch !== debouncedSearch) {
         params.set('search', debouncedSearch);
         params.delete('page');
-        router.push(`/blog?${params.toString()}`);
+        startTransition(() => {
+          router.push(`/blog?${params.toString()}`);
+        });
       }
     } else if (urlSearch) {
       params.delete('search');
       const query = params.toString();
-      router.push(`/blog${query ? `?${query}` : ''}`);
+      startTransition(() => {
+        router.push(`/blog${query ? `?${query}` : ''}`);
+      });
     }
   }, [debouncedSearch, router, searchParams]);
 
-  const handleCategoryClick = (slug: string | null) => {
-    const params = new URLSearchParams(searchParams.toString());
+  const handleCategoryClick = useCallback(
+    (slug: string | null) => {
+      const params = new URLSearchParams(searchParams.toString());
 
-    if (slug) {
-      params.set('category', slug);
-      params.delete('page');
-    } else {
-      params.delete('category');
-      params.delete('page');
-    }
+      if (slug) {
+        params.set('category', slug);
+        params.delete('page');
+      } else {
+        params.delete('category');
+        params.delete('page');
+      }
 
-    const query = params.toString();
-    router.push(`/blog${query ? `?${query}` : ''}`);
-  };
+      const query = params.toString();
+      startTransition(() => {
+        router.push(`/blog${query ? `?${query}` : ''}`);
+      });
+    },
+    [searchParams, router]
+  );
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     setSearchInput('');
     setShowFilters(false);
-    router.push('/blog');
-  };
+    startTransition(() => {
+      router.push('/blog');
+    });
+  }, [router]);
 
   const hasActiveFilters = currentSearch || currentCategory;
 
@@ -75,13 +88,16 @@ export function BlogFilters({ categories, totalPosts }: BlogFiltersProps) {
   const activeCategory = categories.find((cat) => cat.slug.current === currentCategory);
 
   return (
-    <div className="space-y-4">
+    <div className={`space-y-4 ${isPending ? 'opacity-70' : ''}`}>
       {/* Barra de búsqueda */}
-      <div className="flex flex-col sm:flex-row gap-4">
+      <search className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
+            name="search"
+            id="blog-search"
+            aria-label="Buscar artículos del blog"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Buscar artículos por título, contenido, tags..."
@@ -122,7 +138,7 @@ export function BlogFilters({ categories, totalPosts }: BlogFiltersProps) {
             </Button>
           )}
         </div>
-      </div>
+      </search>
 
       {/* Helper text para búsqueda */}
       {searchInput.length > 0 && searchInput.length < 2 && (
@@ -131,10 +147,14 @@ export function BlogFilters({ categories, totalPosts }: BlogFiltersProps) {
 
       {/* Panel de filtros */}
       {showFilters && (
-        <div className="p-4 border border-border rounded-lg bg-muted/30 space-y-4">
+        <section
+          id={filtersPanelId}
+          className="p-4 border border-border rounded-lg bg-muted/30 space-y-4"
+          aria-label="Filtros de búsqueda"
+        >
           {/* Filtro por categoría */}
-          <div>
-            <h4 className="text-sm font-medium mb-2">Categoría</h4>
+          <fieldset className="border-0 p-0 m-0">
+            <legend className="text-sm font-medium mb-2 block">Categoría</legend>
             <div className="flex flex-wrap gap-2">
               <Button
                 variant={!currentCategory ? 'default' : 'outline'}
@@ -157,16 +177,16 @@ export function BlogFilters({ categories, totalPosts }: BlogFiltersProps) {
                 </Button>
               ))}
             </div>
-          </div>
-        </div>
+          </fieldset>
+        </section>
       )}
 
       {/* Resultados */}
       <div className="flex items-center justify-between text-sm text-muted-foreground">
-        <p>
+        <output aria-live="polite" className="contents">
           {totalPosts} artículo{totalPosts !== 1 ? 's' : ''}
           {hasActiveFilters && ' (filtrados)'}
-        </p>
+        </output>
 
         {hasActiveFilters && (
           <div className="flex flex-wrap gap-1">

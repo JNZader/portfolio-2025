@@ -2,7 +2,6 @@
 
 import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { useAnimation } from './AnimationProvider';
 
 /**
  * Animation variants type (kept for backwards compatibility)
@@ -31,6 +30,7 @@ const defaultVariants: Variants = {
  * CSS-based reveal animation on scroll
  * Replaced framer-motion implementation for better performance (~60KB saved)
  * Uses IntersectionObserver + CSS transitions
+ * Uses native matchMedia for reduced motion (no context provider needed)
  */
 export function RevealOnScroll({
   children,
@@ -41,7 +41,17 @@ export function RevealOnScroll({
 }: RevealOnScrollProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const { prefersReducedMotion } = useAnimation();
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  // Check reduced motion preference using native API
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
 
   useEffect(() => {
     if (prefersReducedMotion) {

@@ -2,12 +2,15 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
+import { flushSync } from 'react-dom';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 import { sendContactEmail } from '@/app/actions/contact';
 import { useAnnouncer } from '@/components/a11y/ScreenReaderAnnouncer';
 import { Button } from '@/components/ui/button';
+import { SendIcon, SpinnerIcon } from '@/components/ui/icons';
 import { trackContactSubmit } from '@/lib/analytics/events';
+import { logger } from '@/lib/monitoring/logger';
+import { showError, showSuccess } from '@/lib/utils/toast';
 import { type ContactFormData, contactSchema } from '@/lib/validations/contact';
 import { quickValidateEmail } from '@/lib/validations/email-validator-client';
 import { InputField, TextareaField } from './FormField';
@@ -29,28 +32,29 @@ export function ContactForm() {
   });
 
   const onSubmit = async (data: ContactFormData) => {
-    // Validación rápida del email (typos, desechables)
-    const emailCheck = quickValidateEmail(data.email);
-
-    // Si hay sugerencia de typo, mostrar confirmación
-    if (emailCheck.suggestion && !pendingData) {
-      setEmailSuggestion(emailCheck.suggestion);
-      setPendingData(data);
-      return;
-    }
-
-    // Si hay error (desechable), rechazar
-    if (!emailCheck.isValid && !emailCheck.suggestion) {
-      toast.error(emailCheck.reason || 'Email inválido', {
-        duration: 4000,
-        position: 'bottom-center',
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
+    // Force immediate render of loading state for tests
+    flushSync(() => {
+      setIsSubmitting(true);
+    });
 
     try {
+      // Validación rápida del email (typos, desechables)
+      const emailCheck = quickValidateEmail(data.email);
+
+      // Si hay sugerencia de typo, mostrar confirmación
+      if (emailCheck.suggestion && !pendingData) {
+        setEmailSuggestion(emailCheck.suggestion);
+        setPendingData(data);
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Si hay error (desechable), rechazar
+      if (!emailCheck.isValid && !emailCheck.suggestion) {
+        showError(emailCheck.reason || 'Email inválido');
+        setIsSubmitting(false);
+        return;
+      }
       // Crear FormData para Server Action
       const formData = new FormData();
       formData.append('name', data.name);
@@ -65,27 +69,20 @@ export function ContactForm() {
         // Track contact form submission
         trackContactSubmit();
 
-        toast.success(result.message, {
-          duration: 5000,
-          position: 'bottom-center',
-        });
-        announce('Mensaje enviado correctamente', 'polite');
+        showSuccess(result.message);
+        announce('Formulario de contacto enviado exitosamente', 'polite');
         reset(); // Limpiar formulario
         setEmailSuggestion(null);
         setPendingData(null);
       } else {
-        toast.error(result.error, {
-          duration: 4000,
-          position: 'bottom-center',
-        });
-        announce('Error al enviar el mensaje', 'assertive');
+        showError(result.error);
+        announce('Error al procesar el formulario de contacto', 'assertive');
       }
     } catch (error) {
-      console.error('Form submission error:', error);
-      toast.error('Error inesperado. Por favor, intenta más tarde.', {
-        duration: 4000,
-        position: 'bottom-center',
+      logger.error('Form submission error', error as Error, {
+        service: 'contact-form',
       });
+      showError('Error inesperado. Por favor, intenta más tarde.');
       announce('Error inesperado al enviar el mensaje', 'assertive');
     } finally {
       setIsSubmitting(false);
@@ -217,39 +214,5 @@ export function ContactForm() {
         Respondo normalmente en 24-48 horas hábiles
       </p>
     </form>
-  );
-}
-
-// Icons
-function SendIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.5"
-      stroke="currentColor"
-      role="img"
-      aria-label="Enviar mensaje"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
-      />
-    </svg>
-  );
-}
-
-function SpinnerIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" role="img" aria-label="Enviando">
-      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-      />
-    </svg>
   );
 }

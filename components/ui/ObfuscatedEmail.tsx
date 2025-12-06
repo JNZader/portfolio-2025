@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { logger } from '@/lib/monitoring/logger';
 
 interface ObfuscatedEmailProps {
   user: string; // Parte antes del @
@@ -49,7 +50,9 @@ export function ObfuscatedEmail({
         setShowMenu(false);
       }, 2000);
     } catch (err) {
-      console.error('Error al copiar:', err);
+      logger.error('Error al copiar email', err as Error, {
+        service: 'obfuscated-email',
+      });
     }
   };
 

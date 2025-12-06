@@ -4,6 +4,7 @@ import Giscus from '@giscus/react';
 import { MessageSquare } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { SectionDivider } from '@/components/ui/SectionDivider';
+import { logger } from '@/lib/monitoring/logger';
 
 /**
  * COMPONENTE: Comments con Giscus
@@ -52,7 +53,9 @@ export function Comments({ term }: CommentsProps) {
   }, []);
 
   if (!repo || !repoId || !category || !categoryId) {
-    console.error('Giscus: Missing environment variables');
+    logger.error('Giscus: Missing environment variables', undefined, {
+      service: 'comments',
+    });
     return null;
   }
 

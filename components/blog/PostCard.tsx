@@ -93,14 +93,14 @@ export function PostCard({ post, priority = false }: PostCardProps) {
         </div>
 
         {/* Title con highlight */}
-        <h3 className="mb-2 line-clamp-2 text-xl font-semibold">
+        <h2 className="mb-2 line-clamp-2 text-xl font-semibold">
           <Link
             href={`/blog/${post.slug.current}`}
             className="hover:text-primary transition-colors"
           >
             <HighlightedText parts={titleParts} />
           </Link>
-        </h3>
+        </h2>
 
         {/* Excerpt con highlight */}
         <p className="mb-4 line-clamp-3 text-muted-foreground">
@@ -138,22 +138,26 @@ export function PostCard({ post, priority = false }: PostCardProps) {
 
 /**
  * Componente auxiliar para texto con highlight
+ * Genera keys únicas usando index + tipo + longitud del texto para evitar colisiones
  */
 function HighlightedText({ parts }: { parts: { text: string; highlight: boolean }[] }) {
   return (
     <>
-      {parts.map((part, index) =>
-        part.highlight ? (
+      {parts.map((part, index) => {
+        // Key única: tipo + índice + longitud + primer y último carácter
+        const uniqueKey = `${part.highlight ? 'hl' : 'tx'}-${index}-${part.text.length}-${part.text.charCodeAt(0) || 0}`;
+
+        return part.highlight ? (
           <mark
-            key={`highlight-${index}-${part.text.substring(0, 10)}`}
+            key={uniqueKey}
             className="bg-warning/30 text-foreground font-semibold rounded px-1"
           >
             {part.text}
           </mark>
         ) : (
-          <span key={`text-${index}-${part.text.substring(0, 10)}`}>{part.text}</span>
-        )
-      )}
+          <span key={uniqueKey}>{part.text}</span>
+        );
+      })}
     </>
   );
 }

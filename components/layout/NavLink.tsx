@@ -23,7 +23,7 @@ export function NavLink({ href, children }: NavLinkProps) {
       href={href}
       className={cn(
         'text-sm font-semibold transition-all duration-200 relative py-1 group',
-        isActive ? 'text-primary' : 'text-foreground/80 hover:text-primary'
+        isActive ? 'text-primary' : 'text-foreground hover:text-primary'
       )}
       aria-current={isActive ? 'page' : undefined}
     >
