@@ -9,7 +9,7 @@
 ![Next.js](https://img.shields.io/badge/Next.js-16.0-black)
 ![React](https://img.shields.io/badge/React-19.2-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
-![Version](https://img.shields.io/badge/version-0.18.0-green)
+![Version](https://img.shields.io/badge/version-0.22.6-green)
 
 Portfolio profesional construido con el stack más moderno de 2025. Incluye sistema de blog completo con búsqueda, comentarios, CMS headless, conexión con GitHub API, analytics avanzado, testing completo, y optimizaciones de rendimiento de nivel producción.
 
@@ -130,7 +130,7 @@ Portfolio profesional construido con el stack más moderno de 2025. Incluye sist
 - **Node:** >= 22.12.0 LTS (compatible con Prisma, Vitest y jsdom)
 
 ### CMS y APIs
-- **Headless CMS:** Sanity CMS v4.16
+- **Headless CMS:** Sanity CMS v4.18
 - **GitHub API:** Octokit v5 con rate limiting
 - **Comments:** Giscus (GitHub Discussions)
 - **Theme System:** next-themes v0.4 con SSR support
@@ -143,7 +143,7 @@ Portfolio profesional construido con el stack más moderno de 2025. Incluye sist
 
 ### UI Components
 - **Design System:** shadcn/ui
-- **Icons:** Lucide React v0.553 + React Icons v5.5
+- **Icons:** Lucide React v0.554 + React Icons v5.5
 - **Image Optimization:** Next.js Image + Sanity Image URLs + Plaiceholder
 - **Animations:** Framer Motion v12.23
 
@@ -194,7 +194,7 @@ Portfolio profesional construido con el stack más moderno de 2025. Incluye sist
 - **Image Optimization:** sharp v0.34
 
 ### Herramientas de Desarrollo
-- **Code Quality:** Biome v2.3.5 (linting + formatting)
+- **Code Quality:** Biome v2.3.7 (linting + formatting)
 - **Git Hooks:** Husky v9.1 + lint-staged v16.2
 - **Commits:** Commitlint v20.1 con Conventional Commits
 - **Versioning:** standard-version v9.5 para CHANGELOG automático
@@ -491,7 +491,6 @@ portfolio/
 │       ├── button.tsx             # Button variants
 │       ├── card.tsx               # Card component
 │       ├── Container.tsx          # Container responsive
-│       ├── CustomCursor.tsx       # Cursor personalizado
 │       ├── ExternalLink.tsx       # Link externo seguro
 │       ├── input.tsx              # Input component
 │       ├── Modal.tsx              # Modal accesible
@@ -618,8 +617,8 @@ Basado en shadcn/ui con customizaciones:
 - Theme toggle con iconos animados
 - Responsive navigation con mobile menu
 - Skip links para accesibilidad
-- Custom cursor con efectos premium
 - Loading states con skeletons
+- Microinteracciones y efectos premium (ripple, shine, hover)
 
 ## 📝 Blog Features
 
