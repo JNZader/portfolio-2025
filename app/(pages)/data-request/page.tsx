@@ -32,10 +32,8 @@ export default function DataRequestPage() {
             </div>
 
             {/* Eliminar Datos */}
-            <div className="border border-red-200 dark:border-red-900 rounded-lg p-6">
-              <h2 className="text-2xl font-semibold mb-2 text-red-600 dark:text-red-400">
-                🗑️ Eliminar mis datos
-              </h2>
+            <div className="border border-destructive/30 rounded-lg p-6">
+              <h2 className="text-2xl font-semibold mb-2 text-destructive">🗑️ Eliminar mis datos</h2>
               <p className="text-[var(--color-foreground)]/70 mb-6">
                 Solicita la eliminación permanente de todos tus datos personales. Recibirás un email
                 de verificación para confirmar. Esta acción es<strong> irreversible</strong>.

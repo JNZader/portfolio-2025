@@ -1,5 +1,6 @@
 import { Award, BookOpen, Code2, GraduationCap } from 'lucide-react';
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import { RevealOnScroll } from '@/components/animations';
 import { ClickableAvatar } from '@/components/features/ClickableAvatar';
 import { DownloadCVButton } from '@/components/ui/DownloadCVButton';
@@ -9,6 +10,12 @@ import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/comp
 import { SkillsList } from '@/components/ui/SkillsList';
 import { SKILLS_DATA } from '@/lib/constants';
 
+// Lazy load ScrollIndicator - non-critical
+const ScrollIndicator = dynamic(
+  () => import('@/components/ui/ScrollIndicator').then((mod) => ({ default: mod.ScrollIndicator })),
+  { ssr: true }
+);
+
 export const metadata: Metadata = {
   title: 'Sobre mí',
   description:
@@ -17,7 +24,7 @@ export const metadata: Metadata = {
 
 export default function SobreMiPage() {
   return (
-    <div className="pt-16">
+    <>
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">
         <HeroBackground />
@@ -40,10 +47,15 @@ export default function SobreMiPage() {
             </SectionHeader>
           </RevealOnScroll>
         </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+          <ScrollIndicator targetId="content" />
+        </div>
       </section>
 
       {/* Main Content */}
-      <Section>
+      <Section id="content">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Main Content */}
@@ -191,6 +203,6 @@ export default function SobreMiPage() {
           </div>
         </div>
       </Section>
-    </div>
+    </>
   );
 }

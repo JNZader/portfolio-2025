@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
+import { logger } from '@/lib/monitoring/logger';
 
 export default function PostError({
   error,
@@ -12,7 +13,10 @@ export default function PostError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error('Post page error:', error);
+    logger.error('Post page error', error, {
+      service: 'blog',
+      path: '/blog/[slug]',
+    });
   }, [error]);
 
   return (

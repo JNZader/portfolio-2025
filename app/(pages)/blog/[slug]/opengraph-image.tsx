@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { logger } from '@/lib/monitoring/logger';
 import { sanityFetch } from '@/sanity/lib/client';
 import { postBySlugQuery } from '@/sanity/lib/queries';
 import type { Post } from '@/types/sanity';
@@ -51,7 +52,11 @@ export default async function Image({ params }: Props) {
       tags: [`post:${slug}`],
     });
   } catch (error) {
-    console.warn('Failed to fetch post for OG image:', error);
+    logger.warn('Failed to fetch post for OG image', {
+      service: 'og-image',
+      slug,
+      error: (error as Error).message,
+    });
   }
 
   const title = post?.title || 'Blog Post';

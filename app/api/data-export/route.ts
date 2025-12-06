@@ -5,6 +5,7 @@ import { prisma } from '@/lib/db/prisma';
 import { resend } from '@/lib/email/resend';
 import { logger } from '@/lib/monitoring/logger';
 import { redis } from '@/lib/rate-limit/redis';
+import { CSRF_ERROR_RESPONSE, verifyCsrf } from '@/lib/security/security-config';
 import { dataExportSchema } from '@/lib/validations/gdpr';
 
 // Rate limiter por email: 3 solicitudes por hora
@@ -23,6 +24,18 @@ const ipRateLimiter = new Ratelimit({
 
 export async function POST(request: NextRequest) {
   try {
+    // 0. CSRF Protection
+    if (!verifyCsrf(request)) {
+      logger.warn('CSRF validation failed', {
+        path: '/api/data-export',
+        origin: request.headers.get('origin'),
+      });
+      return NextResponse.json(
+        { message: CSRF_ERROR_RESPONSE.message },
+        { status: CSRF_ERROR_RESPONSE.status }
+      );
+    }
+
     // 1. Rate limiting por IP (primero, para prevenir enumeración)
     const ip =
       request.headers.get('x-forwarded-for')?.split(',')[0] ||

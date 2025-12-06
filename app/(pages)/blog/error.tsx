@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
+import { logger } from '@/lib/monitoring/logger';
 
 export default function BlogError({
   error,
@@ -13,8 +14,10 @@ export default function BlogError({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log error to error reporting service
-    console.error('Blog page error:', error);
+    logger.error('Blog page error', error, {
+      service: 'blog',
+      path: '/blog',
+    });
   }, [error]);
 
   return (

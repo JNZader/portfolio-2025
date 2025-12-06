@@ -10,6 +10,7 @@ import { TableOfContents } from '@/components/blog/TableOfContents';
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
 import { JsonLd } from '@/components/seo/JsonLd';
 import Container from '@/components/ui/Container';
+import { logger } from '@/lib/monitoring/logger';
 import { generateBlogPostingSchema, generateBreadcrumbSchema } from '@/lib/seo/schema';
 import { generateTableOfContents } from '@/lib/utils/toc';
 import { sanityFetch } from '@/sanity/lib/client';
@@ -88,7 +89,11 @@ export async function generateStaticParams() {
       slug,
     }));
   } catch (error) {
-    console.warn('Failed to fetch post slugs for static generation:', error);
+    logger.warn('Failed to fetch post slugs for static generation', {
+      service: 'blog',
+      path: '/blog/[slug]',
+      error: (error as Error).message,
+    });
     return [];
   }
 }

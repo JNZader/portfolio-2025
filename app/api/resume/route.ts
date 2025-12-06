@@ -1,6 +1,6 @@
-import { jsPDF } from 'jspdf';
-import { NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/monitoring/logger';
+import { getClientIdentifier, resumeRateLimiter } from '@/lib/rate-limit/redis';
 import resumeData from '@/public/resume.json';
 
 interface ResumeData {
@@ -47,9 +47,25 @@ interface ResumeData {
 /**
  * API Route para generar CV en PDF
  * Endpoint: /api/resume
+ * Rate limited: 10 requests por hora por IP
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    // Rate limiting para prevenir DoS
+    const clientId = getClientIdentifier(request);
+    const { success } = await resumeRateLimiter.limit(clientId);
+
+    if (!success) {
+      logger.warn('Resume rate limit exceeded', { ip: clientId });
+      return new NextResponse('Demasiadas solicitudes. Intenta de nuevo en 1 hora.', {
+        status: 429,
+        headers: { 'Retry-After': '3600' },
+      });
+    }
+
+    // Lazy load jsPDF para reducir bundle inicial
+    const { jsPDF } = await import('jspdf');
+
     const data = resumeData as ResumeData;
     const doc = new jsPDF();
 

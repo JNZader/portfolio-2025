@@ -139,14 +139,22 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
 
         const confirmUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/newsletter/confirm?token=${confirmToken}`;
 
-        await trackEmailSend('newsletter_confirm', () =>
-          resend.emails.send({
-            from: emailConfig.from,
-            to: email,
-            subject: 'Confirma tu suscripción',
-            react: NewsletterConfirm({ confirmUrl }),
-          })
-        );
+        // Skip email sending in test/dev if Resend is not configured
+        if (process.env.RESEND_API_KEY) {
+          await trackEmailSend('newsletter_confirm', () =>
+            resend.emails.send({
+              from: emailConfig.from,
+              to: email,
+              subject: 'Confirma tu suscripción',
+              react: NewsletterConfirm({ confirmUrl }),
+            })
+          );
+        } else {
+          logger.warn('Skipping email send - RESEND_API_KEY not configured', {
+            email,
+            environment: process.env.NODE_ENV,
+          });
+        }
 
         return {
           success: true,
@@ -180,6 +188,18 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
 
     // 6. Enviar email de confirmación
     const confirmUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/newsletter/confirm?token=${confirmToken}`;
+
+    // Skip email sending in test/dev if Resend is not configured
+    if (!process.env.RESEND_API_KEY) {
+      logger.warn('Skipping email send - RESEND_API_KEY not configured', {
+        email,
+        environment: process.env.NODE_ENV,
+      });
+      return {
+        success: true,
+        message: '¡Revisa tu email! Te hemos enviado un link de confirmación.',
+      };
+    }
 
     const emailResult = await trackEmailSend('newsletter_confirm', () =>
       resend.emails.send({

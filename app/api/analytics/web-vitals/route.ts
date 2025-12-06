@@ -1,5 +1,8 @@
+import { Ratelimit } from '@upstash/ratelimit';
 import { type NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/monitoring/logger';
+import { redis } from '@/lib/rate-limit/redis';
+import { CSRF_ERROR_RESPONSE, verifyCsrf } from '@/lib/security/security-config';
 
 interface WebVitalData {
   metric: string;
@@ -11,6 +14,13 @@ interface WebVitalData {
   userAgent: string | null;
 }
 
+// Rate limiter: 100 requests per minute per IP
+const vitalsRateLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(100, '1 m'),
+  prefix: 'ratelimit:web-vitals',
+});
+
 // Simple in-memory storage (en producción usar DB)
 const vitalsData: WebVitalData[] = [];
 
@@ -18,6 +28,25 @@ const vitalsData: WebVitalData[] = [];
  * POST endpoint to receive Web Vitals data
  */
 export async function POST(request: NextRequest) {
+  // CSRF Protection
+  if (!verifyCsrf(request)) {
+    logger.warn('CSRF validation failed', {
+      path: '/api/analytics/web-vitals',
+      origin: request.headers.get('origin'),
+    });
+    return NextResponse.json(
+      { message: CSRF_ERROR_RESPONSE.message },
+      { status: CSRF_ERROR_RESPONSE.status }
+    );
+  }
+
+  // Rate Limiting
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
+  const { success: rateLimitSuccess } = await vitalsRateLimiter.limit(ip);
+  if (!rateLimitSuccess) {
+    return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
+  }
+
   try {
     const data = await request.json();
 
