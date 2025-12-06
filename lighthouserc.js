@@ -5,6 +5,10 @@
 module.exports = {
   ci: {
     collect: {
+      // Start the production server before running tests
+      startServerCommand: 'npm start',
+      startServerReadyPattern: 'Ready in',
+      startServerReadyTimeout: 60000, // 60 seconds to start
       url: [
         'http://localhost:3000',
         'http://localhost:3000/sobre-mi',
