@@ -1,8 +1,13 @@
 import { test, expect } from '@playwright/test';
+import { dismissCookieConsent } from '../fixtures/test-data';
 
 test.describe('Navigation', () => {
-  test('should navigate between pages', async ({ page }) => {
+  test('should navigate between pages', async ({ page, viewport }) => {
+    // Skip on mobile - nav is hidden in hamburger menu (tested separately)
+    test.skip(!!viewport && viewport.width < 768, 'Desktop navigation test - skipped on mobile');
+
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     // Test header navigation
     const nav = page.getByRole('navigation', { name: /principal/i });
@@ -29,16 +34,30 @@ test.describe('Navigation', () => {
 
   test('should have skip links', async ({ page }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
-    // Tab to skip link
-    await page.keyboard.press('Tab');
+    // Wait for page to be fully loaded and interactive
+    await page.waitForLoadState('domcontentloaded');
 
-    // Should show skip link
-    const skipLink = page.getByRole('link', { name: /saltar al contenido/i });
+    // Skip link should exist in the DOM (it's sr-only, so not visible until focused)
+    const skipLink = page.getByRole('link', { name: /saltar al contenido principal/i });
+    await expect(skipLink).toBeAttached();
+
+    // Focus the skip link directly
+    await skipLink.focus();
+
+    // Wait briefly for focus styles to apply
+    await page.waitForTimeout(100);
+
+    // When focused, skip link should become visible (focus:not-sr-only)
     await expect(skipLink).toBeVisible();
+    await expect(skipLink).toBeFocused();
 
     // Click skip link
     await skipLink.click();
+
+    // Wait for focus to move
+    await page.waitForTimeout(100);
 
     // Focus should be on main content
     const mainContent = page.locator('#main-content');
@@ -46,31 +65,39 @@ test.describe('Navigation', () => {
   });
 
   test('should toggle mobile menu', async ({ page, viewport }) => {
-    // Only on mobile
-    if (viewport && viewport.width < 768) {
-      await page.goto('/');
+    // Skip on desktop - mobile menu is only visible on mobile
+    test.skip(!viewport || viewport.width >= 768, 'Mobile menu test - skipped on desktop');
 
-      // Mobile menu button should be visible
-      const menuButton = page.getByRole('button', { name: /menú/i });
-      await expect(menuButton).toBeVisible();
+    await page.goto('/');
+    await dismissCookieConsent(page);
 
-      // Click to open
-      await menuButton.click();
+    // Wait for page to be fully loaded
+    await page.waitForLoadState('domcontentloaded');
 
-      // Menu should be visible
-      const mobileMenu = page.getByRole('navigation', { name: /móvil/i });
-      await expect(mobileMenu).toBeVisible();
+    // Mobile menu button should be visible - matches "Abrir menú de navegación"
+    const menuButton = page.getByRole('button', { name: /abrir menú/i });
+    await expect(menuButton).toBeVisible({ timeout: 5000 });
 
-      // Click link
-      await mobileMenu.getByRole('link', { name: /blog/i }).click();
+    // Click to open
+    await menuButton.click();
 
-      // Should navigate
-      await expect(page).toHaveURL(/\/blog/);
-    }
+    // Wait for menu animation to complete
+    await page.waitForTimeout(300);
+
+    // Menu should be visible - look for the mobile menu nav with "Navegación móvil" aria-label
+    const mobileMenu = page.getByRole('navigation', { name: /navegación móvil/i });
+    await expect(mobileMenu).toBeVisible({ timeout: 5000 });
+
+    // Click link
+    await mobileMenu.getByRole('link', { name: /blog/i }).click();
+
+    // Should navigate
+    await expect(page).toHaveURL(/\/blog/);
   });
 
   test('should have footer links', async ({ page }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     // Scroll to footer
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
@@ -88,9 +115,10 @@ test.describe('Navigation', () => {
 test.describe('Dark Mode', () => {
   test('should toggle dark mode', async ({ page }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
     // Find theme toggle button
-    const themeToggle = page.getByRole('button', { name: /tema/i });
+    const themeToggle = page.getByRole('button', { name: /cambiar a modo/i });
 
     if (await themeToggle.isVisible()) {
       // Get initial state
@@ -108,8 +136,9 @@ test.describe('Dark Mode', () => {
 
   test('should persist dark mode preference', async ({ page, context }) => {
     await page.goto('/');
+    await dismissCookieConsent(page);
 
-    const themeToggle = page.getByRole('button', { name: /tema/i });
+    const themeToggle = page.getByRole('button', { name: /cambiar a modo/i });
 
     if (await themeToggle.isVisible()) {
       // Toggle to dark

@@ -1,51 +1,32 @@
 'use client';
 
 import { useState } from 'react';
-import toast from 'react-hot-toast';
-import { subscribeToNewsletter } from '@/app/actions/newsletter';
 import { Button } from '@/components/ui/button';
+import { useNewsletterSubscription } from '@/hooks/useNewsletterSubscription';
 
 export function NewsletterInline() {
   const [email, setEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { status, subscribe } = useNewsletterSubscription();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!email || !email.includes('@')) {
-      toast.error('Por favor, ingresa un email válido.');
       return;
     }
 
-    setIsSubmitting(true);
-
-    try {
-      const formData = new FormData();
-      formData.append('email', email);
-
-      const result = await subscribeToNewsletter(formData);
-
-      if (result.success) {
-        toast.success(result.message, {
-          duration: 5000,
-        });
-        setEmail('');
-      } else {
-        toast.error(result.error, {
-          duration: 4000,
-        });
-      }
-    } catch (_error) {
-      toast.error('Error inesperado. Por favor, intenta más tarde.');
-    } finally {
-      setIsSubmitting(false);
+    const success = await subscribe(email);
+    if (success) {
+      setEmail('');
     }
   };
+
+  const isDisabled = status === 'loading' || status === 'success';
 
   return (
     <form onSubmit={handleSubmit} className="flex gap-2">
       <label htmlFor="footer-newsletter-email" className="sr-only">
-        Correo electrónico para newsletter
+        Correo electr&oacute;nico para newsletter
       </label>
       <input
         id="footer-newsletter-email"
@@ -53,12 +34,12 @@ export function NewsletterInline() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="tu@email.com"
-        className="flex h-10 flex-1 rounded-md border border-[var(--color-input)] bg-[var(--color-background)] px-3 py-2 text-sm placeholder:text-[var(--color-muted-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2"
-        disabled={isSubmitting}
+        className="flex h-10 flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        disabled={isDisabled}
         required
       />
-      <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Enviando...' : 'Suscribirse'}
+      <Button type="submit" disabled={isDisabled}>
+        {status === 'loading' ? 'Enviando...' : status === 'success' ? 'Suscrito' : 'Suscribirse'}
       </Button>
     </form>
   );

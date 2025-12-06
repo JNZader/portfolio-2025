@@ -24,11 +24,11 @@ export function ScrollIndicator({ targetId = 'content', className }: ScrollIndic
         'group flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors duration-300',
         className
       )}
-      aria-label="Desplazar hacia abajo"
+      aria-label="Explorar contenido"
     >
       <span className="text-xs font-medium uppercase tracking-wider">Explorar</span>
       <div className="relative">
-        <ChevronDown className="w-6 h-6 animate-bounce" aria-hidden="true" />
+        <ChevronDown className="w-6 h-6" aria-hidden="true" />
         <div className="absolute inset-0 bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
     </button>

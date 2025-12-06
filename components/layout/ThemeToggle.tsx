@@ -11,14 +11,16 @@ import { Button } from '@/components/ui/button';
  */
 export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const isDark = resolvedTheme === 'dark';
+
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(isDark ? 'light' : 'dark');
   };
 
   if (!mounted) {
@@ -30,11 +32,11 @@ export function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-      aria-pressed={theme === 'dark'}
+      aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+      aria-pressed={isDark}
     >
-      {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-      <span className="sr-only">Tema actual: {theme === 'dark' ? 'oscuro' : 'claro'}</span>
+      {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+      <span className="sr-only">Tema actual: {isDark ? 'oscuro' : 'claro'}</span>
     </Button>
   );
 }
@@ -44,14 +46,16 @@ export function ThemeToggle() {
  */
 export function ThemeToggleMobile() {
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const isDark = resolvedTheme === 'dark';
+
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(isDark ? 'light' : 'dark');
   };
 
   if (!mounted) {
@@ -63,11 +67,11 @@ export function ThemeToggleMobile() {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-      aria-pressed={theme === 'dark'}
+      aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+      aria-pressed={isDark}
     >
-      {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-      <span className="sr-only">Tema actual: {theme === 'dark' ? 'oscuro' : 'claro'}</span>
+      {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+      <span className="sr-only">Tema actual: {isDark ? 'oscuro' : 'claro'}</span>
     </Button>
   );
 }

@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/monitoring/logger';
-import { redis } from '@/lib/rate-limit/redis';
+import { safeRedisOp } from '@/lib/rate-limit/redis';
 import { exportUserData } from '@/lib/services/gdpr';
 
 export async function GET(request: NextRequest) {
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     }
 
     // 2. Verificar token en Redis
-    const email = await redis.get<string>(`data-export:${token}`);
+    const email = await safeRedisOp((client) => client.get<string>(`data-export:${token}`));
 
     if (!email) {
       return NextResponse.json(
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     }
 
     // 3. Eliminar token (uso único)
-    await redis.del(`data-export:${token}`);
+    await safeRedisOp((client) => client.del(`data-export:${token}`));
 
     // 4. Exportar datos
     const userData = await exportUserData(email);

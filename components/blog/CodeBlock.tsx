@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { SyntaxHighlighter } from '@/components/blog/SyntaxHighlighter';
 import { Button } from '@/components/ui/button';
 
 interface CodeBlockProps {
@@ -21,18 +20,14 @@ export function CodeBlock({ code, language, filename }: CodeBlockProps) {
   };
 
   return (
-    <div className="group relative my-6 overflow-hidden rounded-lg border bg-[var(--color-gray-950)]">
+    <div className="group relative my-6 overflow-hidden rounded-lg border bg-gray-950">
       {/* Header */}
       {(filename || language) && (
-        <div className="flex items-center justify-between border-b border-[var(--color-gray-800)] bg-[var(--color-gray-900)] px-4 py-2">
+        <div className="flex items-center justify-between border-b border-gray-800 bg-gray-900 px-4 py-2">
           <div className="flex items-center gap-2">
-            {filename && (
-              <span className="text-sm font-mono text-[var(--color-gray-300)]">{filename}</span>
-            )}
+            {filename && <span className="text-sm font-mono text-gray-300">{filename}</span>}
             {!filename && language && (
-              <span className="text-xs font-mono text-[var(--color-gray-500)] uppercase">
-                {language}
-              </span>
+              <span className="text-xs font-mono text-gray-500 uppercase">{language}</span>
             )}
           </div>
 
@@ -60,20 +55,7 @@ export function CodeBlock({ code, language, filename }: CodeBlockProps) {
 
       {/* Code */}
       <div className="overflow-x-auto">
-        <SyntaxHighlighter
-          language={language}
-          style={vscDarkPlus}
-          customStyle={{
-            margin: 0,
-            padding: '1rem',
-            background: 'transparent',
-            fontSize: '0.875rem',
-          }}
-          showLineNumbers
-          wrapLines
-        >
-          {code}
-        </SyntaxHighlighter>
+        <SyntaxHighlighter code={code} language={language} showLineNumbers wrapLines />
       </div>
     </div>
   );
@@ -89,7 +71,7 @@ function CopyIcon({ className }: { className?: string }) {
       strokeWidth="1.5"
       stroke="currentColor"
     >
-      <title>Copiar código</title>
+      <title>Copiar c&oacute;digo</title>
       <path
         strokeLinecap="round"
         strokeLinejoin="round"

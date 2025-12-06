@@ -23,6 +23,9 @@ export default defineConfig({
         'lib/generated/**', // Excluir código generado de Prisma
         'sanity/**', // Excluir configuración de Sanity
         '**/index.ts', // Excluir barrel exports
+        'lib/analytics/**', // Analytics utilities (browser-only)
+        'lib/monitoring/logger.ts', // Logger (side effects)
+        'components/ui/icons.tsx', // Static icon components
       ],
       thresholds: {
         lines: 80,

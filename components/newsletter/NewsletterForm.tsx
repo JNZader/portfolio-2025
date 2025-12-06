@@ -3,15 +3,20 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 import { subscribeToNewsletter } from '@/app/actions/newsletter';
+import { useAnnouncer } from '@/components/a11y/ScreenReaderAnnouncer';
 import { InputField } from '@/components/forms/FormField';
 import { Button } from '@/components/ui/button';
+import { MailIcon, SpinnerIcon } from '@/components/ui/icons';
 import { trackNewsletterSignup } from '@/lib/analytics/events';
+import { logger } from '@/lib/monitoring/logger';
+import { showError, showSuccess } from '@/lib/utils/toast';
 import { type NewsletterFormData, newsletterSchema } from '@/lib/validations/newsletter';
 
 export function NewsletterForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
+  const { announce } = useAnnouncer();
 
   const {
     register,
@@ -24,6 +29,7 @@ export function NewsletterForm() {
 
   const onSubmit = async (data: NewsletterFormData) => {
     setIsSubmitting(true);
+    setStatusMessage(''); // Clear previous messages
 
     try {
       const formData = new FormData();
@@ -35,89 +41,82 @@ export function NewsletterForm() {
         // Track newsletter signup
         trackNewsletterSignup(data.email);
 
-        toast.success(result.message, {
-          duration: 5000,
-          position: 'bottom-center',
-        });
+        // Set message before toast for immediate visibility
+        setStatusMessage(result.message);
+        announce(result.message, 'polite');
         reset();
+
+        showSuccess(result.message);
       } else {
-        toast.error(result.error, {
-          duration: 4000,
-          position: 'bottom-center',
-        });
+        // Set message before toast for immediate visibility
+        setStatusMessage(result.error);
+        announce(result.error, 'assertive');
+
+        showError(result.error);
       }
     } catch (error) {
-      console.error('Newsletter subscription error:', error);
-      toast.error('Error inesperado. Por favor, intenta más tarde.', {
-        duration: 4000,
-        position: 'bottom-center',
+      logger.error('Newsletter subscription error', error as Error, {
+        service: 'newsletter-form',
       });
+      const errorMsg = 'Error inesperado al suscribirse al newsletter';
+
+      // Set message before toast for immediate visibility
+      setStatusMessage(errorMsg);
+      announce(errorMsg, 'assertive');
+
+      showError('Error inesperado. Por favor, intenta más tarde.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-      <InputField
-        label="Email"
-        type="email"
-        placeholder="tu@email.com"
-        error={errors.email?.message}
-        required
-        {...register('email')}
-      />
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-4"
+      aria-label="Newsletter subscription"
+      noValidate
+    >
+      <fieldset className="border-0 p-0 m-0">
+        <legend className="sr-only">Suscripción al newsletter</legend>
 
-      <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-        {isSubmitting ? (
-          <>
-            <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />
-            Suscribiendo...
-          </>
-        ) : (
-          <>
-            <MailIcon className="mr-2 h-4 w-4" />
-            Suscribirme
-          </>
-        )}
-      </Button>
+        <InputField
+          label="Email"
+          type="email"
+          placeholder="tu@email.com"
+          error={errors.email?.message}
+          required
+          {...register('email')}
+        />
 
-      <p className="text-xs text-center text-[var(--color-muted-foreground)]">
+        <Button type="submit" size="lg" className="w-full mt-4" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <>
+              <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />
+              Suscribiendo...
+            </>
+          ) : (
+            <>
+              <MailIcon className="mr-2 h-4 w-4" />
+              Suscribirme
+            </>
+          )}
+        </Button>
+      </fieldset>
+
+      <p className="text-xs text-center text-muted-foreground">
         Te enviaremos un email de confirmación. No spam, prometido.
       </p>
+
+      {/* Mensaje de estado para tests - siempre renderizado */}
+      <output
+        aria-live="polite"
+        aria-atomic="true"
+        className="text-sm text-center mt-2 min-h-[24px] text-foreground"
+        data-testid="newsletter-status"
+      >
+        {statusMessage}
+      </output>
     </form>
-  );
-}
-
-// Icons
-function MailIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.5"
-      stroke="currentColor"
-      aria-hidden="true"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-      />
-    </svg>
-  );
-}
-
-function SpinnerIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" aria-hidden="true">
-      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-      />
-    </svg>
   );
 }

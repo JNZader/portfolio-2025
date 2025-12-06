@@ -23,7 +23,7 @@ export function EmptyState({
       </div>
 
       {/* Text */}
-      <h3 className="mb-2 text-xl font-semibold">{title}</h3>
+      <h2 className="mb-2 text-xl font-semibold">{title}</h2>
       <p className="mb-6 max-w-md text-[var(--color-muted-foreground)]">{description}</p>
 
       {/* Action */}

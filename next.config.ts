@@ -48,12 +48,12 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
 
-  // Sentry source maps
-  productionBrowserSourceMaps: true,
+  // Source maps: Only upload to Sentry, don't expose to browsers
+  productionBrowserSourceMaps: false,
 
-  // Webpack config for source maps
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
+  // Webpack config for source maps (dev only)
+  webpack: (config, { isServer, dev }) => {
+    if (!isServer && dev) {
       config.devtool = 'source-map';
     }
     return config;
@@ -62,7 +62,13 @@ const nextConfig: NextConfig = {
   // Experimental features
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['lucide-react', 'date-fns'],
+    optimizePackageImports: [
+      'lucide-react',
+      'date-fns',
+      'react-icons',
+      'react-icons/fa',
+      '@sanity/client',
+    ],
   },
 
   // Headers for security, caching and CORS
@@ -75,20 +81,22 @@ const nextConfig: NextConfig = {
         source: '/:path*',
         headers: [
           // Content Security Policy - Previene XSS y data injection
+          // HARDENED: Removido 'unsafe-eval', restringido img-src
           {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              // Scripts: permitir Vercel Live, Giscus, Google Analytics
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://*.giscus.app https://www.googletagmanager.com https://www.google-analytics.com",
+              // Scripts: permitir Vercel Live, Vercel Analytics, Giscus, Google Analytics
+              // NOTA: 'unsafe-inline' necesario para Next.js, 'unsafe-eval' REMOVIDO
+              "script-src 'self' 'unsafe-inline' https://vercel.live https://va.vercel-scripts.com https://*.giscus.app https://www.googletagmanager.com https://www.google-analytics.com",
               // Estilos: permitir inline styles (necesario para Tailwind) y Google Fonts
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              // Imágenes: permitir todas las fuentes (para blog y proyectos)
-              "img-src 'self' data: blob: https: http:",
+              // Imágenes: whitelist específica en lugar de wildcard
+              "img-src 'self' data: blob: https://cdn.sanity.io https://avatars.githubusercontent.com https://media.licdn.com https://www.google-analytics.com https://www.googletagmanager.com https://img.shields.io https://badgen.net https://raw.githubusercontent.com https://github.com https://api.securityscorecards.dev https://codecov.io https://results.pre-commit.ci",
               // Fuentes: Google Fonts
               "font-src 'self' https://fonts.gstatic.com data:",
-              // Conexiones: Sanity, Upstash, Analytics
-              "connect-src 'self' https://*.sanity.io https://cdn.sanity.io https://*.upstash.io https://vitals.vercel-insights.com https://www.google-analytics.com https://analytics.google.com",
+              // Conexiones: Sanity, Upstash, Vercel Analytics, Google Analytics
+              "connect-src 'self' https://*.sanity.io https://cdn.sanity.io https://*.upstash.io https://vitals.vercel-insights.com https://va.vercel-scripts.com https://www.google-analytics.com https://analytics.google.com",
               // Frames: solo Giscus comments
               "frame-src 'self' https://giscus.app",
               // Media: solo self

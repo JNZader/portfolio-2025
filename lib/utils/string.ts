@@ -107,3 +107,21 @@ export function pluralize(count: number, singular: string, plural?: string): str
 export function cleanWhitespace(text: string): string {
   return text.replace(/\s+/g, ' ').trim();
 }
+
+/**
+ * Escapa caracteres HTML para prevenir XSS en contenido dinámico
+ *
+ * @example
+ * escapeHtml('<script>alert("xss")</script>')
+ * // => '&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;'
+ */
+export function escapeHtml(text: string): string {
+  const htmlEscapeMap: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  };
+  return text.replace(/[&<>"']/g, (char) => htmlEscapeMap[char] || char);
+}

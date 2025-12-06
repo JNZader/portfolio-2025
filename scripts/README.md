@@ -1,6 +1,6 @@
-# 🌱 Scripts de Seed para Sanity CMS
+# 🛠️ Scripts de Gestión de Sanity CMS
 
-Scripts para poblar Sanity CMS con datos de prueba.
+Scripts para gestionar contenido en Sanity CMS: auditar, limpiar, y poblar con datos.
 
 ## 📋 Prerrequisitos
 
@@ -29,9 +29,53 @@ Agrega el token a tu archivo `.env.local`:
 SANITY_API_WRITE_TOKEN="tu-token-sanity-aqui"
 ```
 
-## 🚀 Uso
+## 🚀 Scripts Disponibles
 
-### Ejecutar Seed
+### 1. Auditar Datos Actuales
+
+Muestra todo el contenido actual en Sanity con análisis detallado:
+
+```bash
+node scripts/audit-sanity-data.mjs
+```
+
+**Qué hace**:
+- Lista todas las categorías, posts y proyectos
+- Detecta duplicados
+- Identifica contenido sin imágenes
+- Encuentra URLs ficticias
+- Detecta posts con poco contenido
+- Genera recomendaciones de limpieza
+
+**Resultado**: Informe completo en consola + archivo `SANITY_DATA_AUDIT.md`
+
+---
+
+### 2. Limpiar Base de Datos (DESTRUCTIVO)
+
+⚠️ **ADVERTENCIA**: Elimina TODOS los datos permanentemente.
+
+```bash
+node scripts/clean-sanity-data.mjs
+```
+
+**Qué hace**:
+- Pide confirmación doble
+- Elimina todos los posts
+- Elimina todos los proyectos
+- Elimina todas las categorías
+- Deja la DB limpia para contenido real
+
+**Cuándo usar**:
+- Cuando quieres eliminar datos ficticios/prueba
+- Para empezar con contenido 100% real
+- Después de revisar el audit y decidir limpiar todo
+
+**Nota**: Después de limpiar, usa la guía en `CONTENT_GUIDE.md` para agregar contenido real.
+
+---
+
+### 3. Poblar con Datos de Prueba
 
 ```bash
 node scripts/seed-sanity.mjs
@@ -148,8 +192,63 @@ Si necesitas eliminar todos los datos y volver a ejecutar el seed:
 - Usa tokens específicos para cada ambiente (dev, staging, prod)
 - Revoca tokens que ya no uses
 
+## 🎯 Flujo de Trabajo Recomendado
+
+### Para Nuevo Proyecto (Primera vez)
+
+1. **Poblar con datos de prueba** (para testing):
+   ```bash
+   node scripts/seed-sanity.mjs
+   ```
+
+2. **Probar que todo funciona**:
+   - Blog: http://localhost:3000/blog
+   - Proyectos: http://localhost:3000/proyectos
+   - Studio: http://localhost:3000/studio
+
+3. **Cuando estés listo para producción**:
+   ```bash
+   # Auditar primero
+   node scripts/audit-sanity-data.mjs
+
+   # Limpiar todo
+   node scripts/clean-sanity-data.mjs
+
+   # Agregar contenido real siguiendo CONTENT_GUIDE.md
+   ```
+
+### Para Proyecto Existente (Con datos ficticios)
+
+1. **Auditar estado actual**:
+   ```bash
+   node scripts/audit-sanity-data.mjs
+   ```
+
+2. **Revisar** `SANITY_DATA_AUDIT.md` generado
+
+3. **Decidir estrategia**:
+   - Opción A: Limpiar todo y empezar de cero (recomendado)
+   - Opción B: Limpiar duplicados manualmente y mejorar contenido
+
+4. **Si eliges Opción A**:
+   ```bash
+   node scripts/clean-sanity-data.mjs
+   ```
+
+5. **Agregar contenido real**:
+   - Seguir guía en `CONTENT_GUIDE.md`
+   - Calidad sobre cantidad
+
+## 📋 Archivos Generados
+
+| Archivo | Propósito |
+|---------|-----------|
+| `SANITY_DATA_AUDIT.md` | Informe completo de auditoría con recomendaciones |
+| `CONTENT_GUIDE.md` | Guía paso a paso para crear contenido real de calidad |
+
 ## 📚 Recursos
 
 - [Sanity Client Docs](https://www.sanity.io/docs/js-client)
 - [Sanity API Tokens](https://www.sanity.io/docs/http-auth)
 - [GROQ Query Language](https://www.sanity.io/docs/groq)
+- **Guía de Contenido**: Ver `CONTENT_GUIDE.md` en la raíz del proyecto

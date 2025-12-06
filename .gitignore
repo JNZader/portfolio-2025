@@ -42,7 +42,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files (ninguno se commitea, solo .env.example)
+# .env = produccion
+# .env.local = desarrollo (override local)
 .env
 .env.local
 .env.development.local
@@ -73,3 +75,5 @@ sanity/dist
 # Husky
 .husky/_
 /lib/generated/prisma
+/tests/manual/csrf-test.html
+/lighthouse-mobile-after.json

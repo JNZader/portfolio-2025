@@ -1,11 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { unlockAchievement } from '@/lib/achievements';
 
 export function EasterEggs() {
   const [konamiActivated, setKonamiActivated] = useState(false);
   const [_keys, setKeys] = useState<string[]>([]);
+  const consoleShown = useRef(false);
 
   // Konami Code: ↑ ↑ ↓ ↓ ← → ← → B A
   const konamiCode = [
@@ -81,8 +82,11 @@ export function EasterEggs() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [confetti]);
 
-  // Console Easter Egg
+  // Console Easter Egg - useRef evita duplicación en Strict Mode
   useEffect(() => {
+    if (consoleShown.current) return;
+    consoleShown.current = true;
+
     console.log('%c🎉 ¡Hola developer!', 'font-size: 24px; font-weight: bold; color: #1e40af;');
     console.log('%cVeo que te gusta inspeccionar código!!! 🧐', 'font-size: 14px; color: #6b7280;');
     console.log(

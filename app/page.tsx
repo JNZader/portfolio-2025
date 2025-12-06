@@ -1,4 +1,5 @@
 import { Award, Briefcase, Target, TrendingUp } from 'lucide-react';
+import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { RevealOnScroll, StaggeredReveal } from '@/components/animations';
@@ -15,6 +16,17 @@ import { SectionDivider } from '@/components/ui/SectionDivider';
 import { SkillsList } from '@/components/ui/SkillsList';
 import { SKILLS_DATA_HOME } from '@/lib/constants';
 import { generatePersonSchema, generateWebSiteSchema } from '@/lib/seo/schema';
+
+export const metadata: Metadata = {
+  title: 'Inicio',
+  description:
+    'Desarrollador backend con más de 20 años en tecnología. Experiencia en soporte técnico, mantenimiento de sistemas y desarrollo de software con Java, Spring Boot y React.',
+  openGraph: {
+    title: 'Javier Zader - Backend Developer',
+    description:
+      'Desarrollador backend con más de 20 años en tecnología. Especializado en Java, Spring Boot y React.',
+  },
+};
 
 // Lazy load newsletter component (below the fold)
 const NewsletterHero = dynamic(
@@ -48,10 +60,10 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <HeroSection
-        greeting="¡Hola! 👋"
+        greeting="¡Hola!"
+        jobTitle="Backend Developer · Java & Spring Boot"
         title="Javier Zader"
-        subtitle="Backend Java Developer"
-        description="Creo soluciones robustas y escalables combinando más de 20 años de experiencia en tecnología con frameworks modernos. Especializado en Java, Spring Boot, React y arquitecturas de microservicios."
+        description="Desarrollador backend con más de 20 años en tecnología. Experiencia en soporte técnico, mantenimiento de sistemas y desarrollo de software con Java, Spring Boot y React."
         primaryCta={{
           text: 'Ver Proyectos',
           href: '/proyectos',
@@ -67,8 +79,8 @@ export default function HomePage() {
         }}
       />
 
-      {/* Quick Stats */}
-      <Section background={SECTION_BG.MUTED} spacing="lg">
+      {/* Quick Stats - below the fold, use content-visibility */}
+      <Section background={SECTION_BG.MUTED} spacing="lg" className="content-auto">
         <StaggeredReveal
           staggerDelay={0.1}
           className="flex flex-wrap justify-center gap-8 md:gap-16"
@@ -76,15 +88,16 @@ export default function HomePage() {
           {stats.map((stat) => {
             const Icon = stat.icon;
             return (
-              <div key={stat.label} className="text-center group">
+              <div
+                key={stat.label}
+                className="text-center group card-hover p-6 rounded-xl bg-card/50 border border-transparent hover:border-primary/20"
+              >
                 <div className="flex items-center justify-center gap-3 mb-2">
                   <div className="p-3 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                    <Icon className="w-6 h-6 text-primary" />
+                    <Icon className="w-6 h-6 text-primary" aria-hidden="true" />
                   </div>
                 </div>
-                <div className="text-4xl font-bold text-primary group-hover:scale-110 transition-transform">
-                  {stat.value}
-                </div>
+                <div className="text-4xl font-bold text-display text-primary">{stat.value}</div>
                 <div className="mt-2 text-sm text-muted-foreground">{stat.label}</div>
               </div>
             );
@@ -95,8 +108,8 @@ export default function HomePage() {
       {/* Decorative Divider */}
       <SectionDivider variant="gradient" />
 
-      {/* About Preview */}
-      <Section id="content">
+      {/* About Preview - below the fold, use content-visibility */}
+      <Section id="content" className="content-auto">
         <RevealOnScroll>
           <SectionHeader centered>
             <SectionTitle>Sobre Mí</SectionTitle>
@@ -115,14 +128,14 @@ export default function HomePage() {
                   <h3 className="text-xl font-bold mb-3">Mi Trayectoria</h3>
                   <div className="space-y-3 text-muted-foreground">
                     <p>
-                      Con más de 20 años en el mundo tecnológico, he evolucionado desde
-                      administrador de sistemas hasta desarrollador backend especializado en Java y
-                      Spring Boot.
+                      Con más de 20 años en el mundo tecnológico, mi camino comenzó en soporte
+                      técnico y mantenimiento de equipos, lo que me dio una base sólida para
+                      entender los sistemas desde su núcleo.
                     </p>
                     <p>
-                      Me apasiona resolver problemas complejos mediante código elegante y eficiente.
-                      Siempre estoy aprendiendo nuevas tecnologías y mejores prácticas para
-                      mantenerme actualizado en este campo en constante evolución.
+                      Esa experiencia práctica me llevó naturalmente al desarrollo de software,
+                      donde hoy me especializo en Java y Spring Boot. Siempre estoy aprendiendo
+                      nuevas tecnologías para seguir creciendo profesionalmente.
                     </p>
                   </div>
                 </div>
@@ -143,8 +156,8 @@ export default function HomePage() {
             <RevealOnScroll delay={0.2}>
               <div className="space-y-6">
                 {/* Skills Card */}
-                <div className="bg-card p-6 rounded-lg border">
-                  <h3 className="text-lg font-bold mb-4">Habilidades Técnicas</h3>
+                <div className="glass-card p-6 rounded-xl card-hover">
+                  <h3 className="text-lg font-bold mb-4 heading-accent">Habilidades Técnicas</h3>
                   <div className="space-y-4">
                     <SkillsList title="Backend" skills={SKILLS_DATA_HOME.backend} />
                     <SkillsList title="Frontend" skills={SKILLS_DATA_HOME.frontend} />
@@ -153,8 +166,8 @@ export default function HomePage() {
                 </div>
 
                 {/* Experience Card */}
-                <div className="bg-card p-6 rounded-lg border">
-                  <h3 className="text-lg font-bold mb-4">Experiencia</h3>
+                <div className="glass-card p-6 rounded-xl card-hover">
+                  <h3 className="text-lg font-bold mb-4 heading-accent">Experiencia</h3>
                   <div className="space-y-3">
                     <div>
                       <h4 className="font-semibold text-sm">Backend Developer</h4>

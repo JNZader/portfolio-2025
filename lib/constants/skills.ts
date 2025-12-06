@@ -28,7 +28,7 @@ export const SKILLS_DATA: SkillsData = {
   ],
   frontend: [
     { name: 'React', icon: Code2, color: 'text-cyan-600 dark:text-cyan-400' },
-    { name: 'Next.js', icon: Layers, color: 'text-gray-900 dark:text-white' },
+    { name: 'Next.js', icon: Layers, color: 'text-foreground' },
     { name: 'TypeScript', icon: Code2, color: 'text-blue-600 dark:text-blue-400' },
     { name: 'Tailwind CSS', icon: Palette, color: 'text-teal-600 dark:text-teal-400' },
   ],
@@ -40,7 +40,7 @@ export const SKILLS_DATA: SkillsData = {
   devops: [
     { name: 'Docker', icon: Server, color: 'text-blue-600 dark:text-blue-400' },
     { name: 'Git', icon: GitBranch, color: 'text-orange-600 dark:text-orange-400' },
-    { name: 'GitHub', icon: GitBranch, color: 'text-gray-900 dark:text-white' },
+    { name: 'GitHub', icon: GitBranch, color: 'text-foreground' },
     { name: 'Linux', icon: Server, color: 'text-yellow-600 dark:text-yellow-400' },
     { name: 'CI/CD', icon: Target, color: 'text-green-600 dark:text-green-400' },
   ],

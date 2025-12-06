@@ -584,5 +584,5 @@ key: ${{ runner.os }}-build-${{ hashFiles('**/next.config.ts') }}-${{ hashFiles(
 
 ---
 
-**Última actualización:** v0.18.0
+**Última actualización:** v0.22.6
 **Mantenido por:** Development Team

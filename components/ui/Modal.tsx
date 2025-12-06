@@ -1,9 +1,68 @@
 'use client';
 
-import { type ReactNode, useEffect } from 'react';
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { FocusTrap } from '@/components/a11y/FocusTrap';
 import { cn } from '@/lib/utils';
+
+// Context para manejar el contador de modales abiertos de forma segura
+const ModalCountContext = createContext<{
+  increment: () => void;
+  decrement: () => void;
+} | null>(null);
+
+// Hook para usar el contexto de modales
+function useModalCount() {
+  const context = useContext(ModalCountContext);
+  // Fallback para cuando no hay provider (uso directo del Modal)
+  if (!context) {
+    return {
+      increment: () => {
+        const count = Number(document.body.dataset.modalCount || '0') + 1;
+        document.body.dataset.modalCount = String(count);
+        if (count === 1) document.body.style.overflow = 'hidden';
+      },
+      decrement: () => {
+        const count = Math.max(0, Number(document.body.dataset.modalCount || '0') - 1);
+        document.body.dataset.modalCount = String(count);
+        if (count === 0) document.body.style.overflow = '';
+      },
+    };
+  }
+  return context;
+}
+
+// Provider opcional para aplicaciones con múltiples modales
+export function ModalProvider({ children }: { children: ReactNode }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (count > 0) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [count]);
+
+  return (
+    <ModalCountContext.Provider
+      value={{
+        increment: () => setCount((c) => c + 1),
+        decrement: () => setCount((c) => Math.max(0, c - 1)),
+      }}
+    >
+      {children}
+    </ModalCountContext.Provider>
+  );
+}
 
 interface ModalProps {
   isOpen: boolean;
@@ -15,6 +74,12 @@ interface ModalProps {
 }
 
 export function Modal({ isOpen, onClose, title, description, children, size = 'md' }: ModalProps) {
+  const modalId = useId();
+  const titleId = `modal-title-${modalId}`;
+  const descriptionId = `modal-description-${modalId}`;
+  const wasOpenRef = useRef(false);
+  const { increment, decrement } = useModalCount();
+
   // Cerrar con ESC
   useEffect(() => {
     if (!isOpen) return;
@@ -27,17 +92,23 @@ export function Modal({ isOpen, onClose, title, description, children, size = 'm
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
-  // Prevenir scroll del body
+  // Prevenir scroll del body - usando context/data-attribute para manejar múltiples modales
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+    if (isOpen && !wasOpenRef.current) {
+      increment();
+      wasOpenRef.current = true;
+    } else if (!isOpen && wasOpenRef.current) {
+      decrement();
+      wasOpenRef.current = false;
     }
+
     return () => {
-      document.body.style.overflow = '';
+      if (wasOpenRef.current) {
+        decrement();
+        wasOpenRef.current = false;
+      }
     };
-  }, [isOpen]);
+  }, [isOpen, increment, decrement]);
 
   if (!isOpen) return null;
 
@@ -52,8 +123,8 @@ export function Modal({ isOpen, onClose, title, description, children, size = 'm
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       role="dialog"
       aria-modal="true"
-      aria-labelledby="modal-title"
-      aria-describedby={description ? 'modal-description' : undefined}
+      aria-labelledby={titleId}
+      aria-describedby={description ? descriptionId : undefined}
     >
       {/* Backdrop */}
       <div
@@ -104,11 +175,11 @@ export function Modal({ isOpen, onClose, title, description, children, size = 'm
 
           {/* Header */}
           <div className="mb-4">
-            <h2 id="modal-title" className="text-2xl font-semibold">
+            <h2 id={titleId} className="text-2xl font-semibold">
               {title}
             </h2>
             {description && (
-              <p id="modal-description" className="text-sm text-muted-foreground mt-2">
+              <p id={descriptionId} className="text-sm text-muted-foreground mt-2">
                 {description}
               </p>
             )}

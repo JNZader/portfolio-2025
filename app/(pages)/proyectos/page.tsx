@@ -6,6 +6,7 @@ import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
 import { getCachedFeaturedProjects } from '@/lib/github/queries';
 import type { Project } from '@/lib/github/types';
+import { logger } from '@/lib/monitoring/logger';
 import { sanityFetch } from '@/sanity/lib/client';
 import { projectsQuery } from '@/sanity/lib/queries';
 import type { Project as SanityProject } from '@/types/sanity';
@@ -46,7 +47,10 @@ export default async function ProyectosPage() {
     });
     sanityProjects = projects.map(convertSanityProject);
   } catch (error) {
-    console.error('Failed to fetch Sanity projects:', error);
+    logger.error('Failed to fetch Sanity projects', error as Error, {
+      service: 'projects',
+      path: '/proyectos',
+    });
   }
 
   // Obtener proyectos de GitHub (con fallback)
@@ -54,7 +58,10 @@ export default async function ProyectosPage() {
   try {
     githubProjects = await getCachedFeaturedProjects();
   } catch (error) {
-    console.error('Failed to fetch GitHub projects:', error);
+    logger.error('Failed to fetch GitHub projects', error as Error, {
+      service: 'projects',
+      path: '/proyectos',
+    });
   }
 
   // Combinar proyectos (Sanity primero, luego GitHub)

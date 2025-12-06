@@ -36,7 +36,7 @@ export default function Footer() {
                   href="https://github.com/JNZader"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-110 hover:-translate-y-1"
+                  className="text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-110 hover:-translate-y-1 rounded-md p-1 -m-1 hover:ring-2 hover:ring-primary/20 focus-visible:ring-2 focus-visible:ring-primary"
                   aria-label="GitHub"
                 >
                   <FaGithub className="h-5 w-5" />
@@ -45,7 +45,7 @@ export default function Footer() {
                   href="https://www.linkedin.com/in/jnzader/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-110 hover:-translate-y-1"
+                  className="text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-110 hover:-translate-y-1 rounded-md p-1 -m-1 hover:ring-2 hover:ring-primary/20 focus-visible:ring-2 focus-visible:ring-primary"
                   aria-label="LinkedIn"
                 >
                   <FaLinkedin className="h-5 w-5" />
@@ -53,7 +53,7 @@ export default function Footer() {
               </div>
               <Link
                 href="/contacto"
-                className="text-sm text-primary hover:text-primary/80 transition-colors inline-block"
+                className="text-sm text-primary hover:text-primary-700 dark:hover:text-primary-600 transition-colors inline-block underline underline-offset-2 decoration-primary/40 hover:decoration-primary-700"
               >
                 Contactar →
               </Link>
@@ -67,7 +67,7 @@ export default function Footer() {
                   <li key={item.name}>
                     <Link
                       href={item.href}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2 decoration-muted-foreground/40 hover:decoration-foreground"
                     >
                       {item.name}
                     </Link>
@@ -103,19 +103,19 @@ export default function Footer() {
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
               <span>© {currentYear} Javier Zader. Hecho con</span>
               <Heart className="h-4 w-4 text-red-500 fill-current" />
-              <span>y mucho cafe</span>
+              <span>y mucho mate 🧉</span>
             </div>
 
             <div className="flex items-center gap-6">
               <Link
                 href="/privacy"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2 decoration-muted-foreground/40 hover:decoration-foreground"
               >
                 Privacidad
               </Link>
               <Link
                 href="/data-request"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2 decoration-muted-foreground/40 hover:decoration-foreground"
               >
                 Datos GDPR
               </Link>

@@ -3,9 +3,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { showError, showSuccess } from '@/lib/utils/toast';
 import { type DataExportInput, dataExportSchema } from '@/lib/validations/gdpr';
 
 export function DataRequestForm() {
@@ -33,14 +33,14 @@ export function DataRequestForm() {
       const result = await response.json();
 
       if (!response.ok) {
-        toast.error(result.message || 'Error al solicitar datos');
+        showError(result.message || 'Error al solicitar datos');
         return;
       }
 
-      toast.success(result.message || 'Revisa tu email para descargar tus datos');
+      showSuccess(result.message || 'Revisa tu email para descargar tus datos');
       reset();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Error al exportar datos');
+      showError(error instanceof Error ? error.message : 'Error al exportar datos');
     } finally {
       setIsLoading(false);
     }
@@ -53,7 +53,7 @@ export function DataRequestForm() {
           Email
         </label>
         <Input id="email" type="email" placeholder="tu@email.com" {...register('email')} />
-        {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
+        {errors.email && <p className="mt-1 text-sm text-destructive">{errors.email.message}</p>}
       </div>
 
       <Button type="submit" disabled={isLoading}>

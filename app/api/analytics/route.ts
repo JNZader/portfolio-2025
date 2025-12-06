@@ -1,11 +1,35 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/monitoring/logger';
+import { createRateLimiter } from '@/lib/rate-limit/redis';
+import { CSRF_ERROR_RESPONSE, verifyCsrf } from '@/lib/security/security-config';
+
+// Rate limiter: 100 requests per minute per IP
+const analyticsRateLimiter = createRateLimiter('analytics', 100, '1 m');
 
 /**
  * Analytics API endpoint for Web Vitals
  * Receives metrics from client and logs/forwards them
  */
 export async function POST(request: NextRequest) {
+  // CSRF Protection
+  if (!verifyCsrf(request)) {
+    logger.warn('CSRF validation failed', {
+      path: '/api/analytics',
+      origin: request.headers.get('origin'),
+    });
+    return NextResponse.json(
+      { message: CSRF_ERROR_RESPONSE.message },
+      { status: CSRF_ERROR_RESPONSE.status }
+    );
+  }
+
+  // Rate Limiting
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
+  const { success: rateLimitSuccess } = await analyticsRateLimiter.limit(ip);
+  if (!rateLimitSuccess) {
+    return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
+  }
+
   try {
     const data = await request.json();
 

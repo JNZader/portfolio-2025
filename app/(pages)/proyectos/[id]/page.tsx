@@ -12,6 +12,7 @@ import Section from '@/components/ui/Section';
 import { getRepoReadme } from '@/lib/github/client';
 import { getCachedFeaturedProjects } from '@/lib/github/queries';
 import type { Project } from '@/lib/github/types';
+import { logger } from '@/lib/monitoring/logger';
 import { getTechIcon } from '@/lib/utils/tech-icons';
 import { sanityFetch } from '@/sanity/lib/client';
 import { projectsQuery } from '@/sanity/lib/queries';
@@ -54,7 +55,10 @@ async function getAllProjects(): Promise<Project[]> {
     });
     sanityProjects = projects.map(convertSanityProject);
   } catch (error) {
-    console.error('Failed to fetch Sanity projects:', error);
+    logger.error('Failed to fetch Sanity projects', error as Error, {
+      service: 'projects',
+      path: '/proyectos/[id]',
+    });
   }
 
   // Obtener proyectos de GitHub
@@ -62,7 +66,10 @@ async function getAllProjects(): Promise<Project[]> {
   try {
     githubProjects = await getCachedFeaturedProjects();
   } catch (error) {
-    console.error('Failed to fetch GitHub projects:', error);
+    logger.error('Failed to fetch GitHub projects', error as Error, {
+      service: 'projects',
+      path: '/proyectos/[id]',
+    });
   }
 
   return [...sanityProjects, ...githubProjects];

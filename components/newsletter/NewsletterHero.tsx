@@ -2,12 +2,10 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckCircle, Loader2, Mail } from 'lucide-react';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
-import { subscribeToNewsletter } from '@/app/actions/newsletter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useNewsletterSubscription } from '@/hooks/useNewsletterSubscription';
 import { cn } from '@/lib/utils';
 import { type NewsletterFormData, newsletterSchema } from '@/lib/validations/newsletter';
 
@@ -17,7 +15,7 @@ interface NewsletterCardProps {
 }
 
 function NewsletterCard({ className, size = 'lg' }: NewsletterCardProps) {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const { status, subscribe } = useNewsletterSubscription();
 
   const {
     register,
@@ -29,27 +27,9 @@ function NewsletterCard({ className, size = 'lg' }: NewsletterCardProps) {
   });
 
   const onSubmit = async (data: NewsletterFormData) => {
-    setStatus('loading');
-
-    try {
-      const formData = new FormData();
-      formData.append('email', data.email);
-
-      const result = await subscribeToNewsletter(formData);
-
-      if (result.success) {
-        setStatus('success');
-        toast.success(result.message, { duration: 5000 });
-        reset();
-        setTimeout(() => setStatus('idle'), 3000);
-      } else {
-        setStatus('idle');
-        toast.error(result.error, { duration: 4000 });
-      }
-    } catch (error) {
-      setStatus('idle');
-      console.error('Newsletter subscription error:', error);
-      toast.error('Error inesperado. Por favor, intenta más tarde.');
+    const success = await subscribe(data.email);
+    if (success) {
+      reset();
     }
   };
 
@@ -84,9 +64,14 @@ function NewsletterCard({ className, size = 'lg' }: NewsletterCardProps) {
         className
       )}
     >
-      <form onSubmit={handleSubmit(onSubmit)} className={currentSize.form} aria-label="Newsletter">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={currentSize.form}
+        aria-label="Newsletter"
+        noValidate
+      >
         <label htmlFor="newsletter-email" className="sr-only">
-          Correo electrónico para newsletter
+          Email para newsletter
         </label>
         <Input
           id="newsletter-email"

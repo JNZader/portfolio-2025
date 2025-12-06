@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import { RevealOnScroll } from '@/components/animations';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -21,9 +22,14 @@ import Section, {
 export const metadata = {
   title: 'Design System',
   description: 'Documentación de componentes shadcn/ui',
+  robots: { index: false, follow: false },
 };
 
 export default function DesignSystemPage() {
+  // Only available in development
+  if (process.env.NODE_ENV === 'production') {
+    notFound();
+  }
   return (
     <>
       {/* Hero */}

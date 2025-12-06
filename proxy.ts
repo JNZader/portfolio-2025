@@ -1,11 +1,38 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { logger } from '@/lib/monitoring/logger';
 
 /**
- * Middleware de seguridad global
+ * Proxy de seguridad global (Next.js 16+)
  * Se ejecuta en TODAS las rutas antes de procesarlas
+ * Reemplaza el antiguo middleware.ts
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // =========================================
+  // ADMIN ROUTE PROTECTION
+  // =========================================
+
+  // Verificar si es una ruta de admin (excepto login y unauthorized)
+  const isAdminRoute = pathname.startsWith('/admin');
+  const isAdminLogin = pathname === '/admin/login';
+  const isAdminUnauthorized = pathname === '/admin/unauthorized';
+
+  if (isAdminRoute && !isAdminLogin && !isAdminUnauthorized) {
+    // Verificar si hay cookie de sesión de NextAuth
+    const sessionToken =
+      request.cookies.get('authjs.session-token')?.value ||
+      request.cookies.get('__Secure-authjs.session-token')?.value;
+
+    if (!sessionToken) {
+      // No hay sesión, redirigir a login
+      const loginUrl = new URL('/admin/login', request.url);
+      loginUrl.searchParams.set('callbackUrl', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
   // Clona la respuesta para poder modificar headers
   const response = NextResponse.next();
 
@@ -44,12 +71,12 @@ export function middleware(request: NextRequest) {
   );
 
   if (isSuspiciousBot) {
-    // Log para monitoreo (en produccion puedes enviar a Sentry)
-    console.warn('[Security] Suspicious bot detected:', {
+    logger.warn('Suspicious bot detected', {
+      service: 'proxy',
+      action: 'bot-detection',
       userAgent,
       path: request.nextUrl.pathname,
       ip: request.headers.get('x-forwarded-for') || 'unknown',
-      timestamp: new Date().toISOString(),
     });
 
     // Opcional: Bloquear bots sospechosos (descomentar si deseas)
@@ -83,11 +110,12 @@ export function middleware(request: NextRequest) {
       });
 
       if (!isAllowed) {
-        console.warn('[Security] CSRF attempt detected:', {
+        logger.warn('CSRF attempt detected', {
+          service: 'proxy',
+          action: 'csrf-protection',
           origin,
           host,
           path: request.nextUrl.pathname,
-          timestamp: new Date().toISOString(),
         });
 
         return new NextResponse('Forbidden - Invalid Origin', {
@@ -109,7 +137,7 @@ export function middleware(request: NextRequest) {
 }
 
 /**
- * Configuracion del middleware
+ * Configuracion del proxy (Next.js 16+)
  * Aplica a todas las rutas excepto:
  * - Archivos estaticos (_next/static)
  * - Imagenes (_next/image)

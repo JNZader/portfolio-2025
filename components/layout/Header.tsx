@@ -5,7 +5,7 @@ import { MobileMenuButton } from './MobileMenuButton';
 import { NavLink } from './NavLink';
 import { ThemeToggle, ThemeToggleMobile } from './ThemeToggle';
 
-const navigation = [...MAIN_NAVIGATION, { name: 'Design System', href: '/design-system' }];
+const navigation = [...MAIN_NAVIGATION];
 
 /**
  * Header - Server Component
@@ -22,8 +22,15 @@ export default function Header() {
         >
           {/* Logo - Static */}
           <div className="flex lg:flex-1">
-            <Link href="/" className="-m-1.5 p-1.5">
-              <span className="text-xl font-bold text-primary">JZ</span>
+            <Link
+              href="/"
+              className="group -m-1.5 p-1.5 flex items-center gap-1"
+              aria-label="Ir a página de inicio"
+            >
+              <span className="text-2xl font-black tracking-tight gradient-text-accent">JZ</span>
+              <span className="hidden sm:inline text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                dev
+              </span>
             </Link>
           </div>
 

@@ -36,8 +36,9 @@ describe('Modal', () => {
 
     const dialog = screen.getByRole('dialog');
     expect(dialog).toHaveAttribute('aria-modal', 'true');
-    expect(dialog).toHaveAttribute('aria-labelledby', 'modal-title');
-    expect(dialog).toHaveAttribute('aria-describedby', 'modal-description');
+    // useId() generates unique IDs like 'modal-title-:r0:' so we check prefix
+    expect(dialog.getAttribute('aria-labelledby')).toMatch(/^modal-title-/);
+    expect(dialog.getAttribute('aria-describedby')).toMatch(/^modal-description-/);
   });
 
   it('should call onClose when close button is clicked', async () => {

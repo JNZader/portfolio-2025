@@ -1,28 +1,32 @@
-import { Ratelimit } from '@upstash/ratelimit';
 import { nanoid } from 'nanoid';
 import { type NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import { resend } from '@/lib/email/resend';
 import { logger } from '@/lib/monitoring/logger';
-import { redis } from '@/lib/rate-limit/redis';
+import { createRateLimiter, safeRedisOp } from '@/lib/rate-limit/redis';
+import { CSRF_ERROR_RESPONSE, verifyCsrf } from '@/lib/security/security-config';
 import { dataExportSchema } from '@/lib/validations/gdpr';
 
 // Rate limiter por email: 3 solicitudes por hora
-const exportRateLimiter = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(process.env.NODE_ENV === 'development' ? 100 : 3, '1 h'),
-  prefix: 'ratelimit:data-export',
-});
+const exportRateLimiter = createRateLimiter('data-export', 3, '1 h');
 
 // Rate limiter por IP: 5 solicitudes por hora (más restrictivo)
-const ipRateLimiter = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(process.env.NODE_ENV === 'development' ? 100 : 5, '1 h'),
-  prefix: 'ratelimit:data-export-ip',
-});
+const ipRateLimiter = createRateLimiter('data-export-ip', 5, '1 h');
 
 export async function POST(request: NextRequest) {
   try {
+    // 0. CSRF Protection
+    if (!verifyCsrf(request)) {
+      logger.warn('CSRF validation failed', {
+        path: '/api/data-export',
+        origin: request.headers.get('origin'),
+      });
+      return NextResponse.json(
+        { message: CSRF_ERROR_RESPONSE.message },
+        { status: CSRF_ERROR_RESPONSE.status }
+      );
+    }
+
     // 1. Rate limiting por IP (primero, para prevenir enumeración)
     const ip =
       request.headers.get('x-forwarded-for')?.split(',')[0] ||
@@ -78,7 +82,7 @@ export async function POST(request: NextRequest) {
     const token = nanoid(32);
 
     // Guardar token en Redis (expira en 15 minutos)
-    await redis.set(`data-export:${token}`, email, { ex: 900 });
+    await safeRedisOp((client) => client.set(`data-export:${token}`, email, { ex: 900 }));
 
     // 7. Enviar email de verificación
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';

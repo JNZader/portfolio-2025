@@ -7,11 +7,11 @@ export type Nullable<T> = T | null;
 export type Maybe<T> = T | null | undefined;
 
 // Async helpers
-export type AsyncReturnType<T extends (...args: any) => Promise<any>> = T extends (
-        ...args: any
-    ) => Promise<infer R>
-    ? R
-    : any;
+export type AsyncReturnType<T extends (...args: unknown[]) => Promise<unknown>> = T extends (
+    ...args: unknown[]
+  ) => Promise<infer R>
+  ? R
+  : never;
 
 // ID types
 export type ID = string | number;
@@ -33,14 +33,14 @@ export interface PaginatedResponse<T> {
 }
 
 // API Response
-export interface ApiResponse<T = any> {
-    success: boolean;
-    data?: T;
-    error?: {
-        message: string;
-        code?: string;
-        details?: any;
-    };
+export interface ApiResponse<T = unknown> {
+  success: boolean;
+  data?: T;
+  error?: {
+    message: string;
+    code?: string;
+    details?: Record<string, unknown>;
+  };
 }
 
 // SEO Metadata
