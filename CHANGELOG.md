@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.22.7](https://github.com/JNZader/portfolio-2025/compare/v0.22.6...v0.22.7) (2025-12-06)
+
+
+### Features
+
+* **auth:** add GitHub OAuth authentication system ([087096b](https://github.com/JNZader/portfolio-2025/commits/087096bca8659b5844b8e87c53000e1d0cb796f0))
+* **auth:** add GitHub OAuth authentication system ([cb06438](https://github.com/JNZader/portfolio-2025/commits/cb064381d82b896104f51f7cc60da681b9c8dc01))
+* **auth:** add NextAuth API route and update gitignore ([b30104e](https://github.com/JNZader/portfolio-2025/commits/b30104ec785754367134508ecbb6f0b787f48047))
+* **auth:** add NextAuth API route handler ([ec2a9c4](https://github.com/JNZader/portfolio-2025/commits/ec2a9c446de48222cde45addc1d117c4d2d29107))
+* **ui:** add new UI components and remove unused CustomCursor ([4e30af3](https://github.com/JNZader/portfolio-2025/commits/4e30af3e10c74c917e449cc8d0aa4e1baacc2e2d))
+* **utils:** add utility scripts and hooks ([ac9501c](https://github.com/JNZader/portfolio-2025/commits/ac9501c69b49a9ebbc7e29aae4d54807415ede9d))
+
+
+### Bug Fixes
+
+* **a11y:** fix Modal global state and MobileMenu accessibility ([b66dc72](https://github.com/JNZader/portfolio-2025/commits/b66dc7235f563225443b0c18f0bc5d215ed9cfac))
+* **ci:** fix coverage thresholds and Lighthouse server startup ([d4192af](https://github.com/JNZader/portfolio-2025/commits/d4192af2fae1413bc2397798114bb3858ac75c67))
+* **e2e:** improve test stability and CI compatibility ([ad9366f](https://github.com/JNZader/portfolio-2025/commits/ad9366fe807e475d64c63c497932f518e003f314))
+* **e2e:** improve test stability and CI compatibility ([ea8a932](https://github.com/JNZader/portfolio-2025/commits/ea8a93226be7ed4bc2191d32a48b1ae195da117d))
+* **e2e:** update tests to match current code state ([c772d28](https://github.com/JNZader/portfolio-2025/commits/c772d28b1b1bfc2883282b6c6ffd61496061ef9b))
+* **lighthouse:** relax thresholds for blog dynamic content ([83d3205](https://github.com/JNZader/portfolio-2025/commits/83d3205a290a0da2c0615974db6904f0886f3a2c))
+* **rate-limit:** add noop fallback when Redis is not configured ([3efb2bf](https://github.com/JNZader/portfolio-2025/commits/3efb2bfd210d7353bb2510246a13f1e6dd362257))
+* **security:** protect health endpoint and migrate to proxy ([e3e66fa](https://github.com/JNZader/portfolio-2025/commits/e3e66fa4a44c36d7089bbcf8a151e8ead449ba2e))
+
+
+### Documentation
+
+* update project documentation ([93a3124](https://github.com/JNZader/portfolio-2025/commits/93a3124d077bbbe8ea1ce0d1f47687f82c514653))
+
+
+### Code Refactoring
+
+* **components:** update UI and layout components ([34db1bd](https://github.com/JNZader/portfolio-2025/commits/34db1bdfba19e7e03c0d5b123086d052ee9131be))
+* **lib:** update libraries and utilities ([89d4603](https://github.com/JNZader/portfolio-2025/commits/89d46032201c8cce4a4185c4d8faf31bce935ffe))
+* **pages:** update pages and API routes ([dd9b5ad](https://github.com/JNZader/portfolio-2025/commits/dd9b5adc0edd8e2b463dbb3d852fcbe5d2f85d6b))
+* **types:** replace any with unknown in utilities ([9823115](https://github.com/JNZader/portfolio-2025/commits/98231153ac518dcf4e88fb8dab6c88242817f558))
+
 ### [0.22.6](https://github.com/JNZader/portfolio-2025/compare/v0.22.5...v0.22.6) (2025-12-04)
 
 
