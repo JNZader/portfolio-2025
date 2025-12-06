@@ -43,11 +43,11 @@ test.describe('Contact Form', () => {
     // Submit empty form
     await main.getByRole('button', { name: /enviar/i }).click();
 
-    // Should show errors
-    await expect(page.getByText(/nombre.*requerido/i)).toBeVisible();
+    // Should show errors (messages from contactSchema validation)
+    await expect(page.getByText(/nombre.*al menos 2 caracteres/i)).toBeVisible();
     await expect(page.getByText(/email.*requerido/i)).toBeVisible();
-    await expect(page.getByText(/asunto.*requerido/i)).toBeVisible();
-    await expect(page.getByText(/mensaje.*requerido/i)).toBeVisible();
+    await expect(page.getByText(/asunto.*al menos 5 caracteres/i)).toBeVisible();
+    await expect(page.getByText(/mensaje.*al menos 10 caracteres/i)).toBeVisible();
   });
 
   test('should validate email format', async ({ page }) => {
@@ -67,17 +67,28 @@ test.describe('Contact Form', () => {
     const email = testData.contact.email();
     const main = page.locator('main');
 
+    // Slow down network to catch loading state
+    await page.route('**/api/**', async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await route.continue();
+    });
+
     await main.getByRole('textbox', { name: /nombre/i }).fill(testData.contact.name);
     await main.getByRole('textbox', { name: /^email/i }).fill(email);
     await main.getByLabel(/asunto/i).fill('Test Subject');
     await main.getByRole('textbox', { name: /mensaje/i }).fill(testData.contact.message);
 
     const submitButton = main.getByRole('button', { name: /enviar/i });
-    await submitButton.click();
 
-    // Button should show loading state
-    await expect(submitButton).toBeDisabled();
-    await expect(submitButton).toHaveAttribute('aria-busy', 'true');
+    // Start submission and immediately check loading state
+    const clickPromise = submitButton.click();
+
+    // Button should show loading state (check quickly before submission completes)
+    await expect(submitButton).toBeDisabled({ timeout: 2000 });
+    await expect(submitButton).toHaveAttribute('aria-busy', 'true', { timeout: 2000 });
+
+    // Wait for submission to complete
+    await clickPromise;
   });
 
   test('should enforce character limits', async ({ page }) => {

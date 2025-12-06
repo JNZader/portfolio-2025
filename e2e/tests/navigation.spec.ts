@@ -90,7 +90,7 @@ test.describe('Dark Mode', () => {
     await page.goto('/');
 
     // Find theme toggle button
-    const themeToggle = page.getByRole('button', { name: /tema/i });
+    const themeToggle = page.getByRole('button', { name: /cambiar a modo/i });
 
     if (await themeToggle.isVisible()) {
       // Get initial state
@@ -109,7 +109,7 @@ test.describe('Dark Mode', () => {
   test('should persist dark mode preference', async ({ page, context }) => {
     await page.goto('/');
 
-    const themeToggle = page.getByRole('button', { name: /tema/i });
+    const themeToggle = page.getByRole('button', { name: /cambiar a modo/i });
 
     if (await themeToggle.isVisible()) {
       // Toggle to dark

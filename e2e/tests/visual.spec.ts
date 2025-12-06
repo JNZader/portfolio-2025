@@ -37,7 +37,7 @@ test.describe('Visual Regression', () => {
     await page.goto('/');
 
     // Toggle dark mode
-    const themeToggle = page.getByRole('button', { name: /tema/i });
+    const themeToggle = page.getByRole('button', { name: /cambiar a modo/i });
     if (await themeToggle.isVisible()) {
       await themeToggle.click();
       await page.waitForTimeout(300);

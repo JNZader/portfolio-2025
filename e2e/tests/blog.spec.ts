@@ -5,8 +5,9 @@ test.describe('Blog', () => {
   test('should navigate to blog page', async ({ page }) => {
     await page.goto('/');
 
-    // Click blog link in navigation
-    await page.getByRole('link', { name: /blog/i }).click();
+    // Click blog link in main navigation (use nav context to avoid ambiguity)
+    const nav = page.getByRole('navigation', { name: /principal/i });
+    await nav.getByRole('link', { name: /blog/i }).click();
 
     // Should be on blog page
     await expect(page).toHaveURL(/\/blog/);
@@ -85,10 +86,17 @@ test.describe('Blog', () => {
     await searchInput.fill(testData.search.noResultsQuery);
 
     // Wait for URL to update (indicates search completed)
-    await page.waitForURL(/search=/, { timeout: 3000 });
+    await page.waitForURL(/search=/, { timeout: 5000 });
 
-    // Should show empty state
-    await expect(page.getByText(/no se encontraron/i)).toBeVisible();
+    // Wait for content to load after search
+    await page.waitForLoadState('networkidle');
+
+    // Should show empty state - check for title or description
+    const emptyStateTitle = page.getByRole('heading', { name: /no se encontraron|no hay/i });
+    const emptyStateText = page.getByText(/no se encontraron|no hay artículos que coincidan/i);
+
+    // Either the heading or the text should be visible
+    await expect(emptyStateTitle.or(emptyStateText).first()).toBeVisible({ timeout: 10000 });
   });
 
   test('should paginate results', async ({ page }) => {

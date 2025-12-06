@@ -25,8 +25,8 @@ test.describe('Newsletter Subscription', () => {
     await form.getByRole('textbox', { name: /email/i }).fill(email);
     await form.getByRole('button', { name: /suscribirse/i }).click();
 
-    // Should show success message
-    await expect(page.getByText(/email de confirmación/i)).toBeVisible();
+    // Should show success message (server returns: "¡Revisa tu email! Te hemos enviado un link de confirmación.")
+    await expect(page.getByText(/revisa tu email|link de confirmación/i)).toBeVisible();
 
     // Form should be reset
     await expect(form.getByRole('textbox', { name: /email/i })).toHaveValue('');
@@ -69,38 +69,14 @@ test.describe('Newsletter Subscription', () => {
       await form.getByRole('button', { name: /suscribirse/i }).click();
 
       // Wait for either success or error message before next submission
+      // Server messages: "¡Revisa tu email..." or "Demasiados intentos..."
       await Promise.race([
-        page.getByText(/email de confirmación/i).waitFor({ timeout: 2000 }).catch(() => {}),
-        page.getByText(/demasiado.*intent/i).waitFor({ timeout: 2000 }).catch(() => {}),
+        page.getByText(/revisa tu email|link de confirmación/i).waitFor({ timeout: 2000 }).catch(() => {}),
+        page.getByText(/demasiados intentos/i).waitFor({ timeout: 2000 }).catch(() => {}),
       ]);
     }
 
-    // Should show rate limit error
-    await expect(page.getByText(/demasiado.*intent/i)).toBeVisible();
-  });
-});
-
-test.describe.skip('Newsletter Inline Form (Footer)', () => {
-  // Footer newsletter feature removed - tests skipped
-  test('should have inline form in footer', async ({ page }) => {
-    await page.goto('/');
-
-    // Scroll to footer
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-
-    const footerForm = page.locator('footer').getByRole('textbox', { name: /email/i });
-    await expect(footerForm).toBeVisible();
-  });
-
-  test('should subscribe from footer', async ({ page }) => {
-    await page.goto('/');
-
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-
-    const email = testData.newsletter.validEmail();
-    await page.locator('footer').getByRole('textbox', { name: /email/i }).fill(email);
-    await page.locator('footer').getByRole('button', { name: /suscribirse/i }).click();
-
-    await expect(page.getByText(/email de confirmación/i)).toBeVisible();
+    // Should show rate limit error (server returns: "Demasiados intentos. Por favor, intenta más tarde.")
+    await expect(page.getByText(/demasiados intentos/i)).toBeVisible();
   });
 });
