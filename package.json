@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "analyze": "cross-env ANALYZE=true npm run build",
     "check": "biome check .",
@@ -31,7 +31,6 @@
     "lighthouse:collect": "lhci collect",
     "lighthouse:assert": "lhci assert",
     "prepare": "husky",
-    "postinstall": "prisma generate",
     "release": "standard-version",
     "release:minor": "standard-version --release-as minor",
     "release:major": "standard-version --release-as major",
