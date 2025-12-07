@@ -1,3 +1,4 @@
+import sanitizeHtml from 'sanitize-html';
 import { z } from 'zod';
 
 /**
@@ -48,19 +49,9 @@ export const sanitizeContactData = (data: ContactFormData): ContactFormData => {
 };
 
 /**
- * Sanitiza texto eliminando tags HTML y escapando entidades
- * Alternativa server-side a DOMPurify que no requiere jsdom
+ * Sanitiza texto eliminando todos los tags HTML
+ * Usa sanitize-html que es compatible con serverless (sin jsdom)
  */
 export function sanitizeText(text: string): string {
-  return (
-    text
-      // Eliminar tags HTML
-      .replace(/<[^>]*>/g, '')
-      // Escapar entidades HTML peligrosas
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#x27;')
-  );
+  return sanitizeHtml(text, { allowedTags: [], allowedAttributes: {} });
 }
