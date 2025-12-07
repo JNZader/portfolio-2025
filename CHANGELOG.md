@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.22.13](https://github.com/JNZader/portfolio-2025/compare/v0.22.12...v0.22.13) (2025-12-07)
+
+
+### Bug Fixes
+
+* **build:** add postinstall script to generate Prisma client ([55b3844](https://github.com/JNZader/portfolio-2025/commits/55b3844cdea26f013918c3f864e8c8191278fc35))
+* **build:** move prisma generate to build script ([ff84837](https://github.com/JNZader/portfolio-2025/commits/ff84837e7504e6d8164c54575cf391b15bf99f9d))
+
 ### [0.22.12](https://github.com/JNZader/portfolio-2025/compare/v0.22.11...v0.22.12) (2025-12-07)
 
 ### [0.22.11](https://github.com/JNZader/portfolio-2025/compare/v0.22.10...v0.22.11) (2025-12-07)
