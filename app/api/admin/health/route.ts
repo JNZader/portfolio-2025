@@ -3,6 +3,7 @@ import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/db/prisma';
 import { resend } from '@/lib/email/resend';
 import { logger } from '@/lib/monitoring/logger';
+import packageJson from '@/package.json';
 
 /**
  * GET /api/admin/health
@@ -63,7 +64,7 @@ export async function GET() {
     const response = {
       status: isHealthy ? 'healthy' : 'degraded',
       timestamp: new Date().toISOString(),
-      version: process.env.npm_package_version || '0.22.6',
+      version: packageJson.version,
       environment: process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.NODE_ENV || 'development',
       uptime: process.uptime(),
       responseTime: `${Math.round(duration)}ms`,
