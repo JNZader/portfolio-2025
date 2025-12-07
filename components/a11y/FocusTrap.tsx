@@ -16,7 +16,7 @@ export function FocusTrap({ children, active = true, onDeactivate }: FocusTrapPr
       focusTrapOptions={{
         onDeactivate,
         escapeDeactivates: true,
-        clickOutsideDeactivates: true,
+        clickOutsideDeactivates: false,
         initialFocus: false,
         returnFocusOnDeactivate: true,
       }}
