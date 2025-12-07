@@ -96,7 +96,7 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
   const [health, setHealth] = useState<HealthData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+  const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
 
   const fetchHealth = useCallback(async () => {
     try {
@@ -134,11 +134,13 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
           <Clock className="h-4 w-4" />
           <span>
             Última actualización:{' '}
-            {lastRefresh.toLocaleTimeString('es-ES', {
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-            })}
+            {lastRefresh
+              ? lastRefresh.toLocaleTimeString('es-ES', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                })
+              : '--:--:--'}
           </span>
         </div>
         <div className="flex gap-2">

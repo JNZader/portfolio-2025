@@ -2,6 +2,7 @@
 
 import { headers } from 'next/headers';
 import { emailConfig, resend, validateEmailConfig } from '@/lib/email/resend';
+import ContactConfirm from '@/lib/email/templates/ContactConfirm';
 import ContactEmail from '@/lib/email/templates/ContactEmail';
 import { logger } from '@/lib/monitoring/logger';
 import { measureAsync, trackEmailSend } from '@/lib/monitoring/performance';
@@ -142,7 +143,33 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
       };
     }
 
-    // 9. Success
+    // 9. Enviar email de confirmación al remitente (solo si el dominio está verificado)
+    // Esto requiere que RESEND_FROM_EMAIL sea de un dominio verificado en Resend
+    const confirmEmailResult = await trackEmailSend('contact_confirm', () =>
+      resend.emails.send({
+        from: emailConfig.from,
+        to: sanitizedData.email,
+        subject: '✅ Mensaje recibido - Javier Zader',
+        react: ContactConfirm({
+          name: sanitizedData.name,
+        }),
+      })
+    );
+
+    if (confirmEmailResult.error) {
+      // Log pero no falla - el mensaje principal ya fue enviado
+      logger.warn('Failed to send contact confirmation email', {
+        email: sanitizedData.email,
+        error: confirmEmailResult.error,
+      });
+    } else {
+      logger.info('Contact confirmation email sent', {
+        email: sanitizedData.email,
+        emailId: confirmEmailResult.data?.id,
+      });
+    }
+
+    // 10. Success
     logger.info('Contact form submitted successfully', {
       email: sanitizedData.email,
       subject: sanitizedData.subject,
