@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.5](https://github.com/JNZader/portfolio-2025/compare/v1.0.4...v1.0.5) (2025-12-07)
+
+
+### Bug Fixes
+
+* **admin:** read version from package.json instead of env ([e8dfd6f](https://github.com/JNZader/portfolio-2025/commits/e8dfd6f1b03d9772ed1f32ad2bf3b9789d544492))
+
 ### [1.0.4](https://github.com/JNZader/portfolio-2025/compare/v1.0.3...v1.0.4) (2025-12-07)
 
 
