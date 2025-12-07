@@ -46,3 +46,21 @@ export const sanitizeContactData = (data: ContactFormData): ContactFormData => {
     message: data.message.trim(),
   };
 };
+
+/**
+ * Sanitiza texto eliminando tags HTML y escapando entidades
+ * Alternativa server-side a DOMPurify que no requiere jsdom
+ */
+export function sanitizeText(text: string): string {
+  return (
+    text
+      // Eliminar tags HTML
+      .replace(/<[^>]*>/g, '')
+      // Escapar entidades HTML peligrosas
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#x27;')
+  );
+}
