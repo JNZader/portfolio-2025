@@ -1,3 +1,4 @@
+import sanitizeHtml from 'sanitize-html';
 import { z } from 'zod';
 
 /**
@@ -46,3 +47,11 @@ export const sanitizeContactData = (data: ContactFormData): ContactFormData => {
     message: data.message.trim(),
   };
 };
+
+/**
+ * Sanitiza texto eliminando todos los tags HTML
+ * Usa sanitize-html que es compatible con serverless (sin jsdom)
+ */
+export function sanitizeText(text: string): string {
+  return sanitizeHtml(text, { allowedTags: [], allowedAttributes: {} });
+}

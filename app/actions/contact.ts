@@ -1,13 +1,12 @@
 'use server';
 
-import DOMPurify from 'isomorphic-dompurify';
 import { headers } from 'next/headers';
 import { emailConfig, resend, validateEmailConfig } from '@/lib/email/resend';
 import ContactEmail from '@/lib/email/templates/ContactEmail';
 import { logger } from '@/lib/monitoring/logger';
 import { measureAsync, trackEmailSend } from '@/lib/monitoring/performance';
 import { contactRateLimiter, getClientIdentifier } from '@/lib/rate-limit/redis';
-import { contactSchema, sanitizeContactData } from '@/lib/validations/contact';
+import { contactSchema, sanitizeContactData, sanitizeText } from '@/lib/validations/contact';
 import { validateEmail } from '@/lib/validations/email-validator';
 
 /**
@@ -52,10 +51,10 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
 
     // 5. Sanitización adicional contra XSS
     const sanitizedData = {
-      name: DOMPurify.sanitize(data.name, { ALLOWED_TAGS: [] }),
-      email: DOMPurify.sanitize(data.email, { ALLOWED_TAGS: [] }),
-      subject: DOMPurify.sanitize(data.subject, { ALLOWED_TAGS: [] }),
-      message: DOMPurify.sanitize(data.message, { ALLOWED_TAGS: [] }),
+      name: sanitizeText(data.name),
+      email: sanitizeText(data.email),
+      subject: sanitizeText(data.subject),
+      message: sanitizeText(data.message),
     };
 
     // 6. Validación avanzada de email (DNS/MX records, dominios desechables)
