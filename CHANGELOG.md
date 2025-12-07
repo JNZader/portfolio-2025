@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.4](https://github.com/JNZader/portfolio-2025/compare/v1.0.3...v1.0.4) (2025-12-07)
+
+
+### Bug Fixes
+
+* **prisma:** make DIRECT_URL optional for CI builds ([03c75f8](https://github.com/JNZader/portfolio-2025/commits/03c75f8cc2fbbf3c572ce57f164d797a2088544e))
+
 ### [1.0.3](https://github.com/JNZader/portfolio-2025/compare/v1.0.2...v1.0.3) (2025-12-07)
 
 
