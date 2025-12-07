@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/JNZader/portfolio-2025/compare/v1.0.1...v1.1.0) (2025-12-07)
+
+
+### Features
+
+* **contact:** add confirmation email to sender ([9fee992](https://github.com/JNZader/portfolio-2025/commits/9fee992c8475704cd6c4954350eac5120aa1c69a))
+
+
+### Bug Fixes
+
+* **admin:** read version from package.json instead of env ([e8dfd6f](https://github.com/JNZader/portfolio-2025/commits/e8dfd6f1b03d9772ed1f32ad2bf3b9789d544492))
+* **admin:** resolve React hydration error with timestamp ([d31b7c5](https://github.com/JNZader/portfolio-2025/commits/d31b7c518ee190e9fdc3430c2fcdc54589189c56))
+* **contact:** replace isomorphic-dompurify with server-compatible sanitization ([b278bc2](https://github.com/JNZader/portfolio-2025/commits/b278bc21498b311a5cbdae68c40d15bb046d5efa))
+* **prisma:** make DIRECT_URL optional for CI builds ([03c75f8](https://github.com/JNZader/portfolio-2025/commits/03c75f8cc2fbbf3c572ce57f164d797a2088544e))
+* **security:** use sanitize-html for robust XSS protection ([f3f31e2](https://github.com/JNZader/portfolio-2025/commits/f3f31e2f9027816d863d0aae1ab3d7c818a80598))
+
 ### [1.0.1](https://github.com/JNZader/portfolio-2025/compare/v1.0.0...v1.0.1) (2025-12-07)
 
 ### [0.22.13](https://github.com/JNZader/portfolio-2025/compare/v0.22.12...v0.22.13) (2025-12-07)
