@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/JNZader/portfolio-2025/compare/v0.22.8...v1.0.0) (2025-12-07)
+
+
+### Bug Fixes
+
+* **build:** add postinstall script to generate Prisma client ([55b3844](https://github.com/JNZader/portfolio-2025/commits/55b3844cdea26f013918c3f864e8c8191278fc35))
+* **build:** move prisma generate to build script ([ff84837](https://github.com/JNZader/portfolio-2025/commits/ff84837e7504e6d8164c54575cf391b15bf99f9d))
+* **mobile-menu:** use portal to render menu outside header DOM ([95ffceb](https://github.com/JNZader/portfolio-2025/commits/95ffceb920c6c4c2f2c74224458705b38ef9ca60))
+
 ### [0.22.8](https://github.com/JNZader/portfolio-2025/compare/v0.22.0...v0.22.8) (2025-12-06)
 
 
