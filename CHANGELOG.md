@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/JNZader/portfolio-2025/compare/v1.1.0...v1.2.0) (2025-12-07)
+
+
+### Features
+
+* **contact:** add confirmation email to sender ([5d7a787](https://github.com/JNZader/portfolio-2025/commits/5d7a7877ab3d2891d8851605c25812191d8672a7))
+
 ## [1.1.0](https://github.com/JNZader/portfolio-2025/compare/v1.0.1...v1.1.0) (2025-12-07)
 
 
