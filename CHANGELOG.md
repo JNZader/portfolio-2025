@@ -2,15 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [1.2.1](https://github.com/JNZader/portfolio-2025/compare/v1.2.0...v1.2.1) (2025-12-07)
+### [1.3.1](https://github.com/JNZader/portfolio-2025/compare/v1.3.0...v1.3.1) (2025-12-08)
 
-### [1.0.5](https://github.com/JNZader/portfolio-2025/compare/v1.0.4...v1.0.5) (2025-12-07)
+## [1.3.0](https://github.com/JNZader/portfolio-2025/compare/v1.2.0...v1.3.0) (2025-12-08)
 
-### [1.0.4](https://github.com/JNZader/portfolio-2025/compare/v1.0.3...v1.0.4) (2025-12-07)
 
-### [1.0.3](https://github.com/JNZader/portfolio-2025/compare/v1.0.2...v1.0.3) (2025-12-07)
+### Features
 
-### [1.0.2](https://github.com/JNZader/portfolio-2025/compare/v1.0.1...v1.0.2) (2025-12-07)
+* **components:** add BackToTop button and Uptime Robot integration ([2a68542](https://github.com/JNZader/portfolio-2025/commits/2a68542b2c8c66e21d355383612724e0ae22caa1))
 
 ## [1.2.0](https://github.com/JNZader/portfolio-2025/compare/v1.1.0...v1.2.0) (2025-12-07)
 
