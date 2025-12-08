@@ -10,6 +10,7 @@ import { CookieConsent } from '@/components/gdpr/CookieConsent';
 import { ClientComponents } from '@/components/layout/ClientComponents';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
+import { BackToTop } from '@/components/ui/BackToTop';
 import { VercelAnalyticsProvider } from '@/lib/analytics/vercel';
 import { ThemeProvider } from '@/lib/design/theme-provider';
 import { ResourceHints } from '@/lib/performance/resource-hints';
@@ -149,6 +150,9 @@ export default function RootLayout({
             </Suspense>
             <Suspense fallback={null}>
               <CookieConsent />
+            </Suspense>
+            <Suspense fallback={null}>
+              <BackToTop />
             </Suspense>
             <Suspense fallback={null}>
               <WebVitals />
