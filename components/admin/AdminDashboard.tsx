@@ -19,6 +19,7 @@ import { signOut } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { UptimeStatus } from './UptimeStatus';
 
 interface HealthData {
   status: 'healthy' | 'degraded' | 'unhealthy';
@@ -243,60 +244,66 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
             </Card>
           </div>
 
-          {/* Services Status */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5" />
-                Estado de Servicios
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="divide-y divide-border">
-                {/* Database */}
-                <div className="flex items-center justify-between py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
-                      <Database className="h-5 w-5 text-blue-500" />
-                    </div>
-                    <div>
-                      <p className="font-medium">Base de Datos</p>
-                      <p className="text-sm text-muted-foreground">PostgreSQL / Prisma</p>
-                    </div>
-                  </div>
-                  <StatusBadge status={health.services.database} />
-                </div>
+          {/* Uptime Monitor + Services Status */}
+          <div className="grid gap-4 lg:grid-cols-2">
+            {/* Uptime Robot Monitor */}
+            <UptimeStatus />
 
-                {/* Email */}
-                <div className="flex items-center justify-between py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-500/10">
-                      <Mail className="h-5 w-5 text-purple-500" />
+            {/* Services Status */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-5 w-5" />
+                  Estado de Servicios
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="divide-y divide-border">
+                  {/* Database */}
+                  <div className="flex items-center justify-between py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
+                        <Database className="h-5 w-5 text-blue-500" />
+                      </div>
+                      <div>
+                        <p className="font-medium">Base de Datos</p>
+                        <p className="text-sm text-muted-foreground">PostgreSQL / Prisma</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium">Servicio de Email</p>
-                      <p className="text-sm text-muted-foreground">Resend</p>
-                    </div>
+                    <StatusBadge status={health.services.database} />
                   </div>
-                  <StatusBadge status={health.services.email} />
-                </div>
 
-                {/* Environment Config */}
-                <div className="flex items-center justify-between py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-500/10">
-                      <Settings className="h-5 w-5 text-green-500" />
+                  {/* Email */}
+                  <div className="flex items-center justify-between py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-500/10">
+                        <Mail className="h-5 w-5 text-purple-500" />
+                      </div>
+                      <div>
+                        <p className="font-medium">Servicio de Email</p>
+                        <p className="text-sm text-muted-foreground">Resend</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium">Configuración</p>
-                      <p className="text-sm text-muted-foreground">Variables de entorno</p>
-                    </div>
+                    <StatusBadge status={health.services.email} />
                   </div>
-                  <StatusBadge status={health.services.env_config} />
+
+                  {/* Environment Config */}
+                  <div className="flex items-center justify-between py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-500/10">
+                        <Settings className="h-5 w-5 text-green-500" />
+                      </div>
+                      <div>
+                        <p className="font-medium">Configuración</p>
+                        <p className="text-sm text-muted-foreground">Variables de entorno</p>
+                      </div>
+                    </div>
+                    <StatusBadge status={health.services.env_config} />
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
 
           {/* User Info */}
           <Card>
