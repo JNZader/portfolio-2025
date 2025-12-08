@@ -11,7 +11,30 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
 ![Version](https://img.shields.io/badge/version-0.22.6-green)
 
+![Portfolio Preview](https://placehold.co/1200x675/1e293b/ffffff?text=Portfolio+Preview)
+<!-- TODO: Reemplazar esta imagen con una captura de pantalla real de tu proyecto (Home Page) -->
+
+
 Portfolio profesional construido con el stack más moderno de 2025. Incluye sistema de blog completo con búsqueda, comentarios, CMS headless, conexión con GitHub API, analytics avanzado, testing completo, y optimizaciones de rendimiento de nivel producción.
+
+## 📑 Índice
+
+- [Características](#-características)
+- [Stack Tecnológico](#-stack-tecnológico)
+- [Setup y Desarrollo](#-setup-y-desarrollo)
+- [Estructura del Proyecto](#-estructura-del-proyecto)
+- [Sistema de Diseño](#-sistema-de-diseño)
+- [Funcionalidades del Blog](#-blog-features)
+- [Comentarios](#-comentarios)
+- [Convenciones de Código](#-convenciones-de-código)
+- [Flujo de Trabajo Git](#-flujo-de-trabajo-git)
+- [Integración con GitHub](#-integración-con-github)
+- [Testing](#-testing)
+- [Performance](#-performance)
+- [Seguridad](#-seguridad)
+- [Deployment](#-deployment)
+- [Licencia](#-licencia)
+- [Créditos](#-créditos)
 
 ## ✨ Características
 
@@ -322,7 +345,7 @@ Ver documentación completa en `scripts/README.md`
 
 4. Agrega las variables a `.env.local` (ver arriba)
 
-Ver documentación completa en la guía `docs/08_GISCUS_COMENTARIOS.md`
+
 
 ### 7. Comandos de Desarrollo
 
@@ -674,7 +697,7 @@ Los comentarios se moderan desde la pestaña "Discussions" en GitHub:
 - Bloquear usuarios
 - Lock discussions (cerrar comentarios)
 
-Ver documentación completa en `docs/08_GISCUS_COMENTARIOS.md`
+
 
 ## 📝 Convenciones de Código
 
@@ -876,7 +899,7 @@ Asegúrate de configurar todas las variables de `.env.local` en tu plataforma de
 
 ## 📄 Licencia
 
-MIT
+Este proyecto está bajo la Licencia **MIT**. Ver el archivo [LICENSE](LICENSE) para más detalles.
 
 ## 🙏 Créditos
 
