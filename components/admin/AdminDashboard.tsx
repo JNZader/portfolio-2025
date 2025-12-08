@@ -244,6 +244,24 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
             </Card>
           </div>
 
+          {/* Quick Actions */}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <a href="/admin/newsletter" className="block transition-transform hover:scale-[1.02]">
+              <Card className="h-full bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800 hover:border-blue-400 dark:hover:border-blue-600 transition-colors cursor-pointer">
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                    Newsletter
+                  </CardTitle>
+                  <Mail className="h-4 w-4 text-blue-700 dark:text-blue-300" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-xl font-bold text-blue-900 dark:text-blue-100">Enviar</div>
+                  <p className="text-xs text-blue-600 dark:text-blue-400">Crear nuevo broadcast</p>
+                </CardContent>
+              </Card>
+            </a>
+          </div>
+
           {/* Uptime Monitor + Services Status */}
           <div className="grid gap-4 lg:grid-cols-2">
             {/* Uptime Robot Monitor */}
