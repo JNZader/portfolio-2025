@@ -26,9 +26,11 @@ export const CSP_ALLOWED_DOMAINS = {
     'https://*.giscus.app',
     'https://www.googletagmanager.com',
     'https://www.google-analytics.com',
+    'https://*.sanity.io',
+    'https://core.sanity-cdn.com',
   ],
-  styles: ['https://fonts.googleapis.com'],
-  fonts: ['https://fonts.gstatic.com'],
+  styles: ['https://fonts.googleapis.com', 'https://maxcdn.bootstrapcdn.com'],
+  fonts: ['https://fonts.gstatic.com', 'https://maxcdn.bootstrapcdn.com'],
   images: [
     'https://cdn.sanity.io',
     'https://*.sanity.io',
@@ -45,6 +47,8 @@ export const CSP_ALLOWED_DOMAINS = {
   connect: [
     'https://*.sanity.io',
     'https://cdn.sanity.io',
+    'https://sanity-cdn.com',
+    'https://*.sanity-cdn.com',
     'https://*.upstash.io',
     'https://vitals.vercel-insights.com',
     'https://va.vercel-scripts.com',
