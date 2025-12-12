@@ -26,6 +26,7 @@ jobs:
         run: npx prisma generate
         env:
           DATABASE_URL: file:./prisma/dev.db
+          DIRECT_URL: file:./prisma/dev.db
 
       - name: Biome Check(lint+format)
         run: npm run check
@@ -74,11 +75,13 @@ jobs:
         run: npx prisma generate
         env:
           DATABASE_URL: file:./prisma/dev.db
+          DIRECT_URL: file:./prisma/dev.db
 
       - name: Build
         run: npm run build
         env:
           DATABASE_URL: file:./prisma/dev.db
+          DIRECT_URL: file:./prisma/dev.db
           SKIP_ENV_VALIDATION: true
           NEXT_PUBLIC_SITE_URL: http://localhost:3000
           NEXT_PUBLIC_SANITY_PROJECT_ID: dummy-project-id

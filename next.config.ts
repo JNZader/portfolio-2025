@@ -86,17 +86,17 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              // Scripts: permitir Vercel Live, Vercel Analytics, Giscus, Google Analytics
+              // Scripts: permitir Vercel Live, Vercel Analytics, Giscus, Google Analytics, Sanity
               // NOTA: 'unsafe-inline' necesario para Next.js, 'unsafe-eval' REMOVIDO
-              "script-src 'self' 'unsafe-inline' https://vercel.live https://va.vercel-scripts.com https://*.giscus.app https://www.googletagmanager.com https://www.google-analytics.com",
-              // Estilos: permitir inline styles (necesario para Tailwind) y Google Fonts
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "script-src 'self' 'unsafe-inline' https://vercel.live https://va.vercel-scripts.com https://*.giscus.app https://www.googletagmanager.com https://www.google-analytics.com https://*.sanity.io https://core.sanity-cdn.com",
+              // Estilos: permitir inline styles (necesario para Tailwind), Google Fonts, y Font Awesome (EasyMDE)
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://maxcdn.bootstrapcdn.com",
               // Imágenes: whitelist específica en lugar de wildcard
               "img-src 'self' data: blob: https://cdn.sanity.io https://avatars.githubusercontent.com https://media.licdn.com https://www.google-analytics.com https://www.googletagmanager.com https://img.shields.io https://badgen.net https://raw.githubusercontent.com https://github.com https://api.securityscorecards.dev https://codecov.io https://results.pre-commit.ci",
-              // Fuentes: Google Fonts
-              "font-src 'self' https://fonts.gstatic.com data:",
+              // Fuentes: Google Fonts y Font Awesome (EasyMDE)
+              "font-src 'self' https://fonts.gstatic.com https://maxcdn.bootstrapcdn.com data:",
               // Conexiones: Sanity, Upstash, Vercel Analytics, Google Analytics
-              "connect-src 'self' https://*.sanity.io https://cdn.sanity.io https://*.upstash.io https://vitals.vercel-insights.com https://va.vercel-scripts.com https://www.google-analytics.com https://analytics.google.com",
+              "connect-src 'self' https://*.sanity.io https://cdn.sanity.io https://sanity-cdn.com https://*.sanity-cdn.com https://*.upstash.io https://vitals.vercel-insights.com https://va.vercel-scripts.com https://www.google-analytics.com https://analytics.google.com",
               // Frames: solo Giscus comments
               "frame-src 'self' https://giscus.app",
               // Media: solo self

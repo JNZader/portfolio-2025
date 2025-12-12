@@ -108,6 +108,7 @@ export const postBySlugQuery = groq`
     },
     author,
     seo,
+    markdownBody,
     body
   }
 `;
@@ -161,7 +162,7 @@ export const paginatedPostsQuery = groq`{
   "posts": *[
     _type == "post" &&
     (!defined($category) || $category in categories[]->slug.current) &&
-    (!defined($search) || [title, excerpt, pt::text(body)] match $search)
+    (!defined($search) || [title, excerpt, markdownBody, pt::text(body)] match $search)
   ] | order(publishedAt desc) [$start...$end] {
     _id,
     title,
@@ -182,7 +183,7 @@ export const paginatedPostsQuery = groq`{
   "total": count(*[
     _type == "post" &&
     (!defined($category) || $category in categories[]->slug.current) &&
-    (!defined($search) || [title, excerpt, pt::text(body)] match $search)
+    (!defined($search) || [title, excerpt, markdownBody, pt::text(body)] match $search)
   ])
 }`;
 

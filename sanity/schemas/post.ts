@@ -116,9 +116,16 @@ export default defineType({
             },
         }),
         defineField({
+            name: 'markdownBody',
+            title: 'Body (Markdown)',
+            type: 'markdown',
+            description: 'Write content in Markdown - easier for copy/paste. If both fields have content, Markdown takes priority.',
+        }),
+        defineField({
             name: 'body',
-            title: 'Body',
+            title: 'Body (Rich Text)',
             type: 'array',
+            description: 'Alternative: Use the visual editor. Only used if Markdown Body is empty.',
             of: [
                 {
                     type: 'block',
@@ -207,7 +214,6 @@ export default defineType({
                     },
                 },
             ],
-            validation: (Rule) => Rule.required(),
         }),
     ],
     preview: {
