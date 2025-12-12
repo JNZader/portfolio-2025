@@ -16,7 +16,9 @@ interface PortableTextChild {
  * Genera Table of Contents desde Portable Text
  * Extrae h2 y h3 del body
  */
-export function generateTableOfContents(body: PortableTextBlock[]): TocItem[] {
+export function generateTableOfContents(body?: PortableTextBlock[]): TocItem[] {
+  if (!body) return [];
+
   const toc: TocItem[] = [];
 
   body.forEach((block) => {
@@ -34,6 +36,39 @@ export function generateTableOfContents(body: PortableTextBlock[]): TocItem[] {
       }
     }
   });
+
+  return toc;
+}
+
+/**
+ * Genera Table of Contents desde Markdown
+ * Extrae ## y ### del contenido
+ */
+export function generateTableOfContentsFromMarkdown(markdown: string): TocItem[] {
+  const toc: TocItem[] = [];
+  const lines = markdown.split('\n');
+
+  for (const line of lines) {
+    // Match ## and ### headings (not inside code blocks)
+    const h2Match = line.match(/^## (.+)$/);
+    const h3Match = line.match(/^### (.+)$/);
+
+    if (h2Match) {
+      const text = h2Match[1].trim();
+      toc.push({
+        id: slugifyHeading(text),
+        text,
+        level: 2,
+      });
+    } else if (h3Match) {
+      const text = h3Match[1].trim();
+      toc.push({
+        id: slugifyHeading(text),
+        text,
+        level: 3,
+      });
+    }
+  }
 
   return toc;
 }

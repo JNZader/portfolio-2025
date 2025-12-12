@@ -1,7 +1,48 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import resumeDataRaw from '@/lib/data/resume.json';
 import { logger } from '@/lib/monitoring/logger';
 import { getClientIdentifier, resumeRateLimiter } from '@/lib/rate-limit/redis';
-import resumeData from '@/public/resume.json';
+
+interface ResumeDataRaw {
+  personalInfo: {
+    name: string;
+    title: string;
+    email_encoded: string;
+    phone: string;
+    location: string;
+    website: string;
+    linkedin: string;
+    github: string;
+  };
+  summary: string;
+  experience: Array<{
+    company: string;
+    position: string;
+    location: string;
+    startDate: string;
+    endDate: string;
+    highlights: string[];
+  }>;
+  projects?: Array<{
+    name: string;
+    description: string;
+    highlights: string[];
+  }>;
+  education: Array<{
+    institution: string;
+    degree: string;
+    location: string;
+    startDate: string;
+    endDate: string;
+    details?: string[];
+  }>;
+  skills: Record<string, string[]>;
+  softSkills?: string[];
+  languages: Array<{
+    name: string;
+    level: string;
+  }>;
+}
 
 interface ResumeData {
   personalInfo: {
@@ -66,7 +107,19 @@ export async function GET(request: NextRequest) {
     // Lazy load jsPDF para reducir bundle inicial
     const { jsPDF } = await import('jspdf');
 
-    const data = resumeData as ResumeData;
+    // Decodificar email desde base64 (protección anti-scraping)
+    const rawData = resumeDataRaw as ResumeDataRaw;
+    const decodedEmail = Buffer.from(rawData.personalInfo.email_encoded, 'base64').toString(
+      'utf-8'
+    );
+
+    const data: ResumeData = {
+      ...rawData,
+      personalInfo: {
+        ...rawData.personalInfo,
+        email: decodedEmail,
+      },
+    };
     const doc = new jsPDF();
 
     // Colors (matching LaTeX template)

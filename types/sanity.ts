@@ -69,5 +69,6 @@ export interface Post {
 		metaDescription?: string;
 		keywords?: string[];
 	};
-	body: PortableTextBlock[];
+	markdownBody?: string;
+	body?: PortableTextBlock[];
 }

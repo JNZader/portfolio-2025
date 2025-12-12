@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { BlogPostTracker } from '@/components/blog/BlogPostTracker';
 import { Comments } from '@/components/blog/Comments';
+import { MarkdownRenderer } from '@/components/blog/MarkdownRenderer';
 import { PortableTextRenderer } from '@/components/blog/PortableTextRenderer';
 import { PostHeader } from '@/components/blog/PostHeader';
 import { RelatedPosts } from '@/components/blog/RelatedPosts';
@@ -12,7 +13,7 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import Container from '@/components/ui/Container';
 import { logger } from '@/lib/monitoring/logger';
 import { generateBlogPostingSchema, generateBreadcrumbSchema } from '@/lib/seo/schema';
-import { generateTableOfContents } from '@/lib/utils/toc';
+import { generateTableOfContents, generateTableOfContentsFromMarkdown } from '@/lib/utils/toc';
 import { sanityFetch } from '@/sanity/lib/client';
 import { getImageUrl } from '@/sanity/lib/image';
 import { allPostSlugsQuery, postBySlugQuery, relatedPostsQuery } from '@/sanity/lib/queries';
@@ -115,8 +116,10 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
-  // Generate TOC
-  const toc = generateTableOfContents(post.body);
+  // Generate TOC (from Markdown if available, otherwise from Portable Text)
+  const toc = post.markdownBody
+    ? generateTableOfContentsFromMarkdown(post.markdownBody)
+    : generateTableOfContents(post.body);
 
   // Fetch related posts
   const categorySlugArray = post.categories.map((cat) => cat.slug.current);
@@ -180,8 +183,15 @@ export default async function PostPage({ params }: PostPageProps) {
             <article className="min-w-0">
               {/* Body - Card estilizado con MEJOR OPACIDAD */}
               <div className="mb-12 bg-card backdrop-blur-sm rounded-xl border-2 border-border p-8 md:p-12 shadow-md">
-                {/* biome-ignore lint/suspicious/noExplicitAny: Type incompatibility between Sanity and Portable Text library */}
-                <PortableTextRenderer value={post.body as any} />
+                {/* Markdown takes priority if available, otherwise use Portable Text */}
+                {post.markdownBody ? (
+                  <MarkdownRenderer content={post.markdownBody} />
+                ) : post.body ? (
+                  /* biome-ignore lint/suspicious/noExplicitAny: Type incompatibility between Sanity and Portable Text library */
+                  <PortableTextRenderer value={post.body as any} />
+                ) : (
+                  <p className="text-muted-foreground">No content available.</p>
+                )}
               </div>
 
               {/* Share buttons - Card con MEJOR OPACIDAD */}
