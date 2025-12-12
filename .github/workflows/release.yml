@@ -37,6 +37,7 @@ jobs:
         run: npx prisma generate
         env:
           DATABASE_URL: file:./prisma/dev.db
+          DIRECT_URL: file:./prisma/dev.db
 
       - name: Configure Git
         run: |

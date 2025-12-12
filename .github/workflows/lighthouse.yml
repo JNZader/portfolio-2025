@@ -47,6 +47,7 @@ jobs:
       - name: Setup environment variables
         run: |
           echo "DATABASE_URL=file:./prisma/dev.db" >> $GITHUB_ENV
+          echo "DIRECT_URL=file:./prisma/dev.db" >> $GITHUB_ENV
           echo "SKIP_ENV_VALIDATION=true" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_ENABLE_ANALYTICS=false" >> $GITHUB_ENV
 
