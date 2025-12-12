@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/JNZader/portfolio-2025/compare/v1.4.0...v1.5.0) (2025-12-12)
+
+
+### Features
+
+* **blog:** add Markdown support for blog posts ([b8b1249](https://github.com/JNZader/portfolio-2025/commits/b8b1249b9da5233af98e1729c8ca52e3b394bec0))
+* **security:** add anti-scraping protection for CV data ([dda6505](https://github.com/JNZader/portfolio-2025/commits/dda650565387d311ebe3380b88349fffd9a07aee))
+
+
+### Bug Fixes
+
+* **ci:** add DIRECT_URL env var for Prisma in all workflows ([d27903f](https://github.com/JNZader/portfolio-2025/commits/d27903f670cc327adf127482f6108e3b73007788))
+* **deps:** update Next.js to 16.0.10 (security patch) ([d3185bc](https://github.com/JNZader/portfolio-2025/commits/d3185bc6362cc2a3996388ded777900fa2a0f466))
+* **security:** update CSP to allow Sanity Studio resources ([5415a0d](https://github.com/JNZader/portfolio-2025/commits/5415a0d9a7ba29cd74142031d89f8bf381ffbaab))
+
+
+### Documentation
+
+* add portfolio features article and publishing guide ([a6dbe89](https://github.com/JNZader/portfolio-2025/commits/a6dbe898ee9f012aea2636b8fc1314ea4381c472))
+
+### [1.3.4](https://github.com/JNZader/portfolio-2025/compare/v1.3.3...v1.3.4) (2025-12-08)
+
 ## [1.4.0](https://github.com/JNZader/portfolio-2025/compare/v1.3.3...v1.4.0) (2025-12-08)
 
 
