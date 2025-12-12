@@ -95,7 +95,67 @@ Antes de crear tu primer post, necesitas al menos una categoría.
 
 ---
 
-### Paso 5: Escribir el Contenido (Body)
+### Paso 5: Escribir el Contenido
+
+Tienes **dos opciones** para escribir el contenido del post:
+
+#### Opción A: Markdown (Recomendado para copy/paste)
+
+Si ya tienes el contenido escrito en Markdown (por ejemplo, de un README, Notion, o editor externo), usa el campo **"Body (Markdown)"**:
+
+1. En el formulario del post, busca el campo **"Body (Markdown)"**
+2. Pega directamente tu contenido Markdown
+3. El contenido se renderizará automáticamente con estilos
+
+**Sintaxis Markdown soportada:**
+
+```markdown
+# Heading 1 (evitar, usar H2 como máximo)
+## Heading 2 - Secciones principales
+### Heading 3 - Subsecciones
+
+**Texto en negrita** y *texto en cursiva*
+
+- Lista con bullets
+- Otro item
+  - Sub-item
+
+1. Lista numerada
+2. Segundo item
+
+`código inline`
+
+\`\`\`typescript
+// Bloque de código con sintaxis highlighting
+const greeting = "Hola mundo";
+console.log(greeting);
+\`\`\`
+
+[Texto del link](https://ejemplo.com)
+
+![Alt de imagen](url-de-imagen.jpg)
+
+> Cita o blockquote
+
+| Columna 1 | Columna 2 |
+|-----------|-----------|
+| Celda 1   | Celda 2   |
+
+---
+Línea horizontal
+```
+
+**Ventajas de Markdown:**
+- Ideal para copiar contenido existente
+- Más rápido para escribir
+- Soporte completo de GitHub Flavored Markdown (GFM)
+- Tablas, listas de tareas, y más
+
+---
+
+#### Opción B: Portable Text (Editor visual)
+
+Si prefieres un editor visual tipo Word, usa el campo **"Body"** (Portable Text):
 
 El editor de Sanity soporta **Portable Text**, un formato rico que incluye:
 
@@ -259,6 +319,9 @@ Vercel
 
 ### Paso 5: Escribir la Descripción (Body)
 
+> **Nota:** Los proyectos usan el editor visual (Portable Text), no Markdown.
+> Si necesitas copiar contenido de un README, deberás formatearlo manualmente en el editor.
+
 El body del proyecto soporta los mismos elementos que el blog:
 - Párrafos y headings
 - Code blocks
@@ -418,8 +481,49 @@ El body del proyecto soporta los mismos elementos que el blog:
 
 ---
 
+## Tips y Mejores Prácticas
+
+### ¿Cuándo usar Markdown vs Portable Text?
+
+| Situación | Recomendación |
+|-----------|---------------|
+| Copiar contenido de otro lugar (Notion, README, etc.) | **Markdown** |
+| Escribir desde cero en Sanity | Portable Text o Markdown |
+| Necesitas tablas | **Markdown** |
+| Necesitas imágenes con hotspot/caption | **Portable Text** |
+| Post técnico con mucho código | **Markdown** |
+
+### Atajos útiles en el editor
+
+- `Ctrl+B` - Negrita
+- `Ctrl+I` - Cursiva
+- `Ctrl+K` - Insertar link
+- `Ctrl+Z` - Deshacer
+- `Ctrl+Shift+Z` - Rehacer
+
+### Optimización de imágenes
+
+1. **Tamaño recomendado**: 1200x630px para imágenes principales (ratio 1.91:1)
+2. **Formato**: WebP o JPG comprimido
+3. **Peso máximo**: < 500KB para carga rápida
+4. **Herramientas gratuitas**:
+   - [Squoosh](https://squoosh.app) - Compresión de imágenes
+   - [TinyPNG](https://tinypng.com) - Optimización PNG/JPG
+   - [Remove.bg](https://remove.bg) - Remover fondos
+
+### SEO básico para posts
+
+1. **Título**: Incluye la palabra clave principal al inicio
+2. **Excerpt**: Resume el contenido en 1-2 oraciones con keywords
+3. **Slug**: Corto, descriptivo, sin palabras vacías (el, la, de, etc.)
+4. **Imágenes**: Siempre con alt text descriptivo
+5. **Headings**: Estructura jerárquica (H2 > H3 > H4)
+
+---
+
 ## Referencias
 
 - [Documentación de Sanity](https://www.sanity.io/docs)
 - [Guía de Contenido](./CONTENT_GUIDE.md) - Filosofía y mejores prácticas de escritura
 - [Portable Text](https://www.sanity.io/docs/portable-text)
+- [GitHub Flavored Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax) - Sintaxis Markdown
