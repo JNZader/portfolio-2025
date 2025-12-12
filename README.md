@@ -6,10 +6,10 @@
 [![Lighthouse CI](https://github.com/JNZader/portfolio-2025/actions/workflows/lighthouse.yml/badge.svg)](https://github.com/JNZader/portfolio-2025/actions/workflows/lighthouse.yml)
 [![Security](https://github.com/JNZader/portfolio-2025/actions/workflows/security.yml/badge.svg)](https://github.com/JNZader/portfolio-2025/actions/workflows/security.yml)
 
-![Next.js](https://img.shields.io/badge/Next.js-16.0-black)
+![Next.js](https://img.shields.io/badge/Next.js-16.0.10-black)
 ![React](https://img.shields.io/badge/React-19.2-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
-![Version](https://img.shields.io/badge/version-0.22.6-green)
+![Version](https://img.shields.io/badge/version-1.5.0-green)
 
 ![Portfolio Preview](https://placehold.co/1200x675/1e293b/ffffff?text=Portfolio+Preview)
 <!-- TODO: Reemplazar esta imagen con una captura de pantalla real de tu proyecto (Home Page) -->
@@ -47,9 +47,11 @@ Portfolio profesional construido con el stack más moderno de 2025. Incluye sist
 
 ### 📝 Blog Completo
 - **CMS Headless**: Sanity CMS v4 para gestión de contenido
+- **Dual Content Format**: Soporte para Markdown (copy/paste) y Portable Text (editor visual)
 - **Búsqueda Full-Text**: Búsqueda en tiempo real con debouncing y highlight de términos
 - **Comentarios**: Sistema de comentarios con Giscus (GitHub Discussions)
 - **Portable Text**: Renderizado de contenido rico con syntax highlighting
+- **Markdown Support**: GitHub Flavored Markdown con tablas, código y más
 - **Table of Contents**: Navegación automática en posts largos
 - **Posts Relacionados**: Sugerencias basadas en categorías
 - **Categorías**: Filtrado por categorías con colores personalizados
@@ -146,7 +148,7 @@ Portfolio profesional construido con el stack más moderno de 2025. Incluye sist
 ## 🚀 Stack Tecnológico
 
 ### Core
-- **Framework:** Next.js 16.0.2 (App Router)
+- **Framework:** Next.js 16.0.10 (App Router)
 - **UI Library:** React 19.2.0 con React Compiler
 - **Language:** TypeScript 5.9.3 (strict mode)
 - **Styling:** Tailwind CSS 4.1.17 con OKLCH color space
@@ -198,7 +200,7 @@ Portfolio profesional construido con el stack más moderno de 2025. Incluye sist
 ### Security
 - **Validation:** Zod v4.1
 - **Rate Limiting:** Upstash Redis + @upstash/ratelimit
-- **Sanitization:** isomorphic-dompurify v2.31
+- **Sanitization:** sanitize-html v2.17
 - **CSRF Protection:** Tokens con nanoid v5.1
 - **Cookie Management:** js-cookie v3.0
 
@@ -470,6 +472,7 @@ portfolio/
 │   │   ├── CodeBlock.tsx          # Syntax highlighting
 │   │   ├── Comments.tsx           # Sistema de comentarios Giscus
 │   │   ├── EmptyState.tsx         # Estado vacío
+│   │   ├── MarkdownRenderer.tsx   # Renderizado de Markdown (GFM)
 │   │   ├── Pagination.tsx         # Paginación
 │   │   ├── PortableTextRenderer.tsx  # Renderizado Portable Text
 │   │   ├── PostCard.tsx           # Card con search highlight
@@ -598,8 +601,10 @@ portfolio/
 │   └── [assets]               # Assets estáticos
 ├── types/                     # TypeScript type definitions
 ├── docs/                      # Documentación adicional
+│   ├── ARTICULO_PORTFOLIO.md      # Artículo sobre el portfolio
 │   ├── CACHE_OPTIMIZATION.md      # Estrategia de caché
 │   ├── LIGHTHOUSE_CI.md           # Lighthouse CI setup
+│   ├── PUBLISHING_GUIDE.md        # Guía para publicar posts y proyectos
 │   └── THIRD_PARTY_SCRIPTS.md     # Scripts externos
 ├── .github/
 │   └── workflows/             # GitHub Actions workflows
@@ -664,10 +669,12 @@ Basado en shadcn/ui con customizaciones:
 - Lazy loading para mejor performance
 
 ### Content Rendering
+- **Dual Format Support**: Markdown o Portable Text según preferencia
 - Portable Text con componentes custom
-- Syntax highlighting para código
+- Markdown con GitHub Flavored Markdown (tablas, código, listas)
+- Syntax highlighting para código (Prism.js)
 - Imágenes optimizadas con blur placeholders
-- Table of Contents automático
+- Table of Contents automático (ambos formatos)
 - Posts relacionados por categoría
 - Share buttons para redes sociales
 - Event tracking de interacciones
