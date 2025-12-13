@@ -3,20 +3,32 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { subscribeToNewsletter } from '@/app/actions/newsletter';
 import { useAnnouncer } from '@/components/a11y/ScreenReaderAnnouncer';
 import { InputField } from '@/components/forms/FormField';
 import { Button } from '@/components/ui/button';
 import { MailIcon, SpinnerIcon } from '@/components/ui/icons';
-import { trackNewsletterSignup } from '@/lib/analytics/events';
-import { logger } from '@/lib/monitoring/logger';
-import { showError, showSuccess } from '@/lib/utils/toast';
+import { useNewsletterSubscription } from '@/hooks/useNewsletterSubscription';
 import { type NewsletterFormData, newsletterSchema } from '@/lib/validations/newsletter';
 
 export function NewsletterForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
   const { announce } = useAnnouncer();
+
+  // Use shared hook for subscription logic
+  const { status, subscribe } = useNewsletterSubscription({
+    onSuccess: (message) => {
+      setStatusMessage(message);
+      announce(message, 'polite');
+      reset();
+    },
+    onError: (error) => {
+      setStatusMessage(error);
+      announce(error, 'assertive');
+    },
+    resetDelay: 0, // We handle reset manually via react-hook-form
+  });
+
+  const isSubmitting = status === 'loading';
 
   const {
     register,
@@ -28,46 +40,8 @@ export function NewsletterForm() {
   });
 
   const onSubmit = async (data: NewsletterFormData) => {
-    setIsSubmitting(true);
     setStatusMessage(''); // Clear previous messages
-
-    try {
-      const formData = new FormData();
-      formData.append('email', data.email);
-
-      const result = await subscribeToNewsletter(formData);
-
-      if (result.success) {
-        // Track newsletter signup
-        trackNewsletterSignup(data.email);
-
-        // Set message before toast for immediate visibility
-        setStatusMessage(result.message);
-        announce(result.message, 'polite');
-        reset();
-
-        showSuccess(result.message);
-      } else {
-        // Set message before toast for immediate visibility
-        setStatusMessage(result.error);
-        announce(result.error, 'assertive');
-
-        showError(result.error);
-      }
-    } catch (error) {
-      logger.error('Newsletter subscription error', error as Error, {
-        service: 'newsletter-form',
-      });
-      const errorMsg = 'Error inesperado al suscribirse al newsletter';
-
-      // Set message before toast for immediate visibility
-      setStatusMessage(errorMsg);
-      announce(errorMsg, 'assertive');
-
-      showError('Error inesperado. Por favor, intenta más tarde.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    await subscribe(data.email);
   };
 
   return (

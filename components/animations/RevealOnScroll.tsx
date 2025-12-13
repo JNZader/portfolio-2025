@@ -1,6 +1,7 @@
 'use client';
 
-import { type ReactNode, useEffect, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { cn } from '@/lib/utils';
 
 /**
@@ -29,8 +30,7 @@ const defaultVariants: Variants = {
 /**
  * CSS-based reveal animation on scroll
  * Replaced framer-motion implementation for better performance (~60KB saved)
- * Uses IntersectionObserver + CSS transitions
- * Uses native matchMedia for reduced motion (no context provider needed)
+ * Uses shared useScrollReveal hook for IntersectionObserver + reduced motion
  */
 export function RevealOnScroll({
   children,
@@ -39,50 +39,7 @@ export function RevealOnScroll({
   delay = 0,
   once = true,
 }: RevealOnScrollProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  // Check reduced motion preference using native API
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-
-    const handleChange = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
-  useEffect(() => {
-    if (prefersReducedMotion) {
-      setIsVisible(true);
-      return;
-    }
-
-    const element = ref.current;
-    if (!element) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          if (once) {
-            observer.unobserve(element);
-          }
-        } else if (!once) {
-          setIsVisible(false);
-        }
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px',
-      }
-    );
-
-    observer.observe(element);
-
-    return () => observer.disconnect();
-  }, [once, prefersReducedMotion]);
+  const { ref, isVisible, prefersReducedMotion } = useScrollReveal<HTMLDivElement>({ once });
 
   // Skip animation for reduced motion
   if (prefersReducedMotion) {

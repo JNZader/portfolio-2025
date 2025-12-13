@@ -1,6 +1,7 @@
 'use client';
 
-import { type ReactNode, useEffect, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { cn } from '@/lib/utils';
 
 type AnimationType = 'fade' | 'slide-up' | 'slide-left' | 'slide-right' | 'scale';
@@ -18,8 +19,7 @@ interface CSSRevealOnScrollProps {
 /**
  * CSS-based reveal animation on scroll
  * Replaces framer-motion RevealOnScroll for better performance (~60KB saved)
- * Uses IntersectionObserver + CSS transitions
- * Uses native matchMedia for reduced motion (no context provider needed)
+ * Uses shared useScrollReveal hook for IntersectionObserver + reduced motion
  */
 export function CSSRevealOnScroll({
   children,
@@ -30,50 +30,10 @@ export function CSSRevealOnScroll({
   once = true,
   threshold = 0.1,
 }: CSSRevealOnScrollProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  // Check reduced motion preference using native API
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-
-    const handleChange = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
-  useEffect(() => {
-    if (prefersReducedMotion) {
-      setIsVisible(true);
-      return;
-    }
-
-    const element = ref.current;
-    if (!element) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          if (once) {
-            observer.unobserve(element);
-          }
-        } else if (!once) {
-          setIsVisible(false);
-        }
-      },
-      {
-        threshold,
-        rootMargin: '0px 0px -100px 0px',
-      }
-    );
-
-    observer.observe(element);
-
-    return () => observer.disconnect();
-  }, [once, threshold, prefersReducedMotion]);
+  const { ref, isVisible, prefersReducedMotion } = useScrollReveal<HTMLDivElement>({
+    threshold,
+    once,
+  });
 
   // Animation styles
   const animationStyles: Record<AnimationType, { hidden: string; visible: string }> = {

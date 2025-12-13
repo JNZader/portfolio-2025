@@ -230,7 +230,12 @@ const sentryWebpackPluginOptions = {
   silent: true,
   widenClientFileUpload: true,
   hideSourceMaps: true,
-  disableLogger: true,
+  // Tree shake debug logging (replaces deprecated disableLogger)
+  bundleSizeOptimizations: {
+    excludeDebugStatements: true,
+    excludeReplayIframe: true,
+    excludeReplayShadowDom: true,
+  },
 };
 
 // Wrap with Sentry first, then bundle analyzer
