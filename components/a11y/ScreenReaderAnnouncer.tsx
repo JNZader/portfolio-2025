@@ -1,6 +1,14 @@
 'use client';
 
-import { createContext, type ReactNode, useCallback, useContext, useState } from 'react';
+import {
+  createContext,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 type AnnouncerContextType = {
   announce: (message: string, priority?: 'polite' | 'assertive') => void;
@@ -11,10 +19,24 @@ const AnnouncerContext = createContext<AnnouncerContextType | null>(null);
 export function AnnouncerProvider({ children }: { children: ReactNode }) {
   const [message, setMessage] = useState('');
   const [priority, setPriority] = useState<'polite' | 'assertive'>('polite');
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const announce = useCallback((msg: string, prio: 'polite' | 'assertive' = 'polite') => {
+    // Clear any pending timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     setMessage(''); // Reset para forzar re-anuncio si es el mismo mensaje
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setMessage(msg);
       setPriority(prio);
     }, 100);
