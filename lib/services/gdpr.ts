@@ -95,18 +95,16 @@ export async function deleteUserData(email: string) {
   }
 
   try {
-    // Eliminar consent logs
-    await trackDatabaseQuery('consentLog.deleteMany', () =>
-      prisma.consentLog.deleteMany({
-        where: { email },
-      })
-    );
-
-    // Eliminar subscriber
-    await trackDatabaseQuery('subscriber.delete', () =>
-      prisma.subscriber.delete({
-        where: { email },
-      })
+    // Eliminar datos en transacción atómica para evitar inconsistencias
+    await trackDatabaseQuery('gdpr.deleteTransaction', () =>
+      prisma.$transaction([
+        prisma.consentLog.deleteMany({
+          where: { email },
+        }),
+        prisma.subscriber.delete({
+          where: { email },
+        }),
+      ])
     );
 
     logger.info('GDPR data deletion completed successfully', {
