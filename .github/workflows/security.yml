@@ -9,6 +9,10 @@ on:
     # Run weekly on Mondays at 00:00 UTC
     - cron: '0 0 * * 1'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   # ===== Dependency Review =====
   # Note: Requires "Dependency graph" to be enabled in repository settings:
