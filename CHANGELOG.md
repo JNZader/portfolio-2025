@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.6](https://github.com/JNZader/portfolio-2025/compare/v1.5.5...v1.5.6) (2025-12-13)
+
+
+### Bug Fixes
+
+* **ci:** resolve test and lighthouse workflow failures ([9904832](https://github.com/JNZader/portfolio-2025/commits/9904832af3180e6797a6fbdf9ff8a86ca1571008))
+
 ### [1.5.5](https://github.com/JNZader/portfolio-2025/compare/v1.5.4...v1.5.5) (2025-12-13)
 
 ### [1.5.4](https://github.com/JNZader/portfolio-2025/compare/v1.5.3...v1.5.4) (2025-12-13)
