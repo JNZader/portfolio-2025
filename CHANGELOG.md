@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.6](https://github.com/JNZader/portfolio-2025/compare/v1.5.5...v1.5.6) (2025-12-13)
+
+
+### Bug Fixes
+
+* **ci:** resolve test and lighthouse workflow failures ([9904832](https://github.com/JNZader/portfolio-2025/commits/9904832af3180e6797a6fbdf9ff8a86ca1571008))
+
+### [1.5.5](https://github.com/JNZader/portfolio-2025/compare/v1.5.4...v1.5.5) (2025-12-13)
+
+### [1.5.4](https://github.com/JNZader/portfolio-2025/compare/v1.5.3...v1.5.4) (2025-12-13)
+
+
+### Bug Fixes
+
+* **auth:** improve admin check logging without exposing emails ([54215ee](https://github.com/JNZader/portfolio-2025/commits/54215eebadc1b83d53cdc3a9c9a42968c0e4edcb))
+* **db:** use atomic transactions for GDPR deletion ([10bf688](https://github.com/JNZader/portfolio-2025/commits/10bf688e5c1398b6c026502738d3204e1cc44005))
+* **newsletter:** add validation and improve error handling ([9c7c1cd](https://github.com/JNZader/portfolio-2025/commits/9c7c1cd4e97b00bc8ed55fd17201eba55e6ee4f3))
+* **security:** add rate limiting to confirmation endpoints ([44d4130](https://github.com/JNZader/portfolio-2025/commits/44d41305187a093bf1bd5e7760814e1e064285dc))
+
+
+### Performance Improvements
+
+* **ci:** add concurrency groups to all workflows ([a87b201](https://github.com/JNZader/portfolio-2025/commits/a87b201346f3bc86c1b34a0f919f76b025cc14b5))
+
+
+### Code Refactoring
+
+* **animations:** extract shared useScrollReveal hook ([6ecf8be](https://github.com/JNZader/portfolio-2025/commits/6ecf8befc40964e830d8a631316fb6fdd0ee99a0))
+* **newsletter:** use shared subscription hook ([a4b6460](https://github.com/JNZader/portfolio-2025/commits/a4b6460f0634907c5af5281571cf1f88c8800302))
+
 ### [1.5.3](https://github.com/JNZader/portfolio-2025/compare/v1.5.2...v1.5.3) (2025-12-12)
 
 ### [1.5.2](https://github.com/JNZader/portfolio-2025/compare/v1.5.1...v1.5.2) (2025-12-12)

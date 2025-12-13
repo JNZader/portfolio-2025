@@ -1,6 +1,6 @@
 {
   "name": "portfolio",
-  "version": "1.5.3",
+  "version": "1.5.6",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -103,6 +103,7 @@
     "@biomejs/biome": "^2.3.8",
     "@commitlint/cli": "^20.2.0",
     "@commitlint/config-conventional": "^20.2.0",
+    "@lhci/cli": "^0.15.1",
     "@next/bundle-analyzer": "^16.0.10",
     "@playwright/test": "^1.57.0",
     "@sanity/vision": "^4.21.1",

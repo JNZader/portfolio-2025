@@ -1,10 +1,25 @@
 'use server';
 
+import { z } from 'zod';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/db/prisma';
 import { emailConfig, resend } from '@/lib/email/resend';
 import NewsletterTemplate from '@/lib/email/templates/NewsletterTemplate';
 import { logger } from '@/lib/monitoring/logger';
+
+/**
+ * Schema de validación para newsletter broadcast
+ */
+const newsletterSchema = z.object({
+  subject: z
+    .string()
+    .min(5, 'El asunto debe tener al menos 5 caracteres')
+    .max(200, 'El asunto no puede exceder 200 caracteres'),
+  content: z
+    .string()
+    .min(10, 'El contenido debe tener al menos 10 caracteres')
+    .max(50000, 'El contenido no puede exceder 50,000 caracteres'),
+});
 
 export type BroadcastResult = {
   success: boolean;
@@ -37,12 +52,17 @@ export async function sendTestNewsletter(formData: FormData): Promise<BroadcastR
       return { success: false, error: 'Admin email not found' };
     }
 
-    const subject = formData.get('subject') as string;
-    const content = formData.get('content') as string;
+    // Validar inputs con Zod
+    const validation = newsletterSchema.safeParse({
+      subject: formData.get('subject'),
+      content: formData.get('content'),
+    });
 
-    if (!subject || !content) {
-      return { success: false, error: 'Subject and content are required' };
+    if (!validation.success) {
+      return { success: false, error: validation.error.issues[0].message };
     }
+
+    const { subject, content } = validation.data;
 
     const { error } = await resend.emails.send({
       from: emailConfig.from,
@@ -74,12 +94,17 @@ export async function sendNewsletterBroadcast(formData: FormData): Promise<Broad
   try {
     await requireAdmin();
 
-    const subject = formData.get('subject') as string;
-    const content = formData.get('content') as string;
+    // Validar inputs con Zod
+    const validation = newsletterSchema.safeParse({
+      subject: formData.get('subject'),
+      content: formData.get('content'),
+    });
 
-    if (!subject || !content) {
-      return { success: false, error: 'Subject and content are required' };
+    if (!validation.success) {
+      return { success: false, error: validation.error.issues[0].message };
     }
+
+    const { subject, content } = validation.data;
 
     // 1. Obtener suscriptores activos
     const subscribers = await prisma.subscriber.findMany({
@@ -105,28 +130,31 @@ export async function sendNewsletterBroadcast(formData: FormData): Promise<Broad
     for (let i = 0; i < subscribers.length; i += BATCH_SIZE) {
       const chunk = subscribers.slice(i, i + BATCH_SIZE);
 
-      await Promise.all(
-        chunk.map(async (sub) => {
-          try {
-            await resend.emails.send({
-              from: emailConfig.from,
-              to: sub.email,
-              subject: subject,
-              react: NewsletterTemplate({
-                subject,
-                content,
-                unsubscribeUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/api/newsletter/unsubscribe?token=${sub.unsubToken}`,
-              }),
-            });
-            sentCount++;
-          } catch (err) {
-            logger.error(`Failed to send newsletter to ${sub.email}`, err as Error);
-          }
-        })
+      // Usar Promise.allSettled para conteo preciso y manejo robusto de errores
+      const results = await Promise.allSettled(
+        chunk.map((sub) =>
+          resend.emails.send({
+            from: emailConfig.from,
+            to: sub.email,
+            subject: subject,
+            react: NewsletterTemplate({
+              subject,
+              content,
+              unsubscribeUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/api/newsletter/unsubscribe?token=${sub.unsubToken}`,
+            }),
+          })
+        )
       );
 
-      // Pequeña pausa opcional para respetar rate limits si fuera masivo
-      // await new Promise(r => setTimeout(r, 100));
+      // Contar éxitos y loguear fallos
+      for (let j = 0; j < results.length; j++) {
+        const result = results[j];
+        if (result.status === 'fulfilled') {
+          sentCount++;
+        } else {
+          logger.error(`Failed to send newsletter to ${chunk[j].email}`, result.reason as Error);
+        }
+      }
     }
 
     logger.info(`Newsletter broadcast completed. Sent: ${sentCount}/${subscribers.length}`);
