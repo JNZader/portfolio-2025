@@ -122,6 +122,19 @@ export const resumeRateLimiter = redis
   : noopRateLimiter;
 
 /**
+ * Rate limiter para confirmaciones (newsletter, GDPR): 20 por hora por IP
+ * Previene enumeración de tokens de confirmación
+ */
+export const confirmRateLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(process.env.NODE_ENV === 'development' ? 100 : 20, '1 h'),
+      analytics: true,
+      prefix: 'ratelimit:confirm',
+    })
+  : noopRateLimiter;
+
+/**
  * Factory function para crear rate limiters personalizados
  * Centraliza la configuración y facilita mantenimiento
  * Returns noop limiter if Redis is not configured

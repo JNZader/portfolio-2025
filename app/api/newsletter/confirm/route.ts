@@ -3,9 +3,40 @@ import { prisma } from '@/lib/db/prisma';
 import { emailConfig, resend } from '@/lib/email/resend';
 import NewsletterWelcome from '@/lib/email/templates/NewsletterWelcome';
 import { logger } from '@/lib/monitoring/logger';
+import { confirmRateLimiter, getClientIdentifier } from '@/lib/rate-limit/redis';
 
 export async function GET(request: NextRequest) {
   try {
+    // Rate limiting para prevenir enumeración de tokens
+    const clientId = getClientIdentifier(request);
+    const { success } = await confirmRateLimiter.limit(clientId);
+
+    if (!success) {
+      logger.warn('Newsletter confirm rate limit exceeded', { ip: clientId });
+      return new NextResponse(
+        `
+        <!DOCTYPE html>
+        <html lang="es">
+          <head>
+            <title>Demasiadas solicitudes</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <style>
+              body { font-family: system-ui; max-width: 600px; margin: 80px auto; padding: 0 20px; text-align: center; }
+              h1 { color: #F59E0B; }
+            </style>
+          </head>
+          <body>
+            <h1>Demasiadas Solicitudes</h1>
+            <p>Has realizado demasiadas solicitudes. Por favor, intenta de nuevo en 1 hora.</p>
+            <a href="/">Volver al inicio</a>
+          </body>
+        </html>
+        `,
+        { headers: { 'Content-Type': 'text/html', 'Retry-After': '3600' }, status: 429 }
+      );
+    }
+
     const searchParams = request.nextUrl.searchParams;
     const token = searchParams.get('token');
 
