@@ -93,11 +93,13 @@ export const authConfig: NextAuthConfig = {
       if (user?.email) {
         const isAdmin = ADMIN_EMAILS.includes(user.email.toLowerCase());
         token.isAdmin = isAdmin;
-        // Debug en desarrollo
+        // Debug en desarrollo (sin exponer lista completa de admins)
         if (process.env.NODE_ENV === 'development') {
-          console.log('[Auth] User email:', user.email);
-          console.log('[Auth] Admin emails:', ADMIN_EMAILS);
-          console.log('[Auth] Is admin:', isAdmin);
+          console.log('[Auth] Admin check:', {
+            userEmail: user.email,
+            adminCount: ADMIN_EMAILS.length,
+            isAdmin,
+          });
         }
       }
       return token;

@@ -1,11 +1,23 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { resend } from '@/lib/email/resend';
 import { logger } from '@/lib/monitoring/logger';
-import { safeRedisOp } from '@/lib/rate-limit/redis';
+import { confirmRateLimiter, getClientIdentifier, safeRedisOp } from '@/lib/rate-limit/redis';
 import { deleteUserData } from '@/lib/services/gdpr';
 
 export async function GET(request: NextRequest) {
   try {
+    // Rate limiting para prevenir enumeración de tokens
+    const clientId = getClientIdentifier(request);
+    const { success } = await confirmRateLimiter.limit(clientId);
+
+    if (!success) {
+      logger.warn('Data deletion confirm rate limit exceeded', { ip: clientId });
+      return NextResponse.json(
+        { message: 'Demasiadas solicitudes. Intenta de nuevo en 1 hora.' },
+        { status: 429, headers: { 'Retry-After': '3600' } }
+      );
+    }
+
     // 1. Obtener token de query params
     const { searchParams } = new URL(request.url);
     const token = searchParams.get('token');
