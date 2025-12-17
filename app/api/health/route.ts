@@ -1,13 +1,27 @@
-import { NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import { logger } from '@/lib/monitoring/logger';
+import { createRateLimiter, getClientIdentifier } from '@/lib/rate-limit/redis';
+
+// Rate limiter: 30 requests per minute per IP (prevent health check abuse)
+const healthRateLimiter = createRateLimiter('health', 30, '1 m');
 
 /**
  * GET /api/health
  * Endpoint público de health check con información mínima
  * Para información detallada, usar /api/admin/health (requiere autenticación)
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  // Rate limiting
+  const clientId = getClientIdentifier(request);
+  const { success } = await healthRateLimiter.limit(clientId);
+
+  if (!success) {
+    return NextResponse.json(
+      { status: 'rate_limited', message: 'Too many requests' },
+      { status: 429, headers: { 'Retry-After': '60' } }
+    );
+  }
   const startTime = performance.now();
 
   try {
