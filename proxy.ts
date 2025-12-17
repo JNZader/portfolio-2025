@@ -1,14 +1,89 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
 import { logger } from '@/lib/monitoring/logger';
+
+// Check if Redis is configured
+const isRedisConfigured =
+  process.env.UPSTASH_REDIS_REST_URL &&
+  process.env.UPSTASH_REDIS_REST_TOKEN &&
+  !process.env.UPSTASH_REDIS_REST_URL.includes('dummy');
+
+// Create Redis client (only if configured)
+const redis = isRedisConfigured
+  ? new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL!,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+    })
+  : null;
+
+// Global rate limiter: 100 requests per minute per IP
+const globalRateLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(100, '1 m'),
+      analytics: true,
+      prefix: 'ratelimit:global',
+    })
+  : null;
+
+// Stricter rate limiter for API routes: 60 requests per minute
+const apiRateLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(60, '1 m'),
+      analytics: true,
+      prefix: 'ratelimit:api',
+    })
+  : null;
+
+// Known malicious user agents to block immediately
+const BLOCKED_USER_AGENTS = [
+  'masscan',
+  'nmap',
+  'sqlmap',
+  'nikto',
+  'dirbuster',
+  'gobuster',
+  'nuclei',
+  'whatweb',
+  'wpscan',
+  'zap',
+  'burp',
+  'acunetix',
+  'nessus',
+  'openvas',
+];
+
+/**
+ * Get client IP from request headers
+ */
+function getClientIP(request: NextRequest): string {
+  const forwarded = request.headers.get('x-forwarded-for');
+  const realIp = request.headers.get('x-real-ip');
+  const cfConnectingIp = request.headers.get('cf-connecting-ip');
+  return cfConnectingIp || forwarded?.split(',')[0]?.trim() || realIp || 'unknown';
+}
+
+/**
+ * Check if user agent is malicious
+ */
+function isMaliciousUserAgent(userAgent: string | null): boolean {
+  if (!userAgent) return false;
+  const ua = userAgent.toLowerCase();
+  return BLOCKED_USER_AGENTS.some((bot) => ua.includes(bot));
+}
 
 /**
  * Proxy de seguridad global (Next.js 16+)
  * Se ejecuta en TODAS las rutas antes de procesarlas
- * Reemplaza el antiguo middleware.ts
+ * Features: Admin protection, Rate limiting, Bot detection, CSRF protection
  */
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const clientIP = getClientIP(request);
+  const userAgent = request.headers.get('user-agent');
 
   // =========================================
   // ADMIN ROUTE PROTECTION
@@ -33,6 +108,59 @@ export function proxy(request: NextRequest) {
     }
   }
 
+  // =========================================
+  // MALICIOUS BOT BLOCKING
+  // =========================================
+
+  if (isMaliciousUserAgent(userAgent)) {
+    logger.warn('Blocked malicious user agent', {
+      service: 'proxy',
+      action: 'bot-blocked',
+      userAgent,
+      path: pathname,
+      ip: clientIP,
+    });
+    return new NextResponse('Forbidden', { status: 403 });
+  }
+
+  // =========================================
+  // GLOBAL RATE LIMITING
+  // =========================================
+
+  if (redis) {
+    const rateLimiter = pathname.startsWith('/api/') ? apiRateLimiter : globalRateLimiter;
+
+    if (rateLimiter) {
+      const { success, remaining, reset } = await rateLimiter.limit(clientIP);
+
+      if (!success) {
+        logger.warn('Rate limit exceeded', {
+          service: 'proxy',
+          action: 'rate-limit',
+          ip: clientIP,
+          path: pathname,
+        });
+
+        return new NextResponse(
+          JSON.stringify({
+            error: 'Too many requests',
+            message: 'Rate limit exceeded. Please try again later.',
+            retryAfter: Math.ceil((reset - Date.now()) / 1000),
+          }),
+          {
+            status: 429,
+            headers: {
+              'Content-Type': 'application/json',
+              'Retry-After': String(Math.ceil((reset - Date.now()) / 1000)),
+              'X-RateLimit-Remaining': String(remaining),
+              'X-RateLimit-Reset': String(reset),
+            },
+          }
+        );
+      }
+    }
+  }
+
   // Clona la respuesta para poder modificar headers
   const response = NextResponse.next();
 
@@ -53,34 +181,21 @@ export function proxy(request: NextRequest) {
   response.headers.set('X-XSS-Protection', '1; mode=block');
 
   // =========================================
-  // BOT DETECTION - Logging basico
+  // BOT DETECTION - Logging (suspicious but not blocked)
   // =========================================
 
-  const userAgent = request.headers.get('user-agent') || '';
-  const suspiciousBots = [
-    'curl/',
-    'wget/',
-    'python-requests/',
-    'scrapy/',
-    'masscan/',
-  ];
-
-  // Detectar bots sospechosos
-  const isSuspiciousBot = suspiciousBots.some((bot) =>
-    userAgent.toLowerCase().includes(bot.toLowerCase())
-  );
+  const suspiciousBots = ['curl/', 'wget/', 'python-requests/', 'scrapy/', 'httpx/', 'axios/'];
+  const ua = userAgent?.toLowerCase() || '';
+  const isSuspiciousBot = suspiciousBots.some((bot) => ua.includes(bot));
 
   if (isSuspiciousBot) {
-    logger.warn('Suspicious bot detected', {
+    logger.info('Suspicious bot detected', {
       service: 'proxy',
       action: 'bot-detection',
       userAgent,
-      path: request.nextUrl.pathname,
-      ip: request.headers.get('x-forwarded-for') || 'unknown',
+      path: pathname,
+      ip: clientIP,
     });
-
-    // Opcional: Bloquear bots sospechosos (descomentar si deseas)
-    // return new NextResponse('Forbidden', { status: 403 });
   }
 
   // =========================================
@@ -115,7 +230,7 @@ export function proxy(request: NextRequest) {
           action: 'csrf-protection',
           origin,
           host,
-          path: request.nextUrl.pathname,
+          path: pathname,
         });
 
         return new NextResponse('Forbidden - Invalid Origin', {
@@ -125,13 +240,8 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // =========================================
-  // RATE LIMITING HINT
-  // =========================================
-
-  // Agregar header para rate limiting (lo procesaran las API routes)
-  const clientIp = request.headers.get('x-forwarded-for') || 'unknown';
-  response.headers.set('X-Client-IP', clientIp);
+  // Agregar header con IP del cliente para API routes
+  response.headers.set('X-Client-IP', clientIP);
 
   return response;
 }
