@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/JNZader/portfolio-2025/compare/v1.5.7...v1.6.0) (2025-12-17)
+
+
+### Features
+
+* **security:** add global rate limiting to proxy ([b09eb7a](https://github.com/JNZader/portfolio-2025/commits/b09eb7a1249852fd475c64de64d3243eaacf5ae4))
+
 ### [1.5.7](https://github.com/JNZader/portfolio-2025/compare/v1.5.6...v1.5.7) (2025-12-13)
 
 ### [1.5.6](https://github.com/JNZader/portfolio-2025/compare/v1.5.5...v1.5.6) (2025-12-13)
