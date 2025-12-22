@@ -47,7 +47,7 @@
     "@react-email/components": "^1.0.2",
     "@react-email/markdown": "^0.0.17",
     "@sanity/client": "^7.13.2",
-    "@sanity/code-input": "^6.0.3",
+    "@sanity/code-input": "^7.0.2",
     "@sanity/image-url": "^2.0.2",
     "@sentry/nextjs": "^10.32.1",
     "@tailwindcss/line-clamp": "^0.4.4",
