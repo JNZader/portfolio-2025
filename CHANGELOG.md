@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.4](https://github.com/JNZader/portfolio-2025/compare/v1.6.3...v1.6.4) (2025-12-23)
+
+
+### Bug Fixes
+
+* **ci:** run release workflow only on main branch ([5dfc9eb](https://github.com/JNZader/portfolio-2025/commits/5dfc9ebc5e758d2d1b83976ea67c75c936e9150f))
+* **seo:** remove email from JSON-LD schema to prevent scraping ([61681ab](https://github.com/JNZader/portfolio-2025/commits/61681aba021364da54a68976dd96e5f835a01231))
+
+### [1.6.2](https://github.com/JNZader/portfolio-2025/compare/v1.6.1...v1.6.2) (2025-12-17)
+
 ### [1.6.3](https://github.com/JNZader/portfolio-2025/compare/v1.6.1...v1.6.3) (2025-12-22)
 
 ### [1.6.2](https://github.com/JNZader/portfolio-2025/compare/v1.6.1...v1.6.2) (2025-12-17)
