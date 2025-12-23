@@ -15,7 +15,6 @@ export function generatePersonSchema(): WithContext<Person> {
     jobTitle: 'Backend Java Developer',
     description:
       'Backend Java Developer con más de 20 años de experiencia en tecnología, especializado en Spring Boot, React y arquitecturas modernas. Técnico en Desarrollo de Software.',
-    email: 'mailto:jnzader@gmail.com',
     sameAs: ['https://github.com/JNZader', 'https://linkedin.com/in/jnzader'],
     knowsAbout: [
       'Java',
