@@ -190,7 +190,8 @@ test.describe('Blog Post', () => {
 
       // Wait for scroll to complete by checking URL hash
       if (href) {
-        await expect(page).toHaveURL(new RegExp(href.replace('#', '#')));
+        const escapedHref = href.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        await expect(page).toHaveURL(new RegExp(escapedHref));
       }
     }
   });
