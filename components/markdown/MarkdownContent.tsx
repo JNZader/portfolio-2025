@@ -184,7 +184,10 @@ export function MarkdownContent({ content, className = '' }: MarkdownContentProp
             if (srcStr) {
               try {
                 // Handle absolute URLs; relative URLs will throw and leave hostname as ''
-                const urlObj = new URL(srcStr, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
+                const urlObj = new URL(
+                  srcStr,
+                  typeof window !== 'undefined' ? window.location.origin : 'http://localhost'
+                );
                 hostname = urlObj.hostname.toLowerCase();
               } catch {
                 hostname = '';
