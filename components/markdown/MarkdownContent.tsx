@@ -178,19 +178,47 @@ export function MarkdownContent({ content, className = '' }: MarkdownContentProp
             // Detect badges/shields (common patterns)
             const srcStr = typeof src === 'string' ? src : '';
             const altStr = typeof alt === 'string' ? alt : '';
+
+            // Safely derive hostname from the src, if possible
+            let hostname = '';
+            if (srcStr) {
+              try {
+                // Handle absolute URLs; relative URLs will throw and leave hostname as ''
+                const urlObj = new URL(
+                  srcStr,
+                  typeof window !== 'undefined' ? window.location.origin : 'http://localhost'
+                );
+                hostname = urlObj.hostname.toLowerCase();
+              } catch {
+                hostname = '';
+              }
+            }
+
+            const altLower = altStr.toLowerCase();
+
+            const isBadgeHost =
+              hostname === 'shields.io' ||
+              hostname.endsWith('.shields.io') ||
+              hostname === 'img.shields.io' ||
+              hostname.endsWith('.img.shields.io') ||
+              hostname === 'travis-ci.org' ||
+              hostname.endsWith('.travis-ci.org') ||
+              hostname === 'travis-ci.com' ||
+              hostname.endsWith('.travis-ci.com') ||
+              hostname === 'coveralls.io' ||
+              hostname.endsWith('.coveralls.io') ||
+              hostname === 'badgen.net' ||
+              hostname.endsWith('.badgen.net');
+
             const isBadge =
-              srcStr.includes('shields.io') ||
+              isBadgeHost ||
               srcStr.includes('badge') ||
-              srcStr.includes('img.shields') ||
-              srcStr.includes('travis-ci') ||
-              srcStr.includes('coveralls') ||
-              srcStr.includes('badgen.net') ||
               srcStr.includes('flat-square') ||
               (srcStr.includes('svg') &&
-                (altStr.toLowerCase().includes('license') ||
-                  altStr.toLowerCase().includes('build') ||
-                  altStr.toLowerCase().includes('coverage') ||
-                  altStr.toLowerCase().includes('version')));
+                (altLower.includes('license') ||
+                  altLower.includes('build') ||
+                  altLower.includes('coverage') ||
+                  altLower.includes('version')));
 
             // Render badges inline
             if (isBadge) {
