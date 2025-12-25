@@ -1,10 +1,10 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { unlockAchievement } from '@/lib/achievements';
 
 export function TypingEasterEgg() {
-  const [_typedKeys, setTypedKeys] = useState<string[]>([]);
+  const typedKeysRef = useRef<string[]>([]);
   const [showHireMe, setShowHireMe] = useState(false);
 
   // Confetti animation
@@ -19,7 +19,7 @@ export function TypingEasterEgg() {
         width: 10px;
         height: 10px;
         background-color: ${colors[Math.floor(Math.random() * colors.length)]};
-        left: ${Math.random() * window.innerWidth}px;
+        left: ${Math.random() * globalThis.innerWidth}px;
         top: -10px;
         opacity: 1;
         z-index: 9999;
@@ -36,7 +36,7 @@ export function TypingEasterEgg() {
         [
           { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
           {
-            transform: `translate(${randomX}px, ${window.innerHeight + 20}px) rotate(${randomRotation}deg)`,
+            transform: `translate(${randomX}px, ${globalThis.innerHeight + 20}px) rotate(${randomRotation}deg)`,
             opacity: 0,
           },
         ],
@@ -57,7 +57,7 @@ export function TypingEasterEgg() {
         unlockAchievement('hire_me_typer');
       },
       secret: () => {
-        window.location.href = '/secret-achievements';
+        globalThis.location.href = '/secret-achievements';
       },
       coffee: () => {
         unlockAchievement('coffee_lover');
@@ -74,24 +74,21 @@ export function TypingEasterEgg() {
         return;
       }
 
-      setTypedKeys((prev) => {
-        const newKeys = [...prev, e.key].slice(-10); // Últimas 10 teclas
+      typedKeysRef.current = [...typedKeysRef.current, e.key].slice(-10); // Últimas 10 teclas
 
-        // Verificar cada palabra secreta
-        const typedString = newKeys.join('').toLowerCase();
-        for (const [secret, action] of Object.entries(secrets)) {
-          if (typedString.includes(secret)) {
-            action();
-            return []; // Reset
-          }
+      // Verificar cada palabra secreta
+      const typedString = typedKeysRef.current.join('').toLowerCase();
+      for (const [secret, action] of Object.entries(secrets)) {
+        if (typedString.includes(secret)) {
+          action();
+          typedKeysRef.current = []; // Reset
+          return;
         }
-
-        return newKeys;
-      });
+      }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    globalThis.addEventListener('keydown', handleKeyPress);
+    return () => globalThis.removeEventListener('keydown', handleKeyPress);
   }, [secrets]);
 
   if (showHireMe) {

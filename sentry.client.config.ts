@@ -21,7 +21,7 @@ Sentry.init({
   ],
 
   // Environment
-  environment: process.env.NEXT_PUBLIC_VERCEL_ENV || 'development',
+  environment: process.env.NEXT_PUBLIC_VERCEL_ENV ?? 'development',
 
   // Release tracking
   release: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA,

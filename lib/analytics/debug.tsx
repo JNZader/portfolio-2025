@@ -26,8 +26,8 @@ export function AnalyticsDebugPanel() {
   useEffect(() => {
     // Check analytics status
     const checkStatus = () => {
-      setVaStatus(typeof window !== 'undefined' && !!window.va);
-      setGtagStatus(typeof window !== 'undefined' && !!window.gtag);
+      setVaStatus(typeof globalThis !== 'undefined' && !!globalThis.va);
+      setGtagStatus(typeof globalThis !== 'undefined' && !!globalThis.gtag);
     };
 
     checkStatus();
@@ -38,15 +38,15 @@ export function AnalyticsDebugPanel() {
 
   // Intercept analytics calls (for demo/testing)
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof globalThis === 'undefined') return;
 
     // Store original functions
-    const originalVa = window.va;
-    const originalGtag = window.gtag;
+    const originalVa = globalThis.va;
+    const originalGtag = globalThis.gtag;
 
     // Wrap va
-    if (window.va) {
-      window.va = (type: string, name: string, data?: Record<string, unknown>) => {
+    if (globalThis.va) {
+      globalThis.va = (type: string, name: string, data?: Record<string, unknown>) => {
         addEvent({
           type: type === 'track' ? 'event' : 'pageview',
           name,
@@ -58,10 +58,10 @@ export function AnalyticsDebugPanel() {
     }
 
     // Wrap gtag
-    if (window.gtag) {
-      window.gtag = (
+    if (globalThis.gtag) {
+      globalThis.gtag = (
         command: 'config' | 'event' | 'js' | 'set' | 'consent',
-        targetId: string | Date | 'default' | 'update',
+        targetId: string | Date,
         config?: Record<string, unknown>
       ) => {
         if (command === 'event') {
@@ -78,8 +78,8 @@ export function AnalyticsDebugPanel() {
 
     return () => {
       // Restore original functions
-      if (originalVa) window.va = originalVa;
-      if (originalGtag) window.gtag = originalGtag;
+      if (originalVa) globalThis.va = originalVa;
+      if (originalGtag) globalThis.gtag = originalGtag;
     };
   }, [addEvent]);
 

@@ -8,9 +8,9 @@ interface JsonLdProps {
 /**
  * JSON-LD structured data component
  */
-export function JsonLd({ data }: JsonLdProps) {
+export function JsonLd({ data }: Readonly<JsonLdProps>) {
   // Generate unique ID based on the type or a fallback
-  const schemaType = (data as { '@type'?: string })['@type'] || 'schema';
+  const schemaType = (data as { '@type'?: string })['@type'] ?? 'schema';
   const id = `json-ld-${schemaType}`;
 
   return (

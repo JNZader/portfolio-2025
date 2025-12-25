@@ -45,7 +45,7 @@ export function HeroSection({
   secondaryCta,
   socialLinks,
   showScrollIndicator = true,
-}: HeroSectionProps) {
+}: Readonly<HeroSectionProps>) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <HeroBackground />

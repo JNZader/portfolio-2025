@@ -20,7 +20,7 @@ interface SkillBadgeProps {
  * <SkillBadge name="React" icon={Code2} color="text-cyan-500" />
  * ```
  */
-export function SkillBadge({ name, icon: Icon, color, className }: SkillBadgeProps) {
+export function SkillBadge({ name, icon: Icon, color, className }: Readonly<SkillBadgeProps>) {
   return (
     <span
       className={cn(

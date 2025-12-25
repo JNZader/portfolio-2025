@@ -105,7 +105,7 @@ export function SyntaxHighlighter({
   wrapLines = true,
   customStyle,
   className,
-}: SyntaxHighlighterProps) {
+}: Readonly<SyntaxHighlighterProps>) {
   return (
     <Suspense fallback={<CodeSkeleton />}>
       <LazyHighlighter

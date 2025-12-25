@@ -108,11 +108,11 @@ function BenefitCard({
   icon,
   title,
   description,
-}: {
+}: Readonly<{
   icon: string;
   title: string;
   description: string;
-}) {
+}>) {
   return (
     <div className="flex gap-4">
       <div className="text-3xl">{icon}</div>
@@ -124,7 +124,7 @@ function BenefitCard({
   );
 }
 
-function StatItem({ label, value }: { label: string; value: string }) {
+function StatItem({ label, value }: Readonly<{ label: string; value: string }>) {
   return (
     <div className="flex justify-between items-center">
       <span className="text-sm text-[var(--color-muted-foreground)]">{label}</span>

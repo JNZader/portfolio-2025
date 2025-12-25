@@ -13,6 +13,7 @@ import { getRepoReadme } from '@/lib/github/client';
 import { getCachedFeaturedProjects } from '@/lib/github/queries';
 import type { Project } from '@/lib/github/types';
 import { logger } from '@/lib/monitoring/logger';
+import { convertSanityProject } from '@/lib/utils/project';
 import { getTechIcon } from '@/lib/utils/tech-icons';
 import { sanityFetch } from '@/sanity/lib/client';
 import { projectsQuery } from '@/sanity/lib/queries';
@@ -26,24 +27,6 @@ interface ProjectPageProps {
 
 // ISR: Revalidar cada 1 hora
 export const revalidate = 3600;
-
-/**
- * Convertir proyectos de Sanity al formato de la aplicación
- */
-function convertSanityProject(sanityProject: SanityProject): Project {
-  return {
-    id: sanityProject._id,
-    title: sanityProject.title,
-    description: sanityProject.excerpt,
-    tech: sanityProject.technologies || [],
-    image: sanityProject.mainImage ? `/projects/${sanityProject.slug.current}.jpg` : undefined,
-    url: sanityProject.demoUrl || sanityProject.githubUrl || '#',
-    github: sanityProject.githubUrl,
-    demo: sanityProject.demoUrl,
-    source: 'sanity',
-    featured: sanityProject.featured,
-  };
-}
 
 async function getAllProjects(): Promise<Project[]> {
   // Obtener proyectos de Sanity
@@ -92,7 +75,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   };
 }
 
-export default async function ProjectPage({ params }: ProjectPageProps) {
+export default async function ProjectPage({ params }: Readonly<ProjectPageProps>) {
   const resolvedParams = await params;
   const projects = await getAllProjects();
   const project = projects.find((p) => p.id === resolvedParams.id);
@@ -104,8 +87,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   // Obtener README si es un proyecto de GitHub
   let readme: string | null = null;
   if (project.source === 'github' && project.github) {
-    // Extraer owner y repo de la URL de GitHub
-    const match = project.github.match(/github\.com\/([^/]+)\/([^/]+)/);
+    // Extraer owner y repo de la URL de GitHub usando RegExp.exec()
+    const githubUrlRegex = /github\.com\/([^/]+)\/([^/]+)/;
+    const match = githubUrlRegex.exec(project.github);
     if (match) {
       const [, owner, repo] = match;
       readme = await getRepoReadme(owner, repo);

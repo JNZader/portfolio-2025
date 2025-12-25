@@ -14,7 +14,13 @@ interface NewsletterCardProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-function NewsletterCard({ className, size = 'lg' }: NewsletterCardProps) {
+function getButtonText(status: string): string {
+  if (status === 'loading') return 'Suscribiendo...';
+  if (status === 'success') return '¡Suscrito!';
+  return 'Suscribirse';
+}
+
+function NewsletterCard({ className, size = 'lg' }: Readonly<NewsletterCardProps>) {
   const { status, subscribe } = useNewsletterSubscription();
 
   const {
@@ -92,11 +98,7 @@ function NewsletterCard({ className, size = 'lg' }: NewsletterCardProps) {
         >
           {status === 'loading' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {status === 'success' && <CheckCircle className="mr-2 h-4 w-4" />}
-          {status === 'loading'
-            ? 'Suscribiendo...'
-            : status === 'success'
-              ? '¡Suscrito!'
-              : 'Suscribirse'}
+          {getButtonText(status)}
         </Button>
       </form>
 

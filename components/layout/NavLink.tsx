@@ -14,7 +14,7 @@ interface NavLinkProps {
  * Extracted from Header for Server Component optimization
  * Handles active state detection using usePathname
  */
-export function NavLink({ href, children }: NavLinkProps) {
+export function NavLink({ href, children }: Readonly<NavLinkProps>) {
   const pathname = usePathname();
   const isActive = pathname === href || (href !== '/' && pathname.startsWith(href));
 

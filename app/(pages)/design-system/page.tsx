@@ -25,6 +25,18 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
+const TYPOGRAPHY_SIZES = [
+  { size: 'text-5xl', label: '5xl' },
+  { size: 'text-4xl', label: '4xl' },
+  { size: 'text-3xl', label: '3xl' },
+  { size: 'text-2xl', label: '2xl' },
+  { size: 'text-xl', label: 'xl' },
+  { size: 'text-lg', label: 'lg' },
+  { size: 'text-base', label: 'base' },
+  { size: 'text-sm', label: 'sm' },
+  { size: 'text-xs', label: 'xs' },
+];
+
 export default function DesignSystemPage() {
   // Only available in development
   if (process.env.NODE_ENV === 'production') {
@@ -76,17 +88,7 @@ export default function DesignSystemPage() {
             <h2 className="text-3xl font-bold mb-6">Typography</h2>
           </RevealOnScroll>
           <div className="space-y-4">
-            {[
-              { size: 'text-5xl', label: '5xl' },
-              { size: 'text-4xl', label: '4xl' },
-              { size: 'text-3xl', label: '3xl' },
-              { size: 'text-2xl', label: '2xl' },
-              { size: 'text-xl', label: 'xl' },
-              { size: 'text-lg', label: 'lg' },
-              { size: 'text-base', label: 'base' },
-              { size: 'text-sm', label: 'sm' },
-              { size: 'text-xs', label: 'xs' },
-            ].map(({ size, label }) => (
+            {TYPOGRAPHY_SIZES.map(({ size, label }) => (
               <div key={size}>
                 <p className="text-sm text-muted-foreground mb-1">{label}</p>
                 <p className={`${size} font-bold`}>The quick brown fox</p>
@@ -338,7 +340,7 @@ export default function DesignSystemPage() {
 }
 
 // Helper Components
-function ColorSwatch({ name, className }: { name: string; className: string }) {
+function ColorSwatch({ name, className }: Readonly<{ name: string; className: string }>) {
   return (
     <div className="space-y-2">
       <div
@@ -361,7 +363,7 @@ function PlusIcon() {
   );
 }
 
-function CheckIcon({ className }: { className?: string }) {
+function CheckIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <title>Check</title>

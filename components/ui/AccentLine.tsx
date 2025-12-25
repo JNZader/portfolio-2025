@@ -8,7 +8,7 @@ interface AccentLineProps {
 /**
  * Decorative accent line for section headers
  */
-export function AccentLine({ position = 'left', className = '' }: AccentLineProps) {
+export function AccentLine({ position = 'left', className = '' }: Readonly<AccentLineProps>) {
   return (
     <div
       className={cn(

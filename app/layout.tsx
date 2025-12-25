@@ -47,7 +47,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://javierzader.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://javierzader.com'),
   title: {
     default: 'Javier Zader - Portfolio',
     template: '%s | Javier Zader',

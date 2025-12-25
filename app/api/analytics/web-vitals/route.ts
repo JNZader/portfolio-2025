@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Rate Limiting
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0] ?? 'unknown';
   const { success: rateLimitSuccess } = await vitalsRateLimiter.limit(ip);
   if (!rateLimitSuccess) {
     return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     const data = await request.json();
 
     // Validate required fields
-    if (!data.metric || typeof data.value === 'undefined') {
+    if (!data.metric || data.value === undefined) {
       return NextResponse.json({ success: false, error: 'Invalid data' }, { status: 400 });
     }
 

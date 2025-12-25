@@ -63,7 +63,7 @@ function getClientIP(request: NextRequest): string {
   const forwarded = request.headers.get('x-forwarded-for');
   const realIp = request.headers.get('x-real-ip');
   const cfConnectingIp = request.headers.get('cf-connecting-ip');
-  return cfConnectingIp || forwarded?.split(',')[0]?.trim() || realIp || 'unknown';
+  return cfConnectingIp ?? forwarded?.split(',')[0]?.trim() ?? realIp ?? 'unknown';
 }
 
 /**
@@ -97,7 +97,7 @@ export async function proxy(request: NextRequest) {
   if (isAdminRoute && !isAdminLogin && !isAdminUnauthorized) {
     // Verificar si hay cookie de sesión de NextAuth
     const sessionToken =
-      request.cookies.get('authjs.session-token')?.value ||
+      request.cookies.get('authjs.session-token')?.value ??
       request.cookies.get('__Secure-authjs.session-token')?.value;
 
     if (!sessionToken) {
@@ -185,7 +185,7 @@ export async function proxy(request: NextRequest) {
   // =========================================
 
   const suspiciousBots = ['curl/', 'wget/', 'python-requests/', 'scrapy/', 'httpx/', 'axios/'];
-  const ua = userAgent?.toLowerCase() || '';
+  const ua = userAgent?.toLowerCase() ?? '';
   const isSuspiciousBot = suspiciousBots.some((bot) => ua.includes(bot));
 
   if (isSuspiciousBot) {

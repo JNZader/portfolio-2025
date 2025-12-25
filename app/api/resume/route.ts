@@ -1,8 +1,10 @@
+import type { jsPDF } from 'jspdf';
 import { type NextRequest, NextResponse } from 'next/server';
 import resumeDataRaw from '@/lib/data/resume.json';
 import { logger } from '@/lib/monitoring/logger';
 import { getClientIdentifier, resumeRateLimiter } from '@/lib/rate-limit/redis';
 
+// Type definitions
 interface ResumeDataRaw {
   personalInfo: {
     name: string;
@@ -38,51 +40,206 @@ interface ResumeDataRaw {
   }>;
   skills: Record<string, string[]>;
   softSkills?: string[];
-  languages: Array<{
-    name: string;
-    level: string;
-  }>;
+  languages: Array<{ name: string; level: string }>;
 }
 
-interface ResumeData {
-  personalInfo: {
-    name: string;
-    title: string;
-    email: string;
-    phone: string;
-    location: string;
-    website: string;
-    linkedin: string;
-    github: string;
-  };
-  summary: string;
-  experience: Array<{
-    company: string;
-    position: string;
-    location: string;
-    startDate: string;
-    endDate: string;
-    highlights: string[];
-  }>;
-  projects?: Array<{
-    name: string;
-    description: string;
-    highlights: string[];
-  }>;
-  education: Array<{
-    institution: string;
-    degree: string;
-    location: string;
-    startDate: string;
-    endDate: string;
-    details?: string[];
-  }>;
-  skills: Record<string, string[]>;
-  softSkills?: string[];
-  languages: Array<{
-    name: string;
-    level: string;
-  }>;
+interface ResumeData extends Omit<ResumeDataRaw, 'personalInfo'> {
+  personalInfo: Omit<ResumeDataRaw['personalInfo'], 'email_encoded'> & { email: string };
+}
+
+// PDF Colors
+const COLORS = {
+  primary: [0, 102, 204] as [number, number, number],
+  text: [51, 51, 51] as [number, number, number],
+  lightGray: [128, 128, 128] as [number, number, number],
+};
+
+// PDF Context for rendering
+interface PDFContext {
+  doc: jsPDF;
+  yPos: number;
+  margin: number;
+  pageHeight: number;
+}
+
+// Helper: Check and add new page if needed
+function checkNewPage(ctx: PDFContext, requiredSpace = 20): void {
+  if (ctx.yPos + requiredSpace > ctx.pageHeight - ctx.margin) {
+    ctx.doc.addPage();
+    ctx.yPos = 12;
+  }
+}
+
+// Helper: Render section header
+function renderSectionHeader(ctx: PDFContext, title: string): void {
+  checkNewPage(ctx, 30);
+  ctx.doc.setFontSize(12);
+  ctx.doc.setTextColor(...COLORS.primary);
+  ctx.doc.text(title, 12, ctx.yPos);
+  ctx.yPos += 7;
+}
+
+// Helper: Render bullet points
+function renderBulletPoints(ctx: PDFContext, items: string[], indent = 17): void {
+  ctx.doc.setFontSize(8);
+  ctx.doc.setTextColor(...COLORS.text);
+  for (const item of items) {
+    checkNewPage(ctx, 15);
+    const lines = ctx.doc.splitTextToSize(`• ${item}`, 180);
+    ctx.doc.text(lines, indent, ctx.yPos);
+    ctx.yPos += lines.length * 4;
+  }
+}
+
+// Helper: Render header section
+function renderHeader(ctx: PDFContext, data: ResumeData): void {
+  ctx.doc.setFontSize(24);
+  ctx.doc.setTextColor(...COLORS.primary);
+  ctx.doc.text(data.personalInfo.name, 12, ctx.yPos);
+  ctx.yPos += 8;
+
+  ctx.doc.setFontSize(14);
+  ctx.doc.setTextColor(...COLORS.text);
+  ctx.doc.text(data.personalInfo.title, 12, ctx.yPos);
+  ctx.yPos += 10;
+
+  ctx.doc.setFontSize(9);
+  ctx.doc.setTextColor(...COLORS.lightGray);
+  ctx.doc.text(`${data.personalInfo.email} | ${data.personalInfo.location}`, 12, ctx.yPos);
+  ctx.yPos += 5;
+  ctx.doc.text(`${data.personalInfo.website} | ${data.personalInfo.linkedin}`, 12, ctx.yPos);
+  ctx.yPos += 12;
+}
+
+// Helper: Render summary section
+function renderSummary(ctx: PDFContext, summary: string): void {
+  renderSectionHeader(ctx, 'RESUMEN PROFESIONAL');
+  ctx.doc.setFontSize(9);
+  ctx.doc.setTextColor(...COLORS.text);
+  const lines = ctx.doc.splitTextToSize(summary, 185);
+  ctx.doc.text(lines, 12, ctx.yPos);
+  ctx.yPos += lines.length * 4 + 8;
+}
+
+// Helper: Render experience section
+function renderExperience(ctx: PDFContext, experience: ResumeData['experience']): void {
+  renderSectionHeader(ctx, 'EXPERIENCIA PROFESIONAL');
+
+  for (const job of experience) {
+    checkNewPage(ctx, 40);
+    ctx.doc.setFontSize(10);
+    ctx.doc.setTextColor(...COLORS.text);
+    ctx.doc.setFont('helvetica', 'bold');
+    ctx.doc.text(job.position, 12, ctx.yPos);
+    ctx.doc.setFont('helvetica', 'normal');
+    ctx.yPos += 5;
+
+    ctx.doc.setFontSize(9);
+    ctx.doc.setTextColor(...COLORS.lightGray);
+    const endDate = job.endDate === 'presente' ? 'Presente' : job.endDate;
+    ctx.doc.text(`${job.company} | ${job.startDate} - ${endDate}`, 12, ctx.yPos);
+    ctx.yPos += 5;
+
+    renderBulletPoints(ctx, job.highlights);
+    ctx.yPos += 4;
+  }
+}
+
+// Helper: Render projects section
+function renderProjects(ctx: PDFContext, projects: NonNullable<ResumeData['projects']>): void {
+  renderSectionHeader(ctx, 'PROYECTOS DESTACADOS');
+
+  for (const project of projects) {
+    checkNewPage(ctx, 40);
+    ctx.doc.setFontSize(10);
+    ctx.doc.setTextColor(...COLORS.primary);
+    ctx.doc.setFont('helvetica', 'bold');
+    ctx.doc.text(project.name, 12, ctx.yPos);
+    ctx.doc.setFont('helvetica', 'normal');
+    ctx.yPos += 5;
+
+    ctx.doc.setFontSize(8);
+    ctx.doc.setTextColor(...COLORS.text);
+    const descLines = ctx.doc.splitTextToSize(project.description, 185);
+    ctx.doc.text(descLines, 12, ctx.yPos);
+    ctx.yPos += descLines.length * 4 + 2;
+
+    renderBulletPoints(ctx, project.highlights);
+    ctx.yPos += 4;
+  }
+}
+
+// Helper: Render education section
+function renderEducation(ctx: PDFContext, education: ResumeData['education']): void {
+  renderSectionHeader(ctx, 'EDUCACIÓN Y CERTIFICACIONES');
+
+  for (const edu of education) {
+    checkNewPage(ctx, 30);
+    ctx.doc.setFontSize(10);
+    ctx.doc.setTextColor(...COLORS.primary);
+    ctx.doc.setFont('helvetica', 'bold');
+    ctx.doc.text(edu.degree, 12, ctx.yPos);
+    ctx.doc.setFont('helvetica', 'normal');
+    ctx.yPos += 5;
+
+    ctx.doc.setFontSize(8);
+    ctx.doc.setTextColor(...COLORS.lightGray);
+    ctx.doc.text(`${edu.institution} | ${edu.startDate} - ${edu.endDate}`, 12, ctx.yPos);
+    ctx.yPos += 5;
+
+    if (edu.details && edu.details.length > 0) {
+      renderBulletPoints(ctx, edu.details);
+    }
+    ctx.yPos += 4;
+  }
+}
+
+// Helper: Render skills section
+function renderSkills(ctx: PDFContext, skills: ResumeData['skills']): void {
+  renderSectionHeader(ctx, 'HABILIDADES TÉCNICAS');
+
+  for (const [category, skillList] of Object.entries(skills)) {
+    checkNewPage(ctx, 10);
+    ctx.doc.setFontSize(9);
+    ctx.doc.setTextColor(...COLORS.text);
+    ctx.doc.setFont('helvetica', 'bold');
+    ctx.doc.text(`${category}:`, 12, ctx.yPos);
+    ctx.doc.setFont('helvetica', 'normal');
+
+    ctx.doc.setTextColor(...COLORS.lightGray);
+    const skillsText = skillList.join(', ');
+    const skillsLines = ctx.doc.splitTextToSize(skillsText, 150);
+    ctx.doc.text(skillsLines, 50, ctx.yPos);
+    ctx.yPos += skillsLines.length * 4 + 2;
+  }
+}
+
+// Helper: Render soft skills section
+function renderSoftSkills(ctx: PDFContext, softSkills: string[]): void {
+  ctx.yPos += 3;
+  renderSectionHeader(ctx, 'HABILIDADES BLANDAS');
+  renderBulletPoints(ctx, softSkills);
+}
+
+// Helper: Render languages section
+function renderLanguages(ctx: PDFContext, languages: ResumeData['languages']): void {
+  ctx.yPos += 3;
+  checkNewPage(ctx, 20);
+  ctx.doc.setFontSize(12);
+  ctx.doc.setTextColor(...COLORS.primary);
+  ctx.doc.text('IDIOMAS', 12, ctx.yPos);
+  ctx.yPos += 7;
+
+  for (const lang of languages) {
+    ctx.doc.setFontSize(9);
+    ctx.doc.setTextColor(...COLORS.text);
+    ctx.doc.setFont('helvetica', 'bold');
+    ctx.doc.text(`${lang.name}:`, 12, ctx.yPos);
+    ctx.doc.setFont('helvetica', 'normal');
+    ctx.doc.setTextColor(...COLORS.lightGray);
+    ctx.doc.text(lang.level, 50, ctx.yPos);
+    ctx.yPos += 5;
+  }
 }
 
 /**
@@ -107,244 +264,50 @@ export async function GET(request: NextRequest) {
     // Lazy load jsPDF para reducir bundle inicial
     const { jsPDF } = await import('jspdf');
 
-    // Decodificar email desde base64 (protección anti-scraping)
+    // Prepare resume data (decode email from base64)
     const rawData = resumeDataRaw as ResumeDataRaw;
-    const decodedEmail = Buffer.from(rawData.personalInfo.email_encoded, 'base64').toString(
-      'utf-8'
-    );
-
     const data: ResumeData = {
       ...rawData,
       personalInfo: {
         ...rawData.personalInfo,
-        email: decodedEmail,
+        email: Buffer.from(rawData.personalInfo.email_encoded, 'base64').toString('utf-8'),
       },
     };
+
+    // Initialize PDF and context
     const doc = new jsPDF();
-
-    // Colors (matching LaTeX template)
-    const primaryColor: [number, number, number] = [0, 102, 204]; // RGB(0, 102, 204)
-    const textColor: [number, number, number] = [51, 51, 51];
-    const lightGray: [number, number, number] = [128, 128, 128];
-
-    let yPos = 12;
-    const pageHeight = doc.internal.pageSize.height;
-    const margin = 12;
-
-    // Helper function to check if we need a new page
-    const checkNewPage = (requiredSpace = 20) => {
-      if (yPos + requiredSpace > pageHeight - margin) {
-        doc.addPage();
-        yPos = 12;
-      }
+    const ctx: PDFContext = {
+      doc,
+      yPos: 12,
+      margin: 12,
+      pageHeight: doc.internal.pageSize.height,
     };
 
-    // Header
-    doc.setFontSize(24);
-    doc.setTextColor(...primaryColor);
-    doc.text(data.personalInfo.name, 12, yPos);
-    yPos += 8;
+    // Render all sections
+    renderHeader(ctx, data);
+    renderSummary(ctx, data.summary);
+    renderExperience(ctx, data.experience);
 
-    doc.setFontSize(14);
-    doc.setTextColor(...textColor);
-    doc.text(data.personalInfo.title, 12, yPos);
-    yPos += 10;
-
-    // Contact Info
-    doc.setFontSize(9);
-    doc.setTextColor(...lightGray);
-    const contactLine1 = `${data.personalInfo.email} | ${data.personalInfo.location}`;
-    doc.text(contactLine1, 12, yPos);
-    yPos += 5;
-    const contactLine2 = `${data.personalInfo.website} | ${data.personalInfo.linkedin}`;
-    doc.text(contactLine2, 12, yPos);
-    yPos += 12;
-
-    // Summary
-    checkNewPage(30);
-    doc.setFontSize(12);
-    doc.setTextColor(...primaryColor);
-    doc.text('RESUMEN PROFESIONAL', 12, yPos);
-    yPos += 7;
-
-    doc.setFontSize(9);
-    doc.setTextColor(...textColor);
-    const summaryLines = doc.splitTextToSize(data.summary, 185);
-    doc.text(summaryLines, 12, yPos);
-    yPos += summaryLines.length * 4 + 8;
-
-    // Experience
-    checkNewPage(30);
-    doc.setFontSize(12);
-    doc.setTextColor(...primaryColor);
-    doc.text('EXPERIENCIA PROFESIONAL', 12, yPos);
-    yPos += 7;
-
-    for (const job of data.experience) {
-      checkNewPage(40);
-
-      doc.setFontSize(10);
-      doc.setTextColor(...textColor);
-      doc.setFont('helvetica', 'bold');
-      doc.text(job.position, 12, yPos);
-      doc.setFont('helvetica', 'normal');
-      yPos += 5;
-
-      doc.setFontSize(9);
-      doc.setTextColor(...lightGray);
-      const endDate = job.endDate === 'presente' ? 'Presente' : job.endDate;
-      doc.text(`${job.company} | ${job.startDate} - ${endDate}`, 12, yPos);
-      yPos += 5;
-
-      doc.setFontSize(8);
-      doc.setTextColor(...textColor);
-      for (const highlight of job.highlights) {
-        checkNewPage(15);
-        const highlightLines = doc.splitTextToSize(`• ${highlight}`, 180);
-        doc.text(highlightLines, 17, yPos);
-        yPos += highlightLines.length * 4;
-      }
-      yPos += 4;
-    }
-
-    // Projects (if available)
     if (data.projects && data.projects.length > 0) {
-      checkNewPage(30);
-      doc.setFontSize(12);
-      doc.setTextColor(...primaryColor);
-      doc.text('PROYECTOS DESTACADOS', 12, yPos);
-      yPos += 7;
-
-      for (const project of data.projects) {
-        checkNewPage(40);
-
-        doc.setFontSize(10);
-        doc.setTextColor(...primaryColor);
-        doc.setFont('helvetica', 'bold');
-        doc.text(project.name, 12, yPos);
-        doc.setFont('helvetica', 'normal');
-        yPos += 5;
-
-        doc.setFontSize(8);
-        doc.setTextColor(...textColor);
-        const descLines = doc.splitTextToSize(project.description, 185);
-        doc.text(descLines, 12, yPos);
-        yPos += descLines.length * 4 + 2;
-
-        for (const highlight of project.highlights) {
-          checkNewPage(15);
-          const highlightLines = doc.splitTextToSize(`• ${highlight}`, 180);
-          doc.text(highlightLines, 17, yPos);
-          yPos += highlightLines.length * 4;
-        }
-        yPos += 4;
-      }
+      renderProjects(ctx, data.projects);
     }
 
-    // Education
-    checkNewPage(30);
-    doc.setFontSize(12);
-    doc.setTextColor(...primaryColor);
-    doc.text('EDUCACIÓN Y CERTIFICACIONES', 12, yPos);
-    yPos += 7;
+    renderEducation(ctx, data.education);
+    renderSkills(ctx, data.skills);
 
-    for (const edu of data.education) {
-      checkNewPage(30);
-
-      doc.setFontSize(10);
-      doc.setTextColor(...primaryColor);
-      doc.setFont('helvetica', 'bold');
-      doc.text(edu.degree, 12, yPos);
-      doc.setFont('helvetica', 'normal');
-      yPos += 5;
-
-      doc.setFontSize(8);
-      doc.setTextColor(...lightGray);
-      doc.text(`${edu.institution} | ${edu.startDate} - ${edu.endDate}`, 12, yPos);
-      yPos += 5;
-
-      // Education details (if available)
-      if (edu.details && edu.details.length > 0) {
-        doc.setFontSize(8);
-        doc.setTextColor(...textColor);
-        for (const detail of edu.details) {
-          checkNewPage(10);
-          const detailLines = doc.splitTextToSize(`• ${detail}`, 180);
-          doc.text(detailLines, 17, yPos);
-          yPos += detailLines.length * 4;
-        }
-      }
-      yPos += 4;
-    }
-
-    // Skills
-    checkNewPage(40);
-    doc.setFontSize(12);
-    doc.setTextColor(...primaryColor);
-    doc.text('HABILIDADES TÉCNICAS', 12, yPos);
-    yPos += 7;
-
-    for (const [category, skills] of Object.entries(data.skills)) {
-      checkNewPage(10);
-
-      doc.setFontSize(9);
-      doc.setTextColor(...textColor);
-      doc.setFont('helvetica', 'bold');
-      doc.text(`${category}:`, 12, yPos);
-      doc.setFont('helvetica', 'normal');
-
-      doc.setTextColor(...lightGray);
-      const skillsText = skills.join(', ');
-      const skillsLines = doc.splitTextToSize(skillsText, 150);
-      doc.text(skillsLines, 50, yPos);
-      yPos += skillsLines.length * 4 + 2;
-    }
-
-    // Soft Skills (if available)
     if (data.softSkills && data.softSkills.length > 0) {
-      yPos += 3;
-      checkNewPage(30);
-      doc.setFontSize(12);
-      doc.setTextColor(...primaryColor);
-      doc.text('HABILIDADES BLANDAS', 12, yPos);
-      yPos += 7;
-
-      doc.setFontSize(8);
-      doc.setTextColor(...textColor);
-      for (const skill of data.softSkills) {
-        checkNewPage(10);
-        const skillLines = doc.splitTextToSize(`• ${skill}`, 180);
-        doc.text(skillLines, 17, yPos);
-        yPos += skillLines.length * 4;
-      }
+      renderSoftSkills(ctx, data.softSkills);
     }
 
-    // Languages
-    yPos += 3;
-    checkNewPage(20);
-    doc.setFontSize(12);
-    doc.setTextColor(...primaryColor);
-    doc.text('IDIOMAS', 12, yPos);
-    yPos += 7;
+    renderLanguages(ctx, data.languages);
 
-    for (const lang of data.languages) {
-      doc.setFontSize(9);
-      doc.setTextColor(...textColor);
-      doc.setFont('helvetica', 'bold');
-      doc.text(`${lang.name}:`, 12, yPos);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(...lightGray);
-      doc.text(lang.level, 50, yPos);
-      yPos += 5;
-    }
-
-    // Generate PDF
+    // Generate and return PDF
     const pdfBuffer = doc.output('arraybuffer');
 
     return new NextResponse(pdfBuffer, {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="CV-${data.personalInfo.name.replace(/ /g, '-')}.pdf"`,
+        'Content-Disposition': `attachment; filename="CV-${data.personalInfo.name.replaceAll(' ', '-')}.pdf"`,
         'Cache-Control': 'public, max-age=3600',
       },
     });

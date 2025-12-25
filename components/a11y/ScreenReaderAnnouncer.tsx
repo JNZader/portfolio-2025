@@ -6,6 +6,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -16,7 +17,7 @@ type AnnouncerContextType = {
 
 const AnnouncerContext = createContext<AnnouncerContextType | null>(null);
 
-export function AnnouncerProvider({ children }: { children: ReactNode }) {
+export function AnnouncerProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [message, setMessage] = useState('');
   const [priority, setPriority] = useState<'polite' | 'assertive'>('polite');
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -42,8 +43,10 @@ export function AnnouncerProvider({ children }: { children: ReactNode }) {
     }, 100);
   }, []);
 
+  const contextValue = useMemo(() => ({ announce }), [announce]);
+
   return (
-    <AnnouncerContext.Provider value={{ announce }}>
+    <AnnouncerContext.Provider value={contextValue}>
       {children}
       {/* Live region para screen readers - visually hidden but accessible */}
       <output aria-live={priority} aria-atomic="true" className="sr-only">

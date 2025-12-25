@@ -29,8 +29,8 @@ export function hasAnalyticsConsent(): boolean {
  * Update Google Analytics consent mode
  */
 export function updateGAConsent(analytics: boolean) {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('consent', 'update', {
+  if (typeof globalThis !== 'undefined' && globalThis.gtag) {
+    globalThis.gtag('consent', 'update', {
       analytics_storage: analytics ? 'granted' : 'denied',
     });
   }
@@ -40,8 +40,8 @@ export function updateGAConsent(analytics: boolean) {
  * Set default Google Analytics consent (called on page load)
  */
 export function setDefaultGAConsent() {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('consent', 'default', {
+  if (typeof globalThis !== 'undefined' && globalThis.gtag) {
+    globalThis.gtag('consent', 'default', {
       analytics_storage: 'denied',
       ad_storage: 'denied',
       wait_for_update: 500,

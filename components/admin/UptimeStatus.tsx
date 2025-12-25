@@ -45,7 +45,7 @@ interface UptimeData {
   error?: string;
 }
 
-function StatusIcon({ status }: { status: string }) {
+function StatusIcon({ status }: Readonly<{ status: string }>) {
   switch (status) {
     case 'up':
       return <CheckCircle className="h-5 w-5 text-green-500" />;
@@ -59,7 +59,7 @@ function StatusIcon({ status }: { status: string }) {
   }
 }
 
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({ status }: Readonly<{ status: string }>) {
   const config: Record<string, { color: string; label: string }> = {
     up: {
       color: 'bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20',
@@ -83,7 +83,7 @@ function StatusBadge({ status }: { status: string }) {
     },
   };
 
-  const { color, label } = config[status] || {
+  const { color, label } = config[status] ?? {
     color: 'bg-gray-500/10 text-gray-600 dark:text-gray-400 border-gray-500/20',
     label: status,
   };
@@ -97,7 +97,7 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-function UptimeBar({ value, label }: { value: number; label: string }) {
+function UptimeBar({ value, label }: Readonly<{ value: number; label: string }>) {
   const getColor = (v: number) => {
     if (v >= 99.9) return 'bg-green-500';
     if (v >= 99) return 'bg-green-400';
@@ -143,6 +143,18 @@ function formatRelativeTime(isoDate: string): string {
   return `Hace ${diffDays}d`;
 }
 
+const LOG_TYPE_LABELS: Record<string, string> = {
+  up: 'Recuperado',
+  down: 'Caida',
+  paused: 'Pausado',
+};
+
+function LogIcon({ type }: Readonly<{ type: string }>) {
+  if (type === 'up') return <CheckCircle className="h-3 w-3 text-green-500" />;
+  if (type === 'down') return <XCircle className="h-3 w-3 text-red-500" />;
+  return <AlertTriangle className="h-3 w-3 text-yellow-500" />;
+}
+
 export function UptimeStatus() {
   const [data, setData] = useState<UptimeData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -157,7 +169,7 @@ export function UptimeStatus() {
       const result = await response.json();
 
       if (!response.ok && !result.configured) {
-        throw new Error(result.error || 'Error al obtener datos');
+        throw new Error(result.error ?? 'Error al obtener datos');
       }
 
       setData(result);
@@ -353,20 +365,8 @@ export function UptimeStatus() {
                       className="flex items-center justify-between rounded bg-muted/30 px-2 py-1.5 text-xs"
                     >
                       <div className="flex items-center gap-2">
-                        {log.type === 'up' ? (
-                          <CheckCircle className="h-3 w-3 text-green-500" />
-                        ) : log.type === 'down' ? (
-                          <XCircle className="h-3 w-3 text-red-500" />
-                        ) : (
-                          <AlertTriangle className="h-3 w-3 text-yellow-500" />
-                        )}
-                        <span className="capitalize">
-                          {log.type === 'up'
-                            ? 'Recuperado'
-                            : log.type === 'down'
-                              ? 'Caida'
-                              : 'Pausado'}
-                        </span>
+                        <LogIcon type={log.type} />
+                        <span className="capitalize">{LOG_TYPE_LABELS[log.type] ?? 'Pausado'}</span>
                         {log.duration > 0 && (
                           <span className="text-muted-foreground">
                             ({formatDuration(log.duration)})

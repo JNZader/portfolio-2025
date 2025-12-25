@@ -3,53 +3,59 @@
 import { X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 interface MobileMenuProps {
   open: boolean;
   onClose: () => void;
-  navigation: Array<{ name: string; href: string }>;
+  navigation: ReadonlyArray<{ name: string; href: string }>;
 }
 
-export default function MobileMenu({ open, onClose, navigation }: MobileMenuProps) {
+export default function MobileMenu({ open, onClose, navigation }: Readonly<MobileMenuProps>) {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
+  // Manage dialog open/close with native <dialog> API
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    const dialog = dialogRef.current;
+    if (!dialog) return;
 
-  // Prevenir scroll cuando el menú está abierto
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+    if (open && !dialog.open) {
+      dialog.showModal();
+    } else if (!open && dialog.open) {
+      dialog.close();
     }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
   }, [open]);
 
-  if (!mounted || !open) return null;
+  // Handle native dialog close event (ESC key, etc.)
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
 
-  const menuContent = (
-    <div
-      className="md:hidden"
-      role="dialog"
-      aria-modal="true"
+    const handleClose = () => {
+      onClose();
+    };
+
+    dialog.addEventListener('close', handleClose);
+    return () => dialog.removeEventListener('close', handleClose);
+  }, [onClose]);
+
+  return (
+    <dialog
+      ref={dialogRef}
+      className="md:hidden fixed inset-0 p-0 m-0 w-full h-full max-w-full max-h-full bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-sm"
       aria-labelledby="mobile-menu-title"
       aria-describedby="mobile-menu-nav"
     >
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+      {/* Backdrop button for closing */}
+      <button
+        type="button"
+        className="absolute inset-0 w-full h-full cursor-default bg-transparent"
         onClick={onClose}
-        aria-hidden="true"
+        aria-label="Cerrar menú"
+        tabIndex={-1}
       />
-
       {/* Panel */}
       <div
         id="mobile-menu"
@@ -104,8 +110,6 @@ export default function MobileMenu({ open, onClose, navigation }: MobileMenuProp
           </div>
         </nav>
       </div>
-    </div>
+    </dialog>
   );
-
-  return createPortal(menuContent, document.body);
 }

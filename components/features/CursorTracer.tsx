@@ -35,8 +35,8 @@ export function CursorTracer() {
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    globalThis.addEventListener('keydown', handleKeyPress);
+    return () => globalThis.removeEventListener('keydown', handleKeyPress);
   }, []);
 
   useEffect(() => {
@@ -54,8 +54,8 @@ export function CursorTracer() {
       setParticles((prev) => [...prev.slice(-20), newParticle]); // Máximo 20 partículas
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    globalThis.addEventListener('mousemove', handleMouseMove);
+    return () => globalThis.removeEventListener('mousemove', handleMouseMove);
   }, [isActive]);
 
   // Limpiar partículas viejas

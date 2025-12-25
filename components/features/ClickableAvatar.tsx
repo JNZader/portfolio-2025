@@ -12,7 +12,12 @@ interface ClickableAvatarProps {
   priority?: boolean;
 }
 
-export function ClickableAvatar({ src, alt, size = 200, priority = false }: ClickableAvatarProps) {
+export function ClickableAvatar({
+  src,
+  alt,
+  size = 200,
+  priority = false,
+}: Readonly<ClickableAvatarProps>) {
   const [clickCount, setClickCount] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
 

@@ -61,6 +61,16 @@ export function getPrimaryCategory(post: Post): Category | undefined {
   return post.categories?.[0];
 }
 
+// Time unit configuration for relative time formatting
+const TIME_UNITS = [
+  { seconds: 60, unit: 'minuto', plural: 's', divisor: 60 },
+  { seconds: 3600, unit: 'hora', plural: 's', divisor: 3600 },
+  { seconds: 86400, unit: 'día', plural: 's', divisor: 86400 },
+  { seconds: 604800, unit: 'semana', plural: 's', divisor: 604800 },
+  { seconds: 2592000, unit: 'mes', plural: 'es', divisor: 2592000 },
+  { seconds: 31536000, unit: 'año', plural: 's', divisor: 31536000 },
+] as const;
+
 /**
  * Formatea fecha de publicación de manera relativa
  */
@@ -73,31 +83,16 @@ export function getRelativeTime(date: string): string {
     return 'hace un momento';
   }
 
-  const diffInMinutes = Math.floor(diffInSeconds / 60);
-  if (diffInMinutes < 60) {
-    return `hace ${diffInMinutes} minuto${diffInMinutes > 1 ? 's' : ''}`;
+  // Find the appropriate time unit
+  for (let i = TIME_UNITS.length - 1; i >= 0; i--) {
+    const { seconds, unit, plural, divisor } = TIME_UNITS[i];
+    if (diffInSeconds >= seconds) {
+      const value = Math.floor(diffInSeconds / divisor);
+      return `hace ${value} ${unit}${value > 1 ? plural : ''}`;
+    }
   }
 
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  if (diffInHours < 24) {
-    return `hace ${diffInHours} hora${diffInHours > 1 ? 's' : ''}`;
-  }
-
-  const diffInDays = Math.floor(diffInHours / 24);
-  if (diffInDays < 7) {
-    return `hace ${diffInDays} día${diffInDays > 1 ? 's' : ''}`;
-  }
-
-  const diffInWeeks = Math.floor(diffInDays / 7);
-  if (diffInWeeks < 4) {
-    return `hace ${diffInWeeks} semana${diffInWeeks > 1 ? 's' : ''}`;
-  }
-
-  const diffInMonths = Math.floor(diffInDays / 30);
-  if (diffInMonths < 12) {
-    return `hace ${diffInMonths} mes${diffInMonths > 1 ? 'es' : ''}`;
-  }
-
-  const diffInYears = Math.floor(diffInDays / 365);
-  return `hace ${diffInYears} año${diffInYears > 1 ? 's' : ''}`;
+  // Fallback for less than a minute
+  const minutes = Math.floor(diffInSeconds / 60);
+  return `hace ${minutes} minuto${minutes > 1 ? 's' : ''}`;
 }

@@ -9,6 +9,9 @@ import type { ComponentProps } from 'react';
  * Wrapper sobre next-themes que integra con shadcn/ui
  * Soporta: light, dark, system
  */
-export function ThemeProvider({ children, ...props }: ComponentProps<typeof NextThemesProvider>) {
+export function ThemeProvider({
+  children,
+  ...props
+}: Readonly<ComponentProps<typeof NextThemesProvider>>) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
 }

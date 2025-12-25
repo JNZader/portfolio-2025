@@ -8,10 +8,10 @@ import { logger } from '@/lib/monitoring/logger';
 export default function PostError({
   error,
   reset,
-}: {
+}: Readonly<{
   error: Error & { digest?: string };
   reset: () => void;
-}) {
+}>) {
   useEffect(() => {
     logger.error('Post page error', error, {
       service: 'blog',

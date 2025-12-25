@@ -10,7 +10,7 @@ interface CodeBlockProps {
   filename?: string;
 }
 
-export function CodeBlock({ code, language, filename }: CodeBlockProps) {
+export function CodeBlock({ code, language, filename }: Readonly<CodeBlockProps>) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -62,7 +62,7 @@ export function CodeBlock({ code, language, filename }: CodeBlockProps) {
 }
 
 // Icons
-function CopyIcon({ className }: { className?: string }) {
+function CopyIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}
@@ -81,7 +81,7 @@ function CopyIcon({ className }: { className?: string }) {
   );
 }
 
-function CheckIcon({ className }: { className?: string }) {
+function CheckIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}

@@ -8,7 +8,7 @@ interface SearchStatsProps {
   categoryName?: string;
 }
 
-export function SearchStats({ total, categoryName }: SearchStatsProps) {
+export function SearchStats({ total, categoryName }: Readonly<SearchStatsProps>) {
   const searchParams = useSearchParams();
   const searchTerm = searchParams.get('search');
 

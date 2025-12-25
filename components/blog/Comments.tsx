@@ -22,7 +22,7 @@ interface CommentsProps {
   term?: string;
 }
 
-export function Comments({ term }: CommentsProps) {
+export function Comments({ term }: Readonly<CommentsProps>) {
   // Verificar que las variables de entorno existan
   const repo = process.env.NEXT_PUBLIC_GISCUS_REPO;
   const repoId = process.env.NEXT_PUBLIC_GISCUS_REPO_ID;

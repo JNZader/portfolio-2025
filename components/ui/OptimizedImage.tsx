@@ -17,7 +17,7 @@ export function OptimizedImage({
   className,
   blurDataURL,
   ...props
-}: OptimizedImageProps) {
+}: Readonly<OptimizedImageProps>) {
   const [isLoading, setIsLoading] = useState(true);
 
   return (

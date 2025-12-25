@@ -4,7 +4,7 @@ import { urlForImage } from '@/sanity/lib/image';
 import { postsQuery } from '@/sanity/lib/queries';
 import type { Post } from '@/types/sanity';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://javierzader.dev';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://javierzader.dev';
 const AUTHOR_NAME = 'Javier Zader';
 
 /**
@@ -48,8 +48,8 @@ ${posts
       <guid isPermaLink="true">${postUrl}</guid>
       <description><![CDATA[${escapeXml(post.excerpt)}]]></description>
       <pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>
-      <dc:creator><![CDATA[${escapeXml(post.author?.name || AUTHOR_NAME)}]]></dc:creator>
-${post.categories?.map((cat) => `      <category>${escapeXml(cat.title)}</category>`).join('\n')}
+      <dc:creator><![CDATA[${escapeXml(post.author?.name ?? AUTHOR_NAME)}]]></dc:creator>
+${post.categories?.map((cat) => `      <category>${escapeXml(cat.title)}</category>`).join('\n') ?? ''}
 ${imageUrl ? `      <enclosure url="${imageUrl}" type="image/jpeg"/>` : ''}
 ${post.readingTime ? `      <content:encoded><![CDATA[<p>Tiempo de lectura: ${post.readingTime} min</p><p>${escapeXml(post.excerpt)}</p>]]></content:encoded>` : ''}
     </item>`;
@@ -77,9 +77,9 @@ ${post.readingTime ? `      <content:encoded><![CDATA[<p>Tiempo de lectura: ${po
  */
 function escapeXml(text: string): string {
   return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&apos;');
 }

@@ -9,7 +9,7 @@ interface CategoryFilterProps {
   categories: Category[];
 }
 
-export function CategoryFilter({ categories }: CategoryFilterProps) {
+export function CategoryFilter({ categories }: Readonly<CategoryFilterProps>) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentCategory = searchParams.get('category');
@@ -26,21 +26,22 @@ export function CategoryFilter({ categories }: CategoryFilterProps) {
     }
 
     const query = params.toString();
-    router.push(`/blog${query ? `?${query}` : ''}`);
+    const url = query ? `/blog?${query}` : '/blog';
+    router.push(url);
   };
 
   return (
     <div className="flex flex-wrap gap-2">
       {/* Botón "Todas" */}
       <Button
-        variant={!currentCategory ? 'default' : 'outline'}
+        variant={currentCategory ? 'outline' : 'default'}
         size="sm"
         onClick={() => handleCategoryClick(null)}
       >
         Todas
-        {!currentCategory && (
+        {currentCategory ? null : (
           <span className="ml-2 rounded-full bg-white/20 px-2 py-0.5 text-xs">
-            {categories.reduce((acc, cat) => acc + (cat.postCount || 0), 0)}
+            {categories.reduce((acc, cat) => acc + (cat.postCount ?? 0), 0)}
           </span>
         )}
       </Button>

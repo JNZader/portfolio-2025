@@ -18,8 +18,8 @@ function sendToAnalytics(metric: Metric) {
   });
 
   // Send to Vercel Analytics
-  if (typeof window !== 'undefined' && window.va) {
-    window.va('track', 'web-vital', {
+  if (typeof globalThis !== 'undefined' && globalThis.va) {
+    globalThis.va('track', 'web-vital', {
       metric: name,
       value: Math.round(value),
       rating,
@@ -29,8 +29,8 @@ function sendToAnalytics(metric: Metric) {
   }
 
   // Send to Google Analytics
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', name, {
+  if (typeof globalThis !== 'undefined' && globalThis.gtag) {
+    globalThis.gtag('event', name, {
       value: Math.round(value),
       metric_rating: rating,
       metric_delta: Math.round(delta),

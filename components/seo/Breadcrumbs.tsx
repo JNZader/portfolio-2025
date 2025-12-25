@@ -11,7 +11,7 @@ interface BreadcrumbsProps {
   className?: string;
 }
 
-export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
+export function Breadcrumbs({ items, className }: Readonly<BreadcrumbsProps>) {
   return (
     <nav
       aria-label="Breadcrumb"

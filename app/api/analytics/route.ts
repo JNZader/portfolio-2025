@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Rate Limiting
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0] ?? 'unknown';
   const { success: rateLimitSuccess } = await analyticsRateLimiter.limit(ip);
   if (!rateLimitSuccess) {
     return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     const metricValue = data.value;
 
     // Validate metric structure
-    if (!metricName || typeof metricValue === 'undefined') {
+    if (!metricName || metricValue === undefined) {
       return NextResponse.json({ success: false, error: 'Invalid metric' }, { status: 400 });
     }
 
