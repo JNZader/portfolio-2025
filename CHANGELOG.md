@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.7](https://github.com/JNZader/portfolio-2025/compare/v1.6.6...v1.6.7) (2025-12-25)
+
+
+### Bug Fixes
+
+* **security:** prevent URL substring manipulation in badge detection ([3049051](https://github.com/JNZader/portfolio-2025/commits/3049051b034a0935061af594a43b623f29968fa8))
+
+
+### Code Refactoring
+
+* **quality:** fix SonarQube issues and reduce code duplication ([3c96f5e](https://github.com/JNZader/portfolio-2025/commits/3c96f5e58000b14ec25c8ede47542d58179a9729))
+
 ### [1.6.6](https://github.com/JNZader/portfolio-2025/compare/v1.6.5...v1.6.6) (2025-12-24)
 
 ### [1.6.5](https://github.com/JNZader/portfolio-2025/compare/v1.6.4...v1.6.5) (2025-12-24)
