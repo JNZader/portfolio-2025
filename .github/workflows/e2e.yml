@@ -76,6 +76,37 @@ jobs:
           UPSTASH_REDIS_REST_URL: https://dummy-redis.upstash.io
           UPSTASH_REDIS_REST_TOKEN: dummy_redis_token_for_ci
 
+      - name: Start production server
+        run: |
+          npm start &
+          echo "Waiting for server to be ready..."
+          timeout=120
+          while ! curl -s http://localhost:3000 > /dev/null 2>&1; do
+            timeout=$((timeout - 1))
+            if [ $timeout -le 0 ]; then
+              echo "Server failed to start within timeout"
+              exit 1
+            fi
+            sleep 1
+          done
+          echo "Server is ready!"
+        env:
+          DATABASE_URL: file:./prisma/dev.db
+          DIRECT_URL: file:./prisma/dev.db
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
+          NEXT_PUBLIC_SANITY_API_VERSION: ${{ secrets.NEXT_PUBLIC_SANITY_API_VERSION }}
+          NEXT_PUBLIC_GISCUS_REPO: dummy-user/dummy-repo
+          NEXT_PUBLIC_GISCUS_REPO_ID: dummy-repo-id
+          NEXT_PUBLIC_GISCUS_CATEGORY: Announcements
+          NEXT_PUBLIC_GISCUS_CATEGORY_ID: dummy-category-id
+          RESEND_API_KEY: re_dummy_api_key_for_ci_build
+          RESEND_FROM_EMAIL: noreply@example.com
+          RESEND_TO_EMAIL: contact@example.com
+          UPSTASH_REDIS_REST_URL: https://dummy-redis.upstash.io
+          UPSTASH_REDIS_REST_TOKEN: dummy_redis_token_for_ci
+
       - name: Run Playwright tests
         run: npm run e2e
         env:
@@ -83,6 +114,8 @@ jobs:
           NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
           NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
           NEXT_PUBLIC_SANITY_API_VERSION: ${{ secrets.NEXT_PUBLIC_SANITY_API_VERSION }}
+          UPSTASH_REDIS_REST_URL: https://dummy-redis.upstash.io
+          UPSTASH_REDIS_REST_TOKEN: dummy_redis_token_for_ci
 
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v6
