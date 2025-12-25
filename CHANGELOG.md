@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.8](https://github.com/JNZader/portfolio-2025/compare/v1.6.7...v1.6.8) (2025-12-25)
+
+
+### Bug Fixes
+
+* **ci:** start production server before E2E tests ([34c0c62](https://github.com/JNZader/portfolio-2025/commits/34c0c62053dfe19ef0aafc73c1c51ff497500c34))
+
 ### [1.6.7](https://github.com/JNZader/portfolio-2025/compare/v1.6.6...v1.6.7) (2025-12-25)
 
 
