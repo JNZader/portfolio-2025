@@ -1,10 +1,16 @@
 import { z } from 'zod';
+import { REGEX_PATTERNS } from '@/lib/constants';
 
 /**
  * Schema para solicitud de exportación de datos
  */
 export const dataExportSchema = z.object({
-  email: z.string().min(1, 'El email es requerido').email('Email inválido').toLowerCase().trim(),
+  email: z
+    .string()
+    .min(1, 'El email es requerido')
+    .regex(REGEX_PATTERNS.email, 'Email inválido')
+    .toLowerCase()
+    .trim(),
 });
 
 export type DataExportInput = z.infer<typeof dataExportSchema>;
@@ -13,7 +19,12 @@ export type DataExportInput = z.infer<typeof dataExportSchema>;
  * Schema para solicitud de eliminación de datos
  */
 export const dataDeletionSchema = z.object({
-  email: z.string().min(1, 'El email es requerido').email('Email inválido').toLowerCase().trim(),
+  email: z
+    .string()
+    .min(1, 'El email es requerido')
+    .regex(REGEX_PATTERNS.email, 'Email inválido')
+    .toLowerCase()
+    .trim(),
   confirmation: z.literal(true, {
     error: 'Debes confirmar que entiendes que esta acción es irreversible',
   }),

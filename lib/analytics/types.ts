@@ -1,25 +1,32 @@
 /**
  * Global type declarations for analytics
+ * Supports both window and globalThis access patterns
  */
 
-declare global {
-  interface Window {
-    /**
-     * Vercel Analytics
-     * https://vercel.com/docs/analytics
-     */
-    va?: (event: string, eventName: string, eventParams?: Record<string, unknown>) => void;
+type VaFunction = (event: string, eventName: string, eventParams?: Record<string, unknown>) => void;
 
-    /**
-     * Google Analytics (gtag)
-     * https://developers.google.com/analytics/devguides/collection/gtagjs
-     */
-    gtag?: (
-      command: 'config' | 'event' | 'js' | 'set' | 'consent',
-      targetId: string | Date | 'default' | 'update',
-      config?: Record<string, unknown>
-    ) => void;
+type GtagFunction = (
+  command: 'config' | 'event' | 'js' | 'set' | 'consent',
+  targetId: string | Date,
+  config?: Record<string, unknown>
+) => void;
+
+declare global {
+  /**
+   * Window interface extensions (for window.* access)
+   */
+  interface Window {
+    va?: VaFunction;
+    gtag?: GtagFunction;
   }
+
+  /**
+   * Global variables (for globalThis.* access)
+   * Using var is required for global declarations
+   */
+  var va: VaFunction | undefined;
+  var gtag: GtagFunction | undefined;
 }
 
-export {};
+// Export types to make this a module (required for global augmentation)
+export type { VaFunction, GtagFunction };

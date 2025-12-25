@@ -18,7 +18,7 @@ export function BlogPostTracker({ slug, title }: BlogPostTrackerProps) {
     trackBlogPostView(slug, title);
 
     // Track posts read for achievement
-    const postsRead = JSON.parse(localStorage.getItem('postsRead') || '[]');
+    const postsRead = JSON.parse(localStorage.getItem('postsRead') ?? '[]');
     if (!postsRead.includes(slug)) {
       postsRead.push(slug);
       localStorage.setItem('postsRead', JSON.stringify(postsRead));

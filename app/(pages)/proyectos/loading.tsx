@@ -2,6 +2,9 @@ import Container from '@/components/ui/Container';
 import { Card, CardContent } from '@/components/ui/card';
 import Section, { SECTION_BG } from '@/components/ui/Section';
 
+const SKELETON_TECH_ITEMS = [1, 2, 3];
+const SKELETON_PROJECT_CARDS = ['a', 'b', 'c', 'd', 'e', 'f'];
+
 function ProjectCardSkeleton() {
   return (
     <Card className="overflow-hidden h-full flex flex-col">
@@ -22,7 +25,7 @@ function ProjectCardSkeleton() {
 
         {/* Technologies skeleton */}
         <div className="flex flex-wrap gap-1 mb-4">
-          {[1, 2, 3].map((i) => (
+          {SKELETON_TECH_ITEMS.map((i) => (
             <div key={i} className="h-5 w-16 bg-muted rounded animate-pulse" />
           ))}
         </div>
@@ -63,7 +66,7 @@ export default function ProyectosLoading() {
 
           {/* Grid skeleton */}
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {['a', 'b', 'c', 'd', 'e', 'f'].map((id) => (
+            {SKELETON_PROJECT_CARDS.map((id) => (
               <ProjectCardSkeleton key={id} />
             ))}
           </div>

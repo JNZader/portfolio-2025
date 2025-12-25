@@ -9,7 +9,7 @@ interface PostHeaderProps {
   post: Post;
 }
 
-export function PostHeader({ post }: PostHeaderProps) {
+export function PostHeader({ post }: Readonly<PostHeaderProps>) {
   const imageUrl = getImageUrl(post.mainImage, 1600, 900);
   const blurUrl = getImageBlurUrl(post.mainImage);
 
@@ -51,7 +51,7 @@ export function PostHeader({ post }: PostHeaderProps) {
                     variant="default"
                     className="shadow-lg"
                     style={{
-                      backgroundColor: category.color || 'var(--color-primary)',
+                      backgroundColor: category.color ?? 'var(--color-primary)',
                       color: 'white',
                     }}
                   >

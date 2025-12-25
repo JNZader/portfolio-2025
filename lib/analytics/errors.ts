@@ -17,8 +17,8 @@ export function trackError(error: Error, context?: Record<string, unknown>): str
   const eventId = Sentry.captureException(error, { extra: context });
 
   // 2. Google Analytics (para métricas de errores)
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'exception', {
+  if (typeof globalThis !== 'undefined' && globalThis.gtag) {
+    globalThis.gtag('event', 'exception', {
       description: error.message,
       fatal: false,
       ...context,
@@ -26,8 +26,8 @@ export function trackError(error: Error, context?: Record<string, unknown>): str
   }
 
   // 3. Vercel Analytics (custom event para dashboard de Vercel)
-  if (typeof window !== 'undefined' && window.va) {
-    window.va('track', 'error', {
+  if (typeof globalThis !== 'undefined' && globalThis.va) {
+    globalThis.va('track', 'error', {
       message: error.message,
       name: error.name,
       stack: error.stack?.substring(0, 500), // Limit stack trace

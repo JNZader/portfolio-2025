@@ -19,6 +19,20 @@ import { getImageUrl } from '@/sanity/lib/image';
 import { allPostSlugsQuery, postBySlugQuery, relatedPostsQuery } from '@/sanity/lib/queries';
 import type { Post } from '@/types/sanity';
 
+/**
+ * Renders the post content based on available format
+ */
+function PostContent({ post }: Readonly<{ post: Post }>) {
+  if (post.markdownBody) {
+    return <MarkdownRenderer content={post.markdownBody} />;
+  }
+  if (post.body) {
+    /* biome-ignore lint/suspicious/noExplicitAny: Type incompatibility between Sanity and Portable Text library */
+    return <PortableTextRenderer value={post.body as any} />;
+  }
+  return <p className="text-muted-foreground">No content available.</p>;
+}
+
 interface PostPageProps {
   params: Promise<{
     slug: string;
@@ -46,13 +60,13 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   const ogImage = getImageUrl(post.mainImage, 1200, 630);
 
   return {
-    title: post.seo?.metaTitle || post.title,
-    description: post.seo?.metaDescription || post.excerpt,
+    title: post.seo?.metaTitle ?? post.title,
+    description: post.seo?.metaDescription ?? post.excerpt,
     keywords: post.seo?.keywords,
     authors: post.author ? [{ name: post.author.name }] : undefined,
     openGraph: {
-      title: post.seo?.metaTitle || post.title,
-      description: post.seo?.metaDescription || post.excerpt,
+      title: post.seo?.metaTitle ?? post.title,
+      description: post.seo?.metaDescription ?? post.excerpt,
       type: 'article',
       publishedTime: post.publishedAt,
       authors: post.author ? [post.author.name] : undefined,
@@ -102,7 +116,7 @@ export async function generateStaticParams() {
 /**
  * Post page
  */
-export default async function PostPage({ params }: PostPageProps) {
+export default async function PostPage({ params }: Readonly<PostPageProps>) {
   const { slug } = await params;
 
   // Fetch post
@@ -133,7 +147,7 @@ export default async function PostPage({ params }: PostPageProps) {
   });
 
   // Full URL for share buttons
-  const fullUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'}/blog/${slug}`;
+  const fullUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://example.com'}/blog/${slug}`;
 
   // Generate schemas
   const blogPostingSchema = generateBlogPostingSchema({
@@ -184,14 +198,7 @@ export default async function PostPage({ params }: PostPageProps) {
               {/* Body - Card estilizado con MEJOR OPACIDAD */}
               <div className="mb-12 bg-card backdrop-blur-sm rounded-xl border-2 border-border p-8 md:p-12 shadow-md">
                 {/* Markdown takes priority if available, otherwise use Portable Text */}
-                {post.markdownBody ? (
-                  <MarkdownRenderer content={post.markdownBody} />
-                ) : post.body ? (
-                  /* biome-ignore lint/suspicious/noExplicitAny: Type incompatibility between Sanity and Portable Text library */
-                  <PortableTextRenderer value={post.body as any} />
-                ) : (
-                  <p className="text-muted-foreground">No content available.</p>
-                )}
+                <PostContent post={post} />
               </div>
 
               {/* Share buttons - Card con MEJOR OPACIDAD */}

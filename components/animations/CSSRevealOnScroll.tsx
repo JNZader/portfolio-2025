@@ -29,7 +29,7 @@ export function CSSRevealOnScroll({
   duration = 600,
   once = true,
   threshold = 0.1,
-}: CSSRevealOnScrollProps) {
+}: Readonly<CSSRevealOnScrollProps>) {
   const { ref, isVisible, prefersReducedMotion } = useScrollReveal<HTMLDivElement>({
     threshold,
     once,
@@ -99,13 +99,13 @@ export function CSSStaggeredReveal({
   className,
   animation = 'slide-up',
   staggerDelay = 0.1,
-}: CSSStaggeredRevealProps) {
+}: Readonly<CSSStaggeredRevealProps>) {
   return (
     <div className={className}>
       {children.map((child, index) => (
         <CSSRevealOnScroll
           // biome-ignore lint/suspicious/noArrayIndexKey: Children are stable and won't reorder
-          key={index}
+          key={index} // NOSONAR S6479 - stable children array, no reordering
           animation={animation}
           delay={index * staggerDelay}
         >

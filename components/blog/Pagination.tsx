@@ -10,7 +10,7 @@ interface PaginationProps {
   totalPages: number;
 }
 
-export function Pagination({ currentPage, totalPages }: PaginationProps) {
+export function Pagination({ currentPage, totalPages }: Readonly<PaginationProps>) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -97,7 +97,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
 }
 
 // Iconos SVG
-function ChevronLeftIcon({ className }: { className?: string }) {
+function ChevronLeftIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}
@@ -112,7 +112,7 @@ function ChevronLeftIcon({ className }: { className?: string }) {
   );
 }
 
-function ChevronRightIcon({ className }: { className?: string }) {
+function ChevronRightIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}

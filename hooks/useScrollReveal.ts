@@ -38,7 +38,7 @@ export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
 
   // Check reduced motion preference using native API
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const mediaQuery = globalThis.matchMedia('(prefers-reduced-motion: reduce)');
     setPrefersReducedMotion(mediaQuery.matches);
 
     const handleChange = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);

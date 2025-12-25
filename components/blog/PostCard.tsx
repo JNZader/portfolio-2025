@@ -15,9 +15,9 @@ interface PostCardProps {
   priority?: boolean;
 }
 
-export function PostCard({ post, priority = false }: PostCardProps) {
+export function PostCard({ post, priority = false }: Readonly<PostCardProps>) {
   const searchParams = useSearchParams();
-  const searchTerm = searchParams.get('search') || '';
+  const searchTerm = searchParams.get('search') ?? '';
 
   const imageUrl = getImageUrl(post.mainImage, 800, 450);
   const blurUrl = getImageBlurUrl(post.mainImage);
@@ -44,7 +44,6 @@ export function PostCard({ post, priority = false }: PostCardProps) {
               className="object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               priority={priority}
-              loading={priority ? 'eager' : 'lazy'}
               placeholder={blurUrl ? 'blur' : 'empty'}
               blurDataURL={blurUrl}
             />
@@ -78,8 +77,8 @@ export function PostCard({ post, priority = false }: PostCardProps) {
               <Badge
                 variant="outline"
                 style={{
-                  borderColor: primaryCategory.color || 'var(--color-border)',
-                  color: primaryCategory.color || 'var(--color-foreground)',
+                  borderColor: primaryCategory.color ?? 'var(--color-border)',
+                  color: primaryCategory.color ?? 'var(--color-foreground)',
                 }}
               >
                 {primaryCategory.title}
@@ -117,7 +116,6 @@ export function PostCard({ post, priority = false }: PostCardProps) {
                 alt={post.author.name}
                 fill
                 className="object-cover"
-                loading="lazy"
                 sizes="40px"
               />
             </div>
@@ -140,12 +138,13 @@ export function PostCard({ post, priority = false }: PostCardProps) {
  * Componente auxiliar para texto con highlight
  * Genera keys únicas usando index + tipo + longitud del texto para evitar colisiones
  */
-function HighlightedText({ parts }: { parts: { text: string; highlight: boolean }[] }) {
+function HighlightedText({ parts }: Readonly<{ parts: { text: string; highlight: boolean }[] }>) {
   return (
     <>
       {parts.map((part, index) => {
-        // Key única: tipo + índice + longitud + primer y último carácter
-        const uniqueKey = `${part.highlight ? 'hl' : 'tx'}-${index}-${part.text.length}-${part.text.charCodeAt(0) || 0}`;
+        // Key única: tipo + índice + longitud + primer código de punto Unicode
+        const firstCodePoint = part.text.codePointAt(0) ?? 0;
+        const uniqueKey = `${part.highlight ? 'hl' : 'tx'}-${index}-${part.text.length}-${firstCodePoint}`;
 
         return part.highlight ? (
           <mark

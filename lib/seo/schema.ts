@@ -1,6 +1,6 @@
 import type { BlogPosting, BreadcrumbList, Person, WebSite, WithContext } from 'schema-dts';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://javierzader.dev';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://javierzader.dev';
 
 /**
  * Generate Person schema (for homepage)
@@ -87,10 +87,10 @@ export function generateBlogPostingSchema(post: {
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
-    image: post.image || `${SITE_URL}/og-image.png`,
+    image: post.image ?? `${SITE_URL}/og-image.png`,
     url: `${SITE_URL}/blog/${post.slug}`,
     datePublished: post.publishedAt,
-    dateModified: post.updatedAt || post.publishedAt,
+    dateModified: post.updatedAt ?? post.publishedAt,
     author: {
       '@type': 'Person',
       name: 'Javier Zader',

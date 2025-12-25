@@ -12,9 +12,14 @@ interface ExternalLinkProps extends Omit<ComponentProps<typeof Link>, 'onClick'>
  * External link component with analytics tracking
  * Automatically opens in new tab and tracks click events
  */
-export function ExternalLink({ href, children, trackLabel, ...props }: ExternalLinkProps) {
+export function ExternalLink({
+  href,
+  children,
+  trackLabel,
+  ...props
+}: Readonly<ExternalLinkProps>) {
   const handleClick = () => {
-    const label = trackLabel || (typeof children === 'string' ? children : href);
+    const label = trackLabel ?? (typeof children === 'string' ? children : href);
     trackExternalLink(href, label);
   };
 

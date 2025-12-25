@@ -8,22 +8,24 @@ import { Button } from '@/components/ui/button';
 import type { Project } from '@/lib/github/types';
 import ProjectCard from './ProjectCard';
 
+type ProjectSource = 'all' | 'sanity' | 'github';
+
 interface ProjectsClientProps {
   projects: Project[];
 }
 
-export default function ProjectsClient({ projects }: ProjectsClientProps) {
+export default function ProjectsClient({ projects }: Readonly<ProjectsClientProps>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   // Estado para búsqueda y filtros
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') ?? '');
   const [selectedTechs, setSelectedTechs] = useState<string[]>(
-    searchParams.get('tech')?.split(',').filter(Boolean) || []
+    searchParams.get('tech')?.split(',').filter(Boolean) ?? []
   );
-  const [selectedSource, setSelectedSource] = useState<'all' | 'sanity' | 'github'>(
-    (searchParams.get('source') as 'all' | 'sanity' | 'github') || 'all'
+  const [selectedSource, setSelectedSource] = useState<ProjectSource>(
+    (searchParams.get('source') as ProjectSource) ?? 'all'
   );
   const [showFilters, setShowFilters] = useState(false);
 
@@ -35,7 +37,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
         techSet.add(tech);
       }
     }
-    return Array.from(techSet).sort();
+    return Array.from(techSet).sort((a, b) => a.localeCompare(b));
   }, [projects]);
 
   // Filtrar proyectos
@@ -59,7 +61,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
   }, [projects, searchQuery, selectedTechs, selectedSource]);
 
   // Actualizar URL params
-  const updateURL = (query: string, techs: string[], source: 'all' | 'sanity' | 'github') => {
+  const updateURL = (query: string, techs: string[], source: ProjectSource) => {
     const params = new URLSearchParams();
     if (query) params.set('q', query);
     if (techs.length > 0) params.set('tech', techs.join(','));
@@ -83,7 +85,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
     updateURL(searchQuery, newTechs, selectedSource);
   };
 
-  const handleSourceChange = (source: 'all' | 'sanity' | 'github') => {
+  const handleSourceChange = (source: ProjectSource) => {
     setSelectedSource(source);
     updateURL(searchQuery, selectedTechs, source);
   };

@@ -36,7 +36,7 @@ export function highlightSearchTerm(
     return [{ text, highlight: false }];
   }
 
-  const normalizedSearch = searchTerm.trim().replace(/\*/g, '');
+  const normalizedSearch = searchTerm.trim().replaceAll('*', '');
   const regex = new RegExp(`(${escapeRegExp(normalizedSearch)})`, 'gi');
   const parts = text.split(regex);
 
@@ -50,7 +50,7 @@ export function highlightSearchTerm(
  * Escape caracteres especiales de regex
  */
 function escapeRegExp(string: string): string {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return string.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 }
 
 /**
@@ -61,7 +61,7 @@ export function getSearchStatsMessage(
   searchTerm: string,
   categoryName?: string
 ): string {
-  const cleanTerm = searchTerm.replace(/\*/g, '');
+  const cleanTerm = searchTerm.replaceAll('*', '');
 
   if (total === 0) {
     if (categoryName) {

@@ -1,12 +1,17 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { unlockAchievement } from '@/lib/achievements';
 
 export function MatrixRain() {
   const [isActive, setIsActive] = useState(false);
-  const [_typedKeys, setTypedKeys] = useState<string[]>([]);
+  const typedKeysRef = useRef<string[]>([]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Function to deactivate matrix mode after timeout
+  const deactivateMatrix = useCallback(() => {
+    setIsActive(false);
+  }, []);
 
   // Detectar "matrix" escrito
   useEffect(() => {
@@ -15,24 +20,20 @@ export function MatrixRain() {
         return;
       }
 
-      setTypedKeys((prev) => {
-        const newKeys = [...prev, e.key].slice(-6);
-        const typed = newKeys.join('').toLowerCase();
+      typedKeysRef.current = [...typedKeysRef.current, e.key].slice(-6);
+      const typed = typedKeysRef.current.join('').toLowerCase();
 
-        if (typed === 'matrix') {
-          setIsActive(true);
-          unlockAchievement('matrix_fan');
-          setTimeout(() => setIsActive(false), 15000); // 15 segundos
-          return [];
-        }
-
-        return newKeys;
-      });
+      if (typed === 'matrix') {
+        setIsActive(true);
+        unlockAchievement('matrix_fan');
+        setTimeout(deactivateMatrix, 15000); // 15 segundos
+        typedKeysRef.current = [];
+      }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, []);
+    globalThis.addEventListener('keydown', handleKeyPress);
+    return () => globalThis.removeEventListener('keydown', handleKeyPress);
+  }, [deactivateMatrix]);
 
   // Canvas Matrix effect
   useEffect(() => {
@@ -42,12 +43,12 @@ export function MatrixRain() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = globalThis.innerWidth;
+    canvas.height = globalThis.innerHeight;
 
     const fontSize = 14;
     const columns = canvas.width / fontSize;
-    const drops: number[] = Array(Math.floor(columns)).fill(1);
+    const drops: number[] = new Array(Math.floor(columns)).fill(1);
 
     // Caracteres Matrix
     const matrixChars =

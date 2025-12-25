@@ -4,6 +4,11 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useNewsletterSubscription } from '@/hooks/useNewsletterSubscription';
 
+const STATUS_BUTTON_TEXT: Record<string, string> = {
+  loading: 'Enviando...',
+  success: 'Suscrito',
+};
+
 export function NewsletterInline() {
   const [email, setEmail] = useState('');
   const { status, subscribe } = useNewsletterSubscription();
@@ -11,7 +16,7 @@ export function NewsletterInline() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !email.includes('@')) {
+    if (!email?.includes('@')) {
       return;
     }
 
@@ -39,7 +44,7 @@ export function NewsletterInline() {
         required
       />
       <Button type="submit" disabled={isDisabled}>
-        {status === 'loading' ? 'Enviando...' : status === 'success' ? 'Suscrito' : 'Suscribirse'}
+        {STATUS_BUTTON_TEXT[status] ?? 'Suscribirse'}
       </Button>
     </form>
   );

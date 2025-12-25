@@ -14,14 +14,14 @@ interface BlogFiltersProps {
   totalPosts: number;
 }
 
-export function BlogFilters({ categories, totalPosts }: BlogFiltersProps) {
+export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProps>) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const filtersPanelId = useId();
   const [isPending, startTransition] = useTransition();
 
   // Estado local
-  const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
+  const [searchInput, setSearchInput] = useState(searchParams.get('search') ?? '');
   const [showFilters, setShowFilters] = useState(false);
 
   // Debounced search
@@ -34,10 +34,12 @@ export function BlogFilters({ categories, totalPosts }: BlogFiltersProps) {
   // Efecto para actualizar URL cuando cambia el debounced search
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
-    const urlSearch = params.get('search') || '';
+    const urlSearch = params.get('search') ?? '';
 
     if (debouncedSearch && isValidSearchTerm(debouncedSearch)) {
-      if (urlSearch !== debouncedSearch) {
+      if (urlSearch === debouncedSearch) {
+        // No changes needed
+      } else {
         params.set('search', debouncedSearch);
         params.delete('page');
         startTransition(() => {
@@ -47,8 +49,9 @@ export function BlogFilters({ categories, totalPosts }: BlogFiltersProps) {
     } else if (urlSearch) {
       params.delete('search');
       const query = params.toString();
+      const url = query ? `/blog?${query}` : '/blog';
       startTransition(() => {
-        router.push(`/blog${query ? `?${query}` : ''}`);
+        router.push(url);
       });
     }
   }, [debouncedSearch, router, searchParams]);
@@ -66,8 +69,9 @@ export function BlogFilters({ categories, totalPosts }: BlogFiltersProps) {
       }
 
       const query = params.toString();
+      const url = query ? `/blog?${query}` : '/blog';
       startTransition(() => {
-        router.push(`/blog${query ? `?${query}` : ''}`);
+        router.push(url);
       });
     },
     [searchParams, router]
@@ -81,7 +85,7 @@ export function BlogFilters({ categories, totalPosts }: BlogFiltersProps) {
     });
   }, [router]);
 
-  const hasActiveFilters = currentSearch || currentCategory;
+  const hasActiveFilters = currentSearch ?? currentCategory;
 
   const activeFiltersCount = [currentSearch && 1, currentCategory && 1].filter(Boolean).length;
 
@@ -157,7 +161,7 @@ export function BlogFilters({ categories, totalPosts }: BlogFiltersProps) {
             <legend className="text-sm font-medium mb-2 block">Categoría</legend>
             <div className="flex flex-wrap gap-2">
               <Button
-                variant={!currentCategory ? 'default' : 'outline'}
+                variant={currentCategory ? 'outline' : 'default'}
                 size="sm"
                 onClick={() => handleCategoryClick(null)}
               >
@@ -184,7 +188,7 @@ export function BlogFilters({ categories, totalPosts }: BlogFiltersProps) {
       {/* Resultados */}
       <div className="flex items-center justify-between text-sm text-muted-foreground">
         <output aria-live="polite" className="contents">
-          {totalPosts} artículo{totalPosts !== 1 ? 's' : ''}
+          {totalPosts} artículo{totalPosts === 1 ? '' : 's'}
           {hasActiveFilters && ' (filtrados)'}
         </output>
 

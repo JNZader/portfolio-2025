@@ -3,7 +3,7 @@
 import * as Sentry from '@sentry/nextjs';
 import { useEffect } from 'react';
 
-export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
+export default function GlobalError({ error }: Readonly<{ error: Error & { digest?: string } }>) {
   useEffect(() => {
     Sentry.captureException(error, {
       tags: {
@@ -20,7 +20,7 @@ export default function GlobalError({ error }: { error: Error & { digest?: strin
           <p>Hemos sido notificados y estamos trabajando en una solución.</p>
           <button
             onClick={() => {
-              window.location.href = '/';
+              globalThis.location.href = '/';
             }}
             style={{
               marginTop: '1rem',

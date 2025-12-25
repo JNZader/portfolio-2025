@@ -19,7 +19,7 @@ export function ObfuscatedEmail({
   domain,
   className = '',
   showIcon = false,
-}: ObfuscatedEmailProps) {
+}: Readonly<ObfuscatedEmailProps>) {
   const [showMenu, setShowMenu] = useState(false);
   const [copied, setCopied] = useState(false);
   const menuRef = useRef<HTMLSpanElement>(null);
@@ -57,7 +57,7 @@ export function ObfuscatedEmail({
   };
 
   const handleMailto = () => {
-    window.location.href = `mailto:${getEmail()}`;
+    globalThis.location.href = `mailto:${getEmail()}`;
     setShowMenu(false);
   };
 
@@ -115,7 +115,11 @@ export function ObfuscatedEmail({
 /**
  * Versión aún más ofuscada - no muestra el email completo hasta hacer hover
  */
-export function ObfuscatedEmailButton({ user, domain, className = '' }: ObfuscatedEmailProps) {
+export function ObfuscatedEmailButton({
+  user,
+  domain,
+  className = '',
+}: Readonly<ObfuscatedEmailProps>) {
   const [showEmail, setShowEmail] = useState(false);
   const [email, setEmail] = useState('');
 
@@ -125,7 +129,7 @@ export function ObfuscatedEmailButton({ user, domain, className = '' }: Obfuscat
 
   const handleClick = () => {
     if (email) {
-      window.location.href = `mailto:${email}`;
+      globalThis.location.href = `mailto:${email}`;
     }
   };
 
@@ -145,7 +149,7 @@ export function ObfuscatedEmailButton({ user, domain, className = '' }: Obfuscat
 }
 
 // Icons
-function EmailIcon({ className }: { className?: string }) {
+function EmailIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}
@@ -153,8 +157,7 @@ function EmailIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      role="img"
-      aria-label="Email"
+      aria-hidden="true"
     >
       <path
         strokeLinecap="round"
@@ -165,7 +168,7 @@ function EmailIcon({ className }: { className?: string }) {
   );
 }
 
-function ChevronIcon({ className }: { className?: string }) {
+function ChevronIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}
@@ -173,15 +176,14 @@ function ChevronIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       strokeWidth="2"
       stroke="currentColor"
-      role="img"
-      aria-label="Expandir"
+      aria-hidden="true"
     >
       <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
     </svg>
   );
 }
 
-function SendIcon({ className }: { className?: string }) {
+function SendIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}
@@ -189,8 +191,7 @@ function SendIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      role="img"
-      aria-label="Enviar"
+      aria-hidden="true"
     >
       <path
         strokeLinecap="round"
@@ -201,7 +202,7 @@ function SendIcon({ className }: { className?: string }) {
   );
 }
 
-function CopyIcon({ className }: { className?: string }) {
+function CopyIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}
@@ -209,8 +210,7 @@ function CopyIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      role="img"
-      aria-label="Copiar"
+      aria-hidden="true"
     >
       <path
         strokeLinecap="round"
@@ -221,7 +221,7 @@ function CopyIcon({ className }: { className?: string }) {
   );
 }
 
-function CheckIcon({ className }: { className?: string }) {
+function CheckIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}
@@ -229,8 +229,7 @@ function CheckIcon({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       strokeWidth="2"
       stroke="currentColor"
-      role="img"
-      aria-label="Completado"
+      aria-hidden="true"
     >
       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
     </svg>

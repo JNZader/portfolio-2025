@@ -8,7 +8,10 @@ interface ScrollIndicatorProps {
   className?: string;
 }
 
-export function ScrollIndicator({ targetId = 'content', className }: ScrollIndicatorProps) {
+export function ScrollIndicator({
+  targetId = 'content',
+  className,
+}: Readonly<ScrollIndicatorProps>) {
   const handleScroll = () => {
     const element = document.getElementById(targetId);
     if (element) {

@@ -1,3 +1,5 @@
+const SKELETON_FEATURES = [1, 2, 3];
+
 export function NewsletterSkeleton() {
   return (
     <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
@@ -28,7 +30,7 @@ export function NewsletterSkeleton() {
 
           {/* Features skeleton */}
           <div className="flex flex-wrap justify-center gap-6">
-            {[1, 2, 3].map((i) => (
+            {SKELETON_FEATURES.map((i) => (
               <div key={i} className="h-5 w-48 bg-muted/50 rounded animate-pulse" />
             ))}
           </div>

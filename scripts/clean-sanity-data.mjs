@@ -27,7 +27,7 @@ envContent.split('\n').forEach(line => {
   const trimmed = line.trim();
   if (trimmed && !trimmed.startsWith('#')) {
     const [key, ...valueParts] = trimmed.split('=');
-    const value = valueParts.join('=').replace(/^["']|["']$/g, '');
+    const value = valueParts.join('=').replaceAll(/^["']|["']$/g, '');
     env[key] = value;
   }
 });

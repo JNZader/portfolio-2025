@@ -5,7 +5,10 @@ interface SectionDividerProps {
   className?: string;
 }
 
-export function SectionDivider({ variant = 'default', className = '' }: SectionDividerProps) {
+export function SectionDivider({
+  variant = 'default',
+  className = '',
+}: Readonly<SectionDividerProps>) {
   if (variant === 'gradient') {
     return (
       <div className={cn('relative h-px w-full my-12', className)}>

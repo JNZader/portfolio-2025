@@ -33,11 +33,11 @@ export function DataRequestForm() {
       const result = await response.json();
 
       if (!response.ok) {
-        showError(result.message || 'Error al solicitar datos');
+        showError(result.message ?? 'Error al solicitar datos');
         return;
       }
 
-      showSuccess(result.message || 'Revisa tu email para descargar tus datos');
+      showSuccess(result.message ?? 'Revisa tu email para descargar tus datos');
       reset();
     } catch (error) {
       showError(error instanceof Error ? error.message : 'Error al exportar datos');

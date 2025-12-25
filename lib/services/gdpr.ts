@@ -141,7 +141,7 @@ export async function logConsent(data: {
     email: data.email,
     consentType: data.consentType,
     consentGiven: data.consentGiven,
-    version: data.version || '1.0',
+    version: data.version ?? '1.0',
   });
 
   await trackDatabaseQuery('consentLog.create', () =>
@@ -152,7 +152,7 @@ export async function logConsent(data: {
         consentGiven: data.consentGiven,
         ipAddress: data.ipAddress,
         userAgent: data.userAgent,
-        version: data.version || '1.0',
+        version: data.version ?? '1.0',
       },
     })
   );

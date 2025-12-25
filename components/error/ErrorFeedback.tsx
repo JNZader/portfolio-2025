@@ -4,7 +4,7 @@ import * as Sentry from '@sentry/nextjs';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
-export function ErrorFeedback({ eventId }: { eventId?: string }) {
+export function ErrorFeedback({ eventId }: Readonly<{ eventId?: string }>) {
   const [submitted, setSubmitted] = useState(false);
 
   const handleFeedback = () => {

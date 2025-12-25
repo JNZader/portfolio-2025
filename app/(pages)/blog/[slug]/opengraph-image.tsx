@@ -59,8 +59,8 @@ export default async function Image({ params }: Props) {
     });
   }
 
-  const title = post?.title || 'Blog Post';
-  const categories = post?.categories?.map((cat) => cat.title).join(', ') || '';
+  const title = post?.title ?? 'Blog Post';
+  const categories = post?.categories?.map((cat) => cat.title).join(', ') ?? '';
 
   return new ImageResponse(
     <div

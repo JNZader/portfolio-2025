@@ -14,7 +14,7 @@ export function EmptyState({
   title = 'No hay posts disponibles',
   description = 'Aún no se han publicado artículos en esta categoría.',
   action,
-}: EmptyStateProps) {
+}: Readonly<EmptyStateProps>) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
       {/* Icon */}
@@ -37,7 +37,7 @@ export function EmptyState({
 }
 
 // Icon SVG
-function DocumentIcon({ className }: { className?: string }) {
+function DocumentIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}

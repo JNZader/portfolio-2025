@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || '';
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? '';
 const ENABLE_ANALYTICS = process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === 'true';
 
 interface CookiePreferences {
@@ -41,8 +41,8 @@ export function GoogleAnalytics() {
     const url = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
 
     // Track pageview on route change
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('config', GA_MEASUREMENT_ID, {
+    if (typeof globalThis !== 'undefined' && globalThis.gtag) {
+      globalThis.gtag('config', GA_MEASUREMENT_ID, {
         page_path: url,
         anonymize_ip: true,
         cookie_flags: 'SameSite=None;Secure',

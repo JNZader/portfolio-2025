@@ -6,21 +6,20 @@ import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
 import { trackError } from '@/lib/analytics/errors';
 
-// biome-ignore lint/suspicious/noShadowRestrictedNames: Next.js requires this exact name for error boundaries
-export default function Error({
+export default function ErrorPage({
   error,
   reset,
-}: {
+}: Readonly<{
   error: Error & { digest?: string };
   reset: () => void;
-}) {
+}>) {
   const [eventId, setEventId] = useState<string | undefined>();
 
   useEffect(() => {
     // Track error to analytics and capture Sentry eventId
     const id = trackError(error, {
       digest: error.digest,
-      page: window.location.pathname,
+      page: globalThis.location.pathname,
       timestamp: new Date().toISOString(),
     });
     setEventId(id);
@@ -69,7 +68,7 @@ export default function Error({
           </Button>
           <Button
             onClick={() => {
-              window.location.href = '/';
+              globalThis.location.href = '/';
             }}
             variant="outline"
             size="lg"
@@ -91,7 +90,7 @@ export default function Error({
           <a href="/contacto" className="text-primary hover:underline">
             contáctanos
           </a>
-          .
+          {'.'}
         </p>
       </div>
     </Container>

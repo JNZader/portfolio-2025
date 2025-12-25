@@ -6,7 +6,7 @@ interface ShareButtonsProps {
   url: string;
 }
 
-export function ShareButtons({ url }: ShareButtonsProps) {
+export function ShareButtons({ url }: Readonly<ShareButtonsProps>) {
   const encodedUrl = encodeURIComponent(url);
 
   const shareLinks = {
@@ -15,7 +15,7 @@ export function ShareButtons({ url }: ShareButtonsProps) {
   };
 
   const handleShare = (platform: keyof typeof shareLinks) => {
-    window.open(shareLinks[platform], '_blank', 'width=600,height=400,resizable=yes');
+    globalThis.open(shareLinks[platform], '_blank', 'width=600,height=400,resizable=yes');
   };
 
   return (
@@ -54,7 +54,7 @@ export function ShareButtons({ url }: ShareButtonsProps) {
 }
 
 // Social Icons
-function LinkedInIcon({ className }: { className?: string }) {
+function LinkedInIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg className={className} fill="currentColor" viewBox="0 0 24 24">
       <title>LinkedIn</title>
@@ -63,7 +63,7 @@ function LinkedInIcon({ className }: { className?: string }) {
   );
 }
 
-function FacebookIcon({ className }: { className?: string }) {
+function FacebookIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg className={className} fill="currentColor" viewBox="0 0 24 24">
       <title>Facebook</title>

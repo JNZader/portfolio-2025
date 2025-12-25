@@ -26,7 +26,7 @@ export function ConfirmationModal({
   cancelText = 'Cancelar',
   variant = 'default',
   isLoading = false,
-}: ConfirmationModalProps) {
+}: Readonly<ConfirmationModalProps>) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
       <div className="space-y-4">

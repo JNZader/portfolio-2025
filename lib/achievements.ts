@@ -109,7 +109,7 @@ export const achievements: Achievement[] = [
 ];
 
 export function unlockAchievement(achievementId: string) {
-  if (typeof window === 'undefined') return;
+  if (typeof globalThis === 'undefined') return;
 
   const unlocked = getUnlockedAchievements();
   if (!unlocked.includes(achievementId)) {
@@ -120,8 +120,8 @@ export function unlockAchievement(achievementId: string) {
 }
 
 export function getUnlockedAchievements(): string[] {
-  if (typeof window === 'undefined') return [];
-  return JSON.parse(localStorage.getItem('achievements') || '[]');
+  if (typeof globalThis === 'undefined') return [];
+  return JSON.parse(localStorage.getItem('achievements') ?? '[]');
 }
 
 export function isAchievementUnlocked(achievementId: string): boolean {

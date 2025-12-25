@@ -12,7 +12,7 @@ export function SearchInput() {
   const searchParams = useSearchParams();
 
   // Estado local del input
-  const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
+  const [searchInput, setSearchInput] = useState(searchParams.get('search') ?? '');
 
   // Debounced value (500ms delay)
   const [debouncedSearch] = useDebounce(searchInput, 500);
@@ -20,7 +20,7 @@ export function SearchInput() {
   // Efecto para actualizar URL cuando cambia el debounced value
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
-    const currentSearch = params.get('search') || '';
+    const currentSearch = params.get('search') ?? '';
 
     // Solo actualizar si el valor debounced es diferente del actual
     if (debouncedSearch && isValidSearchTerm(debouncedSearch)) {
@@ -28,13 +28,15 @@ export function SearchInput() {
         params.set('search', debouncedSearch);
         params.delete('page'); // Reset a página 1
         const query = params.toString();
-        router.push(`/blog${query ? `?${query}` : ''}`);
+        const url = query ? `/blog?${query}` : '/blog';
+        router.push(url);
       }
     } else if (currentSearch) {
       // Solo borrar si había búsqueda activa
       params.delete('search');
       const query = params.toString();
-      router.push(`/blog${query ? `?${query}` : ''}`);
+      const url = query ? `/blog?${query}` : '/blog';
+      router.push(url);
     }
   }, [debouncedSearch, router, searchParams]);
 
@@ -83,7 +85,7 @@ export function SearchInput() {
 }
 
 // Icons
-function SearchIcon({ className }: { className?: string }) {
+function SearchIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}
@@ -102,7 +104,7 @@ function SearchIcon({ className }: { className?: string }) {
   );
 }
 
-function XIcon({ className }: { className?: string }) {
+function XIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}

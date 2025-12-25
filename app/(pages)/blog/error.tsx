@@ -9,10 +9,10 @@ import { logger } from '@/lib/monitoring/logger';
 export default function BlogError({
   error,
   reset,
-}: {
+}: Readonly<{
   error: Error & { digest?: string };
   reset: () => void;
-}) {
+}>) {
   useEffect(() => {
     logger.error('Blog page error', error, {
       service: 'blog',
@@ -57,7 +57,7 @@ export default function BlogError({
   );
 }
 
-function ExclamationIcon({ className }: { className?: string }) {
+function ExclamationIcon({ className }: Readonly<{ className?: string }>) {
   return (
     <svg
       className={className}

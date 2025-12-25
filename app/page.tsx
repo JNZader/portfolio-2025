@@ -40,17 +40,17 @@ const NewsletterHero = dynamic(
   }
 );
 
+const STATS = [
+  { value: '20+', label: 'Años en Tecnología', icon: TrendingUp },
+  { value: '15+', label: 'Proyectos Completados', icon: Briefcase },
+  { value: '4+', label: 'Certificaciones', icon: Award },
+  { value: '100%', label: 'Compromiso', icon: Target },
+];
+
 export default function HomePage() {
   // Generate structured data schemas
   const personSchema = generatePersonSchema();
   const websiteSchema = generateWebSiteSchema();
-
-  const stats = [
-    { value: '20+', label: 'Años en Tecnología', icon: TrendingUp },
-    { value: '15+', label: 'Proyectos Completados', icon: Briefcase },
-    { value: '4+', label: 'Certificaciones', icon: Award },
-    { value: '100%', label: 'Compromiso', icon: Target },
-  ];
 
   return (
     <>
@@ -85,7 +85,7 @@ export default function HomePage() {
           staggerDelay={0.1}
           className="flex flex-wrap justify-center gap-8 md:gap-16"
         >
-          {stats.map((stat) => {
+          {STATS.map((stat) => {
             const Icon = stat.icon;
             return (
               <div

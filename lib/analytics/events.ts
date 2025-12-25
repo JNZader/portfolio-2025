@@ -14,13 +14,13 @@ export function trackEvent(
   }
 ) {
   // Vercel Analytics
-  if (typeof window !== 'undefined' && window.va) {
-    window.va('track', eventName, eventParams);
+  if (typeof globalThis !== 'undefined' && globalThis.va) {
+    globalThis.va('track', eventName, eventParams);
   }
 
   // Google Analytics
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', eventName, {
+  if (typeof globalThis !== 'undefined' && globalThis.gtag) {
+    globalThis.gtag('event', eventName, {
       event_category: eventParams?.category,
       event_label: eventParams?.label,
       value: eventParams?.value,
@@ -83,7 +83,7 @@ export function trackDownload(fileName: string) {
 export function trackExternalLink(url: string, label?: string) {
   trackEvent('external_link', {
     category: 'outbound',
-    label: label || url,
+    label: label ?? url,
     url,
   });
 }

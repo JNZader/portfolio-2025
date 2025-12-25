@@ -20,7 +20,7 @@ export default async function AdminPage() {
         <div>
           <h1 className="text-3xl font-bold text-foreground">Panel de Administración</h1>
           <p className="mt-1 text-muted-foreground">
-            Bienvenido, {session.user.name || session.user.email}
+            Bienvenido, {session.user.name ?? session.user.email}
           </p>
         </div>
       </div>

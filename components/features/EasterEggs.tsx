@@ -5,7 +5,7 @@ import { unlockAchievement } from '@/lib/achievements';
 
 export function EasterEggs() {
   const [konamiActivated, setKonamiActivated] = useState(false);
-  const [_keys, setKeys] = useState<string[]>([]);
+  const keysRef = useRef<string[]>([]);
   const consoleShown = useRef(false);
 
   // Konami Code: ↑ ↑ ↓ ↓ ← → ← → B A
@@ -33,7 +33,7 @@ export function EasterEggs() {
       confettiElement.style.width = '10px';
       confettiElement.style.height = '10px';
       confettiElement.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      confettiElement.style.left = `${Math.random() * window.innerWidth}px`;
+      confettiElement.style.left = `${Math.random() * globalThis.innerWidth}px`;
       confettiElement.style.top = '-10px';
       confettiElement.style.opacity = '1';
       confettiElement.style.zIndex = '9999';
@@ -49,7 +49,7 @@ export function EasterEggs() {
         [
           { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
           {
-            transform: `translate(${randomX}px, ${window.innerHeight}px) rotate(${randomRotation}deg)`,
+            transform: `translate(${randomX}px, ${globalThis.innerHeight}px) rotate(${randomRotation}deg)`,
             opacity: 0,
           },
         ],
@@ -65,21 +65,17 @@ export function EasterEggs() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      setKeys((prevKeys) => {
-        const newKeys = [...prevKeys, e.key].slice(-10);
+      keysRef.current = [...keysRef.current, e.key].slice(-10);
 
-        if (newKeys.join(',') === konamiCode.join(',')) {
-          setKonamiActivated(true);
-          confetti();
-          unlockAchievement('konami_master');
-        }
-
-        return newKeys;
-      });
+      if (keysRef.current.join(',') === konamiCode.join(',')) {
+        setKonamiActivated(true);
+        confetti();
+        unlockAchievement('konami_master');
+      }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    globalThis.addEventListener('keydown', handleKeyDown);
+    return () => globalThis.removeEventListener('keydown', handleKeyDown);
   }, [confetti]);
 
   // Console Easter Egg - useRef evita duplicación en Strict Mode

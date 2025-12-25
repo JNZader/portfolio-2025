@@ -4,7 +4,7 @@ import { sanityFetch } from '@/sanity/lib/client';
 import { postsQuery, projectsQuery } from '@/sanity/lib/queries';
 import type { Post, Project } from '@/types/sanity';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://javierzader.dev';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://javierzader.dev';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages
@@ -50,7 +50,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
     blogPages = posts.map((post) => ({
       url: `${SITE_URL}/blog/${post.slug.current}`,
-      lastModified: new Date(post._updatedAt || post.publishedAt),
+      lastModified: new Date(post._updatedAt ?? post.publishedAt),
       changeFrequency: 'monthly',
       priority: 0.7,
     }));
@@ -70,7 +70,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
     projectPages = projects.map((project) => ({
       url: `${SITE_URL}/proyectos/${project.slug.current}`,
-      lastModified: new Date(project._updatedAt || project.publishedAt),
+      lastModified: new Date(project._updatedAt ?? project.publishedAt),
       changeFrequency: 'monthly',
       priority: 0.6,
     }));

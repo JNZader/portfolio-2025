@@ -93,39 +93,42 @@ export async function GET() {
     const data: UptimeRobotResponse = await response.json();
 
     if (data.stat !== 'ok') {
-      throw new Error(data.error?.message || 'Error desconocido de Uptime Robot');
+      throw new Error(data.error?.message ?? 'Error desconocido de Uptime Robot');
     }
 
     // Transformar datos para el frontend
     const monitors = data.monitors?.map((monitor) => {
-      const uptimeRatios = monitor.custom_uptime_ratio?.split('-').map(Number) || [0, 0, 0];
+      const uptimeRatios = monitor.custom_uptime_ratio?.split('-').map(Number) ?? [0, 0, 0];
 
       return {
         id: monitor.id,
         name: monitor.friendly_name,
         url: monitor.url,
-        status: STATUS_MAP[monitor.status] || 'unknown',
+        status: STATUS_MAP[monitor.status] ?? 'unknown',
         statusCode: monitor.status,
         responseTime: Number.parseInt(monitor.average_response_time, 10) || 0,
         uptime: {
-          day: uptimeRatios[0] || 0,
-          week: uptimeRatios[1] || 0,
-          month: uptimeRatios[2] || 0,
+          day: uptimeRatios[0] ?? 0,
+          week: uptimeRatios[1] ?? 0,
+          month: uptimeRatios[2] ?? 0,
         },
         logs:
-          monitor.logs?.slice(0, 5).map((log) => ({
-            type: log.type === 1 ? 'down' : log.type === 2 ? 'up' : 'paused',
-            datetime: new Date(log.datetime * 1000).toISOString(),
-            duration: log.duration,
-            reason: log.reason?.detail,
-          })) || [],
+          monitor.logs?.slice(0, 5).map((log) => {
+            const logTypeMap: Record<number, string> = { 1: 'down', 2: 'up' };
+            return {
+              type: logTypeMap[log.type] ?? 'paused',
+              datetime: new Date(log.datetime * 1000).toISOString(),
+              duration: log.duration,
+              reason: log.reason?.detail,
+            };
+          }) ?? [],
       };
     });
 
     return NextResponse.json(
       {
         configured: true,
-        monitors: monitors || [],
+        monitors: monitors ?? [],
         timestamp: new Date().toISOString(),
       },
       {

@@ -14,7 +14,7 @@ interface ProjectCardProps {
   priority?: boolean;
 }
 
-export default function ProjectCard({ project, priority = false }: ProjectCardProps) {
+export default function ProjectCard({ project, priority = false }: Readonly<ProjectCardProps>) {
   return (
     <Card
       variant="interactive"
@@ -30,7 +30,6 @@ export default function ProjectCard({ project, priority = false }: ProjectCardPr
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               priority={priority}
-              loading={priority ? 'eager' : 'lazy'}
               className="object-cover group-hover:scale-110 group-hover:brightness-110 transition-all duration-500"
             />
             {/* Gradient overlay for better badge contrast */}

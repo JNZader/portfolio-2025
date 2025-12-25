@@ -51,7 +51,7 @@ export function ContactForm() {
 
       // Si hay error (desechable), rechazar
       if (!emailCheck.isValid && !emailCheck.suggestion) {
-        showError(emailCheck.reason || 'Email inválido');
+        showError(emailCheck.reason ?? 'Email inválido');
         setIsSubmitting(false);
         return;
       }

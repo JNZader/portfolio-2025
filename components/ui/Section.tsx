@@ -61,7 +61,7 @@ function Section({
   container = true,
   children,
   ...props
-}: SectionProps) {
+}: Readonly<SectionProps>) {
   const content = container ? <Container>{children}</Container> : children;
 
   return (
