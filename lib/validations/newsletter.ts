@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { REGEX_PATTERNS } from '@/lib/constants';
 
 /**
  * Schema para suscripción a newsletter
@@ -7,7 +8,7 @@ export const newsletterSchema = z.object({
   email: z
     .string()
     .min(1, 'El email es requerido')
-    .email('Email inválido')
+    .regex(REGEX_PATTERNS.email, 'Email inválido')
     .max(255, 'El email es demasiado largo')
     .toLowerCase()
     .trim(),

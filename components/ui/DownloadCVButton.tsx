@@ -9,7 +9,10 @@ interface DownloadCVButtonProps {
   variant?: 'default' | 'outline';
 }
 
-export function DownloadCVButton({ className, variant = 'default' }: DownloadCVButtonProps) {
+export function DownloadCVButton({
+  className,
+  variant = 'default',
+}: Readonly<DownloadCVButtonProps>) {
   const handleDownload = () => {
     unlockAchievement('cv_downloader');
   };

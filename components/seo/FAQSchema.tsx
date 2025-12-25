@@ -10,7 +10,7 @@ interface FAQSchemaProps {
   items: FAQItem[];
 }
 
-export function FAQSchema({ items }: FAQSchemaProps) {
+export function FAQSchema({ items }: Readonly<FAQSchemaProps>) {
   const schema: WithContext<FAQPage> = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',

@@ -5,7 +5,7 @@ import GitHub from 'next-auth/providers/github';
  * Lista de emails de administradores autorizados
  * Solo estos usuarios pueden acceder al dashboard de admin
  */
-const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(',').map((e) => e.trim().toLowerCase()) || [];
+const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(',').map((e) => e.trim().toLowerCase()) ?? [];
 
 /**
  * Detecta automáticamente la URL base según el ambiente
@@ -32,7 +32,7 @@ function getBaseUrl(): string {
   }
 
   // Fallback para desarrollo local
-  return process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  return process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 }
 
 // URL base detectada automáticamente

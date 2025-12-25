@@ -6,14 +6,12 @@ import type { GitHubRateLimit, GitHubRepo, Project } from './types';
 let octokitInstance: Octokit | null = null;
 
 function getOctokit(): Octokit {
-  if (!octokitInstance) {
-    octokitInstance = new Octokit({
-      auth: process.env.GITHUB_TOKEN,
-      userAgent: 'portfolio-next-app/1.0.0',
-      timeZone: 'America/New_York',
-      baseUrl: 'https://api.github.com',
-    });
-  }
+  octokitInstance ??= new Octokit({
+    auth: process.env.GITHUB_TOKEN,
+    userAgent: 'portfolio-next-app/1.0.0',
+    timeZone: 'America/New_York',
+    baseUrl: 'https://api.github.com',
+  });
   return octokitInstance;
 }
 
@@ -22,7 +20,7 @@ function getOctokit(): Octokit {
  */
 export async function getReposByTopic(topic: string, username?: string): Promise<GitHubRepo[]> {
   const octokit = getOctokit();
-  const user = username || process.env.NEXT_PUBLIC_GITHUB_USERNAME;
+  const user = username ?? process.env.NEXT_PUBLIC_GITHUB_USERNAME;
 
   if (!user) {
     logger.warn('GitHub username not configured', {
@@ -57,7 +55,7 @@ export async function getReposByTopic(topic: string, username?: string): Promise
  */
 export async function getFeaturedRepos(username?: string): Promise<GitHubRepo[]> {
   const octokit = getOctokit();
-  const user = username || process.env.NEXT_PUBLIC_GITHUB_USERNAME;
+  const user = username ?? process.env.NEXT_PUBLIC_GITHUB_USERNAME;
 
   if (!user) {
     logger.warn('GitHub username not configured', {
@@ -184,10 +182,10 @@ export function normalizeGitHubRepo(repo: GitHubRepo): Project {
   return {
     id: `github-${repo.id}`,
     title: repo.name,
-    description: repo.description || 'Sin descripción',
+    description: repo.description ?? 'Sin descripción',
     url: repo.html_url,
     github: repo.html_url,
-    demo: repo.homepage || undefined,
+    demo: repo.homepage ?? undefined,
     tech: repo.language ? [repo.language, ...repo.topics.slice(0, 4)] : repo.topics.slice(0, 5),
     stars: repo.stargazers_count,
     source: 'github',

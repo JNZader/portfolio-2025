@@ -11,6 +11,8 @@ import {
   Text,
 } from '@react-email/components';
 import { Markdown } from '@react-email/markdown';
+import type { CSSProperties } from 'react';
+import { main } from './email-styles';
 
 interface NewsletterTemplateProps {
   subject: string;
@@ -18,18 +20,62 @@ interface NewsletterTemplateProps {
   unsubscribeUrl?: string;
 }
 
+// Template-specific styles (differs from standard templates)
+const newsletterContainer: CSSProperties = {
+  backgroundColor: '#ffffff',
+  margin: '0 auto',
+  padding: '40px 20px',
+  marginBottom: '64px',
+  maxWidth: '600px',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+};
+
+const newsletterH1: CSSProperties = {
+  color: '#111827',
+  fontSize: '28px',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  margin: '0 0 32px',
+};
+
+const contentSection: CSSProperties = {
+  color: '#374151',
+};
+
+const newsletterHr: CSSProperties = {
+  borderColor: '#e5e7eb',
+  margin: '40px 0 24px',
+};
+
+const newsletterFooter: CSSProperties = {
+  textAlign: 'center',
+};
+
+const footerText: CSSProperties = {
+  color: '#6b7280',
+  fontSize: '14px',
+  marginBottom: '12px',
+};
+
+const newsletterFooterLink: CSSProperties = {
+  color: '#9ca3af',
+  fontSize: '12px',
+  textDecoration: 'underline',
+};
+
 export default function NewsletterTemplate({
   subject,
   content,
   unsubscribeUrl = '#',
-}: NewsletterTemplateProps) {
+}: Readonly<NewsletterTemplateProps>) {
   return (
     <Html>
       <Head />
       <Preview>{subject}</Preview>
       <Body style={main}>
-        <Container style={container}>
-          <Heading style={h1}>{subject}</Heading>
+        <Container style={newsletterContainer}>
+          <Heading style={newsletterH1}>{subject}</Heading>
 
           <Section style={contentSection}>
             <Markdown
@@ -45,14 +91,14 @@ export default function NewsletterTemplate({
             </Markdown>
           </Section>
 
-          <Hr style={hr} />
+          <Hr style={newsletterHr} />
 
-          <Section style={footer}>
+          <Section style={newsletterFooter}>
             <Text style={footerText}>
               Estás recibiendo este email porque te suscribiste a nuestra newsletter.
             </Text>
             {unsubscribeUrl && (
-              <Link href={unsubscribeUrl} style={footerLink}>
+              <Link href={unsubscribeUrl} style={newsletterFooterLink}>
                 Darse de baja
               </Link>
             )}
@@ -62,52 +108,3 @@ export default function NewsletterTemplate({
     </Html>
   );
 }
-
-const main = {
-  backgroundColor: '#f6f9fc',
-  fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
-};
-
-const container = {
-  backgroundColor: '#ffffff',
-  margin: '0 auto',
-  padding: '40px 20px',
-  marginBottom: '64px',
-  maxWidth: '600px',
-  borderRadius: '8px',
-  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-};
-
-const h1 = {
-  color: '#111827',
-  fontSize: '28px',
-  fontWeight: 'bold',
-  textAlign: 'center' as const,
-  margin: '0 0 32px',
-};
-
-const contentSection = {
-  color: '#374151',
-};
-
-const hr = {
-  borderColor: '#e5e7eb',
-  margin: '40px 0 24px',
-};
-
-const footer = {
-  textAlign: 'center' as const,
-};
-
-const footerText = {
-  color: '#6b7280',
-  fontSize: '14px',
-  marginBottom: '12px',
-};
-
-const footerLink = {
-  color: '#9ca3af',
-  fontSize: '12px',
-  textDecoration: 'underline',
-};

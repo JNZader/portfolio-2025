@@ -8,12 +8,13 @@ import {
   Section,
   Text,
 } from '@react-email/components';
+import { callout, calloutText, container, footer, h1, main, text } from './email-styles';
 
 interface ContactConfirmProps {
   name: string;
 }
 
-export default function ContactConfirm({ name }: ContactConfirmProps) {
+export default function ContactConfirm({ name }: Readonly<ContactConfirmProps>) {
   return (
     <Html>
       <Head />
@@ -49,55 +50,3 @@ export default function ContactConfirm({ name }: ContactConfirmProps) {
     </Html>
   );
 }
-
-const main = {
-  backgroundColor: '#f6f9fc',
-  fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
-};
-
-const container = {
-  backgroundColor: '#ffffff',
-  margin: '0 auto',
-  padding: '20px 0 48px',
-  marginBottom: '64px',
-  maxWidth: '600px',
-};
-
-const h1 = {
-  color: '#333',
-  fontSize: '24px',
-  fontWeight: 'bold',
-  margin: '40px 0',
-  padding: '0 40px',
-};
-
-const text = {
-  color: '#333',
-  fontSize: '16px',
-  lineHeight: '26px',
-  margin: '0 0 16px',
-  padding: '0 40px',
-};
-
-const callout = {
-  backgroundColor: '#EEF2FF',
-  borderLeft: '4px solid #3B82F6',
-  margin: '24px 40px',
-  padding: '16px',
-};
-
-const calloutText = {
-  color: '#333',
-  fontSize: '14px',
-  lineHeight: '20px',
-  margin: 0,
-};
-
-const footer = {
-  color: '#8898aa',
-  fontSize: '12px',
-  lineHeight: '16px',
-  marginTop: '32px',
-  padding: '0 40px',
-};

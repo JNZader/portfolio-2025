@@ -9,7 +9,7 @@ interface FocusTrapProps {
   onDeactivate?: () => void;
 }
 
-export function FocusTrap({ children, active = true, onDeactivate }: FocusTrapProps) {
+export function FocusTrap({ children, active = true, onDeactivate }: Readonly<FocusTrapProps>) {
   return (
     <FocusTrapComponent
       active={active}

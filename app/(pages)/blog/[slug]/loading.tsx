@@ -1,5 +1,8 @@
 import Container from '@/components/ui/Container';
 
+const SKELETON_CONTENT_ITEMS = Array.from({ length: 8 }, (_, i) => `content-skeleton-${i}`);
+const SKELETON_SIDEBAR_ITEMS = Array.from({ length: 5 }, (_, i) => `sidebar-skeleton-${i}`);
+
 export default function PostLoading() {
   return (
     <>
@@ -20,7 +23,7 @@ export default function PostLoading() {
           <div className="grid gap-12 lg:grid-cols-[1fr_300px]">
             {/* Main content */}
             <div className="space-y-6">
-              {Array.from({ length: 8 }, (_, i) => `content-skeleton-${i}`).map((id) => (
+              {SKELETON_CONTENT_ITEMS.map((id) => (
                 <div key={id} className="space-y-2">
                   <div className="h-4 w-full animate-pulse rounded bg-[var(--color-gray-300)]" />
                   <div className="h-4 w-11/12 animate-pulse rounded bg-[var(--color-gray-300)]" />
@@ -33,7 +36,7 @@ export default function PostLoading() {
             <div className="hidden lg:block">
               <div className="sticky top-24 space-y-2">
                 <div className="h-4 w-24 animate-pulse rounded bg-[var(--color-gray-300)]" />
-                {Array.from({ length: 5 }, (_, i) => `sidebar-skeleton-${i}`).map((id) => (
+                {SKELETON_SIDEBAR_ITEMS.map((id) => (
                   <div
                     key={id}
                     className="h-4 w-full animate-pulse rounded bg-[var(--color-gray-300)]"

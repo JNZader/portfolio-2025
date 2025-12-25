@@ -1,6 +1,9 @@
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
 
+const SKELETON_FILTER_ITEMS = Array.from({ length: 5 }, (_, i) => `filter-skeleton-${i}`);
+const SKELETON_POST_ITEMS = Array.from({ length: 6 }, (_, i) => `post-skeleton-${i}`);
+
 export default function BlogLoading() {
   return (
     <>
@@ -20,7 +23,7 @@ export default function BlogLoading() {
           <div className="mb-8">
             <div className="mb-4 h-4 w-24 animate-pulse rounded bg-[var(--color-gray-300)]" />
             <div className="flex flex-wrap gap-2">
-              {Array.from({ length: 5 }, (_, i) => `filter-skeleton-${i}`).map((id) => (
+              {SKELETON_FILTER_ITEMS.map((id) => (
                 <div
                   key={id}
                   className="h-9 w-24 animate-pulse rounded-md bg-[var(--color-gray-300)]"
@@ -35,7 +38,7 @@ export default function BlogLoading() {
       <Section>
         <Container>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }, (_, i) => `post-skeleton-${i}`).map((id) => (
+            {SKELETON_POST_ITEMS.map((id) => (
               <div
                 key={id}
                 className="overflow-hidden rounded-lg border bg-[var(--color-background)]"

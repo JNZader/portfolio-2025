@@ -5,7 +5,7 @@ interface PostGridProps {
   posts: Post[];
 }
 
-export function PostGrid({ posts }: PostGridProps) {
+export function PostGrid({ posts }: Readonly<PostGridProps>) {
   return (
     <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
       {posts.map((post, index) => (

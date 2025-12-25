@@ -1,5 +1,6 @@
 /**
  * Convierte texto a slug URL-friendly
+ * Includes length limit to prevent ReDoS attacks
  *
  * @example
  * slugify('Hola Mundo con Ñ y Acentos')
@@ -8,18 +9,21 @@
  * slugify('¡TypeScript & React!')
  * // => 'typescript-react'
  */
-export function slugify(text: string): string {
-  return text
+export function slugify(text: string, maxLength: number = 200): string {
+  // Limit input length to prevent ReDoS (fail fast)
+  const safeText = text.length > maxLength ? text.slice(0, maxLength) : text;
+
+  return safeText
     .toString()
     .normalize('NFD') // Normaliza caracteres Unicode
-    .replace(/[\u0300-\u036f]/g, '') // Quita acentos
+    .replaceAll(/[\u0300-\u036f]/g, '') // Quita acentos
     .toLowerCase()
     .trim()
-    .replace(/\s+/g, '-') // Espacios a guiones
-    .replace(/[^\w-]+/g, '') // Quita caracteres especiales
-    .replace(/--+/g, '-') // Múltiples guiones a uno
-    .replace(/^-+/, '') // Quita guiones al inicio
-    .replace(/-+$/, ''); // Quita guiones al final
+    .replaceAll(/\s+/g, '-') // Espacios a guiones
+    .replaceAll(/[^\w-]+/g, '') // Quita caracteres especiales
+    .replaceAll(/-{2,}/g, '-') // Múltiples guiones a uno (optimized regex)
+    .replace(/^-/, '') // Quita guión al inicio
+    .replace(/-$/, ''); // Quita guión al final
 }
 
 /**
@@ -93,7 +97,7 @@ export function excerpt(text: string, maxLength: number = 160): string {
  * // => '5 proyectos'
  */
 export function pluralize(count: number, singular: string, plural?: string): string {
-  const pluralForm = plural || `${singular}s`;
+  const pluralForm = plural ?? `${singular}s`;
   return `${count} ${count === 1 ? singular : pluralForm}`;
 }
 
@@ -105,7 +109,7 @@ export function pluralize(count: number, singular: string, plural?: string): str
  * // => 'hello world'
  */
 export function cleanWhitespace(text: string): string {
-  return text.replace(/\s+/g, ' ').trim();
+  return text.replaceAll(/\s+/g, ' ').trim();
 }
 
 /**
@@ -123,5 +127,5 @@ export function escapeHtml(text: string): string {
     '"': '&quot;',
     "'": '&#39;',
   };
-  return text.replace(/[&<>"']/g, (char) => htmlEscapeMap[char] || char);
+  return text.replaceAll(/[&<>"']/g, (char) => htmlEscapeMap[char] || char);
 }

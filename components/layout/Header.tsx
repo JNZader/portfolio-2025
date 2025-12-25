@@ -3,7 +3,7 @@ import Container from '@/components/ui/Container';
 import { MAIN_NAVIGATION } from '@/lib/constants/navigation';
 import { MobileMenuButton } from './MobileMenuButton';
 import { NavLink } from './NavLink';
-import { ThemeToggle, ThemeToggleMobile } from './ThemeToggle';
+import { ThemeToggle } from './ThemeToggle';
 
 const navigation = [...MAIN_NAVIGATION];
 
@@ -50,7 +50,7 @@ export default function Header() {
 
           {/* Mobile controls - Client components */}
           <div className="flex md:hidden gap-2">
-            <ThemeToggleMobile />
+            <ThemeToggle compact />
             <MobileMenuButton navigation={navigation} />
           </div>
         </nav>

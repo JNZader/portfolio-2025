@@ -6,9 +6,10 @@ interface IconProps {
   className?: string;
 }
 
-export function SpinnerIcon({ className }: IconProps) {
+export function SpinnerIcon({ className }: Readonly<IconProps>) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" role="img" aria-label="Cargando">
+    <svg className={className} fill="none" viewBox="0 0 24 24" aria-hidden="true">
+      <title>Cargando</title>
       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
       <path
         className="opacity-75"
@@ -19,7 +20,7 @@ export function SpinnerIcon({ className }: IconProps) {
   );
 }
 
-export function SendIcon({ className }: IconProps) {
+export function SendIcon({ className }: Readonly<IconProps>) {
   return (
     <svg
       className={className}
@@ -27,9 +28,9 @@ export function SendIcon({ className }: IconProps) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      role="img"
-      aria-label="Enviar"
+      aria-hidden="true"
     >
+      <title>Enviar</title>
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -39,7 +40,7 @@ export function SendIcon({ className }: IconProps) {
   );
 }
 
-export function CheckIcon({ className }: IconProps) {
+export function CheckIcon({ className }: Readonly<IconProps>) {
   return (
     <svg
       className={className}
@@ -47,15 +48,15 @@ export function CheckIcon({ className }: IconProps) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      role="img"
-      aria-label="Completado"
+      aria-hidden="true"
     >
+      <title>Completado</title>
       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
     </svg>
   );
 }
 
-export function CopyIcon({ className }: IconProps) {
+export function CopyIcon({ className }: Readonly<IconProps>) {
   return (
     <svg
       className={className}
@@ -63,9 +64,9 @@ export function CopyIcon({ className }: IconProps) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      role="img"
-      aria-label="Copiar"
+      aria-hidden="true"
     >
+      <title>Copiar</title>
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -75,7 +76,7 @@ export function CopyIcon({ className }: IconProps) {
   );
 }
 
-export function MailIcon({ className }: IconProps) {
+export function MailIcon({ className }: Readonly<IconProps>) {
   return (
     <svg
       className={className}

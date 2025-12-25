@@ -26,11 +26,11 @@ interface BlogPageProps {
   }>;
 }
 
-export default async function BlogPage({ searchParams }: BlogPageProps) {
+export default async function BlogPage({ searchParams }: Readonly<BlogPageProps>) {
   const params = await searchParams;
-  const currentPage = parseInt(params.page || '1', 10);
-  const categorySlug = params.category || null;
-  const searchTerm = params.search || '';
+  const currentPage = Number.parseInt(params.page ?? '1', 10);
+  const categorySlug = params.category ?? null;
+  const searchTerm = params.search ?? '';
 
   // Normalizar búsqueda para GROQ
   const normalizedSearch =
@@ -59,6 +59,22 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   });
 
   const totalPages = getTotalPages(total);
+
+  // Determine empty state message and description
+  let emptyTitle: string;
+  let emptyDescription: string;
+
+  if (normalizedSearch || categorySlug) {
+    emptyTitle = 'No se encontraron resultados';
+    if (normalizedSearch) {
+      emptyDescription = `No hay artículos que coincidan con "${searchTerm}". Intenta con otros términos.`;
+    } else {
+      emptyDescription = 'Prueba con otra categoría.';
+    }
+  } else {
+    emptyTitle = 'No hay posts disponibles';
+    emptyDescription = 'Aún no se han publicado artículos.';
+  }
 
   return (
     <>
@@ -130,18 +146,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             </>
           ) : (
             <EmptyState
-              title={
-                normalizedSearch || categorySlug
-                  ? 'No se encontraron resultados'
-                  : 'No hay posts disponibles'
-              }
-              description={
-                normalizedSearch
-                  ? `No hay artículos que coincidan con "${searchTerm}". Intenta con otros términos.`
-                  : categorySlug
-                    ? 'Prueba con otra categoría.'
-                    : 'Aún no se han publicado artículos.'
-              }
+              title={emptyTitle}
+              description={emptyDescription}
               action={
                 normalizedSearch || categorySlug
                   ? { label: 'Ver todos los posts', href: '/blog' }

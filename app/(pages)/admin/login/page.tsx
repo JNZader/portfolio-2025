@@ -9,7 +9,7 @@ import Container from '@/components/ui/Container';
 function LoginContent() {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
-  const callbackUrl = searchParams.get('callbackUrl') || '/admin';
+  const callbackUrl = searchParams.get('callbackUrl') ?? '/admin';
 
   const errorMessages: Record<string, string> = {
     OAuthSignin: 'Error al iniciar sesión con GitHub',

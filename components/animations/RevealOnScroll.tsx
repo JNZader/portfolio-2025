@@ -38,7 +38,7 @@ export function RevealOnScroll({
   variants = defaultVariants,
   delay = 0,
   once = true,
-}: RevealOnScrollProps) {
+}: Readonly<RevealOnScrollProps>) {
   const { ref, isVisible, prefersReducedMotion } = useScrollReveal<HTMLDivElement>({ once });
 
   // Skip animation for reduced motion
@@ -95,13 +95,17 @@ interface StaggeredRevealProps {
   staggerDelay?: number;
 }
 
-export function StaggeredReveal({ children, className, staggerDelay = 0.1 }: StaggeredRevealProps) {
+export function StaggeredReveal({
+  children,
+  className,
+  staggerDelay = 0.1,
+}: Readonly<StaggeredRevealProps>) {
   return (
     <div className={className}>
       {children.map((child, index) => (
         <RevealOnScroll
           // biome-ignore lint/suspicious/noArrayIndexKey: Children are stable and won't reorder
-          key={index}
+          key={index} // NOSONAR S6479 - stable children array, no reordering
           delay={index * staggerDelay}
         >
           {child}

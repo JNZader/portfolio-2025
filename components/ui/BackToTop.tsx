@@ -9,15 +9,15 @@ export function BackToTop() {
   useEffect(() => {
     const toggleVisibility = () => {
       // Mostrar después de 400px de scroll
-      setIsVisible(window.scrollY > 400);
+      setIsVisible(globalThis.scrollY > 400);
     };
 
-    window.addEventListener('scroll', toggleVisibility, { passive: true });
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    globalThis.addEventListener('scroll', toggleVisibility, { passive: true });
+    return () => globalThis.removeEventListener('scroll', toggleVisibility);
   }, []);
 
   const scrollToTop = useCallback(() => {
-    window.scrollTo({
+    globalThis.scrollTo({
       top: 0,
       behavior: 'smooth',
     });

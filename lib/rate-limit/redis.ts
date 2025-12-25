@@ -78,7 +78,7 @@ export function getClientIdentifier(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for');
   const realIp = request.headers.get('x-real-ip');
 
-  const ip = forwarded?.split(',')[0] || realIp || 'anonymous';
+  const ip = forwarded?.split(',')[0] ?? realIp ?? 'anonymous';
 
   return ip.trim();
 }

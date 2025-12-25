@@ -29,9 +29,9 @@ export function NewsletterBroadcaster() {
     setIsLoading(false);
 
     if (res.success) {
-      toast.success(res.message || 'Test enviado correctamente');
+      toast.success(res.message ?? 'Test enviado correctamente');
     } else {
-      toast.error(res.error || 'Error al enviar test');
+      toast.error(res.error ?? 'Error al enviar test');
     }
   };
 
@@ -54,11 +54,11 @@ export function NewsletterBroadcaster() {
     setIsLoading(false);
 
     if (res.success) {
-      toast.success(res.message || 'Broadcast enviado correctamente');
+      toast.success(res.message ?? 'Broadcast enviado correctamente');
       setSubject('');
       setContent('');
     } else {
-      toast.error(res.error || 'Error al enviar broadcast');
+      toast.error(res.error ?? 'Error al enviar broadcast');
     }
   };
 
@@ -85,7 +85,7 @@ export function NewsletterBroadcaster() {
               variant="ghost"
               size="sm"
               onClick={() => setIsPreview(false)}
-              className={!isPreview ? 'bg-muted' : ''}
+              className={isPreview ? '' : 'bg-muted'}
             >
               <Edit className="w-4 h-4 mr-2" /> Editar
             </Button>
@@ -101,7 +101,7 @@ export function NewsletterBroadcaster() {
 
           {isPreview ? (
             <div className="min-h-[300px] border rounded-md p-4 prose dark:prose-invert max-w-none bg-background">
-              <ReactMarkdown>{content || '*Nada para mostrar aún...*'}</ReactMarkdown>
+              <ReactMarkdown>{content.trim() || '*Nada para mostrar aún...*'}</ReactMarkdown>
             </div>
           ) : (
             <textarea

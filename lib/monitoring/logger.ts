@@ -19,10 +19,10 @@ interface LogContext {
  */
 export async function getRequestId(): Promise<string | null> {
   try {
-    if (typeof window === 'undefined') {
+    if (typeof globalThis === 'undefined') {
       const { headers } = await import('next/headers');
       const headersList = await headers();
-      return headersList.get('x-request-id') || headersList.get('x-vercel-id') || null;
+      return headersList.get('x-request-id') ?? headersList.get('x-vercel-id') ?? null;
     }
   } catch {
     // headers() falla en contextos donde no hay request

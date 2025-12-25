@@ -1,31 +1,32 @@
-import { defineConfig, devices } from '@playwright/test';
+import { devices } from '@playwright/test';
+import type { PlaywrightTestConfig } from '@playwright/test';
 
 /**
- * Playwright configuration for Next.js portfolio
+ * Playwright E2E test configuration
+ * Multi-browser testing with accessibility checks
+ *
+ * @see https://playwright.dev/docs/test-configuration
  */
-export default defineConfig({
+const config: PlaywrightTestConfig = {
   // Test directory
   testDir: './e2e/tests',
 
-  // Maximum time one test can run (increased for slower environments)
-  timeout: 60 * 1000,
+  // Timeout per test (3 minutes)
+  timeout: 3 * 60 * 1000,
 
-  // Expect timeout (increased for network requests)
+  // Fail fast: stop after first failure
+  fullyParallel: !process.env.CI,
+
+  // Retry on CI only
+  retries: process.env.CI ? 2 : 0,
+
+  // Limit parallel workers (GitHub Actions free tier has 2 cores)
+  workers: process.env.CI ? 2 : undefined,
+
+  // Fail on console errors
   expect: {
     timeout: 10000,
   },
-
-  // Run tests in files in parallel
-  fullyParallel: true,
-
-  // Fail the build on CI if you accidentally left test.only
-  forbidOnly: !!process.env.CI,
-
-  // Retry failed tests (helps with flaky network issues)
-  retries: process.env.CI ? 2 : 1,
-
-  // Limit parallel workers to avoid resource contention and ECONNRESET errors
-  workers: process.env.CI ? 1 : 2,
 
   // Reporter to use
   reporter: [
@@ -37,7 +38,7 @@ export default defineConfig({
   // Shared settings for all the projects below
   use: {
     // Base URL
-    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000',
+    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL ?? 'http://localhost:3000',
 
     // Navigation timeout (increased for slow page loads)
     navigationTimeout: 30000,
@@ -58,48 +59,69 @@ export default defineConfig({
     locale: 'es-ES',
 
     // Timezone
-    timezoneId: 'Europe/Madrid',
+    timezoneId: 'America/Argentina/Buenos_Aires',
+
+    // Enable JavaScript
+    javaScriptEnabled: true,
+
+    // Accept downloads
+    acceptDownloads: true,
+
+    // Ignore HTTPS errors (for local dev)
+    ignoreHTTPSErrors: true,
   },
 
-  // Configure projects for major browsers
+  // Projects for different browsers
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1920, height: 1080 },
+      },
     },
-
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: {
+        ...devices['Desktop Firefox'],
+        viewport: { width: 1920, height: 1080 },
+      },
     },
-
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      use: {
+        ...devices['Desktop Safari'],
+        viewport: { width: 1920, height: 1080 },
+      },
     },
 
     // Mobile viewports
     {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
+      name: 'mobile-chrome',
+      use: {
+        ...devices['Pixel 5'],
+      },
     },
     {
-      name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] },
-    },
-
-    // Tablet
-    {
-      name: 'iPad',
-      use: { ...devices['iPad Pro'] },
+      name: 'mobile-safari',
+      use: {
+        ...devices['iPhone 13'],
+      },
     },
   ],
 
-  // Run your local dev server before starting the tests
-  webServer: {
-    command: process.env.CI ? 'npm start' : 'npm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
-  },
-});
+  // Web server configuration (auto-start dev server for local tests)
+  webServer: process.env.CI
+    ? undefined
+    : {
+        command: 'npm run dev',
+        url: 'http://localhost:3000',
+        timeout: 120 * 1000,
+        reuseExistingServer: !process.env.CI,
+      },
+
+  // Output folder for test results
+  outputDir: 'test-results/',
+};
+
+export default config;

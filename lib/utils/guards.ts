@@ -68,9 +68,18 @@ export function isPromise<T = unknown>(value: unknown): value is Promise<T> {
 
 /**
  * Verifica si un string es un email válido
+ * Uses length limit to prevent ReDoS attacks (RFC 5321: max 254 chars)
  */
 export function isEmail(value: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // Fail fast: RFC 5321 max email length is 254 characters
+  if (value.length > 254) return false;
+
+  // More specific regex to prevent backtracking:
+  // - Local part: alphanumeric + allowed special chars
+  // - Domain: alphanumeric + hyphens
+  // - TLD: required, 2+ alphabetic chars
+  const emailRegex =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9][a-zA-Z0-9-]*(?:\.[a-zA-Z0-9][a-zA-Z0-9-]*)*\.[a-zA-Z]{2,}$/;
   return emailRegex.test(value);
 }
 
@@ -90,12 +99,12 @@ export function isUrl(value: string): boolean {
  * Verifica si estamos en el cliente (browser)
  */
 export function isClient(): boolean {
-  return typeof window !== 'undefined';
+  return typeof globalThis !== 'undefined';
 }
 
 /**
  * Verifica si estamos en el servidor
  */
 export function isServer(): boolean {
-  return typeof window === 'undefined';
+  return typeof globalThis === 'undefined';
 }

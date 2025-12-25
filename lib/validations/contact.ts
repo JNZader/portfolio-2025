@@ -1,5 +1,6 @@
 import sanitizeHtml from 'sanitize-html';
 import { z } from 'zod';
+import { REGEX_PATTERNS } from '@/lib/constants';
 
 /**
  * Schema de validación para formulario de contacto
@@ -17,7 +18,7 @@ export const contactSchema = z.object({
   email: z
     .string()
     .min(1, 'El email es requerido')
-    .email('Email inválido')
+    .regex(REGEX_PATTERNS.email, 'Email inválido')
     .max(255, 'El email es demasiado largo'),
 
   subject: z

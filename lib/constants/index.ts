@@ -2,15 +2,17 @@
  * Constantes globales del proyecto
  */
 
-import { SITE_CONFIG } from '../config/site-config';
+import { SITE_CONFIG as siteConfig } from '../config/site-config';
 
 export type { SiteConfig } from '../config/site-config';
+// Site Config
+export { SITE_CONFIG } from '../config/site-config';
 export type { Skill, SkillsData } from './skills';
 // Skills
 export { SKILLS_DATA, SKILLS_DATA_HOME } from './skills';
 
-// Site Config
-export { SITE_CONFIG };
+// Internal reference for use in this file
+const SITE_CONFIG = siteConfig;
 
 // Reading time
 export const WORDS_PER_MINUTE = 200;
@@ -59,12 +61,22 @@ export const SOCIAL_LINKS = {
   linkedin: SITE_CONFIG.author.linkedin,
 } as const;
 
-// Regex patterns
+// Regex patterns (designed to prevent ReDoS attacks)
 export const REGEX_PATTERNS = {
-  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  // RFC 5321 compliant email regex - use with length check (max 254 chars)
+  // Requires TLD (e.g., .com, .org) to be valid
+  email:
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9][a-zA-Z0-9-]*(?:\.[a-zA-Z0-9][a-zA-Z0-9-]*)*\.[a-zA-Z]{2,}$/,
   url: /^https?:\/\/.+/,
   slug: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-  hexColor: /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
+  hexColor: /^#(?:[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
+} as const;
+
+// Max lengths for regex validation (prevent ReDoS)
+export const MAX_LENGTHS = {
+  email: 254, // RFC 5321
+  url: 2048, // Common browser limit
+  slug: 200,
 } as const;
 
 // HTTP Status Codes

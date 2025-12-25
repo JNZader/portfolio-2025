@@ -43,7 +43,9 @@ interface AdminDashboardProps {
   };
 }
 
-function StatusIcon({ status }: { status: string }) {
+const SKELETON_CARDS = new Array(4);
+
+function StatusIcon({ status }: Readonly<{ status: string }>) {
   switch (status) {
     case 'ok':
     case 'healthy':
@@ -59,7 +61,7 @@ function StatusIcon({ status }: { status: string }) {
   }
 }
 
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({ status }: Readonly<{ status: string }>) {
   const colors: Record<string, string> = {
     ok: 'bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20',
     healthy: 'bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20',
@@ -72,7 +74,7 @@ function StatusBadge({ status }: { status: string }) {
 
   return (
     <span
-      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${colors[status] || colors.not_configured}`}
+      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${colors[status] ?? colors.not_configured}`}
     >
       {status.replace('_', ' ')}
     </span>
@@ -93,7 +95,7 @@ function formatUptime(seconds: number): string {
   return `${minutes}m`;
 }
 
-export function AdminDashboard({ user }: AdminDashboardProps) {
+export function AdminDashboard({ user }: Readonly<AdminDashboardProps>) {
   const [health, setHealth] = useState<HealthData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -175,7 +177,7 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
       {/* Loading state */}
       {loading && !health && (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {[...Array(4)].map((_, i) => (
+          {SKELETON_CARDS.map((_, i) => (
             <Card key={`skeleton-${i.toString()}`}>
               <CardHeader className="pb-2">
                 <div className="h-4 w-24 animate-pulse rounded bg-muted" />
@@ -335,7 +337,7 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
                 {user.image && (
                   <Image
                     src={user.image}
-                    alt={user.name || 'Avatar'}
+                    alt={user.name ?? 'Avatar'}
                     width={48}
                     height={48}
                     className="h-12 w-12 rounded-full"
@@ -354,7 +356,7 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
             <summary className="cursor-pointer list-none">
               <div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
                 <span className="transition-transform group-open:rotate-90">▶</span>
-                Ver datos JSON
+                <span>Ver datos JSON</span>
               </div>
             </summary>
             <pre className="mt-2 overflow-auto rounded-lg bg-muted p-4 text-xs">

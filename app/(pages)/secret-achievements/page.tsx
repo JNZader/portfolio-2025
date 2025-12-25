@@ -30,14 +30,19 @@ export default function SecretAchievementsPage() {
       unlockAchievement('night_owl');
     }
 
+    const isAchievementUnlocked = (achievement: Achievement): boolean => {
+      if (achievement.id === 'night_owl') {
+        return isNightTime || unlockedAchievements.includes('night_owl');
+      }
+      if (achievement.id === 'completionist') {
+        return unlockedAchievements.length === achievements.length - 1;
+      }
+      return unlockedAchievements.includes(achievement.id);
+    };
+
     const allAchievements: AchievementWithUnlocked[] = achievements.map((achievement) => ({
       ...achievement,
-      unlocked:
-        achievement.id === 'night_owl'
-          ? isNightTime || unlockedAchievements.includes('night_owl')
-          : achievement.id === 'completionist'
-            ? unlockedAchievements.length === achievements.length - 1
-            : unlockedAchievements.includes(achievement.id),
+      unlocked: isAchievementUnlocked(achievement),
     }));
 
     setAchievementsList(allAchievements);

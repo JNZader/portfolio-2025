@@ -18,7 +18,7 @@ const components: PortableTextComponents = {
     // Headings con IDs para TOC
     h2: ({ children, value }: { children?: React.ReactNode; value?: unknown }) => {
       const blockValue = value as { children?: Array<{ text?: string }> };
-      const text = blockValue?.children?.[0]?.text || '';
+      const text = blockValue?.children?.[0]?.text ?? '';
       const id = slugifyHeading(text);
 
       return (
@@ -33,7 +33,7 @@ const components: PortableTextComponents = {
 
     h3: ({ children, value }: { children?: React.ReactNode; value?: unknown }) => {
       const blockValue = value as { children?: Array<{ text?: string }> };
-      const text = blockValue?.children?.[0]?.text || '';
+      const text = blockValue?.children?.[0]?.text ?? '';
       const id = slugifyHeading(text);
 
       return (
@@ -81,12 +81,12 @@ const components: PortableTextComponents = {
   marks: {
     // Links
     link: ({ children, value }) => {
-      const rel = !value?.href?.startsWith('/') ? 'noopener noreferrer' : undefined;
+      const rel = value?.href?.startsWith('/') ? undefined : 'noopener noreferrer';
       const target = value?.blank ? '_blank' : undefined;
 
       return (
         <Link
-          href={value?.href || '#'}
+          href={value?.href ?? '#'}
           rel={rel}
           target={target}
           className="font-medium text-primary underline decoration-primary/30 underline-offset-4 transition-colors hover:decoration-primary"
@@ -133,7 +133,7 @@ const components: PortableTextComponents = {
           <div className="relative aspect-video overflow-hidden rounded-lg border border-border bg-muted">
             <Image
               src={imageUrl}
-              alt={imageValue.alt || 'Post image'}
+              alt={imageValue.alt ?? 'Post image'}
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 900px"
@@ -158,7 +158,7 @@ const components: PortableTextComponents = {
       return (
         <CodeBlock
           code={codeValue.code}
-          language={codeValue.language || 'typescript'}
+          language={codeValue.language ?? 'typescript'}
           filename={codeValue.filename}
         />
       );
@@ -166,7 +166,7 @@ const components: PortableTextComponents = {
   },
 };
 
-export function PortableTextRenderer({ value }: PortableTextRendererProps) {
+export function PortableTextRenderer({ value }: Readonly<PortableTextRendererProps>) {
   return (
     <div className="prose prose-lg max-w-none">
       <PortableText value={value} components={components} />

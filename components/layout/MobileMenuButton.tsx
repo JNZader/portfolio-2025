@@ -13,7 +13,7 @@ interface MobileMenuButtonProps {
  * Extracted from Header for Server Component optimization
  * Manages mobile menu open/close state
  */
-export function MobileMenuButton({ navigation }: MobileMenuButtonProps) {
+export function MobileMenuButton({ navigation }: Readonly<MobileMenuButtonProps>) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (

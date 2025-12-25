@@ -24,7 +24,7 @@ export function generateTableOfContents(body?: PortableTextBlock[]): TocItem[] {
   body.forEach((block) => {
     if (block._type === 'block' && (block.style === 'h2' || block.style === 'h3')) {
       const children = block.children as PortableTextChild[] | undefined;
-      const text = children?.map((child) => child.text || '').join('') || '';
+      const text = children?.map((child) => child.text ?? '').join('') ?? '';
 
       if (text) {
         const id = slugifyHeading(text);
@@ -48,10 +48,13 @@ export function generateTableOfContentsFromMarkdown(markdown: string): TocItem[]
   const toc: TocItem[] = [];
   const lines = markdown.split('\n');
 
+  const h2Regex = /^## (.+)$/;
+  const h3Regex = /^### (.+)$/;
+
   for (const line of lines) {
     // Match ## and ### headings (not inside code blocks)
-    const h2Match = line.match(/^## (.+)$/);
-    const h3Match = line.match(/^### (.+)$/);
+    const h2Match = h2Regex.exec(line);
+    const h3Match = h3Regex.exec(line);
 
     if (h2Match) {
       const text = h2Match[1].trim();
@@ -80,9 +83,9 @@ export function slugifyHeading(text: string): string {
   return text
     .toLowerCase()
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/--+/g, '-')
+    .replaceAll(/[\u0300-\u036f]/g, '')
+    .replaceAll(/[^\w\s-]/g, '')
+    .replaceAll(/\s+/g, '-')
+    .replaceAll(/--+/g, '-')
     .trim();
 }

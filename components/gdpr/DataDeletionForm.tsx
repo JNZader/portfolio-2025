@@ -45,11 +45,11 @@ export function DataDeletionForm() {
       const result = await response.json();
 
       if (!response.ok) {
-        showError(result.message || 'Error al eliminar datos');
+        showError(result.message ?? 'Error al eliminar datos');
         return;
       }
 
-      showSuccess(result.message || 'Revisa tu email para confirmar la eliminación');
+      showSuccess(result.message ?? 'Revisa tu email para confirmar la eliminación');
       reset();
       setPendingData(null);
     } catch (error) {

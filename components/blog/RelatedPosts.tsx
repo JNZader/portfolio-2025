@@ -10,7 +10,7 @@ interface RelatedPostsProps {
   posts: Post[];
 }
 
-export function RelatedPosts({ posts }: RelatedPostsProps) {
+export function RelatedPosts({ posts }: Readonly<RelatedPostsProps>) {
   if (posts.length === 0) {
     return null;
   }
@@ -50,8 +50,8 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
                     variant="outline"
                     className="mb-2"
                     style={{
-                      borderColor: primaryCategory.color || undefined,
-                      color: primaryCategory.color || undefined,
+                      borderColor: primaryCategory.color ?? undefined,
+                      color: primaryCategory.color ?? undefined,
                     }}
                   >
                     {primaryCategory.title}

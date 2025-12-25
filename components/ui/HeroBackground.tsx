@@ -25,7 +25,7 @@ export function HeroBackground({
   showDotPattern = true,
   showGradientMesh = true,
   className,
-}: HeroBackgroundProps) {
+}: Readonly<HeroBackgroundProps>) {
   return (
     <>
       {/* Static gradient background - renders immediately */}

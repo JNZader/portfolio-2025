@@ -6,7 +6,7 @@ export const SITE_CONFIG = {
   name: 'Javier Zader',
   title: 'Javier Zader - Backend Java Developer',
   description: 'Backend Java Developer especializado en Spring Boot y microservicios',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000',
   locale: 'es-AR',
   author: {
     name: 'Javier Zader',

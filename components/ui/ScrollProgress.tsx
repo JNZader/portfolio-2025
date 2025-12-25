@@ -13,10 +13,10 @@ export function ScrollProgress() {
   useEffect(() => {
     const updateProgress = () => {
       // Altura total del documento
-      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollHeight = document.documentElement.scrollHeight - globalThis.innerHeight;
 
       // Scroll actual
-      const scrollTop = window.scrollY;
+      const scrollTop = globalThis.scrollY;
 
       // Calcular porcentaje
       const scrollProgress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
@@ -25,12 +25,12 @@ export function ScrollProgress() {
     };
 
     // Actualizar al hacer scroll
-    window.addEventListener('scroll', updateProgress, { passive: true });
+    globalThis.addEventListener('scroll', updateProgress, { passive: true });
 
     // Actualizar al cargar
     updateProgress();
 
-    return () => window.removeEventListener('scroll', updateProgress);
+    return () => globalThis.removeEventListener('scroll', updateProgress);
   }, []);
 
   return (

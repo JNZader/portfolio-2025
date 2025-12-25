@@ -24,7 +24,7 @@ interface ToggleSwitchProps {
   disabled?: boolean;
 }
 
-function ToggleSwitch({ id, checked, onChange, disabled }: ToggleSwitchProps) {
+function ToggleSwitch({ id, checked, onChange, disabled }: Readonly<ToggleSwitchProps>) {
   return (
     <button
       id={id}
@@ -77,11 +77,11 @@ export function CookieConsent() {
 
     try {
       const parsed = JSON.parse(consent);
-      if (parsed.version !== COOKIE_CONSENT_VERSION) {
+      if (parsed.version === COOKIE_CONSENT_VERSION) {
+        updateGAConsent(parsed.analytics);
+      } else {
         setShow(true);
         requestAnimationFrame(() => setIsVisible(true));
-      } else {
-        updateGAConsent(parsed.analytics);
       }
     } catch {
       setShow(true);

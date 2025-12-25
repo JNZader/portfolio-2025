@@ -10,6 +10,19 @@ import {
   Section,
   Text,
 } from '@react-email/components';
+import {
+  container,
+  footer,
+  h1,
+  hr,
+  label,
+  link,
+  main,
+  messageBox,
+  section,
+  text,
+  value,
+} from './email-styles';
 
 interface ContactEmailProps {
   name: string;
@@ -18,7 +31,12 @@ interface ContactEmailProps {
   message: string;
 }
 
-export default function ContactEmail({ name, email, subject, message }: ContactEmailProps) {
+export default function ContactEmail({
+  name,
+  email,
+  subject,
+  message,
+}: Readonly<ContactEmailProps>) {
   return (
     <Html>
       <Head />
@@ -67,78 +85,3 @@ export default function ContactEmail({ name, email, subject, message }: ContactE
     </Html>
   );
 }
-
-// Estilos inline (requerido por email clients)
-const main = {
-  backgroundColor: '#f6f9fc',
-  fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
-};
-
-const container = {
-  backgroundColor: '#ffffff',
-  margin: '0 auto',
-  padding: '20px 0 48px',
-  marginBottom: '64px',
-  maxWidth: '600px',
-};
-
-const h1 = {
-  color: '#333',
-  fontSize: '24px',
-  fontWeight: 'bold',
-  margin: '40px 0',
-  padding: '0 40px',
-};
-
-const text = {
-  color: '#333',
-  fontSize: '16px',
-  lineHeight: '26px',
-  padding: '0 40px',
-};
-
-const section = {
-  padding: '0 40px',
-};
-
-const label = {
-  color: '#666',
-  fontSize: '14px',
-  fontWeight: '600',
-  margin: '0 0 4px',
-};
-
-const value = {
-  color: '#333',
-  fontSize: '16px',
-  margin: '0 0 16px',
-};
-
-const link = {
-  color: '#3B82F6',
-  textDecoration: 'underline',
-};
-
-const messageBox = {
-  backgroundColor: '#f6f9fc',
-  border: '1px solid #e6e6e6',
-  borderRadius: '4px',
-  color: '#333',
-  fontSize: '16px',
-  lineHeight: '24px',
-  padding: '16px',
-  whiteSpace: 'pre-wrap' as const,
-};
-
-const hr = {
-  borderColor: '#e6e6e6',
-  margin: '20px 40px',
-};
-
-const footer = {
-  color: '#8898aa',
-  fontSize: '12px',
-  lineHeight: '16px',
-  padding: '0 40px',
-};

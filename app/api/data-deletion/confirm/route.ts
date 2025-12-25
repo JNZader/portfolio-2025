@@ -1,12 +1,18 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { MESSAGES, verifyAndConsumeToken } from '@/lib/api/gdpr-utils';
 import { resend } from '@/lib/email/resend';
 import { logger } from '@/lib/monitoring/logger';
-import { confirmRateLimiter, getClientIdentifier, safeRedisOp } from '@/lib/rate-limit/redis';
+import { confirmRateLimiter, getClientIdentifier } from '@/lib/rate-limit/redis';
 import { deleteUserData } from '@/lib/services/gdpr';
+
+interface DeletionTokenData {
+  email: string;
+  reason?: string;
+}
 
 export async function GET(request: NextRequest) {
   try {
-    // Rate limiting para prevenir enumeración de tokens
+    // Rate limiting
     const clientId = getClientIdentifier(request);
     const { success } = await confirmRateLimiter.limit(clientId);
 
@@ -18,41 +24,35 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // 1. Obtener token de query params
+    // Get token from query params
     const { searchParams } = new URL(request.url);
     const token = searchParams.get('token');
 
     if (!token) {
-      return NextResponse.json({ message: 'Token no proporcionado' }, { status: 400 });
+      return NextResponse.json({ message: MESSAGES.tokenMissing }, { status: 400 });
     }
 
-    // 2. Verificar token en Redis
-    const data = await safeRedisOp((client) => client.get<string>(`data-deletion:${token}`));
+    // Verify and consume token
+    const data = await verifyAndConsumeToken<string>(token, 'data-deletion');
 
     if (!data) {
-      return NextResponse.json(
-        { message: 'El enlace ha expirado o es inválido. Solicita uno nuevo.' },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: MESSAGES.tokenExpired }, { status: 400 });
     }
 
-    // 3. Parsear datos
-    const { email, reason } = JSON.parse(data);
+    // Parse token data
+    const { email, reason } = JSON.parse(data) as DeletionTokenData;
 
-    // 4. Eliminar token (uso único)
-    await safeRedisOp((client) => client.del(`data-deletion:${token}`));
-
-    // 5. Eliminar datos
+    // Delete user data
     const result = await deleteUserData(email);
 
     if (!result.success) {
       return NextResponse.json({ message: result.message }, { status: 404 });
     }
 
-    // 6. Enviar email de confirmación
+    // Send confirmation email
     try {
       await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || 'noreply@example.com',
+        from: process.env.RESEND_FROM_EMAIL ?? 'noreply@example.com',
         to: email,
         subject: 'Datos eliminados correctamente',
         html: `
@@ -80,8 +80,8 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // 7. Redirigir a página de confirmación
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    // Redirect to confirmation page
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
     return NextResponse.redirect(`${siteUrl}/data-request?deleted=true`);
   } catch (error) {
     logger.error('Data deletion confirm failed', error as Error, {

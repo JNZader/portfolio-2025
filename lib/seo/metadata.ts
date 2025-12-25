@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://javierzader.dev';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://javierzader.dev';
 const SITE_NAME = 'Javier Zader - Backend Java Developer';
 const SITE_DESCRIPTION =
   'Backend Java Developer con más de 20 años de experiencia en tecnología, especializado en Spring Boot, React y arquitecturas modernas';
@@ -28,7 +28,7 @@ export function generateMetadata({
   keywords?: string[];
 }): Metadata {
   const url = `${SITE_URL}${path}`;
-  const ogImage = image || `${SITE_URL}/og-image.png`;
+  const ogImage = image ?? `${SITE_URL}/og-image.png`;
 
   return {
     title: `${title} | ${SITE_NAME}`,

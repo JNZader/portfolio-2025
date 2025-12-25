@@ -4,16 +4,16 @@ import { describe, expect, it, vi } from 'vitest';
 import { Modal } from '@/components/ui/Modal';
 
 describe('Modal', () => {
-  // No need for portal setup - Modal uses createPortal to document.body directly
-
-  it('should not render when closed', () => {
+  it('should not be open when isOpen is false', () => {
     render(
       <Modal isOpen={false} onClose={vi.fn()} title="Test Modal">
         Content
       </Modal>
     );
 
-    expect(screen.queryByText('Test Modal')).not.toBeInTheDocument();
+    // Native <dialog> is always in DOM but not open
+    const dialog = screen.getByRole('dialog', { hidden: true });
+    expect(dialog).not.toHaveAttribute('open');
   });
 
   it('should render when open', () => {
@@ -49,11 +49,12 @@ describe('Modal', () => {
       </Modal>
     );
 
+    // Get the X close button specifically (not the backdrop)
     await userEvent.click(screen.getByLabelText('Cerrar modal'));
     expect(handleClose).toHaveBeenCalled();
   });
 
-  it('should close on Escape key', async () => {
+  it('should call onClose when backdrop is clicked', async () => {
     const handleClose = vi.fn();
     render(
       <Modal isOpen={true} onClose={handleClose} title="Test Modal">
@@ -61,7 +62,7 @@ describe('Modal', () => {
       </Modal>
     );
 
-    await userEvent.keyboard('{Escape}');
+    await userEvent.click(screen.getByLabelText('Cerrar al hacer clic fuera'));
     expect(handleClose).toHaveBeenCalled();
   });
 
