@@ -177,19 +177,39 @@ const markdownComponents: Components = {
     // Detect badges/shields (common patterns)
     const srcStr = typeof src === 'string' ? src : '';
     const altStr = typeof alt === 'string' ? alt : '';
-    const isBadge =
-      srcStr.includes('shields.io') ||
-      srcStr.includes('badge') ||
-      srcStr.includes('img.shields') ||
-      srcStr.includes('travis-ci') ||
-      srcStr.includes('coveralls') ||
-      srcStr.includes('badgen.net') ||
+
+    // Safely parse hostname to prevent URL substring manipulation attacks
+    let hostname: string | null = null;
+    try {
+      const url = new URL(srcStr, 'https://example.com');
+      hostname = url.hostname.toLowerCase();
+    } catch {
+      hostname = null;
+    }
+
+    // Check against known badge provider hostnames (secure hostname comparison)
+    const isBadgeHost =
+      hostname === 'shields.io' ||
+      hostname === 'img.shields.io' ||
+      hostname === 'travis-ci.org' ||
+      hostname === 'travis-ci.com' ||
+      hostname === 'coveralls.io' ||
+      hostname === 'badgen.net' ||
+      hostname?.endsWith('.shields.io') ||
+      hostname?.endsWith('.travis-ci.org') ||
+      hostname?.endsWith('.coveralls.io');
+
+    // Additional heuristics for badge detection (path-based, not host-based)
+    const isBadgePattern =
+      srcStr.includes('/badge') ||
       srcStr.includes('flat-square') ||
-      (srcStr.includes('svg') &&
+      (srcStr.endsWith('.svg') &&
         (altStr.toLowerCase().includes('license') ||
           altStr.toLowerCase().includes('build') ||
           altStr.toLowerCase().includes('coverage') ||
           altStr.toLowerCase().includes('version')));
+
+    const isBadge = isBadgeHost || isBadgePattern;
 
     // Render badges inline
     if (isBadge) {
