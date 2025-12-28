@@ -86,12 +86,14 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
 
   // Obtener README si es un proyecto de GitHub
   let readme: string | null = null;
+  let repoInfo: { owner: string; repo: string } | undefined;
   if (project.source === 'github' && project.github) {
     // Extraer owner y repo de la URL de GitHub usando RegExp.exec()
     const githubUrlRegex = /github\.com\/([^/]+)\/([^/]+)/;
     const match = githubUrlRegex.exec(project.github);
     if (match) {
       const [, owner, repo] = match;
+      repoInfo = { owner, repo };
       readme = await getRepoReadme(owner, repo);
     }
   }
@@ -183,7 +185,7 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
               <div className="lg:col-span-2">
                 <h2 className="text-2xl font-bold mb-6">Descripción del Proyecto</h2>
                 {readme ? (
-                  <MarkdownContent content={readme} />
+                  <MarkdownContent content={readme} repoInfo={repoInfo} />
                 ) : (
                   <div className="prose prose-gray dark:prose-invert max-w-none">
                     <p className="text-muted-foreground leading-relaxed">{project.description}</p>
