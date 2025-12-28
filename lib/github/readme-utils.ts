@@ -73,9 +73,14 @@ export function transformToRawUrl(
 ): string {
   if (!src) return src;
 
-  // Already a raw URL
-  if (src.includes('raw.githubusercontent.com')) {
-    return src;
+  // Already a raw URL (verify actual hostname to prevent URL manipulation)
+  try {
+    const parsed = new URL(src);
+    if (parsed.hostname.toLowerCase() === 'raw.githubusercontent.com') {
+      return src;
+    }
+  } catch {
+    // If src is not an absolute URL, fall through to relative handling below
   }
 
   // Already an absolute URL (not GitHub)
