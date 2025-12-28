@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/JNZader/portfolio-2025/compare/v1.6.8...v1.7.0) (2025-12-28)
+
+
+### Features
+
+* **github:** extract preview image from README ([5eda1d7](https://github.com/JNZader/portfolio-2025/commits/5eda1d73cb6a5aafd4ebee2585c170a8f27b7db9))
+
+
+### Bug Fixes
+
+* **ci:** install Playwright deps when browsers are cached ([12cb31b](https://github.com/JNZader/portfolio-2025/commits/12cb31bb68bcb48df77e505fc0e3dea240433b63))
+* **markdown:** transform GitHub README image URLs to raw format ([1d2dcdb](https://github.com/JNZader/portfolio-2025/commits/1d2dcdb47a16686d00909b583d253beb75b7f51c))
+* **security:** prevent URL substring manipulation in transformToRawUrl ([da78296](https://github.com/JNZader/portfolio-2025/commits/da78296a5e15f98414c9421354b1e6465133a7df))
+
 ### [1.6.8](https://github.com/JNZader/portfolio-2025/compare/v1.6.7...v1.6.8) (2025-12-25)
 
 
