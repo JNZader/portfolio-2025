@@ -1,5 +1,6 @@
 import { Octokit } from 'octokit';
 import { logger } from '@/lib/monitoring/logger';
+import { extractFirstImageFromReadme } from './readme-utils';
 import type { GitHubRateLimit, GitHubRepo, Project } from './types';
 
 // Singleton pattern para reutilizar instancia
@@ -177,12 +178,21 @@ export async function getRateLimit(): Promise<GitHubRateLimit> {
 
 /**
  * Normalizar repo de GitHub a formato Project
+ * @param repo - Repositorio de GitHub
+ * @param readme - Contenido del README (opcional, para extraer imagen de preview)
  */
-export function normalizeGitHubRepo(repo: GitHubRepo): Project {
+export function normalizeGitHubRepo(repo: GitHubRepo, readme?: string): Project {
+  // Extract preview image from README if available
+  let image: string | undefined;
+  if (readme) {
+    image = extractFirstImageFromReadme(readme, repo.owner.login, repo.name);
+  }
+
   return {
     id: `github-${repo.id}`,
     title: repo.name,
     description: repo.description ?? 'Sin descripción',
+    image,
     url: repo.html_url,
     github: repo.html_url,
     demo: repo.homepage ?? undefined,
