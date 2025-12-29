@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.1](https://github.com/JNZader/portfolio-2025/compare/v1.7.0...v1.7.1) (2025-12-29)
+
+
+### Bug Fixes
+
+* **ci:** add fallback values for Sanity secrets in E2E workflow ([0ae18e4](https://github.com/JNZader/portfolio-2025/commits/0ae18e40a5ba4b3ec20d1e18bafea0c57d37c934))
+
 ## [1.7.0](https://github.com/JNZader/portfolio-2025/compare/v1.6.8...v1.7.0) (2025-12-28)
 
 
