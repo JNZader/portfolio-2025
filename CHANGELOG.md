@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.3](https://github.com/JNZader/portfolio-2025/compare/v1.7.2...v1.7.3) (2026-01-05)
+
+
+### Bug Fixes
+
+* **security:** add npm overrides for qs and tmp vulnerabilities ([befc7ad](https://github.com/JNZader/portfolio-2025/commits/befc7ad8980eeb00f69e5b57b3d5bc5348e58c50))
+
 ### [1.7.2](https://github.com/JNZader/portfolio-2025/compare/v1.7.1...v1.7.2) (2025-12-29)
 
 ### [1.7.1](https://github.com/JNZader/portfolio-2025/compare/v1.7.0...v1.7.1) (2025-12-29)
