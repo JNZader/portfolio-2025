@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.7](https://github.com/JNZader/portfolio-2025/compare/v1.7.6...v1.7.7) (2026-01-12)
+
 ### [1.7.6](https://github.com/JNZader/portfolio-2025/compare/v1.7.5...v1.7.6) (2026-01-05)
 
 ### [1.7.5](https://github.com/JNZader/portfolio-2025/compare/v1.7.4...v1.7.5) (2026-01-05)
