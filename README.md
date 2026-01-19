@@ -11,8 +11,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
 ![Version](https://img.shields.io/badge/version-1.5.0-green)
 
-![Portfolio Preview](https://placehold.co/1200x675/1e293b/ffffff?text=Portfolio+Preview)
-<!-- TODO: Reemplazar esta imagen con una captura de pantalla real de tu proyecto (Home Page) -->
+![Portfolio Preview](public/images/portfolio-preview.png)
 
 
 Portfolio profesional construido con el stack más moderno de 2025. Incluye sistema de blog completo con búsqueda, comentarios, CMS headless, conexión con GitHub API, analytics avanzado, testing completo, y optimizaciones de rendimiento de nivel producción.
