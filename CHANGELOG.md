@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.8](https://github.com/JNZader/portfolio-2025/compare/v1.7.7...v1.7.8) (2026-01-19)
+
+
+### Bug Fixes
+
+* **images:** merge hotfix for local images ([38660a3](https://github.com/JNZader/portfolio-2025/commits/38660a34a8243b8833fc57dd8a56f05b5b321b50))
+* **images:** use local images instead of external URLs ([54a85cb](https://github.com/JNZader/portfolio-2025/commits/54a85cb8579a435b050f267ebb6a8f8b1d70e1f0))
+
 ### [1.7.7](https://github.com/JNZader/portfolio-2025/compare/v1.7.6...v1.7.7) (2026-01-12)
 
 ### [1.7.6](https://github.com/JNZader/portfolio-2025/compare/v1.7.5...v1.7.6) (2026-01-05)
