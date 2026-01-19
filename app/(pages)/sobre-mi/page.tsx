@@ -33,12 +33,7 @@ export default function SobreMiPage() {
           <RevealOnScroll>
             <SectionHeader centered>
               <div className="flex flex-col items-center gap-8 mb-6">
-                <ClickableAvatar
-                  src="https://media.licdn.com/dms/image/v2/D4D03AQE7TmC2O6j21g/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1699301363482?e=1765411200&v=beta&t=iKb1tXsTUVK5R62jF_Owebju8_oScP6J3ulMO0NepSE"
-                  alt="Javier Zader"
-                  size={160}
-                  priority
-                />
+                <ClickableAvatar src="/images/profile.jpg" alt="Javier Zader" size={160} priority />
               </div>
               <SectionTitle size="xl">Sobre mí</SectionTitle>
               <SectionDescription size="lg" className="mx-auto">
