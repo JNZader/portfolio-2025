@@ -1,4 +1,5 @@
 import { defineConfig } from 'sanity';
+import type { StructureBuilder, ListItemBuilder } from 'sanity/structure';
 import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import { codeInput } from '@sanity/code-input';
@@ -17,7 +18,7 @@ export default defineConfig({
 
     plugins: [
         structureTool({
-            structure: (S) =>
+            structure: (S: StructureBuilder) =>
                 S.list()
                     .title('Content')
                     .items([
@@ -40,7 +41,7 @@ export default defineConfig({
                         S.divider(),
                         // Resto de documentos
                         ...S.documentTypeListItems().filter(
-                            (item) =>
+                            (item: ListItemBuilder) =>
                                 !['post', 'category', 'project'].includes(
                                     item.getId() as string
                                 )
