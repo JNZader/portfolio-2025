@@ -1,0 +1,4 @@
+reviews:
+  enabled: false
+chat:
+  enabled: false
