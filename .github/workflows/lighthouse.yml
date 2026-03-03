@@ -99,7 +99,7 @@ jobs:
           NEXT_PUBLIC_GISCUS_CATEGORY_ID: dummy-category-id
 
       - name: Upload Lighthouse results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: lighthouse-results
