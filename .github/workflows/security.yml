@@ -75,4 +75,6 @@ jobs:
           cache: 'npm'
 
       - name: Run npm audit
+        # Remaining moderate vulns are transitive (prisma -> hono/lodash)
+        # and require upstream fixes from the Prisma team
         run: npm audit --audit-level=high
