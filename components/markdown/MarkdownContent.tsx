@@ -8,6 +8,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
 import { SyntaxHighlighter } from '@/components/blog/SyntaxHighlighter';
+import { MermaidDiagram } from '@/components/markdown/MermaidDiagram';
 
 interface RepoInfo {
   owner: string;
@@ -151,6 +152,11 @@ function createMarkdownComponents(repoInfo?: RepoInfo): Components {
     code: ({ className, children, ...props }) => {
       const match = /language-(\w+)/.exec(className ?? '');
       const language = match ? match[1] : '';
+
+      // Render Mermaid diagrams as interactive SVG
+      if (language === 'mermaid') {
+        return <MermaidDiagram chart={getTextContent(children)} />;
+      }
 
       return match ? (
         <div className="relative group my-6">
