@@ -3,24 +3,24 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { unlockAchievement } from '@/lib/achievements';
 
+// Konami Code: ↑ ↑ ↓ ↓ ← → ← → B A
+const konamiCode = [
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowLeft',
+  'ArrowRight',
+  'b',
+  'a',
+] as const;
+
 export function EasterEggs() {
   const [konamiActivated, setKonamiActivated] = useState(false);
   const keysRef = useRef<string[]>([]);
   const consoleShown = useRef(false);
-
-  // Konami Code: ↑ ↑ ↓ ↓ ← → ← → B A
-  const konamiCode = [
-    'ArrowUp',
-    'ArrowUp',
-    'ArrowDown',
-    'ArrowDown',
-    'ArrowLeft',
-    'ArrowRight',
-    'ArrowLeft',
-    'ArrowRight',
-    'b',
-    'a',
-  ];
 
   // Confetti animation
   const confetti = useCallback(() => {
