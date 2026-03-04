@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.9](https://github.com/JNZader/portfolio-2025/compare/v1.7.8...v1.7.9) (2026-01-20)
+
+
+### Bug Fixes
+
+* **sanity:** add explicit types to structure callback parameters ([8d25cd9](https://github.com/JNZader/portfolio-2025/commits/8d25cd9cdd8c693db2beb679bc95f06eec6904d4))
+
 ### [1.7.8](https://github.com/JNZader/portfolio-2025/compare/v1.7.7...v1.7.8) (2026-01-19)
 
 
