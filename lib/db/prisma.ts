@@ -12,9 +12,16 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient() {
-  const adapter = new PrismaPg({
-    connectionString: process.env.DATABASE_URL ?? 'postgresql://dummy:dummy@localhost:5432/dummy',
-  });
+  const connectionString = process.env.DATABASE_URL;
+
+  if (!connectionString) {
+    throw new Error(
+      'DATABASE_URL environment variable is not set. ' +
+        'Please configure it in your .env file or environment.'
+    );
+  }
+
+  const adapter = new PrismaPg({ connectionString });
 
   return new PrismaClient({
     adapter,

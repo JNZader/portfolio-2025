@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 interface MermaidDiagramProps {
   chart: string;
@@ -10,9 +10,13 @@ interface MermaidDiagramProps {
  * Renders a Mermaid diagram from a text definition.
  * Uses dynamic import to avoid loading mermaid on pages that don't need it.
  * Supports both light and dark themes via CSS media query detection.
+ *
+ * Security: mermaid is configured with securityLevel 'strict' which
+ * sanitizes the output SVG. The rendered SVG is set via React's
+ * dangerouslySetInnerHTML to avoid direct DOM manipulation.
  */
 export function MermaidDiagram({ chart }: Readonly<MermaidDiagramProps>) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [svgContent, setSvgContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const uniqueId = useId().replace(/:/g, '-');
@@ -21,6 +25,12 @@ export function MermaidDiagram({ chart }: Readonly<MermaidDiagramProps>) {
     let cancelled = false;
 
     async function renderDiagram() {
+      if (!chart || typeof chart !== 'string') {
+        setError('Invalid diagram definition');
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const mermaid = (await import('mermaid')).default;
 
@@ -38,8 +48,8 @@ export function MermaidDiagram({ chart }: Readonly<MermaidDiagramProps>) {
 
         const { svg } = await mermaid.render(`mermaid${uniqueId}`, chart.trim());
 
-        if (!cancelled && containerRef.current) {
-          containerRef.current.innerHTML = svg;
+        if (!cancelled) {
+          setSvgContent(svg);
           setIsLoading(false);
         }
       } catch (err) {
@@ -76,7 +86,13 @@ export function MermaidDiagram({ chart }: Readonly<MermaidDiagramProps>) {
           Loading diagram...
         </div>
       )}
-      <div ref={containerRef} className="flex justify-center [&>svg]:max-w-full" />
+      {svgContent && (
+        <div
+          className="flex justify-center [&>svg]:max-w-full"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: SVG output from mermaid with securityLevel 'strict'
+          dangerouslySetInnerHTML={{ __html: svgContent }}
+        />
+      )}
     </div>
   );
 }
