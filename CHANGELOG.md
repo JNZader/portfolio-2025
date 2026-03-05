@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/JNZader/portfolio-2025/compare/v2.0.0...v2.0.1) (2026-03-05)
+
+
+### Bug Fixes
+
+* harden localStorage JSON.parse and remove dead code in achievements ([b3d781b](https://github.com/JNZader/portfolio-2025/commits/b3d781bca4dcaff9b1c18fa4bdb25d1e8eba9e76))
+* **security:** override tar to 7.5.10 to resolve high severity CVE ([2f14cf8](https://github.com/JNZader/portfolio-2025/commits/2f14cf8a61e315e926e0033d6113f812649895ba))
+
+
+### Code Refactoring
+
+* remove click_master easter egg from profile photo ([87e0022](https://github.com/JNZader/portfolio-2025/commits/87e0022b46dfd5039ea4637c6324c7ac2638e055))
+* strip easter eggs down to konami code and matrix mode ([347dc9d](https://github.com/JNZader/portfolio-2025/commits/347dc9db44206dfd3383be789fd102754924c15c))
+
 ## [2.0.0](https://github.com/JNZader/portfolio-2025/compare/v1.7.9...v2.0.0) (2026-03-04)
 
 
