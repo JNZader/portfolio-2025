@@ -34,14 +34,6 @@ export const achievements: Achievement[] = [
     rarity: 'rare',
   },
   {
-    id: 'click_master',
-    title: 'Click Master',
-    description: 'Hiciste 10 clicks en mi foto de perfil',
-    icon: '📸',
-    secret: true,
-    rarity: 'rare',
-  },
-  {
     id: 'console_explorer',
     title: 'Console Explorer',
     description: 'Abriste la consola del navegador',
