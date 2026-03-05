@@ -25,14 +25,6 @@ export const achievements: Achievement[] = [
     secret: true,
     rarity: 'epic',
   },
-  {
-    id: 'completionist',
-    title: 'Completionist',
-    description: 'Desbloqueaste todos los achievements',
-    icon: '👑',
-    secret: true,
-    rarity: 'legendary',
-  },
 ];
 
 export function unlockAchievement(achievementId: string) {
@@ -53,20 +45,6 @@ export function getUnlockedAchievements(): string[] {
 
 export function isAchievementUnlocked(achievementId: string): boolean {
   return getUnlockedAchievements().includes(achievementId);
-}
-
-export function getAchievementProgress(): {
-  unlocked: number;
-  total: number;
-  percentage: number;
-} {
-  const unlocked = getUnlockedAchievements().length;
-  const total = achievements.length;
-  return {
-    unlocked,
-    total,
-    percentage: Math.round((unlocked / total) * 100),
-  };
 }
 
 function showAchievementToast(achievementId: string) {

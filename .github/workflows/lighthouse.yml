@@ -2,10 +2,7 @@ name: Lighthouse CI
 
 on:
   pull_request:
-    branches: [main, develop]
-  # Uncomment to run on push to main (optional)
-  # push:
-  #   branches: [main]
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

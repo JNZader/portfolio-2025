@@ -2,12 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import {
-  type Achievement,
-  achievements,
-  getUnlockedAchievements,
-  unlockAchievement,
-} from '@/lib/achievements';
+import { type Achievement, achievements, getUnlockedAchievements } from '@/lib/achievements';
 
 interface AchievementWithUnlocked extends Achievement {
   unlocked: boolean;
@@ -23,27 +18,12 @@ export default function SecretAchievementsPage() {
     // Cargar achievements del localStorage
     const unlockedAchievements = getUnlockedAchievements();
 
-    const isAchievementUnlocked = (achievement: Achievement): boolean => {
-      if (achievement.id === 'completionist') {
-        return unlockedAchievements.length === achievements.length - 1;
-      }
-      return unlockedAchievements.includes(achievement.id);
-    };
-
-    const allAchievements: AchievementWithUnlocked[] = achievements.map((achievement) => ({
-      ...achievement,
-      unlocked: isAchievementUnlocked(achievement),
-    }));
-
-    setAchievementsList(allAchievements);
-
-    // Check completionist
-    if (
-      unlockedAchievements.length === achievements.length - 1 &&
-      !unlockedAchievements.includes('completionist')
-    ) {
-      setTimeout(() => unlockAchievement('completionist'), 1000);
-    }
+    setAchievementsList(
+      achievements.map((achievement) => ({
+        ...achievement,
+        unlocked: unlockedAchievements.includes(achievement.id),
+      }))
+    );
   }, []);
 
   if (!mounted) {
@@ -144,18 +124,6 @@ export default function SecretAchievementsPage() {
           </div>
         ))}
       </div>
-
-      {/* Completion Message */}
-      {completionPercentage === 100 && (
-        <div className="mt-12 p-8 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg text-center">
-          <div className="text-6xl mb-4">👑</div>
-          <h2 className="text-3xl font-bold mb-2">¡COMPLETIONIST!</h2>
-          <p className="text-lg">
-            ¡Felicitaciones! Desbloqueaste todos los achievements. Sos oficialmente un maestro de
-            easter eggs.
-          </p>
-        </div>
-      )}
 
       {/* Back Link */}
       <div className="mt-8 text-center">
