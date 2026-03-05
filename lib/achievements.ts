@@ -5,7 +5,6 @@ export interface Achievement {
   icon: string;
   secret: boolean;
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
-  silent?: boolean; // Don't show toast notification
 }
 
 export const achievements: Achievement[] = [
@@ -50,7 +49,7 @@ export function getUnlockedAchievements(): string[] {
 
 function showAchievementToast(achievementId: string) {
   const achievement = achievements.find((a) => a.id === achievementId);
-  if (!achievement || achievement.silent) return;
+  if (!achievement) return;
 
   // Create toast container using DOM API to prevent XSS
   const toast = document.createElement('div');
