@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/JNZader/portfolio-2025/compare/v2.0.1...v2.1.0) (2026-03-05)
+
+
+### Features
+
+* **resume:** migrate CV data source from static JSON to Sanity CMS ([6d6f1d4](https://github.com/JNZader/portfolio-2025/commits/6d6f1d4413a6d9d52d1f007a7b1b8b990cbc47ed))
+
+
+### Bug Fixes
+
+* **resume:** harden email decoding and improve Sanity fallback diagnostics ([3ed88b9](https://github.com/JNZader/portfolio-2025/commits/3ed88b9466c160db1fecaad7d74d1c9fe4ae6990))
+
+
+### Documentation
+
+* **sdd:** add proposal, spec, design, and tasks for cv-from-sanity ([be69068](https://github.com/JNZader/portfolio-2025/commits/be690688a19c015ccaa8bbd79de6b3d3b8f525b9))
+
 ### [2.0.1](https://github.com/JNZader/portfolio-2025/compare/v2.0.0...v2.0.1) (2026-03-05)
 
 
