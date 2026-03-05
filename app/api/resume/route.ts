@@ -1,51 +1,9 @@
 import type { jsPDF } from 'jspdf';
 import { type NextRequest, NextResponse } from 'next/server';
-import resumeDataRaw from '@/lib/data/resume.json';
 import { logger } from '@/lib/monitoring/logger';
 import { getClientIdentifier, resumeRateLimiter } from '@/lib/rate-limit/redis';
-
-// Type definitions
-interface ResumeDataRaw {
-  personalInfo: {
-    name: string;
-    title: string;
-    email_encoded: string;
-    phone: string;
-    location: string;
-    website: string;
-    linkedin: string;
-    github: string;
-  };
-  summary: string;
-  experience: Array<{
-    company: string;
-    position: string;
-    location: string;
-    startDate: string;
-    endDate: string;
-    highlights: string[];
-  }>;
-  projects?: Array<{
-    name: string;
-    description: string;
-    highlights: string[];
-  }>;
-  education: Array<{
-    institution: string;
-    degree: string;
-    location: string;
-    startDate: string;
-    endDate: string;
-    details?: string[];
-  }>;
-  skills: Record<string, string[]>;
-  softSkills?: string[];
-  languages: Array<{ name: string; level: string }>;
-}
-
-interface ResumeData extends Omit<ResumeDataRaw, 'personalInfo'> {
-  personalInfo: Omit<ResumeDataRaw['personalInfo'], 'email_encoded'> & { email: string };
-}
+import type { ResumeData, ResumeDataRaw } from '@/lib/types/resume';
+import { fetchResumeData } from '@/sanity/lib/queries';
 
 // PDF Colors
 const COLORS = {
@@ -264,8 +222,8 @@ export async function GET(request: NextRequest) {
     // Lazy load jsPDF para reducir bundle inicial
     const { jsPDF } = await import('jspdf');
 
-    // Prepare resume data (decode email from base64)
-    const rawData = resumeDataRaw as ResumeDataRaw;
+    // Fetch resume data from Sanity (with JSON fallback)
+    const rawData: ResumeDataRaw = await fetchResumeData();
     const data: ResumeData = {
       ...rawData,
       personalInfo: {

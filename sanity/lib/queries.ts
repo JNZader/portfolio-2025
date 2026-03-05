@@ -1,4 +1,10 @@
 import { groq } from 'next-sanity';
+import type {
+  ResumeDataRaw,
+  SanityResumeData,
+} from '@/lib/types/resume';
+import { logger } from '@/lib/monitoring/logger';
+import { sanityFetch } from './client';
 
 /**
  * Proyectos
@@ -232,3 +238,73 @@ export const relatedPostsQuery = groq`
 export const allPostSlugsQuery = groq`
   *[_type == "post" && defined(slug.current)][].slug.current
 `;
+
+/**
+ * Resume / CV (singleton)
+ */
+export const resumeQuery = groq`
+  *[_type == "resume"][0] {
+    personalInfo,
+    summary,
+    experience,
+    projects,
+    education,
+    skills,
+    softSkills,
+    languages
+  }
+`;
+
+/**
+ * Transform Sanity skills array to Record<string, string[]>
+ * Sanity stores: [{ category: "Lenguajes", items: ["Java", "Python"] }]
+ * API expects: { "Lenguajes": ["Java", "Python"] }
+ */
+export function transformSkills(
+  skills: SanityResumeData['skills'],
+): Record<string, string[]> {
+  const result: Record<string, string[]> = {};
+  for (const skill of skills) {
+    result[skill.category] = skill.items;
+  }
+  return result;
+}
+
+/**
+ * Fetch resume data from Sanity with fallback to static JSON
+ *
+ * - Fetches from Sanity CMS with ISR (60s revalidation)
+ * - Falls back to lib/data/resume.json on null/error
+ * - Transforms skills from Sanity array format to Record format
+ */
+export async function fetchResumeData(): Promise<ResumeDataRaw> {
+  try {
+    const sanityData = await sanityFetch<SanityResumeData | null>({
+      query: resumeQuery,
+      tags: ['resume'],
+    });
+
+    if (sanityData?.personalInfo && sanityData?.summary) {
+      return {
+        personalInfo: sanityData.personalInfo,
+        summary: sanityData.summary,
+        experience: sanityData.experience ?? [],
+        projects: sanityData.projects,
+        education: sanityData.education ?? [],
+        skills: transformSkills(sanityData.skills ?? []),
+        softSkills: sanityData.softSkills,
+        languages: sanityData.languages ?? [],
+      };
+    }
+
+    logger.warn('Sanity resume data is empty or incomplete, using JSON fallback');
+  } catch (error) {
+    logger.warn('Failed to fetch resume from Sanity, using JSON fallback', {
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+
+  // Fallback to static JSON
+  const { default: fallbackData } = await import('@/lib/data/resume.json');
+  return fallbackData as ResumeDataRaw;
+}
