@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/JNZader/portfolio-2025/compare/v1.7.9...v2.0.0) (2026-03-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** Prisma v7 requires explicit driver adapters.
+
+- Update generator provider from prisma-client-js to prisma-client
+- Install @prisma/adapter-pg for PostgreSQL driver adapter
+- Update PrismaClient instantiation with PrismaPg adapter
+- Update import path to @/lib/generated/prisma/client
+- Remove directUrl from prisma.config.ts (not supported in v7)
+- Remove datasource URLs from schema (managed by prisma.config.ts)
+- Regenerate Prisma client for v7
+
+### Features
+
+* **deps:** upgrade Prisma from v6 to v7 with pg driver adapter ([e7111ba](https://github.com/JNZader/portfolio-2025/commits/e7111bae33dcde55907d11401918d08538a1b9c2))
+* **projects:** add Mermaid diagram rendering for GitHub READMEs ([ff57ee7](https://github.com/JNZader/portfolio-2025/commits/ff57ee714ab96d014a63722f1a30814f1e485a65))
+
+
+### Bug Fixes
+
+* **deps:** resolve npm audit vulnerabilities ([9f46bac](https://github.com/JNZader/portfolio-2025/commits/9f46bac34bf03f9e07eceaf643b9895ad26efe5a))
+* **lint:** update biome schema to 2.4.4 and fix exhaustive-deps in EasterEggs ([9a39fec](https://github.com/JNZader/portfolio-2025/commits/9a39fec3ccd16cccd1889496b804339158fa3ab4))
+* **security:** harden Prisma client init and Mermaid rendering ([556b620](https://github.com/JNZader/portfolio-2025/commits/556b620f5fa71f7dc3734edb3ab570664193e0b2))
+* **security:** override hono and @hono/node-server to fix high vulns ([41408d6](https://github.com/JNZader/portfolio-2025/commits/41408d6ff9cdca9d60be36e430dc4ca5361e0a0e))
+* **security:** resolve all high/critical npm audit vulnerabilities ([ca81ce9](https://github.com/JNZader/portfolio-2025/commits/ca81ce967ef1553e667c7c662cd6afd0e3ae6f7a))
+
 ### [1.7.9](https://github.com/JNZader/portfolio-2025/compare/v1.7.8...v1.7.9) (2026-01-20)
 
 
