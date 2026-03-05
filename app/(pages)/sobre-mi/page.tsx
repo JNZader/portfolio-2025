@@ -1,8 +1,8 @@
 import { Award, BookOpen, Code2, GraduationCap } from 'lucide-react';
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { RevealOnScroll } from '@/components/animations';
-import { ClickableAvatar } from '@/components/features/ClickableAvatar';
 import { DownloadCVButton } from '@/components/ui/DownloadCVButton';
 import { HeroBackground } from '@/components/ui/HeroBackground';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
@@ -33,7 +33,14 @@ export default function SobreMiPage() {
           <RevealOnScroll>
             <SectionHeader centered>
               <div className="flex flex-col items-center gap-8 mb-6">
-                <ClickableAvatar src="/images/profile.jpg" alt="Javier Zader" size={160} priority />
+                <Image
+                  src="/images/profile.jpg"
+                  alt="Javier Zader"
+                  width={160}
+                  height={160}
+                  priority
+                  className="rounded-full ring-4 ring-primary/20 hover:ring-primary/40 transition-all hover:scale-110 duration-500"
+                />
               </div>
               <SectionTitle size="xl">Sobre mí</SectionTitle>
               <SectionDescription size="lg" className="mx-auto">

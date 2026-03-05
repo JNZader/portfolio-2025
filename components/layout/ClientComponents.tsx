@@ -4,16 +4,6 @@ import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { EasterEggs } from '@/components/features/EasterEggs';
 
-const TypingEasterEgg = dynamic(
-  () => import('@/components/features/TypingEasterEgg').then((m) => m.TypingEasterEgg),
-  { ssr: false }
-);
-
-const CursorTracer = dynamic(
-  () => import('@/components/features/CursorTracer').then((m) => m.CursorTracer),
-  { ssr: false }
-);
-
 const MatrixRain = dynamic(
   () => import('@/components/features/MatrixRain').then((m) => m.MatrixRain),
   { ssr: false }
@@ -48,12 +38,6 @@ export function ClientComponents() {
 
       {/* Easter Eggs */}
       <EasterEggs />
-      <Suspense fallback={null}>
-        <TypingEasterEgg />
-      </Suspense>
-      <Suspense fallback={null}>
-        <CursorTracer />
-      </Suspense>
       <Suspense fallback={null}>
         <MatrixRain />
       </Suspense>
