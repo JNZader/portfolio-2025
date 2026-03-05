@@ -20,7 +20,6 @@ const konamiCode = [
 export function EasterEggs() {
   const [konamiActivated, setKonamiActivated] = useState(false);
   const keysRef = useRef<string[]>([]);
-  const consoleShown = useRef(false);
 
   // Confetti animation
   const confetti = useCallback(() => {
@@ -77,21 +76,6 @@ export function EasterEggs() {
     globalThis.addEventListener('keydown', handleKeyDown);
     return () => globalThis.removeEventListener('keydown', handleKeyDown);
   }, [confetti]);
-
-  // Console Easter Egg - useRef evita duplicación en Strict Mode
-  useEffect(() => {
-    if (consoleShown.current) return;
-    consoleShown.current = true;
-
-    console.log('%c🎉 ¡Hola developer!', 'font-size: 24px; font-weight: bold; color: #1e40af;');
-    console.log('%cVeo que te gusta inspeccionar código!!! 🧐', 'font-size: 14px; color: #6b7280;');
-    console.log(
-      '%c👉 Conectemos: https://linkedin.com/in/jnzader/',
-      'font-size: 14px; color: #1e40af;'
-    );
-    console.log('%c💡 Tip: Prueba el Konami Code (↑↑↓↓←→←→BA)', 'font-size: 12px; color: #9ca3af;');
-    unlockAchievement('console_explorer');
-  }, []);
 
   if (konamiActivated) {
     return (

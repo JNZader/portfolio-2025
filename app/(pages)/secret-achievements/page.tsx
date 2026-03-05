@@ -23,17 +23,7 @@ export default function SecretAchievementsPage() {
     // Cargar achievements del localStorage
     const unlockedAchievements = getUnlockedAchievements();
 
-    // Check night owl achievement
-    const currentHour = new Date().getHours();
-    const isNightTime = currentHour >= 0 && currentHour < 6;
-    if (isNightTime && !unlockedAchievements.includes('night_owl')) {
-      unlockAchievement('night_owl');
-    }
-
     const isAchievementUnlocked = (achievement: Achievement): boolean => {
-      if (achievement.id === 'night_owl') {
-        return isNightTime || unlockedAchievements.includes('night_owl');
-      }
       if (achievement.id === 'completionist') {
         return unlockedAchievements.length === achievements.length - 1;
       }
@@ -46,21 +36,6 @@ export default function SecretAchievementsPage() {
     }));
 
     setAchievementsList(allAchievements);
-
-    // Auto-unlock "first_visit"
-    if (!unlockedAchievements.includes('first_visit')) {
-      unlockAchievement('first_visit');
-      // Reload to show updated state
-      setTimeout(() => {
-        const updated = getUnlockedAchievements();
-        setAchievementsList(
-          achievements.map((a) => ({
-            ...a,
-            unlocked: updated.includes(a.id),
-          }))
-        );
-      }, 100);
-    }
 
     // Check completionist
     if (
