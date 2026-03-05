@@ -130,7 +130,7 @@ describe('fetchResumeData', () => {
     const result = await fetchResumeData();
 
     expect(mockLoggerWarn).toHaveBeenCalledWith(
-      'Sanity resume data is empty or incomplete, using JSON fallback',
+      'Sanity resume document not found, using JSON fallback',
     );
     // Fallback data should have the JSON file structure
     expect(result.personalInfo.name).toBe('Javier Norberto Zader');
@@ -139,14 +139,15 @@ describe('fetchResumeData', () => {
   it('falls back to JSON when Sanity response is missing required fields', async () => {
     const incompleteData = {
       personalInfo: { name: 'Test' },
-      // missing summary
+      // missing summary, education, languages
     };
     mockSanityFetch.mockResolvedValueOnce(incompleteData);
 
     const result = await fetchResumeData();
 
     expect(mockLoggerWarn).toHaveBeenCalledWith(
-      'Sanity resume data is empty or incomplete, using JSON fallback',
+      'Sanity resume data is incomplete, using JSON fallback',
+      { missingFields: ['summary', 'education', 'languages'] },
     );
     expect(result.personalInfo.name).toBe('Javier Norberto Zader');
   });

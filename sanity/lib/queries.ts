@@ -284,20 +284,32 @@ export async function fetchResumeData(): Promise<ResumeDataRaw> {
       tags: ['resume'],
     });
 
-    if (sanityData?.personalInfo && sanityData?.summary) {
-      return {
-        personalInfo: sanityData.personalInfo,
-        summary: sanityData.summary,
-        experience: sanityData.experience ?? [],
-        projects: sanityData.projects,
-        education: sanityData.education ?? [],
-        skills: transformSkills(sanityData.skills ?? []),
-        softSkills: sanityData.softSkills,
-        languages: sanityData.languages ?? [],
-      };
-    }
+    if (sanityData) {
+      const requiredFields = ['personalInfo', 'summary', 'education', 'languages'] as const;
+      const missingFields = requiredFields.filter(
+        (field) => !sanityData[field],
+      );
 
-    logger.warn('Sanity resume data is empty or incomplete, using JSON fallback');
+      if (missingFields.length === 0) {
+        return {
+          personalInfo: sanityData.personalInfo,
+          summary: sanityData.summary,
+          experience: sanityData.experience ?? [],
+          projects: sanityData.projects,
+          education: sanityData.education ?? [],
+          skills: transformSkills(sanityData.skills ?? []),
+          softSkills: sanityData.softSkills,
+          languages: sanityData.languages ?? [],
+        };
+      }
+
+      logger.warn(
+        'Sanity resume data is incomplete, using JSON fallback',
+        { missingFields },
+      );
+    } else {
+      logger.warn('Sanity resume document not found, using JSON fallback');
+    }
   } catch (error) {
     logger.warn('Failed to fetch resume from Sanity, using JSON fallback', {
       error: error instanceof Error ? error.message : String(error),

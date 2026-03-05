@@ -224,11 +224,20 @@ export async function GET(request: NextRequest) {
 
     // Fetch resume data from Sanity (with JSON fallback)
     const rawData: ResumeDataRaw = await fetchResumeData();
+
+    let decodedEmail: string;
+    try {
+      decodedEmail = Buffer.from(rawData.personalInfo.email_encoded, 'base64').toString('utf-8');
+    } catch {
+      logger.warn('Failed to decode email_encoded from resume data, using fallback');
+      decodedEmail = 'contacto@javierzader.com';
+    }
+
     const data: ResumeData = {
       ...rawData,
       personalInfo: {
         ...rawData.personalInfo,
-        email: Buffer.from(rawData.personalInfo.email_encoded, 'base64').toString('utf-8'),
+        email: decodedEmail,
       },
     };
 
