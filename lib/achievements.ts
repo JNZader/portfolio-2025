@@ -40,11 +40,12 @@ export function unlockAchievement(achievementId: string) {
 
 export function getUnlockedAchievements(): string[] {
   if (typeof globalThis === 'undefined') return [];
-  return JSON.parse(localStorage.getItem('achievements') ?? '[]');
-}
-
-export function isAchievementUnlocked(achievementId: string): boolean {
-  return getUnlockedAchievements().includes(achievementId);
+  try {
+    const data = JSON.parse(localStorage.getItem('achievements') ?? '[]');
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
 }
 
 function showAchievementToast(achievementId: string) {
