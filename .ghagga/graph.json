@@ -1,0 +1,3762 @@
+{
+  "version": 1,
+  "rootDir": ".",
+  "nodes": {
+    "instrumentation.ts": {
+      "hash": "eaeb2f76eb61c89a8d32aa44bb48a651512c7767d7a45d37d8bcd62bf0ce2d9d",
+      "language": "typescript",
+      "imports": [
+        "./sentry.server.config",
+        "./sentry.edge.config"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "lighthouserc.js": {
+      "hash": "96697e1f2b361f295ce099f3e778040c537a2b34394785ae7fcc773696b7e56e",
+      "language": "javascript",
+      "imports": [],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "next.config.ts": {
+      "hash": "3503f5d0152366f07d1bbff9cb8d64c722d3adbb23206e1dfd471829e11f2b06",
+      "language": "typescript",
+      "imports": [
+        "next",
+        "@next/bundle-analyzer",
+        "@sentry/nextjs"
+      ],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "playwright.config.ts": {
+      "hash": "ad8341000716414bce550a7c0a69f8e8e57cc1000ce89fc064bfd777daa576c9",
+      "language": "typescript",
+      "imports": [
+        "@playwright/test"
+      ],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "postcss.config.mjs": {
+      "hash": "4cae941be9bc3bee9a6905e47ea7a51aee216d587d34a8cc4ae48f78fd6d8159",
+      "language": "javascript",
+      "imports": [],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "prisma.config.ts": {
+      "hash": "4391c850e39b2f395f538c9d7a35a4ff412e8b1077cba67c780c3b99088abb31",
+      "language": "typescript",
+      "imports": [
+        "dotenv/config",
+        "prisma/config"
+      ],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "proxy.ts": {
+      "hash": "87e06ea41669a49c3eb1c378576cd8a9fa58cd081045d2d12ec5edf9cbafae37",
+      "language": "typescript",
+      "imports": [
+        "next/server",
+        "@upstash/ratelimit",
+        "@upstash/redis",
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [
+        "config"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "sentry.client.config.ts": {
+      "hash": "781afb283226548bb1875bb06c340d98f830dee00da759fdef4404c4955b310f",
+      "language": "typescript",
+      "imports": [
+        "@sentry/nextjs"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "sentry.edge.config.ts": {
+      "hash": "cffc3941c86bd5149335b9198d05bf31563942bacc5abdf091f2f7a85f07c9e1",
+      "language": "typescript",
+      "imports": [
+        "@sentry/nextjs"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "sentry.server.config.ts": {
+      "hash": "4b41ad9676372f7114e4d675458bbecd36cf5d0fbcaf5a80b3512a2709114bf7",
+      "language": "typescript",
+      "imports": [
+        "@sentry/nextjs"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "vitest.config.ts": {
+      "hash": "1fb088ea62d4dbc77442ab12a084c5fdf5445d1b7092c034ad39da0b2543bd30",
+      "language": "typescript",
+      "imports": [
+        "path",
+        "@vitejs/plugin-react",
+        "vitest/config"
+      ],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "types/global.d.ts": {
+      "hash": "4e68310b34d5e36e107c5076d6565cd6670415d806da6896aff22d8e12ad9cb2",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "Nullable",
+        "Maybe",
+        "AsyncReturnType",
+        "ID",
+        "PaginationParams",
+        "PaginatedResponse",
+        "ApiResponse",
+        "SeoMetadata",
+        "ImageData"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "types/next-auth.d.ts": {
+      "hash": "441df721b83c91a2f3e7891b1b5aa6b7311699ce6a5f73413cb93664bbfc74c3",
+      "language": "typescript",
+      "imports": [
+        "next-auth"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "types/sanity.ts": {
+      "hash": "8459a10c240101059b6b1d3892207d0586f314613ff4a1b6a06e3b9cc88cc25e",
+      "language": "typescript",
+      "imports": [
+        "sanity"
+      ],
+      "exports": [
+        "Category",
+        "Author",
+        "Project",
+        "Post"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "types/utils.ts": {
+      "hash": "c94996414ea8237c25762c3b23303a3ce53df1cfd7dcc09c750426634ade21dc",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "PartialExcept",
+        "RequiredExcept",
+        "ArrayElement",
+        "UnwrapPromise",
+        "DeepPartial",
+        "DeepRequired",
+        "WithRequired",
+        "Dictionary",
+        "ValueOf",
+        "AsyncFunction"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "scripts/audit-sanity-data.mjs": {
+      "hash": "a4bf78c7c5b7333e532327db944d873c749b8c61f21a8450ba33849f44854a81",
+      "language": "javascript",
+      "imports": [
+        "@sanity/client",
+        "fs",
+        "path",
+        "url"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "scripts/clean-sanity-data.mjs": {
+      "hash": "18acae364e2ad43c17b11d9a5dbf02b6a380ec9e843f430d1ea719a8507007ff",
+      "language": "javascript",
+      "imports": [
+        "@sanity/client",
+        "fs",
+        "path",
+        "url",
+        "readline"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "scripts/measure-web-vitals.js": {
+      "hash": "a1f68308f1abdce6cd3d59e0e7cfa45649343c52c03bd3d51f99a1459d78faee",
+      "language": "javascript",
+      "imports": [],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "scripts/seed-sanity.mjs": {
+      "hash": "27aa4b173cd1f58401d94338043990247fc071c51ad1d0cfda5517e65080c45b",
+      "language": "javascript",
+      "imports": [
+        "@sanity/client",
+        "fs",
+        "path",
+        "url"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "sanity/env.ts": {
+      "hash": "c168de001cbec66ab4d453b8c175db393c39c7045eb1f3da313e67190d2bbbc0",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "apiVersion",
+        "dataset",
+        "projectId",
+        "readToken"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "sanity/sanity.config.ts": {
+      "hash": "7a14015fb6c8742338d5bb48931ea1f304a27ea93b54887883da8ccc36cd95a2",
+      "language": "typescript",
+      "imports": [
+        "sanity",
+        "sanity/structure",
+        "@sanity/vision",
+        "@sanity/code-input",
+        "sanity-plugin-markdown",
+        "./schemas",
+        "./env"
+      ],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "sanity/schemas/category.ts": {
+      "hash": "02506f2a8f6cabd11229951e1ab117d5e566fa926bb599e739c7db40fd7260f6",
+      "language": "typescript",
+      "imports": [
+        "sanity",
+        "@sanity/icons"
+      ],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "sanity/schemas/index.ts": {
+      "hash": "eee0d9b976721149960a9971d37b597e31b5dea0b69b84bd6c347c03fe9a7bb3",
+      "language": "typescript",
+      "imports": [
+        "./category",
+        "./post",
+        "./project",
+        "./resume"
+      ],
+      "exports": [
+        "schemaTypes"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "sanity/schemas/post.ts": {
+      "hash": "df1583fa6032788935cdc247df5c803f469a1ba885bc98dccf1bbd97767d700c",
+      "language": "typescript",
+      "imports": [
+        "sanity",
+        "@sanity/icons"
+      ],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "sanity/schemas/project.ts": {
+      "hash": "a2344d15ed9e8a51e04088bcba3dec708c3b189c1e37b7f84d7dde3c552a961f",
+      "language": "typescript",
+      "imports": [
+        "sanity",
+        "@sanity/icons"
+      ],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "sanity/schemas/resume.ts": {
+      "hash": "49e561945f5f2fa9bd55fe90c4193b35a305862aed5e07a007b1ae2313fb6146",
+      "language": "typescript",
+      "imports": [
+        "sanity",
+        "@sanity/icons"
+      ],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "sanity/lib/client.ts": {
+      "hash": "5423c61a822e84da6065b45bd216fc69a81e0dd86a4e917655d3c40f00e0570a",
+      "language": "typescript",
+      "imports": [
+        "@sanity/client",
+        "../env"
+      ],
+      "exports": [
+        "client"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "sanity/lib/image.ts": {
+      "hash": "75e708e2eeb28306c31fd425aee5211034ebe662557384d0cf4e033c323028f9",
+      "language": "typescript",
+      "imports": [
+        "@sanity/image-url",
+        "sanity",
+        "../env"
+      ],
+      "exports": [
+        "urlForImage",
+        "getImageUrl",
+        "getImageBlurUrl"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "sanity/lib/queries.ts": {
+      "hash": "ac19768159b56ffe696396c7d45d799ba0b47518b5421ca4837d1ff4297d41bb",
+      "language": "typescript",
+      "imports": [
+        "next-sanity",
+        "@/lib/types/resume",
+        "@/lib/monitoring/logger",
+        "./client",
+        "@/lib/data/resume.json"
+      ],
+      "exports": [
+        "projectsQuery",
+        "featuredProjectsQuery",
+        "projectBySlugQuery",
+        "postsQuery",
+        "featuredPostsQuery",
+        "postBySlugQuery",
+        "postsByCategoryQuery",
+        "categoriesQuery",
+        "categoryBySlugQuery",
+        "paginatedPostsQuery",
+        "sidebarPostsQuery",
+        "relatedPostsQuery",
+        "allPostSlugsQuery",
+        "resumeQuery",
+        "transformSkills"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "mocks/handlers.ts": {
+      "hash": "678883edbac8293bad64fd44086512030e96e3b6e2188c4578ae5e227071051a",
+      "language": "typescript",
+      "imports": [
+        "msw"
+      ],
+      "exports": [
+        "handlers"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "mocks/server.ts": {
+      "hash": "97937c844e60e1ecff4890e5f03e9e26a35ed129bd1f1e8ebe282641f25475f6",
+      "language": "typescript",
+      "imports": [
+        "msw/node",
+        "./handlers"
+      ],
+      "exports": [
+        "server"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/achievements.ts": {
+      "hash": "74f4ce1afc08070b7c8d1b3571bae97866ebf526651b297814e8243efe0e72cb",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "Achievement",
+        "achievements",
+        "unlockAchievement",
+        "getUnlockedAchievements"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/validations/constants.ts": {
+      "hash": "7ff6e564e550648ec0ae0542ed1f759a78d8563f7e059bda1ea2f680326d4ba0",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "DISPOSABLE_DOMAINS",
+        "COMMON_DOMAINS",
+        "TYPO_MAP"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/validations/contact.ts": {
+      "hash": "67e0fad715752d15974e5dfa161982fb5cab595a52e36360ccf9ef5082850912",
+      "language": "typescript",
+      "imports": [
+        "sanitize-html",
+        "zod",
+        "@/lib/constants"
+      ],
+      "exports": [
+        "contactSchema",
+        "ContactFormData",
+        "sanitizeContactData",
+        "sanitizeText"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/validations/email-validator-client.ts": {
+      "hash": "c0cf3bcadf692c8e4883465e850c89fcd2243096bf7452d6d401a9e94af29034",
+      "language": "typescript",
+      "imports": [
+        "./email-validator-shared"
+      ],
+      "exports": [
+        "type EmailValidationResult",
+        "findTypoSuggestion",
+        "isDisposableDomain",
+        "parseEmail",
+        "quickValidateEmail"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/validations/email-validator-shared.ts": {
+      "hash": "6e08e2eacbb5d48abc08ad5b010c632df8cda5113087cc0d74e3d50c6204b0e0",
+      "language": "typescript",
+      "imports": [
+        "./constants"
+      ],
+      "exports": [
+        "EmailValidationResult",
+        "isDisposableDomain",
+        "getEditDistance",
+        "calculateSimilarity",
+        "findTypoSuggestion",
+        "parseEmail",
+        "quickValidateEmail"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/validations/email-validator.ts": {
+      "hash": "40e0b8e409181a364ae7c6c4e520a7da5afc52649224cec172919e86e6635cd0",
+      "language": "typescript",
+      "imports": [
+        "node:dns/promises",
+        "./email-validator-shared"
+      ],
+      "exports": [
+        "type EmailValidationResult",
+        "quickValidateEmail"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/validations/gdpr.ts": {
+      "hash": "25e4ad93d4fb35433bd5f732a6f38d917d94210e7016c603d8b45f720b26844f",
+      "language": "typescript",
+      "imports": [
+        "zod",
+        "@/lib/constants"
+      ],
+      "exports": [
+        "dataExportSchema",
+        "DataExportInput",
+        "dataDeletionSchema",
+        "DataDeletionInput",
+        "cookieConsentSchema",
+        "CookieConsentInput"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/validations/newsletter.ts": {
+      "hash": "cc664d47c4187a0ba6e96e8a391abb968c3b8b65b84d917476494151a4aa6e09",
+      "language": "typescript",
+      "imports": [
+        "zod",
+        "@/lib/constants"
+      ],
+      "exports": [
+        "newsletterSchema",
+        "NewsletterFormData",
+        "confirmTokenSchema",
+        "unsubscribeTokenSchema"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/utils/blog.ts": {
+      "hash": "c4dd4ddb5b410ad89522a85b2c17c4a2b5574b8873b253858d5cc56b2bd8540a",
+      "language": "typescript",
+      "imports": [
+        "@/types/sanity"
+      ],
+      "exports": [
+        "POSTS_PER_PAGE",
+        "getTotalPages",
+        "getPaginationRange",
+        "getPageNumbers",
+        "getPrimaryCategory",
+        "getRelativeTime"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/utils/cn.ts": {
+      "hash": "74e8fe9d0d680c442ed6adb13e7d119d6c210c19ae6c114313b2a72552be0883",
+      "language": "typescript",
+      "imports": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "exports": [
+        "cn"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/utils/format.ts": {
+      "hash": "b2a0dce2fa67b003d48bb206c57a540658b5703f8a0c514be4f981f35320f2d9",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "formatDate",
+        "calculateReadingTime",
+        "formatNumber",
+        "formatBytes",
+        "truncate",
+        "formatPercent"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/utils/guards.ts": {
+      "hash": "ee9aaf15edaef4e48138993565c3229bba6426793e3248f1e1110ae55d22af29",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "isString",
+        "isNumber",
+        "isBoolean",
+        "isNullish",
+        "isDefined",
+        "isArray",
+        "isObject",
+        "isFunction",
+        "isPromise",
+        "isEmail",
+        "isUrl",
+        "isClient",
+        "isServer"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/utils/image.ts": {
+      "hash": "ea82435474f8037fce8602f5a7ddad1c266bb3f6260fd1eb768074a8d14681fc",
+      "language": "typescript",
+      "imports": [
+        "plaiceholder",
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/utils/index.ts": {
+      "hash": "df6060399e90b26f2a7391722d23ad387a63a92b0eab0b791aa7e664c3b3ace9",
+      "language": "typescript",
+      "imports": [
+        "./cn",
+        "./format",
+        "./guards",
+        "./string"
+      ],
+      "exports": [
+        "cn",
+        "calculateReadingTime",
+        "formatBytes",
+        "formatDate",
+        "formatNumber",
+        "formatPercent",
+        "truncate",
+        "isArray",
+        "isBoolean",
+        "isClient",
+        "isDefined",
+        "isEmail",
+        "isFunction",
+        "isNullish",
+        "isNumber",
+        "isObject",
+        "isPromise",
+        "isServer",
+        "isString",
+        "isUrl",
+        "capitalize",
+        "capitalizeWords",
+        "cleanWhitespace",
+        "excerpt",
+        "getInitials",
+        "pluralize",
+        "slugify"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/utils/project.ts": {
+      "hash": "68935088a46db3441ab1d829c418f96ab49238a969f87949f7f7f9ab8ae7423b",
+      "language": "typescript",
+      "imports": [
+        "@/lib/github/types",
+        "@/types/sanity"
+      ],
+      "exports": [
+        "convertSanityProject"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/utils/search.ts": {
+      "hash": "9c9fdfa29e552e2c663eca5dde79ccb35403a19e38942f6ea96e68395a5ee29f",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "normalizeSearchTerm",
+        "isValidSearchTerm",
+        "highlightSearchTerm",
+        "getSearchStatsMessage"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/utils/string.ts": {
+      "hash": "54d21ead2c4601e650eda3acca05379213e88a18c53daf1e87341a142f603526",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "slugify",
+        "capitalize",
+        "capitalizeWords",
+        "getInitials",
+        "excerpt",
+        "pluralize",
+        "cleanWhitespace",
+        "escapeHtml"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/utils/tech-icons.tsx": {
+      "hash": "d2f33be17045525de327e7e27757dd56cf66cbec6e517f182d553120e69652fa",
+      "language": "typescript",
+      "imports": [
+        "lucide-react"
+      ],
+      "exports": [
+        "TechIconMapping",
+        "getTechIcon",
+        "getAllTechIcons"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/utils/toast.ts": {
+      "hash": "9c03803b425045d2fa4600a60697da091e371d1f12e2ad6264eb8c6be7532797",
+      "language": "typescript",
+      "imports": [
+        "react-hot-toast"
+      ],
+      "exports": [
+        "showSuccess",
+        "showError",
+        "showPromise",
+        "dismissAll"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/utils/toc.ts": {
+      "hash": "8bc86dd90dfe5ac9fd3173f5853b96699f4c979ea8e5e34bc72dcc5a3486e015",
+      "language": "typescript",
+      "imports": [
+        "sanity"
+      ],
+      "exports": [
+        "TocItem",
+        "generateTableOfContents",
+        "generateTableOfContentsFromMarkdown",
+        "slugifyHeading"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/types/resume.ts": {
+      "hash": "dedeffc9529599da73aff4d6f119a6bd71873ad8e03e07b1878a990f67de3921",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "ResumeDataRaw",
+        "ResumeData",
+        "SanityResumeData"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/services/gdpr.ts": {
+      "hash": "334c15691e5ffdc7cf0793d58e7f906aa6e8fbe35184987bf63cf9293bb189a2",
+      "language": "typescript",
+      "imports": [
+        "@/lib/db/prisma",
+        "@/lib/generated/prisma/client",
+        "@/lib/monitoring/logger",
+        "@/lib/monitoring/performance"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/seo/metadata.ts": {
+      "hash": "26e3ddc07f130d470eb6d6010dfa288aac5bbf2ef689b603337a2564fce698b2",
+      "language": "typescript",
+      "imports": [
+        "next"
+      ],
+      "exports": [
+        "generateMetadata",
+        "defaultMetadata"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/seo/schema.ts": {
+      "hash": "0bcb305052e762eda0f04cbce1f18a8a60e1ade6f5c8a7929876e399909a61e5",
+      "language": "typescript",
+      "imports": [
+        "schema-dts"
+      ],
+      "exports": [
+        "generatePersonSchema",
+        "generateWebSiteSchema",
+        "generateBlogPostingSchema",
+        "generateBreadcrumbSchema"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/security/security-config.ts": {
+      "hash": "7142c75acfe421c80b1921a648cd42abb738e9035122098ae34c6a34b25e66e2",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "ALLOWED_ORIGINS",
+        "CSP_ALLOWED_DOMAINS",
+        "SUSPICIOUS_USER_AGENTS",
+        "SECURITY_HEADERS",
+        "RATE_LIMITS",
+        "verifyCsrf",
+        "CSRF_ERROR_RESPONSE",
+        "withSecurityHeaders",
+        "secureJsonResponse"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/rate-limit/redis.ts": {
+      "hash": "ed3209e848dfab910eab916ec82aafc9761b2b4b315450728a743aacba62dbb1",
+      "language": "typescript",
+      "imports": [
+        "@upstash/ratelimit",
+        "@upstash/redis"
+      ],
+      "exports": [
+        "redis",
+        "getRedisClient",
+        "contactRateLimiter",
+        "getClientIdentifier",
+        "newsletterRateLimiter",
+        "unsubscribeRateLimiter",
+        "resumeRateLimiter",
+        "confirmRateLimiter",
+        "createRateLimiter"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/performance/resource-hints.tsx": {
+      "hash": "27b937e4dcc19b5957e01e0c74475dfb337f4d2eaed3ab90863f3be59679729a",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "ResourceHints"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/performance/web-vitals.ts": {
+      "hash": "c12c829712a4dd2d316026b432fd8054710cf40dbcc19d0879b2eb9dd0d0a67a",
+      "language": "typescript",
+      "imports": [
+        "web-vitals",
+        "@/lib/analytics/types",
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [
+        "trackWebVitals"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/monitoring/logger.ts": {
+      "hash": "69b63b489afbcf2fa027769e6bd8d8b77cbb8a10f977de2c771566eff2bb7301",
+      "language": "typescript",
+      "imports": [
+        "@sentry/nextjs",
+        "next/headers"
+      ],
+      "exports": [
+        "logger"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/monitoring/performance.ts": {
+      "hash": "b861325f77c469f19fa600d2fa8fa77fa30cd3ad2e63595e10ee5b6ddf9005bf",
+      "language": "typescript",
+      "imports": [
+        "@sentry/nextjs",
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [
+        "trackPerformance"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/hooks/useBlogPosts.ts": {
+      "hash": "554c1227257faa6d3dcd4d0691fdff198d4ea3bfdabce124ecdaae62515fca05",
+      "language": "typescript",
+      "imports": [
+        "swr",
+        "@/sanity/lib/client",
+        "@/sanity/lib/queries",
+        "@/types/sanity"
+      ],
+      "exports": [
+        "useBlogPosts",
+        "useFeaturedPosts"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/hooks/useKeyboardNav.ts": {
+      "hash": "c3cdf84b2a828d1a1877fdb842025646c096bdabc07b126f550dd699797af0b9",
+      "language": "typescript",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "useKeyboardNav"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/hooks/useProjects.ts": {
+      "hash": "83227a15c0aff56ff03a9a1a69d7111b70403e0772d0808366d81ca88fac30e6",
+      "language": "typescript",
+      "imports": [
+        "swr",
+        "@/sanity/lib/client",
+        "@/sanity/lib/queries"
+      ],
+      "exports": [
+        "useProjects",
+        "useFeaturedProjects"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/github/cache.ts": {
+      "hash": "df40370a9cde05c6f85e160d95fb644f4838e7c4b43913cb8f99059b91c84095",
+      "language": "typescript",
+      "imports": [
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [
+        "getCached",
+        "setCached",
+        "clearCache"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/github/client.ts": {
+      "hash": "1afc5bb887f369a308fd576404d9c58241b0a3001e2e4c78322380177f045ec5",
+      "language": "typescript",
+      "imports": [
+        "octokit",
+        "@/lib/monitoring/logger",
+        "./readme-utils",
+        "./types"
+      ],
+      "exports": [
+        "normalizeGitHubRepo"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/github/queries.ts": {
+      "hash": "e86720803e7af12ad3e3e38f20a55af714e185e5363a61e7e75b80c811935578",
+      "language": "typescript",
+      "imports": [
+        "./cache",
+        "./client",
+        "./types"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/github/readme-utils.ts": {
+      "hash": "b429dbfcce77fdfb241c9432f4a288f44ab353f3902b78d169a2c649d5a000ce",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "transformToRawUrl",
+        "extractFirstImageFromReadme"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/github/types.ts": {
+      "hash": "3fd8ab06783070bc2a6c4968274f745223c2d819fa07c1cd0d50dff0f26656a3",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "GitHubRepo",
+        "GitHubSearchResponse",
+        "GitHubError",
+        "GitHubRateLimit",
+        "Project"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/email/resend.ts": {
+      "hash": "57db32950d8b62fc090ef8caf4351f5a53a76f6cc7161a2109081736fc699114",
+      "language": "typescript",
+      "imports": [
+        "resend"
+      ],
+      "exports": [
+        "resend",
+        "emailConfig",
+        "validateEmailConfig"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/email/templates/ContactConfirm.tsx": {
+      "hash": "a3cfc955dfb710ba5385dd17b7a91b1703ea8ee6a1b65c8169d85ec19c734d6b",
+      "language": "typescript",
+      "imports": [
+        "@react-email/components",
+        "./email-styles"
+      ],
+      "exports": [
+        "ContactConfirm",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/email/templates/ContactEmail.tsx": {
+      "hash": "ca3a74b1b5f0ddde31557c8d647b97fc54920df148652b6a0a33a72429a6383a",
+      "language": "typescript",
+      "imports": [
+        "@react-email/components",
+        "./email-styles"
+      ],
+      "exports": [
+        "ContactEmail",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/email/templates/NewsletterConfirm.tsx": {
+      "hash": "af6f8ea27394a210405149a01bf5a34d87341ed76d38b1f8dce8b254c7a5ffe5",
+      "language": "typescript",
+      "imports": [
+        "@react-email/components",
+        "react",
+        "./email-styles"
+      ],
+      "exports": [
+        "NewsletterConfirm",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/email/templates/NewsletterTemplate.tsx": {
+      "hash": "5c2bc0e3e613749bc00398a155a9739f8a81767c432956463bbb113a0faa1673",
+      "language": "typescript",
+      "imports": [
+        "@react-email/components",
+        "@react-email/markdown",
+        "react",
+        "./email-styles"
+      ],
+      "exports": [
+        "NewsletterTemplate",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/email/templates/NewsletterWelcome.tsx": {
+      "hash": "7e4b8846875da083a2df36486a3703f20cd5ec9de0a53955d5413e3e121ad696",
+      "language": "typescript",
+      "imports": [
+        "@react-email/components",
+        "./email-styles"
+      ],
+      "exports": [
+        "NewsletterWelcome",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/email/templates/email-styles.ts": {
+      "hash": "9189595a6ad2956ce7c0a114dd608062eb2716df9825dbee8330eda4edc9cbc0",
+      "language": "typescript",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "main",
+        "container",
+        "h1",
+        "text",
+        "footer",
+        "callout",
+        "calloutText",
+        "buttonContainer",
+        "button",
+        "hr",
+        "link",
+        "footerLink",
+        "section",
+        "label",
+        "value",
+        "messageBox",
+        "list",
+        "listItem"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/design/theme-provider.tsx": {
+      "hash": "52ddcf4b62a34a8f26b2792bad77f559696fb7ea170078dddb8475d70340f1d5",
+      "language": "typescript",
+      "imports": [
+        "next-themes",
+        "react"
+      ],
+      "exports": [
+        "ThemeProvider"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/design/tokens.ts": {
+      "hash": "bac33414eda149af1a3b032a720787a9e54aae7b7f9bd6d0afa34bab717d59b0",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "tokens",
+        "ColorKey",
+        "SpacingKey",
+        "RadiusKey"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/db/prisma.ts": {
+      "hash": "a361477f80900d831d5217fc2e58ff8f1fe0e23f4ec18107e04f67cd0632de78",
+      "language": "typescript",
+      "imports": [
+        "@prisma/adapter-pg",
+        "@/lib/generated/prisma/client"
+      ],
+      "exports": [
+        "prisma"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/constants/index.ts": {
+      "hash": "251d795ad5dce8b825e86977201f9c631e3c1ea268fc6fdb4160a42131537ef9",
+      "language": "typescript",
+      "imports": [
+        "../config/site-config",
+        "./skills"
+      ],
+      "exports": [
+        "WORDS_PER_MINUTE",
+        "DEFAULT_PAGE_SIZE",
+        "MAX_PAGE_SIZE",
+        "DATE_FORMATS",
+        "BREAKPOINTS",
+        "ANIMATION_DURATION",
+        "API_ROUTES",
+        "SOCIAL_LINKS",
+        "REGEX_PATTERNS",
+        "MAX_LENGTHS",
+        "HTTP_STATUS",
+        "SITE_CONFIG",
+        "SKILLS_DATA",
+        "SKILLS_DATA_HOME"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/constants/navigation.ts": {
+      "hash": "09068cddcf1c2bbb6cc3a21c5215609c415cef0c089e8ca81cef87c88ce7ed82",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "MAIN_NAVIGATION",
+        "NavigationItem"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/constants/skills.ts": {
+      "hash": "9b4b64b4d88fe58dc4d65fed8a980123b66585ed554171e265b445adde4ed51b",
+      "language": "typescript",
+      "imports": [
+        "lucide-react"
+      ],
+      "exports": [
+        "Skill",
+        "SkillsData",
+        "SKILLS_DATA",
+        "SKILLS_DATA_HOME"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/config/site-config.ts": {
+      "hash": "f1e7095919f472ca5a9e181b63a4a14dce4b0392b1f27d3cd1c5d151e6c596b2",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "SITE_CONFIG",
+        "SiteConfig"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/auth/config.ts": {
+      "hash": "f04c0936967a32bd6ca42eccc095a92d005d872ab1b73164e4d6b1ec5eb1e6cd",
+      "language": "typescript",
+      "imports": [
+        "next-auth",
+        "next-auth/providers/github"
+      ],
+      "exports": [
+        "authConfig"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/auth/index.ts": {
+      "hash": "896bc481c6b52c2de28a24bd231dfed629c7bdd347fc2ccf649d2c15b92615a5",
+      "language": "typescript",
+      "imports": [
+        "next-auth",
+        "./config"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/api/gdpr-utils.ts": {
+      "hash": "61a0f675452f79c38b4af23b3a296fb2b11a2bc668a78b9cf09ff9ddf8f01662",
+      "language": "typescript",
+      "imports": [
+        "next/server",
+        "@/lib/db/prisma",
+        "@/lib/monitoring/logger",
+        "@/lib/rate-limit/redis",
+        "@/lib/security/security-config"
+      ],
+      "exports": [
+        "MESSAGES",
+        "getClientIp",
+        "createGdprRateLimiters"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/analytics/consent.ts": {
+      "hash": "a56c413e1ab509c39cf941013c1301daba4d207e1688dc9ee36fb920d0456735",
+      "language": "typescript",
+      "imports": [
+        "js-cookie",
+        "@/lib/analytics/types"
+      ],
+      "exports": [
+        "hasAnalyticsConsent",
+        "updateGAConsent",
+        "setDefaultGAConsent"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/analytics/debug.tsx": {
+      "hash": "76f97f63c6e8429efbac0fb8ccfbeb212a62f2cc8304d1cd583ee5d8d4d95cd6",
+      "language": "typescript",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "AnalyticsDebugPanel"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/analytics/errors.ts": {
+      "hash": "c47b6bace5be429608d39c40913d6a9717efadb82110858dceaaf51f97d6e8e3",
+      "language": "typescript",
+      "imports": [
+        "@/lib/analytics/types",
+        "@sentry/nextjs",
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [
+        "trackError"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/analytics/events.ts": {
+      "hash": "eaca7ae03fb0165348ff1b19488a87cd927d261d541840005ed0ed5af54faab0",
+      "language": "typescript",
+      "imports": [
+        "@/lib/analytics/types",
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [
+        "trackEvent",
+        "trackNewsletterSignup",
+        "trackContactSubmit",
+        "trackBlogPostView",
+        "trackDownload",
+        "trackExternalLink",
+        "trackSearch"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/analytics/types.ts": {
+      "hash": "da1b203cd84ca10edf8465eb0cf913f8524f7dd1fbf0a00fe0721606305fab43",
+      "language": "typescript",
+      "imports": [],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "lib/analytics/vercel.tsx": {
+      "hash": "c6f8a643076971788772ad05981a6258aab3e8eece58add6c84ccb644fbf393b",
+      "language": "typescript",
+      "imports": [
+        "@vercel/analytics/react",
+        "@vercel/speed-insights/next"
+      ],
+      "exports": [
+        "VercelAnalyticsProvider"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "hooks/useNewsletterSubscription.ts": {
+      "hash": "36263cfc1e1b747b95bd275ab8c061809e386240b555038d0916b99257471bc7",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "react-hot-toast",
+        "@/app/actions/newsletter",
+        "@/lib/analytics/events",
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [
+        "SubscriptionStatus",
+        "useNewsletterSubscription"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "hooks/useScrollReveal.ts": {
+      "hash": "0d5de8fd583327a8913dfaa695062d42e787b7460224fdc49ef1caa4a67a7344",
+      "language": "typescript",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "UseScrollRevealOptions",
+        "UseScrollRevealResult",
+        "useScrollReveal"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "e2e/tests/accessibility.spec.ts": {
+      "hash": "3511c1873f1a705bc82357c8b6ca9608112252bd371bfad581798f4cebc338d1",
+      "language": "typescript",
+      "imports": [
+        "@playwright/test",
+        "@axe-core/playwright",
+        "../fixtures/test-data"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "e2e/tests/blog.spec.ts": {
+      "hash": "483daf569a132f3712e8e3db42ab9993ac508cd21e8232af17537445f43e6e2a",
+      "language": "typescript",
+      "imports": [
+        "@playwright/test",
+        "../fixtures/test-data"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "e2e/tests/contact.spec.ts": {
+      "hash": "0ad55ef2a0eabf1a07800e12e2fe4e75196a82ac280bbd03a3d79c7a1885f21d",
+      "language": "typescript",
+      "imports": [
+        "@playwright/test",
+        "../fixtures/test-data"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "e2e/tests/navigation.spec.ts": {
+      "hash": "06d730f893147b63bc2ffe072123489fbe182ea0602c025d215c625ef1a75c86",
+      "language": "typescript",
+      "imports": [
+        "@playwright/test",
+        "../fixtures/test-data"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "e2e/tests/newsletter.spec.ts": {
+      "hash": "152d454156283d570d31933a062caeb49f4502adb46a2d8a0ec6a2c58e58c3d3",
+      "language": "typescript",
+      "imports": [
+        "@playwright/test",
+        "../fixtures/test-data"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "e2e/tests/visual.spec.ts": {
+      "hash": "53b6976d862b1ed90532f9a98de191e641fec30e12c7ff1faff5735c5181f39c",
+      "language": "typescript",
+      "imports": [
+        "@playwright/test",
+        "../fixtures/test-data"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "e2e/fixtures/test-data.ts": {
+      "hash": "02ced92fdf1bc3672f1ed21bd82c2dbb85d4f52c8be42f4065838bd4f0779a0a",
+      "language": "typescript",
+      "imports": [
+        "nanoid",
+        "@playwright/test"
+      ],
+      "exports": [
+        "testData"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/AccentLine.tsx": {
+      "hash": "722301fbb421cdf8ec5205d09c598fff6b1f27e79362a6ea8b9011df637d3f95",
+      "language": "typescript",
+      "imports": [
+        "@/lib/utils"
+      ],
+      "exports": [
+        "AccentLine"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/BackToTop.tsx": {
+      "hash": "57b701cdc4476439b2c84dcbce7efd443134eed1f94484855e326d585ef83474",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "react"
+      ],
+      "exports": [
+        "BackToTop"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/ConfirmationModal.tsx": {
+      "hash": "05ec2e6834307c6db3cef8819db038922b89d4a9ce1bcb887b2b385f32f252f0",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "@/components/ui/button",
+        "@/components/ui/Modal"
+      ],
+      "exports": [
+        "ConfirmationModal"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/Container.tsx": {
+      "hash": "b11a6bcd15b4b56ec69628d22f4b9bb6e72eb6e7a924bc426bc0229a661eff40",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/lib/utils"
+      ],
+      "exports": [
+        "Container",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/DownloadCVButton.tsx": {
+      "hash": "88709b0226073bb42036f0ef6a9cc13358aba4779d85654e39a7b254c2967134",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "exports": [
+        "DownloadCVButton"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/ExternalLink.tsx": {
+      "hash": "cc26f71e0b2531eefb599c13436a3dd02c869a13e37fafc195b46e4dd0dc461c",
+      "language": "typescript",
+      "imports": [
+        "next/link",
+        "react",
+        "@/lib/analytics/events"
+      ],
+      "exports": [
+        "ExternalLink"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/HeroBackground.tsx": {
+      "hash": "9517d2788cb93779272921c7f15d25fc4e2f879d25063f48ba1007fe3f165ae0",
+      "language": "typescript",
+      "imports": [
+        "@/lib/utils"
+      ],
+      "exports": [
+        "HeroBackground"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/Modal.tsx": {
+      "hash": "9434523a941387b0eba62749eae14ce47e5e751f3668dc3533628d1fdc1436ee",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/lib/utils"
+      ],
+      "exports": [
+        "ModalProvider",
+        "Modal"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/ObfuscatedEmail.tsx": {
+      "hash": "0ca28e65011396623b9334242e46c0e181c30573cafab58d669e2af85b0f77a2",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [
+        "ObfuscatedEmail",
+        "ObfuscatedEmailButton"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/OptimizedImage.tsx": {
+      "hash": "a81c08006b98675813e183ae114ac9d52b4c74d6154029f01b9da013795f9b5b",
+      "language": "typescript",
+      "imports": [
+        "next/image",
+        "react",
+        "@/lib/utils"
+      ],
+      "exports": [
+        "OptimizedImage"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/ScrollIndicator.tsx": {
+      "hash": "9393874a5d8e587a01cdff2ca0489c76cbea674d7af298efcfecedd04a2c261a",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "exports": [
+        "ScrollIndicator"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/ScrollProgress.tsx": {
+      "hash": "1dca9ae1decf394024630cd1a835a8a4779cc8b3be41ccc987eb666fb532bd4b",
+      "language": "typescript",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "ScrollProgress"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/Section.tsx": {
+      "hash": "a248f92437239e9fffa12889e719706a780c16462e6cda6cb8eb60fcfe27c349",
+      "language": "typescript",
+      "imports": [
+        "class-variance-authority",
+        "react",
+        "@/lib/utils",
+        "./Container"
+      ],
+      "exports": [
+        "SectionBackground",
+        "SectionSpacing",
+        "SECTION_BG",
+        "SectionProps",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/SectionDivider.tsx": {
+      "hash": "4997d69cb73c6a72ca800737e7eb2f5d600f632c2160305881d7dfed63ae97b2",
+      "language": "typescript",
+      "imports": [
+        "@/lib/utils"
+      ],
+      "exports": [
+        "SectionDivider"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/SkillBadge.tsx": {
+      "hash": "ee7cb16d8364fd11c4f83943bd71d47eef34b53db0034dddfaeb9506860f7c76",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "@/lib/utils"
+      ],
+      "exports": [
+        "SkillBadge"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/SkillsList.tsx": {
+      "hash": "ef112334a4043a5d43424c777711aa6d47b95ae1736ac381ec4dc5cea509480a",
+      "language": "typescript",
+      "imports": [
+        "@/lib/constants/skills",
+        "./SkillBadge"
+      ],
+      "exports": [
+        "SkillsList"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/SkipLink.tsx": {
+      "hash": "88acdcdda0f9b2b7a3cbc1f50f79f2ac67e4ac4a09de3f1b94f39a227c188fa3",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "SkipLink",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/badge.tsx": {
+      "hash": "a42b262d46153415ea61b8f1cc60c3d710732441ddc091b40d7bd6448f665436",
+      "language": "typescript",
+      "imports": [
+        "@radix-ui/react-slot",
+        "class-variance-authority",
+        "react",
+        "@/lib/utils"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/button.tsx": {
+      "hash": "43b4c989a977ae21bc23011bc803906b129ff219a5583c0f50c3a7cfc47b5c5a",
+      "language": "typescript",
+      "imports": [
+        "@radix-ui/react-slot",
+        "class-variance-authority",
+        "react",
+        "@/lib/utils"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/card.tsx": {
+      "hash": "8c1e06bb535c395a905b6ec1f3ce7710cd1fdf53eb3185ec3bdd4761dde5e61d",
+      "language": "typescript",
+      "imports": [
+        "class-variance-authority",
+        "react",
+        "@/lib/utils"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/icons.tsx": {
+      "hash": "af4ae2d56448d8f196fb790f4c2b75d9e3a750c207bb6d7d93e4e277a37da19b",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "SpinnerIcon",
+        "SendIcon",
+        "CheckIcon",
+        "CopyIcon",
+        "MailIcon"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/input.tsx": {
+      "hash": "d992335badc72488eeab31babf8d964b37a33c4f8a2d95639d9a94ec5c24c6f2",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/lib/utils"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "components/ui/skeleton.tsx": {
+      "hash": "0d676862ab1863e66d9490e0d9a4626f21265762e19a3b1bf915fbd7f3351481",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/lib/utils"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "components/seo/Breadcrumbs.tsx": {
+      "hash": "bba288519120665600c95eaa5e46a3462e4ce14e4fc5a0807eca277966faf583",
+      "language": "typescript",
+      "imports": [
+        "next/link",
+        "@/lib/utils"
+      ],
+      "exports": [
+        "Breadcrumbs"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/seo/FAQSchema.tsx": {
+      "hash": "516fba64936dfcf83ed440b85db724ebfee88933353d51513daa43d516e15e42",
+      "language": "typescript",
+      "imports": [
+        "schema-dts",
+        "./JsonLd"
+      ],
+      "exports": [
+        "FAQSchema"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/seo/JsonLd.tsx": {
+      "hash": "eea1708d3145209c4d9611783c18cfb3fb1cac4d8f1968de8a71b5e92e1537e9",
+      "language": "typescript",
+      "imports": [
+        "next/script",
+        "schema-dts"
+      ],
+      "exports": [
+        "JsonLd"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/sections/hero-section.tsx": {
+      "hash": "97b821df3bf8132f80d21b67803f712877b44badf48ed01ad124f2bfaaf6de5b",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "next/dynamic",
+        "next/link",
+        "react-icons/fa",
+        "@/components/ui/button",
+        "@/components/ui/Container",
+        "@/components/ui/HeroBackground",
+        "@/components/ui/ScrollIndicator"
+      ],
+      "exports": [
+        "HeroSection"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/projects/ProjectCard.tsx": {
+      "hash": "08d9f0416d1a4059dbca599dd5f04718ce0f39296acbfa12a3332e8fe36f17a3",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "next/image",
+        "next/link",
+        "react-icons/fa",
+        "@/components/ui/badge",
+        "@/components/ui/button",
+        "@/components/ui/card",
+        "@/lib/github/types"
+      ],
+      "exports": [
+        "ProjectCard",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/projects/ProjectsClient.tsx": {
+      "hash": "b00a2ad7d1c2fb74f4c0827d53f78eee08b24b1b26f8ba55a510c04f1b543951",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "next/navigation",
+        "react",
+        "@/components/ui/badge",
+        "@/components/ui/button",
+        "@/lib/github/types",
+        "./ProjectCard"
+      ],
+      "exports": [
+        "ProjectsClient",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/newsletter/NewsletterForm.tsx": {
+      "hash": "716f2e46439280bcc93cc938f31dcda57517155789687c9a04b2d339d1e96d60",
+      "language": "typescript",
+      "imports": [
+        "@hookform/resolvers/zod",
+        "react",
+        "react-hook-form",
+        "@/components/a11y/ScreenReaderAnnouncer",
+        "@/components/forms/FormField",
+        "@/components/ui/button",
+        "@/components/ui/icons",
+        "@/hooks/useNewsletterSubscription",
+        "@/lib/validations/newsletter"
+      ],
+      "exports": [
+        "NewsletterForm"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/newsletter/NewsletterHero.tsx": {
+      "hash": "69b5fc41271f802541a5897b27883bd9aa779731581bee04f679168f41583967",
+      "language": "typescript",
+      "imports": [
+        "@hookform/resolvers/zod",
+        "lucide-react",
+        "react-hook-form",
+        "@/components/ui/button",
+        "@/components/ui/input",
+        "@/hooks/useNewsletterSubscription",
+        "@/lib/utils",
+        "@/lib/validations/newsletter"
+      ],
+      "exports": [
+        "NewsletterHero"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/newsletter/NewsletterInline.tsx": {
+      "hash": "55a0c7bcd65ecf7332670753d33a76b79f71ece28f468344608a775e9876a194",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/components/ui/button",
+        "@/hooks/useNewsletterSubscription"
+      ],
+      "exports": [
+        "NewsletterInline"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/newsletter/NewsletterSkeleton.tsx": {
+      "hash": "5d2c161a21b10b96aaa88a9317b8c695878a62f531e723002dba8051d3e69426",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "NewsletterSkeleton"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/markdown/MarkdownContent.tsx": {
+      "hash": "4a4ab2fb1bc465aac99bbe1b156777062648148ad751da6510487ca6905af33a",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "react",
+        "react-markdown",
+        "rehype-raw",
+        "rehype-sanitize",
+        "remark-gfm",
+        "@/components/blog/SyntaxHighlighter",
+        "@/components/markdown/MermaidDiagram"
+      ],
+      "exports": [
+        "MarkdownContent"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/markdown/MermaidDiagram.tsx": {
+      "hash": "2af0896a9abc1573b1a62150553885a0ca21add514eaa3a3cf4f576050ed045b",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "mermaid"
+      ],
+      "exports": [
+        "MermaidDiagram"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/layout/ClientComponents.tsx": {
+      "hash": "975ec53b9fe8bcadcf06de572c6dfdbe0eef6028d7198d528e7b03a15ab3c81c",
+      "language": "typescript",
+      "imports": [
+        "next/dynamic",
+        "react",
+        "@/components/features/EasterEggs",
+        "@/components/features/MatrixRain",
+        "@/components/ui/ScrollProgress",
+        "@/lib/analytics/debug"
+      ],
+      "exports": [
+        "ClientComponents"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/layout/Footer.tsx": {
+      "hash": "3164add3dcd1af0a0cb65d02b17d73f9e3c4d711e9ef09b9097cd33c707e184e",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "next/link",
+        "react-icons/fa",
+        "@/components/ui/Container",
+        "@/lib/constants/navigation"
+      ],
+      "exports": [
+        "Footer",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/layout/Header.tsx": {
+      "hash": "fc2ca280be48a5fe1e18fa1113ef2da9cb9b3fde5e260830c471d220e13d8e10",
+      "language": "typescript",
+      "imports": [
+        "next/link",
+        "@/components/ui/Container",
+        "@/lib/constants/navigation",
+        "./MobileMenuButton",
+        "./NavLink",
+        "./ThemeToggle"
+      ],
+      "exports": [
+        "Header",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/layout/MobileMenu.tsx": {
+      "hash": "33bb3dd24caa0d12a8cc9faab326a48f86a50b108425a5cab248ad8d06676ce5",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "next/link",
+        "next/navigation",
+        "react",
+        "@/lib/utils"
+      ],
+      "exports": [
+        "MobileMenu",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/layout/MobileMenuButton.tsx": {
+      "hash": "f9a7b68309f461bae6abab565d380541fd683223f1e3e6270dd72644629e8674",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "react",
+        "./MobileMenu"
+      ],
+      "exports": [
+        "MobileMenuButton"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/layout/NavLink.tsx": {
+      "hash": "fb72a0a57489d35e4ce47e53a998428b8860dc64ddbf0d9b966ecd2217b4f2ea",
+      "language": "typescript",
+      "imports": [
+        "next/link",
+        "next/navigation",
+        "@/lib/utils"
+      ],
+      "exports": [
+        "NavLink"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/layout/ThemeToggle.tsx": {
+      "hash": "71da3829e997c9d8cac465061760d2c9415bc5b6a1b337a9028f63d86b146b04",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "next-themes",
+        "react",
+        "@/components/ui/button",
+        "@/lib/utils"
+      ],
+      "exports": [
+        "ThemeToggle"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/gdpr/CookieConsent.tsx": {
+      "hash": "018b0fd120080fcc8ac2b5d09bf58781540e673815d5db518b3084566cd3c266",
+      "language": "typescript",
+      "imports": [
+        "js-cookie",
+        "lucide-react",
+        "react",
+        "@/components/ui/button",
+        "@/lib/analytics/consent",
+        "@/lib/utils"
+      ],
+      "exports": [
+        "CookieConsent"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/gdpr/DataDeletionForm.tsx": {
+      "hash": "5be501eb5b5082d5b6511c06c657b94f3fb0a208c122b044fc12443fca658bd5",
+      "language": "typescript",
+      "imports": [
+        "@hookform/resolvers/zod",
+        "react",
+        "react-hook-form",
+        "@/components/ui/button",
+        "@/components/ui/ConfirmationModal",
+        "@/components/ui/input",
+        "@/lib/utils/toast",
+        "@/lib/validations/gdpr"
+      ],
+      "exports": [
+        "DataDeletionForm"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/gdpr/DataRequestForm.tsx": {
+      "hash": "5635ba597d398b45994e32367c0d55c5c7292e10e24b21b573b37132ad494e79",
+      "language": "typescript",
+      "imports": [
+        "@hookform/resolvers/zod",
+        "react",
+        "react-hook-form",
+        "@/components/ui/button",
+        "@/components/ui/input",
+        "@/lib/utils/toast",
+        "@/lib/validations/gdpr"
+      ],
+      "exports": [
+        "DataRequestForm"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/forms/ContactForm.tsx": {
+      "hash": "e48edbc4082b49b5c06b73cfd200e98cfb0e77818dfcd8527f7f1301924e1d22",
+      "language": "typescript",
+      "imports": [
+        "@hookform/resolvers/zod",
+        "react",
+        "react-dom",
+        "react-hook-form",
+        "@/app/actions/contact",
+        "@/components/a11y/ScreenReaderAnnouncer",
+        "@/components/ui/button",
+        "@/components/ui/icons",
+        "@/lib/analytics/events",
+        "@/lib/monitoring/logger",
+        "@/lib/utils/toast",
+        "@/lib/validations/contact",
+        "@/lib/validations/email-validator-client",
+        "./FormField"
+      ],
+      "exports": [
+        "ContactForm"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/forms/FormField.tsx": {
+      "hash": "157d499ac3753a3183273f61e467abdd9f72ec7d19fa1777f0743e894fd0c8d9",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "react",
+        "@/lib/utils"
+      ],
+      "exports": [
+        "InputField",
+        "TextareaField"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/features/EasterEggs.tsx": {
+      "hash": "73d168d07ed91821a47de58e509844ed6cbf43a62a0f0f815cc67ce146abf74f",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/lib/achievements"
+      ],
+      "exports": [
+        "EasterEggs"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/features/MatrixRain.tsx": {
+      "hash": "c2d7b68f3e3dce085d4c15592525b722257505930b833f77bd48beed4d78da2d",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/lib/achievements"
+      ],
+      "exports": [
+        "MatrixRain"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/error/ErrorBoundary.tsx": {
+      "hash": "965a4ecf42c62bf5076355694dd3f0be3d06858b981b682a3c4053b65d579a0d",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/components/ui/button",
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [
+        "ErrorBoundary",
+        "withErrorBoundary"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/error/ErrorFeedback.tsx": {
+      "hash": "51334307535b0d8abb84e31967e94c2ba4733863f39927c145cc30aeb3b996dd",
+      "language": "typescript",
+      "imports": [
+        "@sentry/nextjs",
+        "react",
+        "@/components/ui/button"
+      ],
+      "exports": [
+        "ErrorFeedback"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/BlogFilters.tsx": {
+      "hash": "25ddb3e5e18427074fc86a2513049301de42048d6b14be9dfe012cf4a575b687",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "next/navigation",
+        "react",
+        "use-debounce",
+        "@/components/ui/badge",
+        "@/components/ui/button",
+        "@/lib/utils/search",
+        "@/types/sanity"
+      ],
+      "exports": [
+        "BlogFilters"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/BlogPostTracker.tsx": {
+      "hash": "db61c69fe12c48c0f4e981539321785b82b5c4ccf58de67515b9d8e41f06d7ee",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/lib/analytics/events"
+      ],
+      "exports": [
+        "BlogPostTracker"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/CategoryFilter.tsx": {
+      "hash": "2e5e979a643b56d92977f7230e78918d58cf9d05668cd26b7dcd29f900549a28",
+      "language": "typescript",
+      "imports": [
+        "next/navigation",
+        "@/components/ui/button",
+        "@/lib/utils",
+        "@/types/sanity"
+      ],
+      "exports": [
+        "CategoryFilter"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/CodeBlock.tsx": {
+      "hash": "4aebabcf23f0a5b0717345b906a13eddb17716dddf43cca0f35d2cdd65e9db55",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/components/blog/SyntaxHighlighter",
+        "@/components/ui/button"
+      ],
+      "exports": [
+        "CodeBlock"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/Comments.tsx": {
+      "hash": "b4c88588232ae3aa46ddcf690eb780e743183bc56134b2a7d490333e1c22eef2",
+      "language": "typescript",
+      "imports": [
+        "@giscus/react",
+        "lucide-react",
+        "react",
+        "@/components/ui/SectionDivider",
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [
+        "Comments"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/EmptyState.tsx": {
+      "hash": "e7d617ed338a0fb1af0b77ca0a2105f96145833473d533b482166ad2bdf1888e",
+      "language": "typescript",
+      "imports": [
+        "next/link",
+        "@/components/ui/button"
+      ],
+      "exports": [
+        "EmptyState"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/MarkdownRenderer.tsx": {
+      "hash": "7b58b68d8cb7b392dee859b7034372cc1d1895a0d5f4d6f046f1f7af6a8e5a78",
+      "language": "typescript",
+      "imports": [
+        "next/link",
+        "react",
+        "react-markdown",
+        "rehype-slug",
+        "remark-gfm",
+        "@/lib/utils/toc",
+        "./CodeBlock"
+      ],
+      "exports": [
+        "MarkdownRenderer"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/Pagination.tsx": {
+      "hash": "8669a6f0e4110e47448d0fbe3223510034af199390771695ace6c5a0ab5626df",
+      "language": "typescript",
+      "imports": [
+        "next/navigation",
+        "@/components/ui/button",
+        "@/lib/utils",
+        "@/lib/utils/blog"
+      ],
+      "exports": [
+        "Pagination"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/PortableTextRenderer.tsx": {
+      "hash": "0a915d3ecfaf8924320eeb36aa6c1b0831352ff21f532b40814ac71c57f55df5",
+      "language": "typescript",
+      "imports": [
+        "@portabletext/react",
+        "next/image",
+        "next/link",
+        "@/lib/utils/toc",
+        "@/sanity/lib/image",
+        "./CodeBlock"
+      ],
+      "exports": [
+        "PortableTextRenderer"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/PostCard.tsx": {
+      "hash": "5e08ed9e10aec5ec8e4eec7a66ad90444d6c356c9e36d27dc6921080f983597e",
+      "language": "typescript",
+      "imports": [
+        "next/image",
+        "next/link",
+        "next/navigation",
+        "@/components/ui/badge",
+        "@/lib/utils/blog",
+        "@/lib/utils/format",
+        "@/lib/utils/search",
+        "@/sanity/lib/image",
+        "@/types/sanity"
+      ],
+      "exports": [
+        "PostCard"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/PostGrid.tsx": {
+      "hash": "72a983cdc62faec15ba47a355996800c8ae04d489b0c601f0e7566a1b174ef97",
+      "language": "typescript",
+      "imports": [
+        "@/types/sanity",
+        "./PostCard"
+      ],
+      "exports": [
+        "PostGrid"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/PostHeader.tsx": {
+      "hash": "ffa06f9bcc06ddda12ecbeeded7cfe17c6e8063372932efdcee0c38c51910f84",
+      "language": "typescript",
+      "imports": [
+        "next/image",
+        "next/link",
+        "@/components/ui/badge",
+        "@/lib/utils/format",
+        "@/sanity/lib/image",
+        "@/types/sanity"
+      ],
+      "exports": [
+        "PostHeader"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/RelatedPosts.tsx": {
+      "hash": "df490cd1be46b9c280e0a978decd91d22fc47e0a6873d4111a2acda291553631",
+      "language": "typescript",
+      "imports": [
+        "next/image",
+        "next/link",
+        "@/components/ui/badge",
+        "@/lib/utils/blog",
+        "@/lib/utils/format",
+        "@/sanity/lib/image",
+        "@/types/sanity"
+      ],
+      "exports": [
+        "RelatedPosts"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/SearchInput.tsx": {
+      "hash": "fa4314e04e72d81f473900d9a548aaf96e39ab36342a82947d0e1933f6a69af5",
+      "language": "typescript",
+      "imports": [
+        "next/navigation",
+        "react",
+        "use-debounce",
+        "@/components/ui/button",
+        "@/components/ui/input",
+        "@/lib/utils/search"
+      ],
+      "exports": [
+        "SearchInput"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/SearchStats.tsx": {
+      "hash": "ee7c3da760276b9f847a8b3065ea50f82ec4d82f61974e639aab21d0c5166f68",
+      "language": "typescript",
+      "imports": [
+        "next/navigation",
+        "@/lib/utils/search"
+      ],
+      "exports": [
+        "SearchStats"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/SearchTracker.tsx": {
+      "hash": "f79f209ffbfb83ebf960771a82bb04f4c453a4448e154701ef6a5b4fa3cf3038",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/lib/analytics/events"
+      ],
+      "exports": [
+        "SearchTracker"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/ShareButtons.tsx": {
+      "hash": "b5e60fb83386204717c302a3c45944c712258c948741083f59deaed0bede252b",
+      "language": "typescript",
+      "imports": [
+        "@/components/ui/button"
+      ],
+      "exports": [
+        "ShareButtons"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/SyntaxHighlighter.tsx": {
+      "hash": "79380f5d03c34b6413ce2e41ef7361b447b736c60d9716229fefa72da48e1b71",
+      "language": "typescript",
+      "imports": [
+        "next/dynamic",
+        "react",
+        "react-syntax-highlighter/dist/esm/styles/prism",
+        "react-syntax-highlighter/dist/esm/prism-light",
+        "react-syntax-highlighter/dist/esm/languages/prism/javascript",
+        "react-syntax-highlighter/dist/esm/languages/prism/typescript",
+        "react-syntax-highlighter/dist/esm/languages/prism/jsx",
+        "react-syntax-highlighter/dist/esm/languages/prism/tsx",
+        "react-syntax-highlighter/dist/esm/languages/prism/css",
+        "react-syntax-highlighter/dist/esm/languages/prism/json",
+        "react-syntax-highlighter/dist/esm/languages/prism/bash",
+        "react-syntax-highlighter/dist/esm/languages/prism/markdown",
+        "react-syntax-highlighter/dist/esm/languages/prism/python",
+        "react-syntax-highlighter/dist/esm/languages/prism/sql",
+        "react-syntax-highlighter/dist/esm/languages/prism/yaml",
+        "react-syntax-highlighter/dist/esm/languages/prism/go",
+        "react-syntax-highlighter/dist/esm/languages/prism/rust"
+      ],
+      "exports": [
+        "SyntaxHighlighter"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/blog/TableOfContents.tsx": {
+      "hash": "f94f18f43d9aff7a9a351a0805a5b33a7f2d268f32a6194e93886b24918ed556",
+      "language": "typescript",
+      "imports": [
+        "next/link",
+        "react",
+        "@/lib/utils",
+        "@/lib/utils/toc"
+      ],
+      "exports": [
+        "TableOfContents"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/animations/AnimationProvider.tsx": {
+      "hash": "d4a93038ee94a34f33f85b0ff54c8ff701d9dc86f0cbfcead3c19ab4c554e1fc",
+      "language": "typescript",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "AnimationProvider",
+        "useAnimation"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/animations/CSSRevealOnScroll.tsx": {
+      "hash": "e135db78db62bed81e1ab67d1f74b28f6dd3dae25a95fbc26b08e7cb084fc51f",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/hooks/useScrollReveal",
+        "@/lib/utils"
+      ],
+      "exports": [
+        "CSSRevealOnScroll",
+        "CSSStaggeredReveal"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/animations/RevealOnScroll.tsx": {
+      "hash": "23b70defcafecf849d79057422647afcd9adf6ab4cce694e56940162a04fffc3",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/hooks/useScrollReveal",
+        "@/lib/utils"
+      ],
+      "exports": [
+        "Variants",
+        "RevealOnScroll",
+        "StaggeredReveal",
+        "slideUpVariants",
+        "slideLeftVariants",
+        "slideRightVariants",
+        "scaleVariants",
+        "fadeVariants"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/animations/index.ts": {
+      "hash": "a418430203d1d4f80f4fc8372c1c4fc812c45c77c300f900d47c2ff541c6d333",
+      "language": "typescript",
+      "imports": [
+        "./AnimationProvider",
+        "./RevealOnScroll"
+      ],
+      "exports": [
+        "AnimationProvider",
+        "useAnimation",
+        "fadeVariants",
+        "RevealOnScroll",
+        "StaggeredReveal",
+        "scaleVariants",
+        "slideLeftVariants",
+        "slideRightVariants",
+        "slideUpVariants"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/analytics/GoogleAnalytics.tsx": {
+      "hash": "5119f8d52ba55ffe90f930328dd5494368e0ad6cd1f910a76070fbcf39a88c31",
+      "language": "typescript",
+      "imports": [
+        "@next/third-parties/google",
+        "js-cookie",
+        "next/navigation",
+        "react"
+      ],
+      "exports": [
+        "GoogleAnalytics"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/analytics/ThirdPartyScripts.tsx": {
+      "hash": "9419a18d92764d444d04cd549f8de2551834018a419005fe5cf51293d9a7bf3a",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "./GoogleAnalytics"
+      ],
+      "exports": [
+        "ThirdPartyScripts"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/analytics/WebVitals.tsx": {
+      "hash": "862637523bd9fc3906841d94358e79b7137c827570849261d1a729b8f6bd657c",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/lib/performance/web-vitals"
+      ],
+      "exports": [
+        "WebVitals"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/admin/AdminDashboard.tsx": {
+      "hash": "a127acea997477702a13aee0e4738eefd056357d90b58d9fd47a02deaf038a02",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "next/image",
+        "next-auth/react",
+        "react",
+        "@/components/ui/button",
+        "@/components/ui/card",
+        "./UptimeStatus"
+      ],
+      "exports": [
+        "AdminDashboard"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/admin/NewsletterBroadcaster.tsx": {
+      "hash": "9250f109b9980c3248188c3abb12eea4ebaf59a28329872a9fbf1ee9a68543eb",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "react",
+        "react-hot-toast",
+        "react-markdown",
+        "@/app/actions/admin-newsletter",
+        "@/components/ui/button",
+        "@/components/ui/input"
+      ],
+      "exports": [
+        "NewsletterBroadcaster"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/admin/UptimeStatus.tsx": {
+      "hash": "73c9c3d50ed72ee8256bcc377999f3d34f4ae80b517579c0d4d481a7f36476bb",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "react",
+        "@/components/ui/button",
+        "@/components/ui/card"
+      ],
+      "exports": [
+        "UptimeStatus"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/a11y/FocusTrap.tsx": {
+      "hash": "72c256e3b5f98bc80918dec3c13954fde6b653de97b81bd9fe72939d782f3cef",
+      "language": "typescript",
+      "imports": [
+        "focus-trap-react",
+        "react"
+      ],
+      "exports": [
+        "FocusTrap"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/a11y/ScreenReaderAnnouncer.tsx": {
+      "hash": "322c9452a5d1667bb2a32fdbee1395c5e81df98a3904245602240f94d1dfe236",
+      "language": "typescript",
+      "imports": [
+        "react"
+      ],
+      "exports": [
+        "AnnouncerProvider",
+        "useAnnouncer"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "components/a11y/SkipLinks.tsx": {
+      "hash": "561f4f8ca9b719015afa33ffadbb7e5dd56d6fd1cdf837eeeb3ec73f82aed327",
+      "language": "typescript",
+      "imports": [
+        "@/lib/utils"
+      ],
+      "exports": [
+        "SkipLinks"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/error.tsx": {
+      "hash": "737a299612d9b6bb4e6538609b01b375793ddc8a5de50a1175621cd295390723",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/components/error/ErrorFeedback",
+        "@/components/ui/button",
+        "@/components/ui/Container",
+        "@/lib/analytics/errors"
+      ],
+      "exports": [
+        "ErrorPage",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/global-error.tsx": {
+      "hash": "f078f8ecfa428ef49af80998bf3b3c4f8e0110ffc1712907ac05ff83dc85381c",
+      "language": "typescript",
+      "imports": [
+        "@sentry/nextjs",
+        "react"
+      ],
+      "exports": [
+        "GlobalError",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/layout.tsx": {
+      "hash": "12e1b89cc7b369c647fa550450b516f6225c47bb4287eeee8b217b87d0581f5e",
+      "language": "typescript",
+      "imports": [
+        "next",
+        "next/font/google",
+        "react",
+        "react-hot-toast",
+        "@/components/a11y/ScreenReaderAnnouncer",
+        "@/components/a11y/SkipLinks",
+        "@/components/analytics/ThirdPartyScripts",
+        "@/components/analytics/WebVitals",
+        "@/components/gdpr/CookieConsent",
+        "@/components/layout/ClientComponents",
+        "@/components/layout/Footer",
+        "@/components/layout/Header",
+        "@/components/ui/BackToTop",
+        "@/lib/analytics/vercel",
+        "@/lib/design/theme-provider",
+        "@/lib/performance/resource-hints",
+        "./globals.css"
+      ],
+      "exports": [
+        "metadata",
+        "RootLayout",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/not-found.tsx": {
+      "hash": "9103b044493257ddff4daf1472760e2a1b5164f8d3061fa1ff80b337ddf715aa",
+      "language": "typescript",
+      "imports": [
+        "next/link",
+        "@/components/ui/button",
+        "@/components/ui/HeroBackground"
+      ],
+      "exports": [
+        "NotFound",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/opengraph-image.tsx": {
+      "hash": "bc90987de9538ff0676c1df4125ce4e47508b84843cad041b61fe4f53778eb0c",
+      "language": "typescript",
+      "imports": [
+        "next/og"
+      ],
+      "exports": [
+        "size",
+        "contentType",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/page.tsx": {
+      "hash": "d3c6541214da45027df37f848ae2bc60d2dc0a6f032b66b0c288e91c92782492",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "next",
+        "next/dynamic",
+        "react",
+        "@/components/animations",
+        "@/components/newsletter/NewsletterSkeleton",
+        "@/components/sections/hero-section",
+        "@/components/seo/JsonLd",
+        "@/components/ui/Section",
+        "@/components/ui/SectionDivider",
+        "@/components/ui/SkillsList",
+        "@/lib/constants",
+        "@/lib/seo/schema",
+        "@/components/newsletter/NewsletterHero"
+      ],
+      "exports": [
+        "metadata",
+        "HomePage",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/robots.ts": {
+      "hash": "3c894dfeae8b00be6fd79f72f8ece9a631b8777376cf027a05a839ab441abc53",
+      "language": "typescript",
+      "imports": [
+        "next"
+      ],
+      "exports": [
+        "robots",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/sitemap.ts": {
+      "hash": "fa22b1e0f1ac07ee1ea0bc89c8299e067db46291ff30b8990624cc655b8d9a0b",
+      "language": "typescript",
+      "imports": [
+        "next",
+        "@/lib/monitoring/logger",
+        "@/sanity/lib/client",
+        "@/sanity/lib/queries",
+        "@/types/sanity"
+      ],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/studio/[[...tool]]/StudioComponent.tsx": {
+      "hash": "c780bfafdc58af393f772405530192dc0680af1554c0dc7e68a0848c16632ef4",
+      "language": "typescript",
+      "imports": [
+        "next-sanity/studio",
+        "@/sanity/sanity.config"
+      ],
+      "exports": [
+        "StudioComponent",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/studio/[[...tool]]/layout.tsx": {
+      "hash": "afca436ca36800b586726c0ac1aa18de03c1164873820a4fcee4e31ed08f2202",
+      "language": "typescript",
+      "imports": [],
+      "exports": [
+        "StudioLayout",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/studio/[[...tool]]/page.tsx": {
+      "hash": "673820d664cd3f4cca6f6614c70c982474abc23f9a0afea47dd07ded5cdcf6dc",
+      "language": "typescript",
+      "imports": [
+        "next/dynamic",
+        "./StudioComponent"
+      ],
+      "exports": [
+        "StudioPage",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/feed.xml/route.ts": {
+      "hash": "1a490a53d404003155df7b7f6d24e5c9699add68525ca8a9042960512ecb13c2",
+      "language": "typescript",
+      "imports": [
+        "@/lib/monitoring/logger",
+        "@/sanity/lib/client",
+        "@/sanity/lib/image",
+        "@/sanity/lib/queries",
+        "@/types/sanity"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "app/api/resume/route.ts": {
+      "hash": "ac6e7488a078ab1619e1a396aaff37870e86f4cd690ec1a733ed087de8d2efdc",
+      "language": "typescript",
+      "imports": [
+        "jspdf",
+        "next/server",
+        "@/lib/monitoring/logger",
+        "@/lib/rate-limit/redis",
+        "@/lib/types/resume",
+        "@/sanity/lib/queries"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "app/api/newsletter/unsubscribe/route.ts": {
+      "hash": "1b850520be028baf868337439c3c6fe3ba7c9afdfcc2fd0e2c6afd397d401661",
+      "language": "typescript",
+      "imports": [
+        "next/server",
+        "@/lib/db/prisma",
+        "@/lib/monitoring/logger",
+        "@/lib/rate-limit/redis"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "app/api/newsletter/confirm/route.ts": {
+      "hash": "1dba0d5a72eed6dcbf74bc859197d582eee868a5a3f214bd132ca22216507c50",
+      "language": "typescript",
+      "imports": [
+        "next/server",
+        "@/lib/db/prisma",
+        "@/lib/email/resend",
+        "@/lib/email/templates/NewsletterWelcome",
+        "@/lib/monitoring/logger",
+        "@/lib/rate-limit/redis"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "app/api/health/route.ts": {
+      "hash": "dfc21c14d5d7f559a41ccc311af2828562cb180b359dd77c4559476079bf5cc8",
+      "language": "typescript",
+      "imports": [
+        "next/server",
+        "@/lib/db/prisma",
+        "@/lib/monitoring/logger",
+        "@/lib/rate-limit/redis"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "app/api/data-export/route.ts": {
+      "hash": "a553caf9c20fbb5b7b2f085ab52beb6171e4f640c48f951bce3438c3c81d05a2",
+      "language": "typescript",
+      "imports": [
+        "nanoid",
+        "next/server",
+        "@/lib/api/gdpr-utils",
+        "@/lib/email/resend",
+        "@/lib/monitoring/logger",
+        "@/lib/validations/gdpr"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "app/api/data-export/confirm/route.ts": {
+      "hash": "81913a4f63a73fdbe334a125b5f369813b7a81690e6a525fb5ad9b2763d32bc9",
+      "language": "typescript",
+      "imports": [
+        "next/server",
+        "@/lib/api/gdpr-utils",
+        "@/lib/monitoring/logger",
+        "@/lib/rate-limit/redis",
+        "@/lib/services/gdpr"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "app/api/data-deletion/route.ts": {
+      "hash": "3d7dab8458cdb8b8798170c63cd165590b6ec768f0f98923d49b4f6c245facb5",
+      "language": "typescript",
+      "imports": [
+        "nanoid",
+        "next/server",
+        "@/lib/api/gdpr-utils",
+        "@/lib/email/resend",
+        "@/lib/monitoring/logger",
+        "@/lib/utils/string",
+        "@/lib/validations/gdpr"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "app/api/data-deletion/confirm/route.ts": {
+      "hash": "74470598467a170596ed376e5e335613b1c2d7f756bb9cae959b1a03d11f071e",
+      "language": "typescript",
+      "imports": [
+        "next/server",
+        "@/lib/api/gdpr-utils",
+        "@/lib/email/resend",
+        "@/lib/monitoring/logger",
+        "@/lib/rate-limit/redis",
+        "@/lib/services/gdpr"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "app/api/auth/[...nextauth]/route.ts": {
+      "hash": "1b0c2270d59e5ee6014a99c0d19df99d3689db3713860d5d14cbf205c0461c38",
+      "language": "typescript",
+      "imports": [
+        "@/lib/auth"
+      ],
+      "exports": [
+        "GET",
+        "POST"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/api/analytics/route.ts": {
+      "hash": "2faddca606238373e5139d2bf79482921ea93cc4f84c8dc6bfb7128b4b7d3169",
+      "language": "typescript",
+      "imports": [
+        "next/server",
+        "@/lib/monitoring/logger",
+        "@/lib/rate-limit/redis",
+        "@/lib/security/security-config"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "app/api/analytics/web-vitals/route.ts": {
+      "hash": "0cafeed0d7c1667c50d8a8032808d61414b398a737b79f76a869fe8372fd1f63",
+      "language": "typescript",
+      "imports": [
+        "next/server",
+        "@/lib/monitoring/logger",
+        "@/lib/rate-limit/redis",
+        "@/lib/security/security-config"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "app/api/admin/uptime/route.ts": {
+      "hash": "aa8542c75499612f5274e3426f1fc0b21da4f4741311168180f9f83c6872b0c3",
+      "language": "typescript",
+      "imports": [
+        "next/server",
+        "@/lib/auth",
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "app/api/admin/health/route.ts": {
+      "hash": "84443f0e400ec5c81a489fcd7c4364ad8ed39c99111fff415e30b2e43f57e832",
+      "language": "typescript",
+      "imports": [
+        "next/server",
+        "@/lib/auth",
+        "@/lib/db/prisma",
+        "@/lib/email/resend",
+        "@/lib/monitoring/logger",
+        "@/package.json"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "app/actions/admin-newsletter.ts": {
+      "hash": "03e27ce9c1f5980bd3d9ed6394afd007d6874e7a308e6e1fe3cdf8ac24ab8c5a",
+      "language": "typescript",
+      "imports": [
+        "zod",
+        "@/lib/auth",
+        "@/lib/db/prisma",
+        "@/lib/email/resend",
+        "@/lib/email/templates/NewsletterTemplate",
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [
+        "BroadcastResult"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/actions/contact.ts": {
+      "hash": "d8c908c1c4878d7b72abbf162c991d828cdecf7e28ea916468d07ad05d181778",
+      "language": "typescript",
+      "imports": [
+        "next/headers",
+        "@/lib/email/resend",
+        "@/lib/email/templates/ContactConfirm",
+        "@/lib/email/templates/ContactEmail",
+        "@/lib/monitoring/logger",
+        "@/lib/monitoring/performance",
+        "@/lib/rate-limit/redis",
+        "@/lib/validations/contact",
+        "@/lib/validations/email-validator"
+      ],
+      "exports": [
+        "ContactActionResponse"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/actions/newsletter.ts": {
+      "hash": "ca527fa99282d5fbc5a28f900715390f13d08e31738c8e148ce6d8054c73d20b",
+      "language": "typescript",
+      "imports": [
+        "nanoid",
+        "next/headers",
+        "@/lib/db/prisma",
+        "@/lib/email/resend",
+        "@/lib/email/templates/NewsletterConfirm",
+        "@/lib/monitoring/logger",
+        "@/lib/monitoring/performance",
+        "@/lib/rate-limit/redis",
+        "@/lib/validations/newsletter"
+      ],
+      "exports": [
+        "NewsletterActionResponse"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/sobre-mi/page.tsx": {
+      "hash": "39def126a58f79a4773b5aac16347a022156151dc609ee5989b5cdde88b4729e",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "next",
+        "next/dynamic",
+        "next/image",
+        "@/components/animations",
+        "@/components/ui/DownloadCVButton",
+        "@/components/ui/HeroBackground",
+        "@/components/ui/ObfuscatedEmail",
+        "@/components/ui/Section",
+        "@/components/ui/SkillsList",
+        "@/lib/constants",
+        "@/components/ui/ScrollIndicator"
+      ],
+      "exports": [
+        "metadata",
+        "SobreMiPage",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/secret-achievements/page.tsx": {
+      "hash": "58b8e26afeab66da978f511e5469b31cb5f16a9a09b3509a73a521cc85ec4aaf",
+      "language": "typescript",
+      "imports": [
+        "next/link",
+        "react",
+        "@/lib/achievements"
+      ],
+      "exports": [
+        "SecretAchievementsPage",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/proyectos/loading.tsx": {
+      "hash": "698005025fe03d4451bbf0ae5c299e77d94844a32f0dd979066cafe2b44dfd61",
+      "language": "typescript",
+      "imports": [
+        "@/components/ui/Container",
+        "@/components/ui/card",
+        "@/components/ui/Section"
+      ],
+      "exports": [
+        "ProyectosLoading",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/proyectos/page.tsx": {
+      "hash": "612d085d1de89aeea27174ce73e2605c1bc962ed730b5df109f65f69dc619d83",
+      "language": "typescript",
+      "imports": [
+        "next",
+        "react",
+        "@/components/animations",
+        "@/components/projects/ProjectsClient",
+        "@/components/ui/Container",
+        "@/components/ui/Section",
+        "@/lib/github/queries",
+        "@/lib/github/types",
+        "@/lib/monitoring/logger",
+        "@/lib/utils/project",
+        "@/sanity/lib/client",
+        "@/sanity/lib/queries",
+        "@/types/sanity"
+      ],
+      "exports": [
+        "metadata",
+        "revalidate",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/proyectos/[id]/page.tsx": {
+      "hash": "f0d2636f32f368564122a6a06b22c3d96b585e707586b175757d709fc423f944",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "next",
+        "next/image",
+        "next/link",
+        "next/navigation",
+        "react-icons/fa",
+        "@/components/markdown/MarkdownContent",
+        "@/components/ui/badge",
+        "@/components/ui/button",
+        "@/components/ui/Container",
+        "@/components/ui/Section",
+        "@/lib/github/client",
+        "@/lib/github/queries",
+        "@/lib/github/types",
+        "@/lib/monitoring/logger",
+        "@/lib/utils/project",
+        "@/lib/utils/tech-icons",
+        "@/sanity/lib/client",
+        "@/sanity/lib/queries",
+        "@/types/sanity"
+      ],
+      "exports": [
+        "revalidate",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/privacy/page.tsx": {
+      "hash": "3a39f8f13fd3f10f7e31ea5116955e3838a071408c012c0c56aefcacec140973",
+      "language": "typescript",
+      "imports": [
+        "next",
+        "@/components/ui/Container",
+        "@/components/ui/ObfuscatedEmail",
+        "@/components/ui/Section"
+      ],
+      "exports": [
+        "metadata",
+        "PrivacyPage",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/newsletter/page.tsx": {
+      "hash": "8cf2ab0061be415c9219b90730c49449105d0a9cdc3dfcb2b3f884c92318fe4d",
+      "language": "typescript",
+      "imports": [
+        "next",
+        "@/components/newsletter/NewsletterForm",
+        "@/components/ui/Container",
+        "@/components/ui/card",
+        "@/components/ui/Section"
+      ],
+      "exports": [
+        "metadata",
+        "NewsletterPage",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/design-system/page.tsx": {
+      "hash": "75c1fa27e7a67bce3ddae48e18caf5bdd4df477e813c3938671c25df38bf16dd",
+      "language": "typescript",
+      "imports": [
+        "next/navigation",
+        "@/components/animations",
+        "@/components/ui/badge",
+        "@/components/ui/button",
+        "@/components/ui/Container",
+        "@/components/ui/card",
+        "@/components/ui/input",
+        "@/components/ui/Section"
+      ],
+      "exports": [
+        "metadata",
+        "DesignSystemPage",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/data-request/page.tsx": {
+      "hash": "cec82bc9f751a14dce6142d21fb20e7cef54abc17f7aa301208d6c546eeac069",
+      "language": "typescript",
+      "imports": [
+        "next",
+        "@/components/gdpr/DataDeletionForm",
+        "@/components/gdpr/DataRequestForm",
+        "@/components/ui/Container",
+        "@/components/ui/ObfuscatedEmail",
+        "@/components/ui/Section"
+      ],
+      "exports": [
+        "metadata",
+        "DataRequestPage",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/contacto/page.tsx": {
+      "hash": "efdd44b402c6ccec9c4603a36bc2554e1d322197265759412e0ec7ac8ca1ca9b",
+      "language": "typescript",
+      "imports": [
+        "next",
+        "@/components/animations",
+        "@/components/forms/ContactForm",
+        "@/components/ui/Container",
+        "@/components/ui/card",
+        "@/components/ui/ObfuscatedEmail",
+        "@/components/ui/Section"
+      ],
+      "exports": [
+        "metadata",
+        "ContactoPage",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/blog/error.tsx": {
+      "hash": "c7b2c61fc6a6e98338e5a85a9fc0fc1390f4fc5dc4e676497f18757e4e8ee166",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/components/ui/button",
+        "@/components/ui/Container",
+        "@/components/ui/Section",
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [
+        "BlogError",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/blog/loading.tsx": {
+      "hash": "5384329f16e8e169017bcb38c4d3dd1fea50f135bb632f9485d1f749da4e4a9b",
+      "language": "typescript",
+      "imports": [
+        "@/components/ui/Container",
+        "@/components/ui/Section"
+      ],
+      "exports": [
+        "BlogLoading",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/blog/page.tsx": {
+      "hash": "39cbe6c2fc43f8676d988163c5734361b8ab0f39779ef89ef21dd487a3ffd9c1",
+      "language": "typescript",
+      "imports": [
+        "next",
+        "@/components/animations",
+        "@/components/blog/BlogFilters",
+        "@/components/blog/EmptyState",
+        "@/components/blog/Pagination",
+        "@/components/blog/PostGrid",
+        "@/components/blog/SearchTracker",
+        "@/components/ui/Container",
+        "@/components/ui/Section",
+        "@/lib/utils/blog",
+        "@/lib/utils/search",
+        "@/sanity/lib/client",
+        "@/sanity/lib/queries",
+        "@/types/sanity"
+      ],
+      "exports": [
+        "metadata",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/blog/[slug]/error.tsx": {
+      "hash": "846d26091b3e48c1ac7b6f1f0b48f36a492647ce81b8be9d2583f794b2152093",
+      "language": "typescript",
+      "imports": [
+        "react",
+        "@/components/ui/button",
+        "@/components/ui/Container",
+        "@/lib/monitoring/logger"
+      ],
+      "exports": [
+        "PostError",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/blog/[slug]/loading.tsx": {
+      "hash": "e4567baf5eddcb3bfb62b19e1b57e0c29ce9fc92468dc06ed25aa52172ba044a",
+      "language": "typescript",
+      "imports": [
+        "@/components/ui/Container"
+      ],
+      "exports": [
+        "PostLoading",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/blog/[slug]/opengraph-image.tsx": {
+      "hash": "30abab35659ce6595125aa8c114394440defe94c6d08e7bf520dc35e7e050917",
+      "language": "typescript",
+      "imports": [
+        "next/og",
+        "@/lib/monitoring/logger",
+        "@/sanity/lib/client",
+        "@/sanity/lib/queries",
+        "@/types/sanity"
+      ],
+      "exports": [
+        "size",
+        "contentType",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/blog/[slug]/page.tsx": {
+      "hash": "8b7154ef9a0d0341793f31154520335ff3e718a7a9aa010ff8718cdf81edf10e",
+      "language": "typescript",
+      "imports": [
+        "next",
+        "next/navigation",
+        "@/components/blog/BlogPostTracker",
+        "@/components/blog/Comments",
+        "@/components/blog/MarkdownRenderer",
+        "@/components/blog/PortableTextRenderer",
+        "@/components/blog/PostHeader",
+        "@/components/blog/RelatedPosts",
+        "@/components/blog/ShareButtons",
+        "@/components/blog/TableOfContents",
+        "@/components/seo/Breadcrumbs",
+        "@/components/seo/JsonLd",
+        "@/components/ui/Container",
+        "@/lib/monitoring/logger",
+        "@/lib/seo/schema",
+        "@/lib/utils/toc",
+        "@/sanity/lib/client",
+        "@/sanity/lib/image",
+        "@/sanity/lib/queries",
+        "@/types/sanity"
+      ],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/admin/layout.tsx": {
+      "hash": "0e01e5a2b1f31bdd2fddc6769e139a1b6cadacca14e156f797a0e4326fdb5aec",
+      "language": "typescript",
+      "imports": [
+        "next"
+      ],
+      "exports": [
+        "metadata",
+        "AdminLayout",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/admin/page.tsx": {
+      "hash": "32813d400cb281dc8bff491cfc455e88d8f774c212d7c54f00ed15e8137b8cdb",
+      "language": "typescript",
+      "imports": [
+        "next/navigation",
+        "@/components/admin/AdminDashboard",
+        "@/components/ui/Container",
+        "@/lib/auth"
+      ],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/admin/unauthorized/page.tsx": {
+      "hash": "b866ebba095d1fee5175688bc58447346eb663f4f16378198f7092c75c9c0fba",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "next/link",
+        "next-auth/react",
+        "@/components/ui/button",
+        "@/components/ui/Container"
+      ],
+      "exports": [
+        "UnauthorizedPage",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/admin/newsletter/page.tsx": {
+      "hash": "e654cdba68c5f24550fd5b99e453f02761f4bb38b6e4e438eb92262f06e72da4",
+      "language": "typescript",
+      "imports": [
+        "lucide-react",
+        "next/link",
+        "next/navigation",
+        "@/components/admin/NewsletterBroadcaster",
+        "@/components/ui/button",
+        "@/components/ui/Container",
+        "@/lib/auth"
+      ],
+      "exports": [
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "app/(pages)/admin/login/page.tsx": {
+      "hash": "f02dd33211dace46ee2d9ce3df22f39ec2e63ce0e3227944ae1f5da0b35a93f4",
+      "language": "typescript",
+      "imports": [
+        "next/navigation",
+        "next-auth/react",
+        "react",
+        "react-icons/fa",
+        "@/components/ui/Container"
+      ],
+      "exports": [
+        "AdminLoginPage",
+        "default"
+      ],
+      "calls": [],
+      "isTest": false
+    },
+    "__tests__/setup.ts": {
+      "hash": "322d6031ffc785d567552a1a3ff4e6a3e6395a622ef158c9eb73e8e6c47571c3",
+      "language": "typescript",
+      "imports": [
+        "@testing-library/jest-dom/matchers",
+        "@testing-library/react",
+        "vitest",
+        "@/mocks/server"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "__tests__/test-utils.tsx": {
+      "hash": "74928044d87ab9718c80c8db87b318674bf354a56affa1ef0dadad8233a84e55",
+      "language": "typescript",
+      "imports": [
+        "@testing-library/react",
+        "react",
+        "@/components/a11y/ScreenReaderAnnouncer"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "__tests__/vitest.d.ts": {
+      "hash": "1b3221c7365a03a5ccc5eb10b6dab0df30de8e15ce2a3dcd6aba62a035a8c29c",
+      "language": "typescript",
+      "imports": [
+        "@testing-library/jest-dom/matchers"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": false
+    },
+    "__tests__/unit/achievements.test.ts": {
+      "hash": "73e5ca659da70de0ef1bd286ccb1993b65450088969c892f3d30ff1d967085eb",
+      "language": "typescript",
+      "imports": [
+        "vitest",
+        "@/lib/achievements"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "__tests__/unit/resume-fetch.test.ts": {
+      "hash": "3c3b1ea3b6b4bde0525b2fc47491f0cc975b2ddc2a891e7426849b8c4b74457d",
+      "language": "typescript",
+      "imports": [
+        "vitest",
+        "@/lib/types/resume",
+        "@/sanity/lib/queries"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "__tests__/unit/validations/contact.test.ts": {
+      "hash": "d105317365415cd4fb0670e7e99127523f141ec54c1fdf260a61497f60b72104",
+      "language": "typescript",
+      "imports": [
+        "vitest",
+        "@/lib/validations/contact"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "__tests__/unit/utils/cn.test.ts": {
+      "hash": "956d3ce1b712de901fc09d06129e4f7b1d46ec154f06e3368efcb18e672f948c",
+      "language": "typescript",
+      "imports": [
+        "vitest",
+        "@/lib/utils/cn"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "__tests__/unit/utils/format.test.ts": {
+      "hash": "841fe1887a6ad67254531da046e7584cecf174925d2ef1fd14ebd37e474c3841",
+      "language": "typescript",
+      "imports": [
+        "vitest",
+        "@/lib/utils/format"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "__tests__/unit/utils/guards.test.ts": {
+      "hash": "df647466a52a28edd09483a59fadd43dd2ee1d3ac634c9f70c149a455f341887",
+      "language": "typescript",
+      "imports": [
+        "vitest",
+        "@/lib/utils/guards"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "__tests__/unit/utils/string.test.ts": {
+      "hash": "6406d54134b5264dd9493ceb093c0b2d25e5e3a80985fd4673685cbbdc558fb7",
+      "language": "typescript",
+      "imports": [
+        "vitest",
+        "@/lib/utils/string"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "__tests__/integration/hooks/useKeyboardNav.test.ts": {
+      "hash": "f77085ec9e660269c998f355375751a9a3cbf316fef52b307d6900b56ba4e615",
+      "language": "typescript",
+      "imports": [
+        "@testing-library/react",
+        "vitest",
+        "@/lib/hooks/useKeyboardNav"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "__tests__/integration/components/Button.test.tsx": {
+      "hash": "2e74d35ed9f24155053ba738b8f06dbd4b6b8d573ba657ac27789cc283fa494a",
+      "language": "typescript",
+      "imports": [
+        "@testing-library/react",
+        "@testing-library/user-event",
+        "vitest",
+        "@/components/ui/button"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "__tests__/integration/components/FormField.test.tsx": {
+      "hash": "02f53ee89d93f43414be7a5f2bb1820b19b1c7cda40fe4dabb09f21a1a8e0557",
+      "language": "typescript",
+      "imports": [
+        "@testing-library/react",
+        "@testing-library/user-event",
+        "vitest",
+        "@/components/forms/FormField"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "__tests__/integration/components/Modal.test.tsx": {
+      "hash": "df072898f55995a809720360dcd3e6abb78d9f3176a0ce50f48e06bc5a889540",
+      "language": "typescript",
+      "imports": [
+        "@testing-library/react",
+        "@testing-library/user-event",
+        "vitest",
+        "@/components/ui/Modal"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    },
+    "__tests__/integration/components/NewsletterForm.test.tsx": {
+      "hash": "5cc8dfec42822dd5dab79bb083191276960ccb02868a8422c35648c2d3bb7f65",
+      "language": "typescript",
+      "imports": [
+        "@/__tests__/test-utils",
+        "@testing-library/user-event",
+        "vitest",
+        "@/components/newsletter/NewsletterForm",
+        "@/app/actions/newsletter",
+        "react-hot-toast"
+      ],
+      "exports": [],
+      "calls": [],
+      "isTest": true
+    }
+  }
+}
