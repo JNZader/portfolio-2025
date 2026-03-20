@@ -119,4 +119,4 @@ function SectionDescription({
 }
 
 export default Section;
-export { Section, SectionHeader, SectionTitle, SectionDescription, sectionVariants };
+export { Section, SectionDescription, SectionHeader, SectionTitle, sectionVariants };

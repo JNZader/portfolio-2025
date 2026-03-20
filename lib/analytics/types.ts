@@ -29,4 +29,4 @@ declare global {
 }
 
 // Export types to make this a module (required for global augmentation)
-export type { VaFunction, GtagFunction };
+export type { GtagFunction, VaFunction };
