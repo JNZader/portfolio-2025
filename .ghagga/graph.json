@@ -1325,7 +1325,7 @@
       "isTest": false
     },
     "lib/analytics/types.ts": {
-      "hash": "da1b203cd84ca10edf8465eb0cf913f8524f7dd1fbf0a00fe0721606305fab43",
+      "hash": "36aa2d071e29ca3343c913eb6b24d79e9935d6f0ebe289bb2cda3846b0a0cc8c",
       "language": "typescript",
       "imports": [],
       "exports": [],
@@ -1616,7 +1616,7 @@
       "isTest": false
     },
     "components/ui/Section.tsx": {
-      "hash": "a248f92437239e9fffa12889e719706a780c16462e6cda6cb8eb60fcfe27c349",
+      "hash": "611c7824fb073b97df1d12bbbede0d2e9e1a1532ff3e46cf5e5014ac3419d734",
       "language": "typescript",
       "imports": [
         "class-variance-authority",
@@ -1710,7 +1710,7 @@
       "isTest": false
     },
     "components/ui/card.tsx": {
-      "hash": "8c1e06bb535c395a905b6ec1f3ce7710cd1fdf53eb3185ec3bdd4761dde5e61d",
+      "hash": "4d6126c5fa90ee54f474ec363547db10271b85cbd4668552a340f4c4db31e58f",
       "language": "typescript",
       "imports": [
         "class-variance-authority",
