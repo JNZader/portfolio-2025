@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.2](https://github.com/JNZader/portfolio-2025/compare/v2.1.1...v2.1.2) (2026-03-20)
+
+
+### Bug Fixes
+
+* **deps:** add missing conventional-commits-filter@5.0.0 as dev dep ([e436ca8](https://github.com/JNZader/portfolio-2025/commits/e436ca852ea4121c695d1894f54c4f04219ceec7))
+* update npm audit level to critical and fix lock file consistency ([5ea09a8](https://github.com/JNZader/portfolio-2025/commits/5ea09a85e7a59226170f6662aa3244def382c19d)), closes [#120](https://github.com/JNZader/portfolio-2025/issues/120) [#121](https://github.com/JNZader/portfolio-2025/issues/121) [#122](https://github.com/JNZader/portfolio-2025/issues/122)
+
 ### [2.1.1](https://github.com/JNZader/portfolio-2025/compare/v2.1.0...v2.1.1) (2026-03-19)
 
 ## [2.1.0](https://github.com/JNZader/portfolio-2025/compare/v2.0.1...v2.1.0) (2026-03-05)
