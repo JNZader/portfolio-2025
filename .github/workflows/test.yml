@@ -3,6 +3,18 @@ name: Tests
 on:
   pull_request:
     branches: [main, develop]
+    paths:
+      - 'src/**'
+      - 'app/**'
+      - 'components/**'
+      - 'lib/**'
+      - 'prisma/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+      - 'next.config.*'
+      - 'biome.json'
+      - 'tailwind.config.*'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

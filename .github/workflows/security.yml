@@ -3,6 +3,9 @@ name: Security
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'package.json'
+      - 'src/**'
   schedule:
     # Run weekly on Mondays at 00:00 UTC
     - cron: '0 0 * * 1'
