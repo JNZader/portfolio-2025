@@ -179,90 +179,126 @@ const LOCAL_PROJECTS: SanityProject[] = [
       current: 'apigen-studio',
     },
     excerpt:
-      'A visual API design studio for modeling service boundaries, validating contracts, and preparing generation workflows before code exists.',
+      'A visual designer for Spring Boot APIs and microservices — model entities, gateway routes, and event flows, then export a multi-service project.',
     technologies: [
       'React 19',
-      'TypeScript',
-      'Vite',
-      'Mantine',
+      'TypeScript 5.9',
+      'Vite 7',
+      'Mantine 8',
       'Zustand',
       'Zod',
       'React Flow',
+      'ELK',
       'Playwright',
       'Vitest',
-      'Docker',
     ],
     featured: true,
+    demoUrl: 'https://apigen-web.vercel.app',
     publishedAt: '2026-04-29T09:00:00.000Z',
     body: [
-      block('Product Overview', 'h2'),
+      block('The Problem', 'h2'),
       block(
-        'APiGen Studio is the visual companion to APiGen. Where the core platform focuses on generation, Studio focuses on the work that happens before it: modeling APIs, mapping service boundaries, validating compatibility rules, and making generation decisions visible before the backend pipeline runs.'
+        'Tools like bootify.io let you design a single Spring Boot app visually — entities, relations, basic CRUD, auth. That solves one piece of the work. It does not solve modeling a microservices architecture: multiple services, the routes between them, the events that flow between them, and the export of all of that as a coherent system.'
       ),
       block(
-        'Studio is not a thin UI over a generator or just a visual canvas. It exists because many API problems appear before code generation begins: unclear ownership, weak boundary modeling, incompatible schemas, fragile imports, and decisions buried across documents or YAML files. Studio turns that pre-implementation work into an editor with validation, import review, export discipline, and recovery paths.'
+        'I wanted a visual designer that handled the system, not just the app. One canvas where I model services, draw connections, configure a gateway, lay out event/message flows, and export the whole thing as a multi-service project ready to feed APiGen.'
       ),
-      block('Why It Matters', 'h2'),
+      block('What Studio Does', 'h2'),
+      block(
+        'Studio is a browser-based visual designer for Spring Boot APIs and microservices. Model entities and relations like in bootify.io, then go further: add multiple services, wire gateway routes, design event/message flows, validate cross-service compatibility, and export the full architecture as a project that APiGen can generate. Import SQL schemas or OpenAPI contracts, edit them visually with conflict-aware merge, and never lose work — IndexedDB autosave plus snapshot history are built in.'
+      ),
+      block('Constraints I Set', 'h2'),
       bullet(
-        'Gives teams a shared visual workspace for API design instead of hiding decisions inside YAML files alone.'
+        'Beyond single-app modeling. Studio has to handle service-to-service architecture, not just entities of one service.'
       ),
       bullet(
-        'Parses existing SQL schemas and OpenAPI contracts, then surfaces compatibility and conflict issues before they become integration problems.'
+        'Validation happens while editing, not after generation. The user sees conflicts and incompatibilities live, before exporting.'
       ),
       bullet(
-        'Connects modeling flows with schema-versioned project export, conflict-aware import review, GitHub push, and multi-service generation workflows so design and implementation stay aligned.'
+        'Import has to be safe. Bringing in a SQL schema or OpenAPI contract triggers a pre-import snapshot so destructive operations are recoverable.'
+      ),
+      bullet(
+        'Demo is public from day one. Anyone can open https://apigen-web.vercel.app and try the editor without an account.'
+      ),
+      block('My Role', 'h2'),
+      block(
+        'Single developer. Started January 20, 2026 — two days after APiGen pivoted into a full code generation platform. Designed every screen, wrote every line. 440 commits in 18 active days; the project shipped in a short, intense sprint.'
+      ),
+      block('How Studio Started', 'h2'),
+      block(
+        'I took bootify.io as the reference. The single-app generation flow it offers is clean and useful, but the moment the question becomes "how do these three services talk to each other?" the tool has no answer. That gap is exactly where the work that matters happens.'
       ),
       block(
-        'API design collaboration is usually fragmented. Product people, architects, backend engineers, and frontend consumers often read different artifacts and infer different meanings. A visual studio reduces that ambiguity by giving the team one place to inspect structure, relationships, and readiness before generation hardens those assumptions.'
+        'Studio was built to fill that gap. The entity modeling is the table stakes; the microservices designer is the point.'
       ),
-      block('Frontend Architecture', 'h2'),
+      block('Key Decisions', 'h2'),
+      block('1. Microservices Designer — beyond entity modeling', 'h3'),
       block(
-        'The product is structured as a React editor built for complex state, graph interactions, and validation feedback. Zustand manages editor state, Zod validates project imports and editor data, and the target model carries a real language/framework matrix rather than a single backend assumption. That gives Studio enough depth to model service-level generation intent instead of only drawing boxes and arrows.'
-      ),
-      block(
-        'That makes Studio related to APiGen but distinct in purpose: APiGen accelerates backend foundations, while Studio improves the quality of the decisions that feed that pipeline.'
-      ),
-      block('Why The Product Shape Matters', 'h2'),
-      block(
-        'A visual studio for API work is only credible if it reflects real design complexity instead of flattening it. Service relationships, schema flows, validation warnings, target compatibility rules, and export decisions all need to stay understandable without hiding important constraints. The product has to balance clarity for humans with enough rigor to feed downstream tooling.'
+        'The most consequential product decision. Studio is not "bootify.io clone". It adds a service-to-service designer: multiple services on one canvas, connections between them, a gateway route designer for HTTP routing, an event/message designer for async flows, and a multi-service export that emits an architecture, not a single project.'
       ),
       block(
-        'Studio sits in a different layer of the system than APiGen itself. APiGen encodes backend standards into generated artifacts. Studio turns decision-making into a shared editing workflow: import a contract, inspect the model, preview conflicts, surface incompatibilities, refine boundaries, and export with clearer intent.'
-      ),
-      block('Architectural Decisions', 'h2'),
-      block(
-        'Choosing a client-heavy React architecture is deliberate because the product depends on responsive graph interactions, local validation feedback, and editing workflows that should feel immediate. Keeping more intelligence in the frontend improves the experience, but it also demands careful state boundaries so editor interactions, derived validation state, persisted models, and per-service target decisions do not become entangled.'
+        'That is the differentiator. The entity editor is the entry point that feels familiar; the microservices designer is what makes Studio worth using once a team grows past one app.'
       ),
       block(
-        'State management is central to that problem. Zustand is a practical fit for isolating editor concerns without forcing every interaction through heavyweight global abstractions. The tradeoff is discipline: in graph-heavy products, weak state boundaries quickly become UI coupling, stale derived values, and brittle export logic. That matters here because the app validates language/framework compatibility, feature constraints, and import merge choices while users are still editing.'
+        'Tradeoff: scope. A single-app generator is a tractable product; a multi-service designer is much larger surface area. More features means more places to break, more interactions to validate, and more decisions to design. The bet is that the depth pays back on architectures with three or more services.'
       ),
-      block('Technology Choices And Tradeoffs', 'h2'),
+      block('2. Layout as logic, not decoration', 'h3'),
       block(
-        'React 19 and TypeScript support a strongly typed, component-driven editor that can grow with more advanced workflows. Mantine helps ship a polished product surface faster, which matters when the hard part is interaction design rather than low-level design-system work. The tradeoff is accepting framework conventions in exchange for delivery speed and consistency.'
-      ),
-      block(
-        'Zod matters because validation is part of the product value. If a design tool cannot validate structure early and clearly, it is just a drawing tool. Studio uses schema-versioned project import/export, compatibility checks across supported targets, and conflict-aware merge flows, which makes validation part of the workflow instead of a final warning banner.'
+        'When there are relations between nodes, Studio uses ELK for layered graph layout. When there are not, it falls back to grid placement. The same approach applies to service-to-service maps. Layout is part of the product logic — predictable, deterministic, repeatable across imports — not a cosmetic pass at the end.'
       ),
       block(
-        'Graph tooling adds another layer of complexity around layout, interaction semantics, and synchronization between visual nodes and the underlying model. The editor uses ELK for layered graph layout when relationships exist, falls back to grid placement when they do not, and applies the same approach to service-to-service maps. That makes layout behavior part of the product logic, not just cosmetic polish.'
+        'Tradeoff: layout coupling. Changing the layout algorithm becomes a product-level change, not a CSS tweak. The upside is that two users importing the same OpenAPI file see the same layout, which makes review and collaboration possible.'
+      ),
+      block('3. Client-heavy with safe persistence', 'h3'),
+      block(
+        'All editing, validation, and preview runs in the client — no backend round-trip while modeling. Zustand stores manage editor concerns separately; Zod validates imports and project structure; React Flow drives the canvas.'
       ),
       block(
-        'Playwright and Vitest reflect another important decision: products like this need confidence both in isolated logic and in end-to-end editing behavior. The repo includes focused tests around SQL and OpenAPI parsing, canvas layout, keyboard shortcuts, import preview conflicts, and version history utilities, which is exactly where rich editors tend to fail first.'
+        'Persistence is the safety net. Autosave to IndexedDB on every meaningful change. Snapshot history retained per project so users can roll back. Pre-import safety snapshots so a destructive import can be recovered if the merge goes wrong. The principle: client-heavy is fine when no work can be lost.'
       ),
-      block('Delivery And Workflow Decisions', 'h2'),
+      block('What Studio Can Do Today', 'h2'),
+      bullet(
+        'Visual entity modeling with relations, CRUD generation, and Java/Spring type mapping.'
+      ),
+      bullet(
+        'Microservices Designer — multiple services, connections, gateway route designer, event/message designer, multi-service export.'
+      ),
+      bullet(
+        'Import SQL schemas and OpenAPI contracts with conflict-aware merge and pre-import safety snapshots.'
+      ),
+      bullet(
+        'Auto-layout with ELK (layered when relations exist) and grid fallback. Same logic applied to service-to-service maps.'
+      ),
+      bullet('IndexedDB autosave, retained snapshot history, version recovery flows.'),
+      bullet(
+        'Keyboard-first editing with full shortcut coverage. WCAG 2.1 AA accessibility for non-canvas surfaces.'
+      ),
+      bullet(
+        'Playwright Component Testing for canvas interactions plus end-to-end tests for full editor flows.'
+      ),
+      block("What I'd Reconsider", 'h2'),
       block(
-        'Studio is valuable only if it fits real team workflows, not just solo experimentation. That means treating import, edit, validate, and export as one continuous path. A team should be able to bring in an existing contract, inspect it visually, refine decisions, surface issues, and hand the result back to generation workflows without losing fidelity.'
+        'Mantine 8 as the UI framework. It is well-built and shipped the product fast, but it ties the editor to its design conventions and components. A more headless approach (Radix + a custom design system, or MUI with deeper theming) would have given more freedom to build editor-specific patterns — denser toolbars, more controlled focus management, layout containers that match graph editing better.'
       ),
       block(
-        'That also creates a responsibility around transparency. Visual tooling becomes dangerous when it hides what will actually be generated. A mature implementation needs to make design intent, validation constraints, export consequences, and recovery behavior understandable so the UI improves decisions instead of obscuring engineering reality. Studio backs that up with IndexedDB-based autosave, retained snapshot history, restore flows, and pre-import safety snapshots for destructive operations.'
+        "The README has a justification for Mantine; in retrospect the tradeoff was real. The product moved faster early on and pays a bit of a tax now whenever the editor needs UI patterns that fight Mantine's defaults."
       ),
-      block('Key Engineering Challenges', 'h2'),
-      block(
-        'APiGen Studio is fundamentally a systems UX problem. It combines domain modeling, complex client state, schema validation, graph interaction design, accessibility-minded keyboard editing, and workflow orchestration between human decisions and machine generation. The GitHub push path and multi-service export flow reinforce that it is a serious design-to-delivery surface, not just a drawing tool with an export button.'
+      block('Architecture Snapshot', 'h2'),
+      block('Browser-only application, no custom backend:'),
+      bullet('React 19 + TypeScript 5.9 + Vite 7 — modern toolchain, fast HMR, optimized builds.'),
+      bullet(
+        'Mantine 8 for UI primitives; React Flow for canvas; ELK for layered graph layout with grid fallback.'
       ),
-      block(
-        'The result is a product that feels related to APiGen while clearly standing on its own: the design layer where architecture intent becomes explicit before backend code is generated.'
+      bullet(
+        'Zustand for editor state, segmented by concern; Zod for import validation and project schema.'
       ),
+      bullet(
+        'IndexedDB for autosave + snapshot history; pre-import safety snapshots before destructive merges.'
+      ),
+      bullet(
+        'Playwright (end-to-end + Component Testing) plus Vitest for unit tests. SonarQube wired in.'
+      ),
+      bullet('Deployed to Vercel; Docker images available for self-hosted deployments.'),
     ],
   },
   {
@@ -272,132 +308,153 @@ const LOCAL_PROJECTS: SanityProject[] = [
       current: 'biogas-platform',
     },
     excerpt:
-      'Private case study: a sanitized industrial operations platform for biogas monitoring, field workflows, edge-to-cloud synchronization, and production-minded AI/ML.',
+      'An industrial platform for biogas plants — real-time monitoring, edge ML inference under 50ms, and a three-layer AI architecture for anomaly detection and predictive maintenance.',
     technologies: [
       'Go',
-      'Gin',
+      'GORM',
       'PostgreSQL',
+      'Redis',
+      'Mosquitto MQTT',
       'Rust',
+      'ONNX Runtime',
       'Python',
+      'scikit-learn',
       'React 19',
       'Vite',
       'Mantine',
       'TypeScript',
-      'Zustand',
-      'ONNX Runtime',
-      'scikit-learn',
-      'Airflow',
-      'MLflow',
-      'MinIO',
-      'OpenAPI / OpenSpec',
+      'OpenSpec',
       'Docker',
+      'GitLab CI',
     ],
     featured: true,
-    privateCaseStudy: true,
     publishedAt: '2026-04-25T09:00:00.000Z',
     body: [
-      block('Private Case Study', 'h2'),
+      block('The Problem', 'h2'),
       block(
-        'Biogas Platform is presented as a sanitized private case study. It focuses on architecture and delivery without exposing client identifiers, internal URLs, credentials, or operationally sensitive details.'
+        'My nephew is an environmental engineer. He told me how biogas plants are managed day-to-day: Excel spreadsheets. Sensor readings copied by hand, daily logs that nobody analyzed afterwards, decisions made on intuition because the data was inert. No real-time view, no anomaly detection, no predictive maintenance, no business intelligence — just files that grew bigger every week and were never queried.'
       ),
       block(
-        'The goal is to explain the system shape and engineering decisions in public-facing terms while protecting customer operations. It should be read as an architecture narrative, not as a technical dump.'
+        'The opportunity was obvious. Replace the spreadsheets with a real platform that ingests sensor data, lets operators work from it, and turns the historical record into something the business can actually act on.'
       ),
-      block('Business Framing', 'h2'),
+      block('What Biogas Platform Does', 'h2'),
       block(
-        'The platform was shaped as a contract-driven operations product for industrial environments where field work, monitoring, and synchronization cannot depend on perfect connectivity. The goal was to unify monitoring, operational tasks, and mobile-first execution into one coherent workflow.'
+        'A full operations platform for biogas plants. Sensors stream data over MQTT to a Go backend; the data lands in PostgreSQL with time-series-friendly schemas; operators use a web dashboard and a mobile app for daily workflows; a Python ML pipeline trains models that get deployed to a Rust edge service for sub-50ms inference at the plant; an AI assistant helps operators query the system in plain language. The original Excel workflow disappears.'
       ),
-      block(
-        'That context matters because industrial software is constrained by the physical world. Office users need planning and visibility, while field users need dependable workflows in environments where connectivity, timing, and operational conditions are less predictable. The product therefore had to behave like a coordinated platform, not a single web panel with a database behind it.'
-      ),
-      block('System Shape', 'h2'),
+      block('Constraints I Set', 'h2'),
       bullet(
-        'Backend services exposed stable contracts for operational data, synchronization flows, and workflow actions.'
+        'Edge has to work without internet. Plants can lose connectivity for hours; operations and anomaly detection must keep running locally.'
       ),
       bullet(
-        'Frontend applications shared a consistent product model while serving distinct roles for office and field usage.'
+        'Models are versioned production assets. No ad-hoc model drops — every model is trained, validated, packaged as ONNX, versioned in S3-compatible storage, and rolled out through a controlled deployment.'
       ),
       bullet(
-        'Offline-first mobile behavior and edge-to-cloud synchronization reduced operational friction in unstable network conditions.'
+        'Specs-driven from day one. OpenSpec is the source of truth for contracts between apps; no API is "just shipped" without a spec first.'
       ),
       bullet(
-        'Edge services handled local anomaly scoring and assistant flows so core operational feedback could continue even when connectivity was degraded.'
+        'Role-aware from the start. Plant operators, technical staff, supervisors, and owners see different views and have different capabilities — the role model is part of the data layer, not a UI afterthought.'
+      ),
+      block('My Role', 'h2'),
+      block(
+        'Single developer. Started February 9, 2026. My nephew is the domain expert who validates that the product matches how plants actually operate; every line of code is mine. As of today the project has 1723 commits across 65 active days — still in active daily development.'
+      ),
+      block('How Biogas Platform Started, And Why It Grew', 'h2'),
+      block(
+        'It began as a conversation: my nephew described the Excel reality, I described the platform that should replace it. The first version was modest — a Go backend, a Postgres database, a basic dashboard. Ingest sensor data, show it on a chart, replace the daily log.'
+      ),
+      block(
+        'Once the basic loop worked, the questions stacked up. If the data is in a real database, why not detect anomalies automatically? If we detect anomalies, why not predict failures? If we predict failures, why not run the inference at the plant so it works offline? If we run it at the plant, how do we update the models safely? Each answer added a layer, and the platform grew into what it is today.'
+      ),
+      block('Key Decisions', 'h2'),
+      block('1. Edge inference in Rust + ONNX, under 50ms', 'h3'),
+      block(
+        'Plants cannot stop because the cloud is down. The decision was to run the trained models locally at the plant on an edge gateway, using Rust with onnxruntime 2.0 as the inference layer. Latency is under 50ms from sensor reading to anomaly score, and the gateway keeps working if the WAN link drops.'
+      ),
+      block(
+        'Rust was chosen for predictable performance and memory safety on a long-running edge process. ONNX was chosen because it lets the Python training pipeline (scikit-learn) and the Rust inference engine share the exact same model file — bit-identical outputs verified on both sides.'
+      ),
+      block(
+        'Tradeoff: cross-language complexity. Training in Python, inference in Rust, integration in Go means three runtimes to coordinate. The IR is ONNX itself, which keeps the contract clean, but every model export has parity tests to make sure the Rust output matches the Python output.'
+      ),
+      block('2. Three-layer AI architecture', 'h3'),
+      block(
+        'Instead of treating ML as a feature stuck onto a screen, the platform has three explicit AI layers, each with its own purpose, latency budget, and lifecycle:'
       ),
       bullet(
-        'Cloud services owned heavier training, model lifecycle, and AI routing concerns instead of pushing that burden onto field hardware.'
-      ),
-      block(
-        'The important product decision was to treat those concerns as one system. Monitoring, task execution, and synchronization were not features to bolt together later. They shaped each other directly, which meant contracts and data flows had to be explicit from the beginning.'
-      ),
-      block('Verified AI/ML Layer', 'h2'),
-      block(
-        'The part that was initially underrepresented in this case study is the verified AI/ML layer. This was not decorative “AI added later” work. It was shaped as an operational subsystem with clear boundaries between what must run locally at the edge and what belongs in cloud training and model management.'
+        'Edge inference layer — Isolation Forest + Autoencoder running locally on ONNX, scoring anomalies on every sensor reading in under 50ms.'
       ),
       bullet(
-        'At the edge, anomaly detection combined lightweight statistical checks with ONNX-based Isolation Forest inference so plants could score suspicious behavior locally and react without waiting on a round trip.'
+        'Anomaly detection layer — 32 engineered features (temporal, change, z-score, co-variation, data quality, biogas-domain) fed into ensemble voting with dynamic per-sensor thresholds. SHAP attributions explain why a reading was flagged.'
       ),
       bullet(
-        'In the cloud, anomaly training paired Isolation Forest with an LSTM autoencoder, which is a practical split between point anomalies and sequential behavior changes in sensor streams.'
+        'Predictive AI layer — LSTM + Random Forest models predicting biogas production 7 days ahead and equipment failures 4-24 hours in advance, plus optimization recommendations for operating parameters.'
+      ),
+      block(
+        'Each layer is independent: edge keeps working if the cloud is offline; anomaly detection works without the predictive layer; the predictive layer can be retrained without touching the edge runtime. The separation is what makes the system operable, not just impressive.'
+      ),
+      block(
+        'Tradeoff: model lifecycle weight. Three layers means three training pipelines, three model registries, three deployment paths, three sets of drift monitoring. It is a lot of infrastructure for a single dev to maintain — only worth it because each layer pays back operationally.'
+      ),
+      block('3. Spec-driven development with OpenSpec from day one', 'h3'),
+      block(
+        'The first commit was literally "init: project structure with openspec specs and tooling". Every contract between apps — backend to frontend, edge to backend, ML service to backend — has a spec before any code is written. OpenSpec is the source of truth; the implementation has to match it.'
+      ),
+      block(
+        'Tradeoff: process overhead at the start. Every new endpoint takes longer because the spec comes first. The payback is that when a contract changes, all consumers see the diff explicitly, and AI assistants generating client code can use the spec instead of guessing from the implementation.'
+      ),
+      block('What Biogas Platform Can Do Today', 'h2'),
+      bullet(
+        '5 applications in one monorepo — Go backend, Rust edge gateway, Python ML service, React/Vite web frontend, mobile app.'
       ),
       bullet(
-        'Predictive maintenance was framed with Random Forest models around 7-day and 14-day failure risk plus estimated remaining useful life, which is a more operationally useful output than a vague “risk score.”'
+        'Real-time ingestion over MQTT (Mosquitto broker), persistence in PostgreSQL with Redis for hot data, time-series-aware schemas.'
       ),
       bullet(
-        'The assistant layer used DistilBERT-based ONNX intent classification, with offline keyword fallback and Spanish template responses when local inference confidence or model availability made a simpler path safer.'
+        'Sub-50ms edge anomaly inference with ONNX models trained in Python and verified bit-identical on Rust.'
       ),
       bullet(
-        'Cloud AI routing supported tenant-configurable provider selection and ordered fallback chains, which matters in real products where reliability, cost, and local model availability all vary by deployment.'
+        'Three-layer AI: edge anomaly detection, cloud anomaly analysis with SHAP explainability, predictive layer with 7-day biogas forecasts and 4-24h failure predictions.'
       ),
       bullet(
-        'PSI-based drift detection monitored feature distribution shifts at the edge and fed retraining decisions upstream, while the model lifecycle combined experiment tracking, artifact storage, registry versioning, promotion, and redeployment instead of ad-hoc model drops.'
+        'Role-aware UI for operators, technical staff, supervisors, and owners — distinct views and permissions, not toggles on a single dashboard.'
+      ),
+      bullet(
+        'OpenSpec contracts for every cross-app API; custom Biome plugin (eslint-plugin-biogas-ssot) enforces single-source-of-truth conventions at lint time.'
+      ),
+      bullet(
+        'GitLab CI/CD with versioned model storage on S3-compatible object storage, controlled model rollouts, and drift monitoring feeding retraining decisions.'
+      ),
+      block("What I'd Reconsider", 'h2'),
+      block(
+        'I waited too long to ship something. The instinct was to deliver a mature product — the three AI layers, the mobile app, the role model, the edge inference, all done well before showing it. That is not how this should have gone.'
       ),
       block(
-        'From a public-facing architecture perspective, the interesting lesson is not any single algorithm name. It is the separation of responsibilities: fast local inference where operations need resilience, heavier sequence modeling and retraining in the cloud, and a deployment path that treats models as versioned production assets.'
-      ),
-      block('Architecture Takeaway', 'h2'),
-      block(
-        'The main architectural value was the ability to deliver a multi-application platform around explicit contracts. That improved change management, reduced ambiguity between teams, and made it easier to evolve the system without coupling every application to hidden backend assumptions.'
+        'A smaller, earlier delivery would have been the right call. A backend that ingests sensor data and a dashboard that shows it, shipped in week three, would have given my nephew something real to use immediately. Feedback from actual plant operations would have shaped the priorities for what comes next. Instead I built outward — adding layers, apps, and capabilities — before any of it ran against real daily use.'
       ),
       block(
-        'The AI/ML layer reinforced that same architectural principle. Edge inference, cloud training, provider routing, and retraining triggers were useful precisely because they were designed as explicit platform capabilities rather than scattered experiments hidden behind individual screens.'
+        'The cost is invisible from the outside: the platform looks comprehensive and the architecture is clean. The cost is in what I never learned because nothing was in front of users early enough. The next product I build, I will ship the smallest thing that solves the original problem in the first month, and earn the right to add layers from there.'
       ),
-      block('Why The Product Shape Matters', 'h2'),
-      block(
-        'In a private industrial platform, system shape is often more important than any isolated screen. If office workflows, field execution, and synchronization logic are designed independently, the result becomes brittle fast: data meanings drift, edge cases multiply, and users lose trust when one application behaves differently from another. A platform approach reduces that fragmentation by making contracts and workflow boundaries explicit.'
+      block('Architecture Snapshot', 'h2'),
+      block('Monorepo with five applications and supporting packages:'),
+      bullet(
+        'apps/backend — Go + GORM + Gin, REST API, MQTT subscriber, OpenSpec source of truth.'
       ),
-      block(
-        'The reusable value here is not customer-specific topology. It is the way the system was framed: separate concerns clearly, preserve contract integrity, and design for operational reality instead of ideal connectivity.'
+      bullet(
+        'apps/edge-gateway — Rust + onnxruntime 2.0, local inference, MQTT bridge, offline-first.'
       ),
-      block('Architectural Decisions', 'h2'),
-      block(
-        'Go and PostgreSQL fit the backend well because the system benefits from explicit APIs, predictable performance, and clear control over synchronization and workflow logic. The decision is less about language preference and more about keeping the service layer understandable under operational complexity. In environments with several application consumers, clarity and contract stability matter more than fashionable abstractions.'
+      bullet(
+        'apps/ml-service — Python + scikit-learn, training pipelines, SHAP explainability, ONNX export with parity tests.'
       ),
-      block(
-        'On the frontend side, React and TypeScript support a product family where shared concepts can be modeled consistently across applications, even when interaction patterns differ. Zustand is a practical state choice for keeping local workflow state manageable without turning every feature into a framework inside the framework. The tradeoff is that teams must stay disciplined about store design and domain boundaries to prevent accidental coupling.'
+      bullet(
+        'apps/frontend-vite — React 19 + Vite + Mantine + Recharts, operator and analyst dashboards.'
       ),
-      block(
-        'The contract-driven approach is the deeper architectural decision. Explicit API definitions create a safer seam between backend evolution and application behavior. That becomes especially valuable when synchronization, mobile workflows, and office interfaces all depend on the same domain language but consume it differently.'
+      bullet('apps/mobile — React Native, field workflows, role-aware views.'),
+      bullet(
+        'packages/eslint-plugin-biogas-ssot — custom lint rules that enforce single-source-of-truth across apps.'
       ),
-      block('Technology Choices And Tradeoffs', 'h2'),
+      bullet('services/ai-assistant — natural language query interface over the operational data.'),
       block(
-        'Offline-first behavior is never free. It improves reliability for field usage, but it introduces hard questions around conflict handling, synchronization timing, retry behavior, and what users should see when local and remote state are temporarily out of sync. Choosing that model signals that the product is designed around real operational constraints, not idealized SaaS assumptions.'
-      ),
-      block(
-        'Docker and contract tooling support delivery consistency, but the bigger tradeoff is organizational. Strong contracts and explicit workflows reduce ambiguity, yet they also require more discipline in how features are introduced and how changes are communicated across applications. That is usually the right trade for a serious operational platform.'
-      ),
-      block('Delivery And Workflow Decisions', 'h2'),
-      block(
-        'A platform like this benefits from delivery practices that keep contracts visible and change impact understandable. When multiple user surfaces depend on shared operational concepts, the team cannot treat backend, frontend, and synchronization behavior as separate delivery tracks. Product delivery has to reflect the architecture: shared language, shared contracts, and careful workflow evolution.'
-      ),
-      block(
-        'That is where the project complexity becomes clear. The challenge is managing the tension between industrial reliability, multi-application consistency, offline behavior, and ongoing product evolution without exposing users to internal system complexity.'
-      ),
-      block('System Constraints', 'h2'),
-      block(
-        'Biogas Platform is included as a private case study because the interesting part is the system shape required by the domain. It shows how to build a contract-driven platform for a demanding operational environment and how to design for messy real-world workflows instead of ideal lab conditions.'
-      ),
-      block(
-        'The case study is credible because the engineering value survives sanitization. Even without naming the client or exposing sensitive details, the architecture still shows the same lesson: when operations depend on field execution, shared contracts, and unreliable connectivity, system design determines whether the product feels dependable or fragile.'
+        'Persistence is PostgreSQL for canonical state, Redis for hot data and caching, S3-compatible object storage for model artifacts and large blobs. Messaging is Mosquitto MQTT. Deployment is GitLab CI/CD with Docker images per app and Caddyfile-based edge routing.'
       ),
     ],
   },
