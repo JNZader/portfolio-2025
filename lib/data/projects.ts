@@ -234,16 +234,23 @@ const LOCAL_PROJECTS: SanityProject[] = [
       current: 'biogas-platform',
     },
     excerpt:
-      'Private case study: a sanitized industrial platform for biogas monitoring, field workflows, and edge-to-cloud synchronization.',
+      'Private case study: a sanitized industrial operations platform for biogas monitoring, field workflows, edge-to-cloud synchronization, and production-minded AI/ML.',
     technologies: [
       'Go',
       'Gin',
       'PostgreSQL',
+      'Rust',
+      'Python',
       'React 19',
       'Vite',
       'Mantine',
       'TypeScript',
       'Zustand',
+      'ONNX Runtime',
+      'scikit-learn',
+      'Airflow',
+      'MLflow',
+      'MinIO',
       'OpenAPI / OpenSpec',
       'Docker',
     ],
@@ -275,12 +282,46 @@ const LOCAL_PROJECTS: SanityProject[] = [
       bullet(
         'Offline-first mobile behavior and edge-to-cloud synchronization reduced operational friction in unstable network conditions.'
       ),
+      bullet(
+        'Edge services handled local anomaly scoring and assistant flows so core operational feedback could continue even when connectivity was degraded.'
+      ),
+      bullet(
+        'Cloud services owned heavier training, model lifecycle, and AI routing concerns instead of pushing that burden onto field hardware.'
+      ),
       block(
         'The important product decision was to treat those concerns as one system. Monitoring, task execution, and synchronization were not features to bolt together later. They shaped each other directly, which meant contracts and data flows had to be explicit from the beginning.'
+      ),
+      block('Verified AI/ML Layer', 'h2'),
+      block(
+        'The part that was initially underrepresented in this case study is the verified AI/ML layer. This was not decorative “AI added later” work. It was shaped as an operational subsystem with clear boundaries between what must run locally at the edge and what belongs in cloud training and model management.'
+      ),
+      bullet(
+        'At the edge, anomaly detection combined lightweight statistical checks with ONNX-based Isolation Forest inference so plants could score suspicious behavior locally and react without waiting on a round trip.'
+      ),
+      bullet(
+        'In the cloud, anomaly training paired Isolation Forest with an LSTM autoencoder, which is a practical split between point anomalies and sequential behavior changes in sensor streams.'
+      ),
+      bullet(
+        'Predictive maintenance was framed with Random Forest models around 7-day and 14-day failure risk plus estimated remaining useful life, which is a more operationally useful output than a vague “risk score.”'
+      ),
+      bullet(
+        'The assistant layer used DistilBERT-based ONNX intent classification, with offline keyword fallback and Spanish template responses when local inference confidence or model availability made a simpler path safer.'
+      ),
+      bullet(
+        'Cloud AI routing supported tenant-configurable provider selection and ordered fallback chains, which matters in real products where reliability, cost, and local model availability all vary by deployment.'
+      ),
+      bullet(
+        'PSI-based drift detection monitored feature distribution shifts at the edge and fed retraining decisions upstream, while the model lifecycle combined experiment tracking, artifact storage, registry versioning, promotion, and redeployment instead of ad-hoc model drops.'
+      ),
+      block(
+        'From a public-facing architecture perspective, the interesting lesson is not any single algorithm name. It is the separation of responsibilities: fast local inference where operations need resilience, heavier sequence modeling and retraining in the cloud, and a deployment path that treats models as versioned production assets.'
       ),
       block('Architecture Takeaway', 'h2'),
       block(
         'The main architectural value was the ability to deliver a multi-application platform around explicit contracts. That improved change management, reduced ambiguity between teams, and made it easier to evolve the system without coupling every application to hidden backend assumptions.'
+      ),
+      block(
+        'The AI/ML layer reinforced that same architectural principle. Edge inference, cloud training, provider routing, and retraining triggers were useful precisely because they were designed as explicit platform capabilities rather than scattered experiments hidden behind individual screens.'
       ),
       block('Why The Product Shape Matters', 'h2'),
       block(
