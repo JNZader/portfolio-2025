@@ -72,37 +72,37 @@ const LOCAL_PROJECTS: SanityProject[] = [
     body: [
       block('Platform Overview', 'h2'),
       block(
-        'APiGen is a contract-first platform that turns API definitions into production-oriented service foundations. Rather than stopping at scaffolding, it accelerates the first serious version of a service with opinionated defaults for security, delivery, observability, and modular structure.'
+        'APiGen is a contract-first platform that turns API definitions into production-oriented service foundations. Rather than stopping at scaffolding, it exposes the same generation engine through CLI, server, IDE, and MCP workflows so teams can validate, preview, and generate from the interface that fits their delivery model.'
       ),
       block(
         'The real friction for backend teams rarely starts with controllers or entity classes. It starts earlier: defining service boundaries, aligning cross-cutting concerns, and ensuring every new service begins with the same operational posture. APiGen treats generation as a way to encode engineering standards, so teams move faster without resetting those decisions every time.'
       ),
       block('What It Solves', 'h2'),
       bullet(
-        'Turns SQL schemas and OpenAPI contracts into backend starting points that teams can extend instead of rewriting.'
+        'Turns SQL schemas and OpenAPI contracts into backend starting points that teams can preview, validate, and extend instead of rewriting.'
       ),
       bullet(
         'Standardizes service conventions so multiple generated services share the same operational posture.'
       ),
       bullet(
-        'Supports CLI, server, and integration workflows to fit local development and automated delivery pipelines.'
+        'Supports local CLI usage, server-side generation, IDE assistance, and MCP-based AI tooling without splitting the product into separate generators.'
       ),
       block(
         'That matters for organizations that want faster service creation without letting every team reinvent packaging, authentication, error handling, or deployment wiring. A generated baseline is only useful when it already matches the platform it will live in.'
       ),
       block('Architecture Framing', 'h2'),
       block(
-        'The platform is designed as a modular generation engine rather than a one-off exporter. That separation makes it possible to support different contract inputs, generation strategies, and runtime targets without collapsing into a monolith.'
+        'The platform is designed as a modular generation engine rather than a one-off exporter. The repo is split across reusable libs, generator modules, feature packs, and MCP servers, which keeps parsing, code generation, delivery interfaces, and runtime capabilities from collapsing into one monolith.'
       ),
       block(
         'The business outcome is repeatability. Services start with the same assumptions for authentication, transport compatibility, packaging, and telemetry, which lowers variance across teams and environments.'
       ),
       block('Why The Product Shape Matters', 'h2'),
       block(
-        'A backend generator can be treated as a disposable convenience tool or as a product that sits between API intent and platform delivery. APiGen follows the second model. That choice demands repeatable inputs, deterministic outputs, extension points, and a clear contract for how teams customize generated services without fighting the generator later.'
+        'A backend generator can be treated as a disposable convenience tool or as a product that sits between API intent and platform delivery. APiGen follows the second model. That choice demands repeatable inputs, deterministic outputs, preview and validation paths before file generation, and a clear contract for how teams customize generated services without fighting the generator later.'
       ),
       block(
-        'That framing also explains why contract-first inputs matter. When the source of truth is explicit, generation becomes governable: teams can see what is stable, what is derived, and what can be regenerated safely as standards evolve.'
+        'That framing also explains why contract-first inputs matter. When the source of truth is explicit, generation becomes governable: teams can see what is stable, what is derived, and what can be regenerated safely as standards evolve. The template override path is explicit too, with local `.apigen/templates` overrides instead of forcing every customization into a fork.'
       ),
       block('Architectural Decisions', 'h2'),
       block(
@@ -116,17 +116,17 @@ const LOCAL_PROJECTS: SanityProject[] = [
         'Java and Spring Boot fit the target because this is not a lightweight experiment but a production-oriented service baseline. The ecosystem is strong for modular services, security integration, dependency management, and operational tooling. The tradeoff is heavier conventions and more generated surface area than lighter stacks, but that is acceptable when consistency matters more than minimal code size.'
       ),
       block(
-        "Supporting OpenAPI, GraphQL, and gRPC increases the platform's reach, but it also raises complexity. Each contract style brings different assumptions about schema design, transport semantics, compatibility, and generated artifacts. The platform has to normalize those inputs without flattening the differences, which is far harder than simple template substitution."
+        'The support story is broader than a single Java happy path, but it is not uniformly mature. The repository and docs show a modular multi-language direction, with Java as the flagship implementation and Kotlin, Python, IDE tooling, and MCP surfaces extending that core. That breadth is useful, but it needs careful product framing so the stable center is clear and the expansion areas are not overstated.'
       ),
       block(
         'Docker, Kubernetes, and OpenTelemetry belong here for the same reason: the platform is designed around operational readiness, not only source generation. The tradeoff is stronger opinionation. Teams gain consistency and better defaults, but they also accept that the baseline reflects platform decisions rather than every edge case.'
       ),
       block('Delivery And Workflow Decisions', 'h2'),
       block(
-        'A generator like this only works if it supports more than one workflow. Local CLI usage matters for fast feedback, service-based execution matters for centralized governance, and CI integration matters when generation becomes part of delivery. The product cannot assume a single happy path or a single user persona.'
+        'A generator like this only works if it supports more than one workflow. The CLI covers local generation, validation, preview, and migration tasks; the server adds HTTP generation, preview endpoints, and GitHub-oriented delivery flows; the IDE and LSP layers reduce configuration friction at authoring time; and MCP exposes the same engine to AI assistants. The product cannot assume a single happy path or a single user persona.'
       ),
       block(
-        'That delivery model also changes maintainability. The system needs evolving templates, versioned standards, and safer regeneration boundaries so teams can adopt improvements incrementally. Otherwise the platform creates lock-in instead of leverage.'
+        'That delivery model also changes maintainability. The system needs evolving templates, versioned standards, working examples, and safer regeneration boundaries so teams can adopt improvements incrementally. The docs, quick-start flows, and example schemas act as an enablement layer, while the Terraform area shows a more complete AWS path plus scaffold/reference coverage for other clouds rather than a uniformly finished multi-cloud story.'
       ),
       block('Architectural Complexity', 'h2'),
       block(
@@ -165,62 +165,65 @@ const LOCAL_PROJECTS: SanityProject[] = [
         'APiGen Studio is the visual companion to APiGen. Where the core platform focuses on generation, Studio focuses on the work that happens before it: modeling APIs, mapping service boundaries, validating compatibility rules, and making generation decisions visible before the backend pipeline runs.'
       ),
       block(
-        'Studio is not a thin UI over a generator. It exists because many API problems appear before code generation begins: unclear ownership, weak boundary modeling, incompatible schemas, and decisions buried across documents or YAML files. Studio turns that pre-implementation work into something teams can inspect, review, and correct together.'
+        'Studio is not a thin UI over a generator or just a visual canvas. It exists because many API problems appear before code generation begins: unclear ownership, weak boundary modeling, incompatible schemas, fragile imports, and decisions buried across documents or YAML files. Studio turns that pre-implementation work into an editor with validation, import review, export discipline, and recovery paths.'
       ),
       block('Why It Matters', 'h2'),
       bullet(
         'Gives teams a shared visual workspace for API design instead of hiding decisions inside YAML files alone.'
       ),
       bullet(
-        'Parses existing schemas and contracts to detect compatibility issues before they become integration problems.'
+        'Parses existing SQL schemas and OpenAPI contracts, then surfaces compatibility and conflict issues before they become integration problems.'
       ),
       bullet(
-        'Connects modeling flows with export and generation workflows so design and implementation stay aligned.'
+        'Connects modeling flows with schema-versioned project export, conflict-aware import review, GitHub push, and multi-service generation workflows so design and implementation stay aligned.'
       ),
       block(
         'API design collaboration is usually fragmented. Product people, architects, backend engineers, and frontend consumers often read different artifacts and infer different meanings. A visual studio reduces that ambiguity by giving the team one place to inspect structure, relationships, and readiness before generation hardens those assumptions.'
       ),
       block('Frontend Architecture', 'h2'),
       block(
-        'The product is structured as a React editor built for complex state, graph interactions, and validation feedback. Zustand manages editor state, Zod validates contracts as users work, and graph-based interactions make service relationships inspectable instead of buried in raw files.'
+        'The product is structured as a React editor built for complex state, graph interactions, and validation feedback. Zustand manages editor state, Zod validates project imports and editor data, and the target model carries a real language/framework matrix rather than a single backend assumption. That gives Studio enough depth to model service-level generation intent instead of only drawing boxes and arrows.'
       ),
       block(
         'That makes Studio related to APiGen but distinct in purpose: APiGen accelerates backend foundations, while Studio improves the quality of the decisions that feed that pipeline.'
       ),
       block('Why The Product Shape Matters', 'h2'),
       block(
-        'A visual studio for API work is only credible if it reflects real design complexity instead of flattening it. Service relationships, schema flows, validation warnings, and export decisions all need to stay understandable without hiding important constraints. The product has to balance clarity for humans with enough rigor to feed downstream tooling.'
+        'A visual studio for API work is only credible if it reflects real design complexity instead of flattening it. Service relationships, schema flows, validation warnings, target compatibility rules, and export decisions all need to stay understandable without hiding important constraints. The product has to balance clarity for humans with enough rigor to feed downstream tooling.'
       ),
       block(
-        'Studio sits in a different layer of the system than APiGen itself. APiGen encodes backend standards into generated artifacts. Studio turns decision-making into a collaborative editing workflow: import a contract, inspect the model, surface incompatibilities, refine boundaries, and export with clearer intent.'
+        'Studio sits in a different layer of the system than APiGen itself. APiGen encodes backend standards into generated artifacts. Studio turns decision-making into a shared editing workflow: import a contract, inspect the model, preview conflicts, surface incompatibilities, refine boundaries, and export with clearer intent.'
       ),
       block('Architectural Decisions', 'h2'),
       block(
-        'Choosing a client-heavy React architecture is deliberate because the product depends on responsive graph interactions, local validation feedback, and editing workflows that should feel immediate. Keeping more intelligence in the frontend improves the experience, but it also demands careful state boundaries so editor interactions, derived validation state, and persisted models do not become entangled.'
+        'Choosing a client-heavy React architecture is deliberate because the product depends on responsive graph interactions, local validation feedback, and editing workflows that should feel immediate. Keeping more intelligence in the frontend improves the experience, but it also demands careful state boundaries so editor interactions, derived validation state, persisted models, and per-service target decisions do not become entangled.'
       ),
       block(
-        'State management is central to that problem. Zustand is a practical fit for isolating editor concerns without forcing every interaction through heavyweight global abstractions. The tradeoff is discipline: in graph-heavy products, weak state boundaries quickly become UI coupling, stale derived values, and brittle export logic.'
+        'State management is central to that problem. Zustand is a practical fit for isolating editor concerns without forcing every interaction through heavyweight global abstractions. The tradeoff is discipline: in graph-heavy products, weak state boundaries quickly become UI coupling, stale derived values, and brittle export logic. That matters here because the app validates language/framework compatibility, feature constraints, and import merge choices while users are still editing.'
       ),
       block('Technology Choices And Tradeoffs', 'h2'),
       block(
         'React 19 and TypeScript support a strongly typed, component-driven editor that can grow with more advanced workflows. Mantine helps ship a polished product surface faster, which matters when the hard part is interaction design rather than low-level design-system work. The tradeoff is accepting framework conventions in exchange for delivery speed and consistency.'
       ),
       block(
-        'Zod matters because validation is part of the product value. If a design tool cannot validate structure early and clearly, it is just a drawing tool. Graph tooling enables relationship modeling, but it also introduces complexity around layout, interaction semantics, and synchronization between visual nodes and the underlying domain model.'
+        'Zod matters because validation is part of the product value. If a design tool cannot validate structure early and clearly, it is just a drawing tool. Studio uses schema-versioned project import/export, compatibility checks across supported targets, and conflict-aware merge flows, which makes validation part of the workflow instead of a final warning banner.'
       ),
       block(
-        'Playwright and Vitest reflect another important decision: products like this need confidence both in isolated logic and in end-to-end editing behavior. Rich editors often look stable until a specific interaction order breaks selection state, serialization, or validation messaging.'
+        'Graph tooling adds another layer of complexity around layout, interaction semantics, and synchronization between visual nodes and the underlying model. The editor uses ELK for layered graph layout when relationships exist, falls back to grid placement when they do not, and applies the same approach to service-to-service maps. That makes layout behavior part of the product logic, not just cosmetic polish.'
+      ),
+      block(
+        'Playwright and Vitest reflect another important decision: products like this need confidence both in isolated logic and in end-to-end editing behavior. The repo includes focused tests around SQL and OpenAPI parsing, canvas layout, keyboard shortcuts, import preview conflicts, and version history utilities, which is exactly where rich editors tend to fail first.'
       ),
       block('Delivery And Workflow Decisions', 'h2'),
       block(
         'Studio is valuable only if it fits real team workflows, not just solo experimentation. That means treating import, edit, validate, and export as one continuous path. A team should be able to bring in an existing contract, inspect it visually, refine decisions, surface issues, and hand the result back to generation workflows without losing fidelity.'
       ),
       block(
-        'That also creates a responsibility around transparency. Visual tooling becomes dangerous when it hides what will actually be generated. A mature implementation needs to make design intent, validation constraints, and export consequences understandable so the UI improves decisions instead of obscuring engineering reality.'
+        'That also creates a responsibility around transparency. Visual tooling becomes dangerous when it hides what will actually be generated. A mature implementation needs to make design intent, validation constraints, export consequences, and recovery behavior understandable so the UI improves decisions instead of obscuring engineering reality. Studio backs that up with IndexedDB-based autosave, retained snapshot history, restore flows, and pre-import safety snapshots for destructive operations.'
       ),
       block('Key Engineering Challenges', 'h2'),
       block(
-        'APiGen Studio is fundamentally a systems UX problem. It combines domain modeling, complex client state, schema validation, graph interaction design, and workflow orchestration between human decisions and machine generation. That makes it materially different from shipping a dashboard or a forms-based admin panel.'
+        'APiGen Studio is fundamentally a systems UX problem. It combines domain modeling, complex client state, schema validation, graph interaction design, accessibility-minded keyboard editing, and workflow orchestration between human decisions and machine generation. The GitHub push path and multi-service export flow reinforce that it is a serious design-to-delivery surface, not just a drawing tool with an export button.'
       ),
       block(
         'The result is a product that feels related to APiGen while clearly standing on its own: the design layer where architecture intent becomes explicit before backend code is generated.'
