@@ -63,6 +63,7 @@ export interface Project {
   source: 'sanity' | 'github';
   featured?: boolean;
   privateCaseStudy?: boolean;
+  repoIsOrigin?: boolean;
   publishedAt?: string;
   body?: PortableTextBlock[];
   readme?: string;

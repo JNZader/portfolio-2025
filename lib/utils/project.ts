@@ -23,6 +23,7 @@ export function convertSanityProject(sanityProject: SanityProject): Project {
     source: 'sanity',
     featured: sanityProject.featured,
     privateCaseStudy: sanityProject.privateCaseStudy,
+    repoIsOrigin: sanityProject.repoIsOrigin,
     publishedAt: sanityProject.publishedAt,
     body: sanityProject.body,
   };

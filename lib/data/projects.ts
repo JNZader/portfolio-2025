@@ -54,86 +54,121 @@ const LOCAL_PROJECTS: SanityProject[] = [
       current: 'apigen',
     },
     excerpt:
-      'An API generation platform that turns contracts into production-oriented service foundations for faster backend delivery and stronger standards.',
+      'A code generation platform that turns a SQL schema or OpenAPI contract into a working backend service — 12 target languages, 15+ databases, three cloud stacks.',
     technologies: [
       'Java 25',
-      'Spring Boot',
+      'Spring Boot 4',
       'Gradle',
       'OpenAPI',
       'GraphQL',
       'gRPC',
-      'JWT/OAuth2',
       'Docker',
       'Kubernetes',
-      'OpenTelemetry',
+      'Terraform',
+      'MCP',
     ],
     featured: true,
+    githubUrl: 'https://github.com/JNZader-Vault/apigen',
+    repoIsOrigin: true,
     publishedAt: '2026-05-01T09:00:00.000Z',
     body: [
-      block('Platform Overview', 'h2'),
+      block('The Problem', 'h2'),
       block(
-        'APiGen is a contract-first platform that turns API definitions into production-oriented service foundations. Rather than stopping at scaffolding, it exposes the same generation engine through CLI, server, IDE, and MCP workflows so teams can validate, preview, and generate from the interface that fits their delivery model.'
+        'Every Spring Boot project starts in the same place. You write the entity, then the repository, then the service, then the controller, then DTOs, then the same security setup, then the same observability wiring. Six months later you compare two services from the same team and they all picked slightly different conventions. Multiply that across teams.'
       ),
       block(
-        'The real friction for backend teams rarely starts with controllers or entity classes. It starts earlier: defining service boundaries, aligning cross-cutting concerns, and ensuring every new service begins with the same operational posture. APiGen treats generation as a way to encode engineering standards, so teams move faster without resetting those decisions every time.'
+        'I wanted something that turns a SQL schema or OpenAPI contract into a working service in one command — and stays useful after I customize it.'
       ),
-      block('What It Solves', 'h2'),
+      block('What APiGen Does', 'h2'),
+      block(
+        'Point it at a SQL schema or OpenAPI spec. Get back a production-shaped service: REST endpoints, persistence layer, security wired, observability instrumented, Dockerfile, Kubernetes manifests, CI pipeline. You can preview before generating, override templates locally without forking, and drive the same engine from CLI, HTTP server, IDE plugin, or MCP.'
+      ),
+      block('Constraints I Set', 'h2'),
       bullet(
-        'Turns SQL schemas and OpenAPI contracts into backend starting points that teams can preview, validate, and extend instead of rewriting.'
+        'Contract-first only. Source of truth is the SQL schema or OpenAPI file. No config DSL layered on top.'
       ),
       bullet(
-        'Standardizes service conventions so multiple generated services share the same operational posture.'
+        'Generated code must compile and pass tests on the first try. No scaffolding that needs manual fixing.'
+      ),
+      bullet('Customizations live next to the project in .apigen/templates. Not in a fork.'),
+      bullet(
+        'One engine, every interface. CLI, server, IDE plugin, and MCP all consume the same generation core. No duplication.'
+      ),
+      block('My Role', 'h2'),
+      block(
+        'Single developer. Started December 2024 as a generic Spring Boot REST library. Designed every module, wrote every line that was not auto-generated. Java/Spring background gave me the opinion to encode; APiGen is the platform around that opinion.'
+      ),
+      block('How APiGen Started, And Why It Grew', 'h2'),
+      block(
+        'APiGen began in December 2024 as a generic Spring Boot REST library — the linked repository above. The original code is a base-controller / base-service / base-repository pattern with generics, Hibernate Envers auditing, ModelMapper conversion, centralized exception handling, and pagination, on Spring Boot 3 and Java 21.'
+      ),
+      block(
+        'The goal was modest: encode my preferred conventions so I would stop rewriting the same controllers, the same security setup, the same exception handlers across services.'
+      ),
+      block(
+        'As the library matured through 2025, the question shifted. If the conventions are encoded, why does the user have to write the entities at all? Why not generate them from the schema? Then: if the engine can generate Java/Spring, why not Kotlin? Python? Go?'
+      ),
+      block(
+        'By January 2026 the project became a full code generation platform — the version described in the rest of this page. The link above points to the original generic library so the starting point is verifiable; the platform that grew from it is not public.'
+      ),
+      block('Key Decisions', 'h2'),
+      block('1. Decoupled pipeline: parsing → IR → template rendering', 'h3'),
+      block(
+        'The most consequential early decision. Parsers (SQL, OpenAPI) produce a normalized intermediate representation. Templates consume the IR. Neither side knows the other exists.'
+      ),
+      block(
+        'That separation is what made 12 target languages thinkable. Adding Kotlin does not touch the SQL parser. Adding GraphQL does not touch the codegen pipeline.'
+      ),
+      block(
+        'Tradeoff: the IR is rigid by design. There is no shortcut from "this OpenAPI quirk" straight to "this Java annotation". Every shortcut has to round-trip through the IR, or the abstraction stops paying off.'
+      ),
+      block('2. Features as opt-in Gradle modules', 'h3'),
+      block(
+        'APiGen ships 22 modules: 4 libraries, 4 generators, 13 feature packs (gateway, GraphQL, gRPC, chaos engineering, recommendation, analytics, BFF, notifications, search, observability, and more), and an MCP layer.'
+      ),
+      block(
+        'Features are not always-on flags. They are separate modules a project opts into. A team that needs gRPC includes the gRPC pack; a team that does not gets nothing extra in their build. Each pack versions independently — the chaos pack can move forward without touching the gateway pack.'
+      ),
+      block(
+        'Tradeoff: module-boundary discipline. Every feature pack pays a small overhead in setup and contract maintenance. Letting features bleed into core would have made the early experience faster — and the cleanup later much worse.'
+      ),
+      block('3. One engine, four delivery surfaces', 'h3'),
+      block(
+        'The same codegen engine runs behind a CLI (local generation, preview, validation), an HTTP server (preview endpoints, team-shared flows), an IDE plugin (in-editor authoring), and an MCP server (AI assistants drive generation as a tool).'
+      ),
+      block(
+        'Choosing this on day one forced the engine to be library-shaped from the start, not a CLI with an API bolted on later. That made the MCP integration almost free when it landed.'
+      ),
+      block('What APiGen Can Do Today', 'h2'),
+      bullet(
+        '12 target languages — Java/Spring, Kotlin, Python, Node/TypeScript, Go, Rust, C#, PHP, Ruby, Scala, Elixir, Clojure.'
       ),
       bullet(
-        'Supports local CLI usage, server-side generation, IDE assistance, and MCP-based AI tooling without splitting the product into separate generators.'
+        '15+ databases supported — PostgreSQL, MySQL, MariaDB, Oracle, SQL Server, SQLite, MongoDB, Cassandra, Redis, and more.'
+      ),
+      bullet(
+        '100+ enterprise features across modules — auth, soft delete, multi-tenancy, audit logs, GDPR/SOC2/PCI compliance reports.'
+      ),
+      bullet('3 cloud target stacks — AWS, GCP, Azure, with Terraform output.'),
+      bullet('60% line / 50% branch coverage minimum, gated in CI.'),
+      bullet('Contract tests on the core library + JMH microbenchmarks on the generation engine.'),
+      block("What I'd Reconsider", 'h2'),
+      block(
+        'Growing breadth-first. APiGen scaled outward fast — 12 languages, 15 databases, 13 feature packs — while Java/Spring is the only target where I have full operational confidence. The platform looks comprehensive on paper, but a user landing on Elixir or Clojure gets a less mature path than a user landing on Java.'
       ),
       block(
-        'That matters for organizations that want faster service creation without letting every team reinvent packaging, authentication, error handling, or deployment wiring. A generated baseline is only useful when it already matches the platform it will live in.'
+        'If I started over, I would compress the matrix. Two languages (Java + Python, or Java + Kotlin) and three databases (Postgres, MySQL, Mongo) deep before any breadth growth. "Supports 12 languages" sells better than "supports 2" — but engineering reputation matters more than marketing.'
       ),
-      block('Architecture Framing', 'h2'),
-      block(
-        'The platform is designed as a modular generation engine rather than a one-off exporter. The repo is split across reusable libs, generator modules, feature packs, and MCP servers, which keeps parsing, code generation, delivery interfaces, and runtime capabilities from collapsing into one monolith.'
+      block('Architecture Snapshot', 'h2'),
+      block('22 Gradle modules organized in 4 layers:'),
+      bullet('libs/ — core (engine + IR), security, exceptions, bom (shared dependency catalog).'),
+      bullet('generator/ — cli, codegen, server, ide-plugins.'),
+      bullet(
+        'features/ — 13 opt-in packs (graphql, grpc, gateway, chaos, recommendation, analytics, bff, notifications, search, observability, and more).'
       ),
+      bullet('mcp/ — Java + Python MCP servers exposing the engine to AI assistants.'),
       block(
-        'The business outcome is repeatability. Services start with the same assumptions for authentication, transport compatibility, packaging, and telemetry, which lowers variance across teams and environments.'
-      ),
-      block('Why The Product Shape Matters', 'h2'),
-      block(
-        'A backend generator can be treated as a disposable convenience tool or as a product that sits between API intent and platform delivery. APiGen follows the second model. That choice demands repeatable inputs, deterministic outputs, preview and validation paths before file generation, and a clear contract for how teams customize generated services without fighting the generator later.'
-      ),
-      block(
-        'That framing also explains why contract-first inputs matter. When the source of truth is explicit, generation becomes governable: teams can see what is stable, what is derived, and what can be regenerated safely as standards evolve. The template override path is explicit too, with local `.apigen/templates` overrides instead of forcing every customization into a fork.'
-      ),
-      block('Architectural Decisions', 'h2'),
-      block(
-        'The core architectural decision is to separate parsing, normalization, template orchestration, and runtime packaging. That keeps the engine adaptable when contracts change, new runtime conventions appear, or different transports need different rules. Without that separation, the platform would harden into a single-purpose exporter.'
-      ),
-      block(
-        'Another key decision is treating security, observability, and deployment posture as first-class generation concerns. A service foundation is valuable when it does more than expose endpoints: it should authenticate correctly, emit telemetry, structure modules coherently, and fit the delivery model from day one.'
-      ),
-      block('Technology Choices And Tradeoffs', 'h2'),
-      block(
-        'Java and Spring Boot fit the target because this is not a lightweight experiment but a production-oriented service baseline. The ecosystem is strong for modular services, security integration, dependency management, and operational tooling. The tradeoff is heavier conventions and more generated surface area than lighter stacks, but that is acceptable when consistency matters more than minimal code size.'
-      ),
-      block(
-        'The support story is broader than a single Java happy path, but it is not uniformly mature. The repository and docs show a modular multi-language direction, with Java as the flagship implementation and Kotlin, Python, IDE tooling, and MCP surfaces extending that core. That breadth is useful, but it needs careful product framing so the stable center is clear and the expansion areas are not overstated.'
-      ),
-      block(
-        'Docker, Kubernetes, and OpenTelemetry belong here for the same reason: the platform is designed around operational readiness, not only source generation. The tradeoff is stronger opinionation. Teams gain consistency and better defaults, but they also accept that the baseline reflects platform decisions rather than every edge case.'
-      ),
-      block('Delivery And Workflow Decisions', 'h2'),
-      block(
-        'A generator like this only works if it supports more than one workflow. The CLI covers local generation, validation, preview, and migration tasks; the server adds HTTP generation, preview endpoints, and GitHub-oriented delivery flows; the IDE and LSP layers reduce configuration friction at authoring time; and MCP exposes the same engine to AI assistants. The product cannot assume a single happy path or a single user persona.'
-      ),
-      block(
-        'That delivery model also changes maintainability. The system needs evolving templates, versioned standards, working examples, and safer regeneration boundaries so teams can adopt improvements incrementally. The docs, quick-start flows, and example schemas act as an enablement layer, while the Terraform area shows a more complete AWS path plus scaffold/reference coverage for other clouds rather than a uniformly finished multi-cloud story.'
-      ),
-      block('Architectural Complexity', 'h2'),
-      block(
-        'What makes APiGen substantial is the intersection of product thinking, platform architecture, and developer experience. The hard part is deciding what should be standardized, where extension seams belong, how much opinionation is healthy, and how to keep generated foundations useful after real teams start modifying them.'
-      ),
-      block(
-        'That combination of contract design, modular architecture, operational defaults, and workflow integration makes it a genuine platform product for backend teams, not a conventional CRUD service or a one-off code generator.'
+        'The build graph stays clean because the contract is enforced by the shared BOM plus separation of API and implementation modules. No cycles, no shared mutable state across modules.'
       ),
     ],
   },

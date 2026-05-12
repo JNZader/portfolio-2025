@@ -145,11 +145,6 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
                     Destacado
                   </Badge>
                 )}
-                {project.privateCaseStudy && (
-                  <Badge variant="secondary" className="text-sm">
-                    Private Case Study
-                  </Badge>
-                )}
               </div>
 
               <h1 className="text-4xl md:text-5xl font-bold mb-4">{project.title}</h1>
@@ -179,7 +174,7 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
                     <Button variant="outline" asChild>
                       <a href={project.github} target="_blank" rel="noopener noreferrer">
                         <FaGithub className="mr-2 h-4 w-4" />
-                        Ver Código
+                        {project.repoIsOrigin ? 'Ver Origen' : 'Ver Código'}
                       </a>
                     </Button>
                   )}
@@ -253,12 +248,6 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
                         <span className="ml-2 text-muted-foreground">Destacado</span>
                       </div>
                     )}
-                    {project.privateCaseStudy && (
-                      <div>
-                        <span className="font-medium">Visibilidad:</span>
-                        <span className="ml-2 text-muted-foreground">Private case study</span>
-                      </div>
-                    )}
                     {project.stars !== undefined && project.stars > 0 && (
                       <div>
                         <span className="font-medium">Estrellas:</span>
@@ -281,7 +270,7 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
                           className="flex items-center gap-2 text-sm hover:text-primary transition-colors"
                         >
                           <FaGithub className="h-4 w-4" />
-                          Repositorio en GitHub
+                          {project.repoIsOrigin ? 'Repositorio de origen' : 'Repositorio en GitHub'}
                         </a>
                       )}
                       {project.demo && (

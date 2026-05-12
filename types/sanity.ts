@@ -42,6 +42,7 @@ export interface Project {
 	githubUrl?: string;
 	featured: boolean;
 	privateCaseStudy?: boolean;
+	repoIsOrigin?: boolean;
 	publishedAt: string;
 	body?: PortableTextBlock[];
 }
