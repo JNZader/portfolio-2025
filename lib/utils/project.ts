@@ -14,11 +14,16 @@ export function convertSanityProject(sanityProject: SanityProject): Project {
     title: sanityProject.title,
     description: sanityProject.excerpt,
     tech: sanityProject.technologies || [],
-    image: sanityProject.mainImage ? `/projects/${sanityProject.slug.current}.jpg` : undefined,
+    image: sanityProject.mainImage?.asset?._ref
+      ? `/projects/${sanityProject.slug.current}.jpg`
+      : undefined,
     url: sanityProject.demoUrl ?? sanityProject.githubUrl ?? '#',
     github: sanityProject.githubUrl,
     demo: sanityProject.demoUrl,
     source: 'sanity',
     featured: sanityProject.featured,
+    privateCaseStudy: sanityProject.privateCaseStudy,
+    publishedAt: sanityProject.publishedAt,
+    body: sanityProject.body,
   };
 }

@@ -4,11 +4,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FaGithub } from 'react-icons/fa';
+import { PortableTextRenderer } from '@/components/blog/PortableTextRenderer';
 import { MarkdownContent } from '@/components/markdown/MarkdownContent';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
+import { mergeLocalAndSanityProjects } from '@/lib/data/projects';
 import { getRepoReadme } from '@/lib/github/client';
 import { getCachedFeaturedProjects } from '@/lib/github/queries';
 import type { Project } from '@/lib/github/types';
@@ -36,12 +38,13 @@ async function getAllProjects(): Promise<Project[]> {
       query: projectsQuery,
       tags: ['project'],
     });
-    sanityProjects = projects.map(convertSanityProject);
+    sanityProjects = mergeLocalAndSanityProjects(projects).map(convertSanityProject);
   } catch (error) {
     logger.error('Failed to fetch Sanity projects', error as Error, {
       service: 'projects',
       path: '/proyectos/[id]',
     });
+    sanityProjects = mergeLocalAndSanityProjects([]).map(convertSanityProject);
   }
 
   // Obtener proyectos de GitHub
@@ -55,7 +58,16 @@ async function getAllProjects(): Promise<Project[]> {
     });
   }
 
-  return [...sanityProjects, ...githubProjects];
+  const curatedKeys = new Set(
+    sanityProjects.map((project) => project.title.trim().toLowerCase().replace(/\s+/g, '-'))
+  );
+
+  return [
+    ...sanityProjects,
+    ...githubProjects.filter(
+      (project) => !curatedKeys.has(project.title.trim().toLowerCase().replace(/\s+/g, '-'))
+    ),
+  ];
 }
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
@@ -98,6 +110,8 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
     }
   }
 
+  const hasLinks = Boolean(project.demo || project.github);
+
   return (
     <>
       {/* Back Button */}
@@ -131,6 +145,11 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
                     Destacado
                   </Badge>
                 )}
+                {project.privateCaseStudy && (
+                  <Badge variant="secondary" className="text-sm">
+                    Private Case Study
+                  </Badge>
+                )}
               </div>
 
               <h1 className="text-4xl md:text-5xl font-bold mb-4">{project.title}</h1>
@@ -146,24 +165,26 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
               )}
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap gap-4">
-                {project.demo && (
-                  <Button asChild>
-                    <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="mr-2 h-4 w-4" />
-                      Ver Demo
-                    </a>
-                  </Button>
-                )}
-                {project.github && (
-                  <Button variant="outline" asChild>
-                    <a href={project.github} target="_blank" rel="noopener noreferrer">
-                      <FaGithub className="mr-2 h-4 w-4" />
-                      Ver Código
-                    </a>
-                  </Button>
-                )}
-              </div>
+              {hasLinks && (
+                <div className="flex flex-wrap gap-4">
+                  {project.demo && (
+                    <Button asChild>
+                      <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        Ver Demo
+                      </a>
+                    </Button>
+                  )}
+                  {project.github && (
+                    <Button variant="outline" asChild>
+                      <a href={project.github} target="_blank" rel="noopener noreferrer">
+                        <FaGithub className="mr-2 h-4 w-4" />
+                        Ver Código
+                      </a>
+                    </Button>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Project Image */}
@@ -184,7 +205,9 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
               {/* Main Content */}
               <div className="lg:col-span-2">
                 <h2 className="text-2xl font-bold mb-6">Descripción del Proyecto</h2>
-                {readme ? (
+                {project.body && project.body.length > 0 ? (
+                  <PortableTextRenderer value={project.body} />
+                ) : readme ? (
                   <MarkdownContent content={readme} repoInfo={repoInfo} />
                 ) : (
                   <div className="prose prose-gray dark:prose-invert max-w-none">
@@ -230,6 +253,12 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
                         <span className="ml-2 text-muted-foreground">Destacado</span>
                       </div>
                     )}
+                    {project.privateCaseStudy && (
+                      <div>
+                        <span className="font-medium">Visibilidad:</span>
+                        <span className="ml-2 text-muted-foreground">Private case study</span>
+                      </div>
+                    )}
                     {project.stars !== undefined && project.stars > 0 && (
                       <div>
                         <span className="font-medium">Estrellas:</span>
@@ -240,33 +269,35 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
                 </div>
 
                 {/* Links */}
-                <div className="bg-card p-6 rounded-lg border border-border">
-                  <h3 className="text-lg font-semibold mb-4">Enlaces</h3>
-                  <div className="space-y-3">
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-sm hover:text-primary transition-colors"
-                      >
-                        <FaGithub className="h-4 w-4" />
-                        Repositorio en GitHub
-                      </a>
-                    )}
-                    {project.demo && (
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-sm hover:text-primary transition-colors"
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                        Demo en vivo
-                      </a>
-                    )}
+                {hasLinks && (
+                  <div className="bg-card p-6 rounded-lg border border-border">
+                    <h3 className="text-lg font-semibold mb-4">Enlaces</h3>
+                    <div className="space-y-3">
+                      {project.github && (
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-sm hover:text-primary transition-colors"
+                        >
+                          <FaGithub className="h-4 w-4" />
+                          Repositorio en GitHub
+                        </a>
+                      )}
+                      {project.demo && (
+                        <a
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-sm hover:text-primary transition-colors"
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                          Demo en vivo
+                        </a>
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>

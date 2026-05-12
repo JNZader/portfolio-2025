@@ -4,6 +4,7 @@ import { RevealOnScroll } from '@/components/animations';
 import ProjectsClient from '@/components/projects/ProjectsClient';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
+import { mergeLocalAndSanityProjects } from '@/lib/data/projects';
 import { getCachedFeaturedProjects } from '@/lib/github/queries';
 import type { Project } from '@/lib/github/types';
 import { logger } from '@/lib/monitoring/logger';
@@ -30,12 +31,13 @@ export default async function ProyectosPage() {
       query: projectsQuery,
       tags: ['project'],
     });
-    sanityProjects = projects.map(convertSanityProject);
+    sanityProjects = mergeLocalAndSanityProjects(projects).map(convertSanityProject);
   } catch (error) {
     logger.error('Failed to fetch Sanity projects', error as Error, {
       service: 'projects',
       path: '/proyectos',
     });
+    sanityProjects = mergeLocalAndSanityProjects([]).map(convertSanityProject);
   }
 
   // Obtener proyectos de GitHub (con fallback)
@@ -50,7 +52,13 @@ export default async function ProyectosPage() {
   }
 
   // Combinar proyectos (Sanity primero, luego GitHub)
-  const allProjects = [...sanityProjects, ...githubProjects];
+  const curatedKeys = new Set(
+    sanityProjects.map((project) => project.title.trim().toLowerCase().replace(/\s+/g, '-'))
+  );
+  const dedupedGithubProjects = githubProjects.filter(
+    (project) => !curatedKeys.has(project.title.trim().toLowerCase().replace(/\s+/g, '-'))
+  );
+  const allProjects = [...sanityProjects, ...dedupedGithubProjects];
 
   return (
     <>

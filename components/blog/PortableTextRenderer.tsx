@@ -1,10 +1,7 @@
-import {
-  PortableText,
-  type PortableTextBlock,
-  type PortableTextComponents,
-} from '@portabletext/react';
+import { PortableText, type PortableTextComponents } from '@portabletext/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { PortableTextBlock } from 'sanity';
 import { slugifyHeading } from '@/lib/utils/toc';
 import { getImageUrl } from '@/sanity/lib/image';
 import { CodeBlock } from './CodeBlock';

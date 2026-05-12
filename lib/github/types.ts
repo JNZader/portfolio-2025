@@ -1,3 +1,5 @@
+import type { PortableTextBlock } from 'sanity';
+
 export interface GitHubRepo {
   id: number;
   name: string;
@@ -60,5 +62,8 @@ export interface Project {
   stars?: number;
   source: 'sanity' | 'github';
   featured?: boolean;
+  privateCaseStudy?: boolean;
+  publishedAt?: string;
+  body?: PortableTextBlock[];
   readme?: string;
 }

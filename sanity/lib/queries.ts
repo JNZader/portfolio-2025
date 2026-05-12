@@ -21,7 +21,9 @@ export const projectsQuery = groq`
     demoUrl,
     githubUrl,
     featured,
-    publishedAt
+    privateCaseStudy,
+    publishedAt,
+    body
   }
 `;
 

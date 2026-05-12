@@ -34,13 +34,14 @@ export interface Project {
 		current: string;
 	};
 	excerpt: string;
-	mainImage: Image & {
+	mainImage?: Image & {
 		alt: string;
 	};
 	technologies?: string[];
 	demoUrl?: string;
 	githubUrl?: string;
 	featured: boolean;
+	privateCaseStudy?: boolean;
 	publishedAt: string;
 	body?: PortableTextBlock[];
 }

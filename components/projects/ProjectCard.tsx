@@ -81,6 +81,12 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
           </Link>
         </h3>
 
+        {project.privateCaseStudy && (
+          <Badge variant="outline" className="mb-3 w-fit text-[11px]">
+            Private Case Study
+          </Badge>
+        )}
+
         {/* Description */}
         <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-1 leading-relaxed">
           {project.description}
