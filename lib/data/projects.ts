@@ -109,7 +109,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
         'The core architectural decision is to separate parsing, normalization, template orchestration, and runtime packaging into distinct concerns. That keeps the engine adaptable when the input contract changes, when new runtime conventions are added, or when different transports need different generation rules. Without that separation, the product would collapse into a hard-coded exporter tied to a single workflow.'
       ),
       block(
-        'Another important decision is treating security, observability, and deployment posture as first-class generation concerns rather than optional extras. That is a senior-level distinction: a generated service is not valuable if it only produces endpoints. It becomes valuable when it also reflects how a real service should authenticate, expose telemetry, structure modules, and fit the platform delivery model from day one.'
+        'Another important decision is treating security, observability, and deployment posture as first-class generation concerns rather than optional extras. A generated service is not valuable if it only produces endpoints. It becomes valuable when it also reflects how a real service should authenticate, expose telemetry, structure modules, and fit the platform delivery model from day one.'
       ),
       block('Technology Choices And Tradeoffs', 'h2'),
       block(
@@ -128,9 +128,9 @@ const LOCAL_PROJECTS: SanityProject[] = [
       block(
         'That delivery model also changes how maintainability is approached. The system must support evolving templates, versioned standards, and safer regeneration boundaries so teams can adopt improvements incrementally. Otherwise the platform creates lock-in and fear instead of leverage.'
       ),
-      block('Why It Is Senior-Level', 'h2'),
+      block('Architectural Complexity', 'h2'),
       block(
-        'What makes APiGen interesting from a senior engineering perspective is that it sits at the intersection of product thinking, platform architecture, and developer experience. The challenge is not merely generating files. The challenge is deciding which concerns should be standardized, where extension seams belong, how much opinionation is healthy, and how to keep generated foundations useful after real teams start modifying them.'
+        'What makes APiGen interesting is that it sits at the intersection of product thinking, platform architecture, and developer experience. The challenge is not merely generating files. The challenge is deciding which concerns should be standardized, where extension seams belong, how much opinionation is healthy, and how to keep generated foundations useful after real teams start modifying them.'
       ),
       block(
         'That combination of contract design, modular architecture, operational defaults, and workflow integration is what makes the project substantial. It is effectively a platform product for backend teams, and that requires more architectural judgment than a conventional CRUD service or a one-off code generator.'
@@ -209,7 +209,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
         'Zod is useful because schema validation is not a secondary concern here; it is part of the product value. If a design tool cannot validate structure clearly and early, it is only a drawing tool. React Flow-style graph tooling enables relationship modeling, but it also introduces complexity around layout, interaction semantics, and synchronization between visual nodes and the underlying domain model.'
       ),
       block(
-        'Playwright and Vitest reflect another senior-level decision: products like this need confidence both in isolated logic and in end-to-end editing behavior. The danger in rich editors is that everything appears to work until a particular interaction order breaks selection state, serialization, or validation messaging. Testing strategy has to respect that.'
+        'Playwright and Vitest reflect another important product decision: products like this need confidence both in isolated logic and in end-to-end editing behavior. The danger in rich editors is that everything appears to work until a particular interaction order breaks selection state, serialization, or validation messaging. Testing strategy has to respect that.'
       ),
       block('Delivery And Workflow Decisions', 'h2'),
       block(
@@ -218,9 +218,9 @@ const LOCAL_PROJECTS: SanityProject[] = [
       block(
         'This also creates a product responsibility around transparency. Visual tooling can become dangerous when it hides what will actually be generated. A mature implementation needs to make design intent, validation constraints, and export consequences understandable so the UI becomes a better design instrument, not an abstraction layer that obscures engineering reality.'
       ),
-      block('Why It Is Senior-Level', 'h2'),
+      block('Key Engineering Challenges', 'h2'),
       block(
-        'APiGen Studio is senior-level work because it is fundamentally a systems UX problem. It combines domain modeling, complex client state, schema validation, graph interaction design, and workflow orchestration between human decisions and machine generation. That is a very different level of difficulty than shipping a dashboard or a forms-based admin panel.'
+        'APiGen Studio is fundamentally a systems UX problem. It combines domain modeling, complex client state, schema validation, graph interaction design, and workflow orchestration between human decisions and machine generation. That makes it a meaningfully different challenge from shipping a dashboard or a forms-based admin panel.'
       ),
       block(
         'The result is a product that feels related to APiGen while clearly standing on its own. It is the design intelligence layer of the broader ecosystem: the place where architecture intent becomes explicit before backend code is ever generated.'
@@ -287,7 +287,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
         'In a private industrial platform, the system shape is often more important than any isolated screen. If office workflows, field execution, and synchronization logic are designed independently, the result becomes brittle fast: data meanings drift, edge cases multiply, and users lose trust when one application behaves differently from another. A platform approach reduces that fragmentation by making contracts and workflow boundaries explicit.'
       ),
       block(
-        'That is also why this case study is presented in sanitized form. The reusable value here is not in revealing customer-specific topology. It is in showing how senior engineering work frames the system: separate concerns clearly, preserve contract integrity, and design for operational reality instead of ideal connectivity.'
+        'That is also why this case study is presented in sanitized form. The reusable value here is not in revealing customer-specific topology. It is in showing how the system was framed: separate concerns clearly, preserve contract integrity, and design for operational reality instead of ideal connectivity.'
       ),
       block('Architectural Decisions', 'h2'),
       block(
@@ -311,11 +311,11 @@ const LOCAL_PROJECTS: SanityProject[] = [
         'A platform like this benefits from delivery practices that keep contracts visible and change impact understandable. When multiple user surfaces depend on shared operational concepts, the team cannot treat backend, frontend, and synchronization behavior as separate delivery tracks with no coordination. Product delivery has to reflect the architecture: shared language, shared contracts, and careful evolution of workflows.'
       ),
       block(
-        'That is where the project becomes senior-level. The challenge is not just implementing screens or endpoints. It is managing the tension between industrial reliability, multi-application consistency, offline behavior, and ongoing product evolution without exposing users to internal system complexity.'
+        'That is where the project complexity becomes clear. The challenge is not just implementing screens or endpoints. It is managing the tension between industrial reliability, multi-application consistency, offline behavior, and ongoing product evolution without exposing users to internal system complexity.'
       ),
-      block('Why It Is Senior-Level', 'h2'),
+      block('System Constraints', 'h2'),
       block(
-        'Biogas Platform is included as a private case study because the interesting part is architectural maturity. It demonstrates how to shape a contract-driven platform for a demanding operational domain, how to protect privacy while still explaining engineering value, and how to design for messy real-world workflows instead of ideal lab conditions.'
+        'Biogas Platform is included as a private case study because the interesting part is the system shape required by the domain. It demonstrates how to shape a contract-driven platform for a demanding operational environment, how to protect privacy while still explaining engineering value, and how to design for messy real-world workflows instead of ideal lab conditions.'
       ),
       block(
         'That combination of system design, workflow modeling, synchronization concerns, and disciplined public sanitization is what makes the case study credible. It is not public because it is simple; it is public because the reusable lessons can be described without disclosing anything sensitive.'
