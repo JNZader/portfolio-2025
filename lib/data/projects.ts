@@ -356,7 +356,28 @@ const LOCAL_PROJECTS: SanityProject[] = [
       ),
       block('My Role', 'h2'),
       block(
-        'Single developer. Started February 9, 2026. My nephew is the domain expert who validates that the product matches how plants actually operate; every line of code is mine. As of today the project has 1723 commits across 65 active days — still in active daily development.'
+        'Single developer. Started February 9, 2026. My nephew, an environmental engineer, is the domain expert who validates that the product matches how plants actually operate. I owned every technical decision in the stack:'
+      ),
+      bullet(
+        'The monorepo structure — what is an app, what is a shared package, what is a service, and where the boundaries sit.'
+      ),
+      bullet(
+        'The contract layer — OpenSpec as the source of truth between apps before any code is written.'
+      ),
+      bullet(
+        'The edge gateway design in Rust — Modbus protocol integration, offline-first SQLite store with sync queue, the AI subsystem layout (agents, classifier, model registry, local LLM), OTA model updates with signed artifacts.'
+      ),
+      bullet(
+        'The three-layer ML architecture — what runs at the edge, what runs in the cloud, what trains in batch, what infers in real time, and how models move between them.'
+      ),
+      bullet(
+        'The role model — operators, technical staff, supervisors, owners — as a data-layer concept, not a UI toggle.'
+      ),
+      bullet(
+        'The custom Biome plugin (eslint-plugin-biogas-ssot) that enforces single-source-of-truth conventions across apps at lint time.'
+      ),
+      bullet(
+        'The CI/CD pipeline on GitLab — model versioning to S3-compatible storage, parity tests as a deployment gate, controlled rollouts.'
       ),
       block('How Biogas Platform Started, And Why It Grew', 'h2'),
       block(
@@ -366,15 +387,40 @@ const LOCAL_PROJECTS: SanityProject[] = [
         'Once the basic loop worked, the questions stacked up. If the data is in a real database, why not detect anomalies automatically? If we detect anomalies, why not predict failures? If we predict failures, why not run the inference at the plant so it works offline? If we run it at the plant, how do we update the models safely? Each answer added a layer, and the platform grew into what it is today.'
       ),
       block('Key Decisions', 'h2'),
-      block('1. Edge inference in Rust + ONNX, under 50ms', 'h3'),
+      block('1. Edge gateway in Rust as a self-sufficient industrial node', 'h3'),
       block(
-        'Plants cannot stop because the cloud is down. The decision was to run the trained models locally at the plant on an edge gateway, using Rust with onnxruntime 2.0 as the inference layer. Latency is under 50ms from sensor reading to anomaly score, and the gateway keeps working if the WAN link drops.'
+        'The edge gateway is the heart of the system, not a thin inference wrapper. It is the component that the plant runs locally, and it has to keep working when everything else is unavailable — the WAN link, the cloud backend, the model registry. That is why it is the largest single application in the platform: 74 Rust source files, 18 subsystems, version 2.1.0, designed as an autonomous industrial node that happens to sync with the cloud when it can.'
+      ),
+      block('What the gateway actually does on the plant:'),
+      bullet(
+        'Talks to the PLCs over Modbus TCP/RTU — the industrial protocol that sensors and controllers actually speak. Holding, input, coils, and discrete-input registers, with configurable scale, offset, and data types (u16/i16/f32).'
+      ),
+      bullet(
+        'Persists every reading in a local SQLite store with a sync queue, so an outbound link drop just delays sync — it never loses data. Sync is HTTP batch with exponential retry, circuit breaker, and configurable batch sizes.'
+      ),
+      bullet(
+        'Runs ML inference locally via onnxruntime 2.0 (the ort crate) — anomaly detection on every reading without a cloud round-trip.'
+      ),
+      bullet(
+        'Hosts a local AI subsystem with on-device language models (llama_cpp), classifier, correlator, and a model registry with hardware-aware selection — picks the right model size for the gateway it is running on.'
+      ),
+      bullet(
+        'Has an AI agent framework: help agent, SQLite query agent, status agent — small specialized agents an operator can talk to from the plant dashboard without any cloud connection.'
+      ),
+      bullet(
+        'Supports OTA (over-the-air) updates with ed25519-signed model artifacts — models are downloaded, signature-verified, and deployed without restarting the gateway.'
+      ),
+      bullet(
+        'Exposes Prometheus metrics on :9090/metrics and health checks on :8888/health for monitoring; ships its own embedded dashboard PWA so an operator can inspect state without an external tool.'
       ),
       block(
-        'Rust was chosen for predictable performance and memory safety on a long-running edge process. ONNX was chosen because it lets the Python training pipeline (scikit-learn) and the Rust inference engine share the exact same model file — bit-identical outputs verified on both sides.'
+        'Why Rust: a process that runs unattended on plant hardware for weeks at a time, doing real-time IO with industrial protocols and ML inference, cannot afford memory leaks, GC pauses, or unhandled panics taking the gateway down. Rust delivers predictable performance, no GC, and compile-time guarantees that match the operational profile. The Tokio async runtime makes coordinating Modbus polling, SQLite writes, HTTP sync, and the AI subsystem realistic in a single process.'
       ),
       block(
-        'Tradeoff: cross-language complexity. Training in Python, inference in Rust, integration in Go means three runtimes to coordinate. The IR is ONNX itself, which keeps the contract clean, but every model export has parity tests to make sure the Rust output matches the Python output.'
+        'Why ONNX as the model interchange: the Python training pipeline (scikit-learn for anomaly models, transformers stack for NLP) exports to ONNX, and the Rust runtime consumes the exact same file. Parity tests verify that the Rust outputs match the Python outputs bit-identically before a model is ever promoted.'
+      ),
+      block(
+        'Tradeoff: scope and maintenance weight. The edge gateway is essentially its own product inside the platform — it ships its own version (2.1.0), its own configuration model (edge.toml), its own dashboard, its own CLI tooling for commissioning (validate config, dry-run a register read, convert a CSV of tags into an edge.toml draft). That breadth is the right answer for an industrial node, but it is a non-trivial amount of code to keep healthy alongside the rest of the platform.'
       ),
       block('2. Three-layer AI architecture', 'h3'),
       block(
@@ -410,7 +456,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
         'Real-time ingestion over MQTT (Mosquitto broker), persistence in PostgreSQL with Redis for hot data, time-series-aware schemas.'
       ),
       bullet(
-        'Sub-50ms edge anomaly inference with ONNX models trained in Python and verified bit-identical on Rust.'
+        'Autonomous edge gateway in Rust (v2.1.0) — Modbus TCP/RTU to PLCs, offline-first SQLite with sync queue, sub-50ms ONNX anomaly inference, on-device LLM with AI agents, OTA model updates with ed25519 signature verification, embedded dashboard PWA.'
       ),
       bullet(
         'Three-layer AI: edge anomaly detection, cloud anomaly analysis with SHAP explainability, predictive layer with 7-day biogas forecasts and 4-24h failure predictions.'
@@ -440,7 +486,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
         'apps/backend — Go + GORM + Gin, REST API, MQTT subscriber, OpenSpec source of truth.'
       ),
       bullet(
-        'apps/edge-gateway — Rust + onnxruntime 2.0, local inference, MQTT bridge, offline-first.'
+        'apps/edge-gateway — Rust (Tokio async runtime), Modbus TCP/RTU client to PLCs, SQLite local store with sync queue, onnxruntime 2.0 inference, local LLM via llama_cpp, AI agent framework, OTA model updates with ed25519 signing, embedded dashboard PWA, Prometheus metrics, health endpoints.'
       ),
       bullet(
         'apps/ml-service — Python + scikit-learn, training pipelines, SHAP explainability, ONNX export with parity tests.'
