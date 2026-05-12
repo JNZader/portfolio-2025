@@ -494,7 +494,9 @@ const LOCAL_PROJECTS: SanityProject[] = [
       bullet(
         'apps/frontend-vite — React 19 + Vite + Mantine + Recharts, operator and analyst dashboards.'
       ),
-      bullet('apps/mobile — React Native, field workflows, role-aware views.'),
+      bullet(
+        'apps/mobile — companion app on Ionic + Capacitor + Vite for operator field workflows.'
+      ),
       bullet(
         'packages/eslint-plugin-biogas-ssot — custom lint rules that enforce single-source-of-truth across apps.'
       ),
