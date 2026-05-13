@@ -152,16 +152,7 @@
       "ELK",
       "Ionic + Capacitor"
     ],
-    "Bases de Datos": [
-      "PostgreSQL",
-      "MySQL",
-      "Redis",
-      "MongoDB",
-      "SQLite",
-      "MariaDB",
-      "Supabase",
-      "IndexedDB"
-    ],
+    "Bases de Datos": ["PostgreSQL", "MySQL", "Redis", "MongoDB", "SQLite", "MariaDB", "IndexedDB"],
     "ML / AI": [
       "scikit-learn",
       "ONNX Runtime",

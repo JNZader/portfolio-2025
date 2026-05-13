@@ -50,7 +50,6 @@ export const SKILLS_DATA: SkillsData = {
     { name: 'MySQL', icon: Database, color: 'text-orange-600 dark:text-orange-400' },
     { name: 'MongoDB', icon: Database, color: 'text-green-600 dark:text-green-400' },
     { name: 'Redis', icon: Database, color: 'text-red-600 dark:text-red-400' },
-    { name: 'Supabase', icon: Database, color: 'text-emerald-600 dark:text-emerald-400' },
   ],
   devops: [
     { name: 'Docker', icon: Server, color: 'text-blue-600 dark:text-blue-400' },
