@@ -32,7 +32,7 @@
       "highlights": [
         "Pipeline desacoplado: el parser y los templates no se conocen entre sí, lo que permite agregar lenguajes nuevos sin romper lo que ya funciona.",
         "Estructura modular: 22 Gradle modules organizados en librerías, generadores y feature packs opcionales.",
-        "La misma engine se puede usar desde CLI, servidor HTTP, plugin de IDE o servidor MCP.",
+        "El mismo engine se puede usar desde CLI, servidor HTTP, plugin de IDE o servidor MCP.",
         "Stack: Java 25, Spring Boot 4, Gradle, Docker, OpenAPI, GraphQL, gRPC."
       ]
     },
@@ -41,7 +41,7 @@
       "description": "Editor en el browser para diseñar visualmente APIs y arquitecturas de microservicios. Modela entidades, conexiones entre servicios y exporta el proyecto para alimentar APiGen.",
       "highlights": [
         "No es solo modelado de entidades: diseña arquitecturas de microservicios completas (services, conexiones, gateway routes, flujos de eventos).",
-        "Layout automático con ELK para grafos con relaciones; cae a grilla cuando no hay relaciones.",
+        "Cuando los nodos tienen relaciones entre sí, la librería ELK los acomoda automáticamente para minimizar cruces de líneas; cuando son nodos sueltos, caen en una grilla regular.",
         "Autosave en IndexedDB con historial de snapshots y safety snapshots antes de imports destructivos.",
         "Stack: React 19, TypeScript 5.9, Vite 7, Mantine 8, Zustand, Zod, React Flow, ELK, Playwright, Vitest."
       ]
@@ -58,16 +58,16 @@
     },
     {
       "name": "ghagga — Code review con AI multi-agente",
-      "description": "Sistema de code review impulsado por AI, con varias formas de distribución (SaaS, GitHub Action y CLI). Combina herramientas de análisis estático con un agente AI multi-perspectiva.",
+      "description": "Sistema de code review impulsado por AI distribuido como SaaS, GitHub Action y CLI. Combina varios agentes especializados con herramientas de análisis estático para producir un informe único por pull request.",
       "highlights": [
         "Distintos agentes especializados (security, quality, performance) revisan en paralelo y se sintetizan en un informe único.",
         "Integraciones con Semgrep, Trivy, Gitleaks y otras herramientas de análisis estático.",
-        "La misma engine atiende 3 canales: GitHub App, CLI y dashboard SaaS.",
-        "Stack: TypeScript, GitHub App, Semgrep, Trivy."
+        "El mismo engine atiende 3 canales: GitHub App, CLI y dashboard SaaS, dentro de un monorepo Turborepo con 4 apps y 3 packages.",
+        "Stack: TypeScript, Turborepo + pnpm workspaces, Hono, BullMQ, Drizzle ORM, Vercel AI SDK, Octokit, React 19 + React Router 7 (dashboard), Commander (CLI), GitHub Action."
       ]
     },
     {
-      "name": "Consorcio Canalero — Sistema de gestión hídrica",
+      "name": "Consorcio Canalero — Sistema de gestión",
       "description": "Plataforma para el Consorcio Canalero 10 de Mayo (Bell Ville). Monitoreo satelital de canales, reportes ciudadanos y gestión administrativa.",
       "highlights": [
         "Integración con Google Earth Engine para monitoreo satelital + MapLibre con Mapbox GL Draw para visualización y edición geoespacial en el frontend.",
@@ -76,13 +76,13 @@
       ]
     },
     {
-      "name": "mcp-llm-bridge — Servidor MCP para LLMs",
-      "description": "Servidor que rutea llamadas LLM a través de suscripciones CLI existentes (Claude, Gemini, Codex, Copilot) en lugar de pagar tokens de API.",
+      "name": "mcp-llm-bridge — Gateway MCP para múltiples LLMs",
+      "description": "Servidor MCP que unifica el acceso a múltiples modelos detrás de un solo endpoint, usando las suscripciones CLI que ya tenés activas (Claude Code, Gemini, Codex, Copilot) como proveedores. Cualquier herramienta MCP-compatible puede consumir esos modelos sin manejar API keys por separado.",
       "highlights": [
-        "Multi-provider con cadenas de fallback configurables.",
-        "Dashboard de uso y observabilidad con OpenTelemetry.",
-        "Persistencia local en SQLite con encriptación de credenciales.",
-        "Stack: TypeScript, Hono, MCP, SQLite, OpenTelemetry."
+        "Multi-provider con cadenas de fallback configurables por modelo y por uso.",
+        "Observabilidad end-to-end: traces con OpenTelemetry, métricas con Prometheus y logging estructurado con pino.",
+        "Persistencia local en better-sqlite3 con credenciales encriptadas; validación de schemas con Zod 4.",
+        "Stack: TypeScript, Hono, @modelcontextprotocol/sdk, better-sqlite3, OpenTelemetry, Prometheus, pino, Zod 4."
       ]
     }
   ],

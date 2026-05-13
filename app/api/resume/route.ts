@@ -246,14 +246,13 @@ function renderSkillsTable(ctx: PDFContext, skills: ResumeData['skills']): void 
     setText(ctx, SIZES.body, COLORS.text, 'normal');
     const itemsText = items.join(', ');
     const lines = ctx.doc.splitTextToSize(itemsText, itemsWidth) as string[];
-    const startY = ctx.yPos;
     for (let i = 0; i < lines.length; i++) {
       if (i > 0) checkNewPage(ctx, 4);
       ctx.doc.text(lines[i], itemsX, ctx.yPos + 3.2);
-      if (i < lines.length - 1) ctx.yPos += 4;
+      // Always advance yPos so that wrapped categories (Frontend, ML/AI,
+      // Industrial/IoT) do not overlap with the next row.
+      ctx.yPos += 4;
     }
-    // Ensure row advances at least one line height
-    if (ctx.yPos === startY) ctx.yPos += 4;
     ctx.yPos += 0.6;
   }
 }
