@@ -9,7 +9,7 @@
     "linkedin": "https://linkedin.com/in/jnzader",
     "github": "https://github.com/jnzader"
   },
-  "summary": "Software developer en Córdoba. Trabajo en backend (Java, Go, Rust), frontend (React, Next.js), pipelines de ML y herramientas para developers. Me interesa entender los problemas antes de escribir código y elegir las decisiones técnicas con conciencia de sus implicancias.",
+  "summary": "Software developer de Córdoba. Trabajo en backend (Java, Go, Rust), frontend (React, Next.js), pipelines de ML y herramientas para developers. Me interesa entender los problemas antes de escribir código y elegir las decisiones técnicas con conciencia de sus implicancias.",
   "experience": [
     {
       "company": "Proyectos personales y freelance",
@@ -71,8 +71,8 @@
       "description": "Plataforma para el Consorcio Canalero 10 de Mayo (Bell Ville). Monitoreo satelital, reportes ciudadanos y gestión administrativa.",
       "highlights": [
         "Integración con Google Earth Engine para monitoreo satelital + MapLibre con Mapbox GL Draw para visualización y edición geoespacial en el frontend.",
-        "Backend Python con FastAPI y persistencia en Supabase.",
-        "Stack: React, TypeScript, Mantine, MapLibre, Mapbox GL Draw, Python, FastAPI, Supabase, Google Earth Engine, Docker."
+        "Backend Python con FastAPI y SQLAlchemy 2.0 (async con asyncpg) sobre PostgreSQL + PostGIS para datos geoespaciales; migrations con Alembic y auth con fastapi-users.",
+        "Stack: React, TypeScript, Mantine, MapLibre, Mapbox GL Draw, Python, FastAPI, SQLAlchemy, PostgreSQL + PostGIS, Alembic, Google Earth Engine, Docker."
       ]
     },
     {
