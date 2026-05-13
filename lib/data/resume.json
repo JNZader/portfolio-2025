@@ -9,7 +9,7 @@
     "linkedin": "https://linkedin.com/in/jnzader",
     "github": "https://github.com/jnzader"
   },
-  "summary": "Software developer de Córdoba. Trabajo en backend (Java, Go, Rust), frontend (React, Next.js), pipelines de ML y herramientas para developers. Me interesa entender los problemas antes de escribir código y elegir las decisiones técnicas con conciencia de sus implicancias.",
+  "summary": "Software developer. Trabajo en backend (Java, Go, Rust), frontend (React, Next.js), pipelines de ML y herramientas para developers. Me interesa entender los problemas antes de escribir código y elegir las decisiones técnicas con conciencia de sus implicancias.",
   "experience": [
     {
       "company": "Proyectos personales y freelance",
@@ -18,7 +18,7 @@
       "startDate": "2024",
       "endDate": "Presente",
       "highlights": [
-        "Diseñé y construí 3 proyectos grandes: APiGen (plataforma de generación de código), APiGen Studio (editor visual para microservicios) y Biogas Platform (monitoreo de plantas industriales con sensores en tiempo real y modelos predictivos). Detalles abajo.",
+        "Diseñé y construí 3 proyectos grandes: APiGen (plataforma de generación de código), APiGen Studio (editor visual para microservicios) y Biogas Platform (monitoreo de plantas industriales con sensores en tiempo real y modelos predictivos).",
         "También construí ghagga (sistema de code review con AI multi-agente) y herramientas para mi propio flujo de trabajo: plantillas para empezar proyectos nuevos, instalación y configuración automática de máquinas de desarrollo, y configuraciones de AI CLIs.",
         "Trabajo con tests automatizados, conventional commits y especificaciones escritas antes del código (OpenSpec) en los proyectos donde corresponde.",
         "Uso AI assistants (Claude Code, Codex, opencode) como parte central del workflow, no como ayuda esporádica."
@@ -31,9 +31,10 @@
       "description": "Plataforma que toma un schema SQL o un contrato OpenAPI y genera el código de un servicio backend. Soporta varios lenguajes target.",
       "highlights": [
         "Pipeline desacoplado: el parser y los templates no se conocen entre sí, lo que permite agregar lenguajes nuevos sin romper lo que ya funciona.",
-        "Estructura modular: 22 Gradle modules organizados en librerías, generadores y feature packs opcionales.",
-        "El mismo engine se puede usar desde CLI, servidor HTTP, plugin de IDE o servidor MCP.",
-        "Stack: Java 25, Spring Boot 4, Gradle, Docker, OpenAPI, GraphQL, gRPC."
+        "22 Gradle modules organizados en librerías, generadores y feature packs opcionales. El mismo engine se usa desde CLI, servidor HTTP, plugin de IDE o servidor MCP.",
+        "Multi-protocolo: el mismo modelo expone REST + GraphQL + gRPC sin reescribir lógica de negocio.",
+        "Enterprise features incluidas sin código adicional: soft delete, multi-tenancy, auditoría con Hibernate Envers, caché multinivel (Caffeine + Redis), optimistic locking.",
+        "Stack: Java 25, Spring Boot 4, Gradle, Caffeine, Redis, Docker (con Dockerfile.native para GraalVM), OpenAPI, GraphQL, gRPC, Prometheus, JMH benchmarks, Spring Cloud Contract."
       ]
     },
     {
@@ -42,7 +43,8 @@
       "highlights": [
         "No es solo modelado de entidades: diseña arquitecturas de microservicios completas (services, conexiones, gateway routes, flujos de eventos).",
         "Cuando los nodos tienen relaciones entre sí, la librería ELK los acomoda automáticamente para minimizar cruces de líneas; cuando son nodos sueltos, caen en una grilla regular.",
-        "Autosave en IndexedDB con historial de snapshots y safety snapshots antes de imports destructivos.",
+        "Export multiformato: ZIP de proyecto Spring Boot listo para correr, JSON del modelo, SQL DDL, y diagrama PNG/SVG del canvas.",
+        "Autosave en IndexedDB con historial de snapshots y safety snapshots antes de imports destructivos. WCAG 2.1 AA con shortcuts de teclado — el editor de grafos funciona sin mouse.",
         "Stack: React 19, TypeScript 5.9, Vite 7, Mantine 8, Zustand, Zod, React Flow, ELK, Playwright, Vitest."
       ]
     },
@@ -51,8 +53,10 @@
       "description": "Plataforma para plantas de biogás. Reemplaza la gestión manual con planillas Excel: ingesta de datos en tiempo real, monitoreo, detección de anomalías y predicciones de mantenimiento.",
       "highlights": [
         "Edge gateway en Rust como nodo industrial autónomo: lee PLCs por Modbus TCP/RTU, almacena local en SQLite, hace inferencia ONNX (<50ms), funciona offline.",
-        "Pipeline de ML en 3 capas: training en Python con scikit-learn, exportación a ONNX, deploy en Rust con tests de paridad para asegurar que las salidas coinciden.",
+        "Modelos específicos por tarea: edge (Isolation Forest + Autoencoder para anomalías), cloud (LSTM + Prophet para forecasting de biogás/energía, Random Forest + XGBoost para predicción de fallos 4-24h adelante). SHAP para explicabilidad de cada predicción.",
+        "Pipeline ML production-grade: training en Python con scikit-learn, export a ONNX, deploy en Rust con tests de paridad bit-identical. Continuous learning con retraining automático y drift detection (PSI) que monitorea degradación de modelos en producción.",
         "Monorepo con 5 apps: backend Go, edge gateway Rust, servicio de ML en Python, frontend React, app mobile (Ionic).",
+        "Reduce downtime no planificado con mantenimiento predictivo basado en condición real de los equipos, en lugar de mantenimiento reactivo o calendarizado.",
         "Stack: Go + GORM + Gin, PostgreSQL, Redis, Mosquitto MQTT, Rust + Tokio + Axum, ONNX Runtime, Python, scikit-learn, React 19."
       ]
     },
@@ -61,18 +65,21 @@
       "description": "Sistema de code review impulsado por AI distribuido como SaaS, GitHub Action y CLI. Combina varios agentes especializados con herramientas de análisis estático para producir un informe único por pull request.",
       "highlights": [
         "Distintos agentes especializados (security, quality, performance) revisan en paralelo y se sintetizan en un informe único.",
-        "Integraciones con Semgrep, Trivy, Gitleaks y otras herramientas de análisis estático.",
+        "12+ herramientas de análisis estático integradas (Semgrep, Trivy, Gitleaks, PMD, Biome, Ruff, etc.) con export SARIF para integrar con pipelines SecOps/SAST existentes.",
+        "Health score por PR como métrica unificada que combina los hallazgos de los agentes y de los analizadores estáticos.",
         "El mismo engine atiende 3 canales: GitHub App, CLI y dashboard SaaS, dentro de un monorepo Turborepo con 4 apps y 3 packages.",
         "Stack: TypeScript, Turborepo + pnpm workspaces, Hono, BullMQ, Drizzle ORM, Vercel AI SDK, Octokit, React 19 + React Router 7 (dashboard), Commander (CLI), GitHub Action."
       ]
     },
     {
       "name": "Consorcio Canalero — Sistema de gestión",
-      "description": "Plataforma para el Consorcio Canalero 10 de Mayo (Bell Ville). Monitoreo satelital, reportes ciudadanos y gestión administrativa.",
+      "description": "Plataforma para el Consorcio Canalero 10 de Mayo (Bell Ville). Centraliza monitoreo satelital de la red hídrica, canal de reportes ciudadanos y gestión administrativa del consorcio en una sola aplicación.",
       "highlights": [
         "Integración con Google Earth Engine para monitoreo satelital + MapLibre con Mapbox GL Draw para visualización y edición geoespacial en el frontend.",
-        "Backend Python con FastAPI y SQLAlchemy 2.0 (async con asyncpg) sobre PostgreSQL + PostGIS para datos geoespaciales; migrations con Alembic y auth con fastapi-users.",
-        "Stack: React, TypeScript, Mantine, MapLibre, Mapbox GL Draw, Python, FastAPI, SQLAlchemy, PostgreSQL + PostGIS, Alembic, Google Earth Engine, Docker."
+        "Tile server Martin (Rust) sirve datos vectoriales desde PostGIS al frontend en tiempo real, con caché de tiles PMTiles.",
+        "Pipelines ETL en Python procesan datos espaciales (canales, escuelas, propiedades rurales) y los normalizan antes de cargarlos en PostGIS.",
+        "Backend Python con FastAPI y SQLAlchemy 2.0 (async con asyncpg) sobre PostgreSQL + PostGIS; migrations con Alembic y auth con fastapi-users.",
+        "Stack: React, TypeScript, Mantine, MapLibre, Mapbox GL Draw, Martin, Python, FastAPI, SQLAlchemy, PostgreSQL + PostGIS, Alembic, Google Earth Engine, Docker."
       ]
     },
     {
@@ -81,6 +88,7 @@
       "highlights": [
         "11 provider adapters: 5 API directos (Anthropic, OpenAI, Google, etc.) y 6 CLI-backed (Claude Code, Gemini CLI, Codex, Copilot, Qwen, OpenCode).",
         "Vault cifrado para credenciales, con scope por proyecto y fallback a `_global`.",
+        "Task-aware routing: elige el provider óptimo según el tipo de tarea (generation, refactor, summary, code), con override por proyecto.",
         "MCP tools que van más allá de generation: operaciones de vault, búsqueda semántica de código, estado compartido vía CRDT, inspección de uso.",
         "Observabilidad end-to-end: traces con OpenTelemetry, métricas con Prometheus y logging estructurado con pino.",
         "Stack: TypeScript, Hono, @modelcontextprotocol/sdk, better-sqlite3, OpenTelemetry, Prometheus, pino, Zod 4."
