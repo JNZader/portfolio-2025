@@ -69,7 +69,12 @@ function setText(
   ctx.doc.setFont('helvetica', fontStyle);
 }
 
-// Renders text and advances yPos by lineHeight per wrapped line
+// Renders text and advances yPos by lineHeight per wrapped line. The 3.5 mm
+// offset matches the convention used by every other doc.text call in this
+// module so wrapped text aligns vertically with the rest of the layout.
+// Without it, descriptions printed right after a project name would overlap
+// the project name (the visual baseline ends up only ~1.5 mm below the prior
+// text instead of the ~5 mm needed for 9.5 pt body type).
 function renderWrappedText(
   ctx: PDFContext,
   text: string,
@@ -80,7 +85,7 @@ function renderWrappedText(
   const lines = ctx.doc.splitTextToSize(text, maxWidth);
   for (const line of lines as string[]) {
     checkNewPage(ctx, lineHeight);
-    ctx.doc.text(line, x, ctx.yPos);
+    ctx.doc.text(line, x, ctx.yPos + 3.5);
     ctx.yPos += lineHeight;
   }
 }
