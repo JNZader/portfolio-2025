@@ -240,23 +240,26 @@ function renderSkillsTable(ctx: PDFContext, skills: ResumeData['skills']): void 
   const itemsX = MARGIN + categoryColWidth;
   const itemsWidth = CONTENT_WIDTH - categoryColWidth;
 
+  // Skills table uses a tighter type size (SIZES.bullet) and tighter row
+  // spacing than the rest of the body so eleven categories fit cleanly on
+  // one page without forcing a third page.
   for (const [category, items] of Object.entries(skills)) {
     if (items.length === 0) continue;
-    checkNewPage(ctx, 6);
-    setText(ctx, SIZES.body, COLORS.secondary, 'bold');
-    ctx.doc.text(`${category}:`, MARGIN, ctx.yPos + 3.2);
+    checkNewPage(ctx, 5);
+    setText(ctx, SIZES.bullet, COLORS.secondary, 'bold');
+    ctx.doc.text(`${category}:`, MARGIN, ctx.yPos + 3);
 
-    setText(ctx, SIZES.body, COLORS.text, 'normal');
+    setText(ctx, SIZES.bullet, COLORS.text, 'normal');
     const itemsText = items.join(', ');
     const lines = ctx.doc.splitTextToSize(itemsText, itemsWidth) as string[];
     for (let i = 0; i < lines.length; i++) {
-      if (i > 0) checkNewPage(ctx, 4);
-      ctx.doc.text(lines[i], itemsX, ctx.yPos + 3.2);
+      if (i > 0) checkNewPage(ctx, 3.5);
+      ctx.doc.text(lines[i], itemsX, ctx.yPos + 3);
       // Always advance yPos so that wrapped categories (Frontend, ML/AI,
       // Industrial/IoT) do not overlap with the next row.
-      ctx.yPos += 4;
+      ctx.yPos += 3.5;
     }
-    ctx.yPos += 0.6;
+    ctx.yPos += 0.3;
   }
 }
 
