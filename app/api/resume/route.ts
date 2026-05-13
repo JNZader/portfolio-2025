@@ -21,17 +21,17 @@ const COLORS = {
   lightGray: [110, 110, 110] as RGB, // dates, contact line, institution
 };
 
-// Font sizes (pt)
+// Font sizes (pt). Tuned to fit the full CV in two A4 pages.
 const SIZES = {
-  name: 24,
-  subtitle: 13,
-  contact: 9,
-  section: 14,
-  subsection: 11,
-  projectName: 10,
-  body: 9.5,
-  bullet: 9,
-  small: 8.5,
+  name: 22,
+  subtitle: 12,
+  contact: 8.5,
+  section: 13,
+  subsection: 10.5,
+  projectName: 9.5,
+  body: 9,
+  bullet: 8.5,
+  small: 8,
 };
 
 interface PDFContext {
@@ -130,33 +130,33 @@ function renderHeader(ctx: PDFContext, data: ResumeData): void {
 }
 
 function renderSectionHeader(ctx: PDFContext, title: string): void {
-  checkNewPage(ctx, 18);
-  ctx.yPos += 4; // top spacing before section
+  checkNewPage(ctx, 16);
+  ctx.yPos += 2; // top spacing before section
   setText(ctx, SIZES.section, COLORS.primary, 'bold');
   ctx.doc.text(title, MARGIN, ctx.yPos + 4);
-  ctx.yPos += 5.5;
+  ctx.yPos += 5;
   // Underline rule
   ctx.doc.setDrawColor(...COLORS.primary);
   ctx.doc.setLineWidth(0.3);
   ctx.doc.line(MARGIN, ctx.yPos, PAGE_WIDTH - MARGIN, ctx.yPos);
-  ctx.yPos += 4;
+  ctx.yPos += 2.5;
 }
 
 function renderSubsectionWithDate(ctx: PDFContext, title: string, dateText: string): void {
-  checkNewPage(ctx, 12);
+  checkNewPage(ctx, 10);
   setText(ctx, SIZES.subsection, COLORS.secondary, 'bold');
   ctx.doc.text(title, MARGIN, ctx.yPos + 3.5);
 
   setText(ctx, SIZES.small, COLORS.lightGray, 'normal', 'italic');
   ctx.doc.text(dateText, PAGE_WIDTH - MARGIN, ctx.yPos + 3.5, { align: 'right' });
 
-  ctx.yPos += 6;
+  ctx.yPos += 5;
 }
 
 function renderInstitutionLine(ctx: PDFContext, line: string): void {
   setText(ctx, SIZES.body, COLORS.lightGray, 'normal');
   ctx.doc.text(line, MARGIN, ctx.yPos + 3.5);
-  ctx.yPos += 5;
+  ctx.yPos += 4;
 }
 
 // Top-level bullets (•) at the leftmost column
@@ -166,15 +166,15 @@ function renderBullets(ctx: PDFContext, items: string[], indent = 0): void {
   const textX = bulletX + 3;
   const maxWidth = CONTENT_WIDTH - indent - 3;
   for (const item of items) {
-    checkNewPage(ctx, 6);
-    ctx.doc.text('•', bulletX, ctx.yPos + 3.5);
+    checkNewPage(ctx, 5);
+    ctx.doc.text('•', bulletX, ctx.yPos + 3.2);
     const lines = ctx.doc.splitTextToSize(item, maxWidth) as string[];
     for (let i = 0; i < lines.length; i++) {
-      if (i > 0) checkNewPage(ctx, 4.5);
-      ctx.doc.text(lines[i], textX, ctx.yPos + 3.5);
-      ctx.yPos += 4.5;
+      if (i > 0) checkNewPage(ctx, 4);
+      ctx.doc.text(lines[i], textX, ctx.yPos + 3.2);
+      ctx.yPos += 4;
     }
-    ctx.yPos += 0.5;
+    ctx.yPos += 0.3;
   }
 }
 
@@ -182,8 +182,8 @@ function renderBullets(ctx: PDFContext, items: string[], indent = 0): void {
 function renderSummary(ctx: PDFContext, summary: string): void {
   renderSectionHeader(ctx, 'Resumen Profesional');
   setText(ctx, SIZES.body, COLORS.text, 'normal');
-  renderWrappedText(ctx, summary, MARGIN, CONTENT_WIDTH, 4.8);
-  ctx.yPos += 1;
+  renderWrappedText(ctx, summary, MARGIN, CONTENT_WIDTH, 4.2);
+  ctx.yPos += 0.5;
 }
 
 // Render the experience section -- nests projects inside the single experience entry,
@@ -199,33 +199,33 @@ function renderExperienceWithProjects(
     const dateLine = `${job.startDate} – ${job.endDate}`;
     renderSubsectionWithDate(ctx, job.position, dateLine);
     renderInstitutionLine(ctx, `${job.company} · ${job.location}`);
-    ctx.yPos += 1;
+    ctx.yPos += 0.5;
 
     // Top-level highlights of the role
     if (job.highlights.length > 0) {
       renderBullets(ctx, job.highlights);
-      ctx.yPos += 2;
+      ctx.yPos += 0.8;
     }
   }
 
   // Projects rendered as second-level bullets after the role highlights
   for (const project of projects) {
-    checkNewPage(ctx, 18);
+    checkNewPage(ctx, 14);
     // Project name in bold + primary color. Use "•" (in the Helvetica WinAnsi
     // set) rather than "▪" because the latter renders as a tofu glyph in jsPDF.
     setText(ctx, SIZES.projectName, COLORS.primary, 'bold');
-    ctx.doc.text('•', MARGIN + 1, ctx.yPos + 3.5);
-    ctx.doc.text(project.name, MARGIN + 5, ctx.yPos + 3.5);
-    ctx.yPos += 5;
+    ctx.doc.text('•', MARGIN + 1, ctx.yPos + 3.3);
+    ctx.doc.text(project.name, MARGIN + 5, ctx.yPos + 3.3);
+    ctx.yPos += 4.2;
 
     // Description
     setText(ctx, SIZES.body, COLORS.text, 'normal');
-    renderWrappedText(ctx, project.description, MARGIN + 5, CONTENT_WIDTH - 5, 4.6);
-    ctx.yPos += 0.5;
+    renderWrappedText(ctx, project.description, MARGIN + 5, CONTENT_WIDTH - 5, 4);
+    ctx.yPos += 0.3;
 
     // Indented bullets
     renderBullets(ctx, project.highlights, 5);
-    ctx.yPos += 2;
+    ctx.yPos += 0.8;
   }
 }
 
@@ -239,22 +239,22 @@ function renderSkillsTable(ctx: PDFContext, skills: ResumeData['skills']): void 
 
   for (const [category, items] of Object.entries(skills)) {
     if (items.length === 0) continue;
-    checkNewPage(ctx, 8);
+    checkNewPage(ctx, 6);
     setText(ctx, SIZES.body, COLORS.secondary, 'bold');
-    ctx.doc.text(`${category}:`, MARGIN, ctx.yPos + 3.5);
+    ctx.doc.text(`${category}:`, MARGIN, ctx.yPos + 3.2);
 
     setText(ctx, SIZES.body, COLORS.text, 'normal');
     const itemsText = items.join(', ');
     const lines = ctx.doc.splitTextToSize(itemsText, itemsWidth) as string[];
     const startY = ctx.yPos;
     for (let i = 0; i < lines.length; i++) {
-      if (i > 0) checkNewPage(ctx, 4.5);
-      ctx.doc.text(lines[i], itemsX, ctx.yPos + 3.5);
-      if (i < lines.length - 1) ctx.yPos += 4.5;
+      if (i > 0) checkNewPage(ctx, 4);
+      ctx.doc.text(lines[i], itemsX, ctx.yPos + 3.2);
+      if (i < lines.length - 1) ctx.yPos += 4;
     }
     // Ensure row advances at least one line height
-    if (ctx.yPos === startY) ctx.yPos += 4.5;
-    ctx.yPos += 1.5;
+    if (ctx.yPos === startY) ctx.yPos += 4;
+    ctx.yPos += 0.6;
   }
 }
 
@@ -270,11 +270,11 @@ function renderEducation(ctx: PDFContext, education: ResumeData['education']): v
   renderSectionHeader(ctx, 'Educación y Certificaciones');
 
   for (const edu of education) {
-    checkNewPage(ctx, 12);
+    checkNewPage(ctx, 10);
 
     // Title bold primary
     setText(ctx, SIZES.body, COLORS.primary, 'bold');
-    ctx.doc.text(edu.degree, MARGIN, ctx.yPos + 3.5);
+    ctx.doc.text(edu.degree, MARGIN, ctx.yPos + 3.2);
 
     // Right-aligned date with institution prefix when no separate institution line follows
     const hasDetailsOrInstitution = !!edu.institution;
@@ -282,22 +282,22 @@ function renderEducation(ctx: PDFContext, education: ResumeData['education']): v
       ? `${edu.startDate} – ${edu.endDate}`
       : `${edu.institution}, ${edu.endDate}`;
     setText(ctx, SIZES.small, COLORS.lightGray, 'normal', 'italic');
-    ctx.doc.text(dateText, PAGE_WIDTH - MARGIN, ctx.yPos + 3.5, { align: 'right' });
+    ctx.doc.text(dateText, PAGE_WIDTH - MARGIN, ctx.yPos + 3.2, { align: 'right' });
 
-    ctx.yPos += 5;
+    ctx.yPos += 4;
 
     // Institution as a separate gray line
     if (edu.institution) {
       setText(ctx, SIZES.body, COLORS.lightGray, 'normal');
-      ctx.doc.text(edu.institution, MARGIN, ctx.yPos + 3.5);
-      ctx.yPos += 4.5;
+      ctx.doc.text(edu.institution, MARGIN, ctx.yPos + 3.2);
+      ctx.yPos += 3.8;
     }
 
     if (edu.details && edu.details.length > 0) {
       renderBullets(ctx, edu.details);
     }
 
-    ctx.yPos += 2;
+    ctx.yPos += 1;
   }
 }
 
@@ -306,13 +306,13 @@ function renderLanguages(ctx: PDFContext, languages: ResumeData['languages']): v
   renderSectionHeader(ctx, 'Idiomas');
 
   for (const lang of languages) {
-    checkNewPage(ctx, 6);
+    checkNewPage(ctx, 5);
     setText(ctx, SIZES.body, COLORS.secondary, 'bold');
-    ctx.doc.text(`${lang.name}:`, MARGIN, ctx.yPos + 3.5);
+    ctx.doc.text(`${lang.name}:`, MARGIN, ctx.yPos + 3.2);
 
     setText(ctx, SIZES.body, COLORS.text, 'normal');
-    ctx.doc.text(lang.level, MARGIN + 28, ctx.yPos + 3.5);
-    ctx.yPos += 4.8;
+    ctx.doc.text(lang.level, MARGIN + 28, ctx.yPos + 3.2);
+    ctx.yPos += 4;
   }
 }
 
