@@ -19,7 +19,7 @@ const ScrollIndicator = dynamic(
 export const metadata: Metadata = {
   title: 'Sobre mí',
   description:
-    'Conoce más sobre mi experiencia, habilidades y pasión por el desarrollo. Backend Java Developer con más de 20 años en tecnología.',
+    'Conoce más sobre mi experiencia, habilidades y los proyectos que construyo. Software developer trabajando en backend, frontend, edge ML y AI tooling.',
 };
 
 export default function SobreMiPage() {
@@ -44,7 +44,7 @@ export default function SobreMiPage() {
               </div>
               <SectionTitle size="xl">Sobre mí</SectionTitle>
               <SectionDescription size="lg" className="mx-auto">
-                Desarrollador apasionado por crear soluciones tecnológicas robustas y escalables
+                Construyo plataformas end-to-end — del backend al edge, del ML al frontend
               </SectionDescription>
             </SectionHeader>
           </RevealOnScroll>
@@ -66,19 +66,18 @@ export default function SobreMiPage() {
                 <h2 className="text-2xl font-bold mb-4">Mi Historia</h2>
                 <div className="space-y-4 text-muted-foreground">
                   <p>
-                    Técnico en Desarrollo de Software y Backend Java Developer con más de 20 años de
-                    experiencia en tecnología. Combino expertise técnico con gestión empresarial,
-                    enfocándome en construir soluciones robustas que resuelven desafíos reales de
-                    negocio.
+                    Hola, soy Javier. Software developer en Córdoba, Argentina. Vengo de una mezcla
+                    rara: 20+ años en tecnología y 11 años como productor agropecuario, así que mi
+                    forma de pensar problemas combina rigor técnico con la realidad de operar
+                    negocios y lidiar con la complejidad del campo.
                   </p>
                   <p>
-                    Con más de 20 años en tecnología y 11 años como productor agropecuario, he
-                    desarrollado una perspectiva única que combina conocimiento técnico profundo con
-                    experiencia en gestión empresarial.
-                  </p>
-                  <p>
-                    Mi enfoque está en construir soluciones escalables y mantenibles utilizando
-                    arquitecturas modernas y mejores prácticas.
+                    Hoy construyo plataformas end-to-end. En el último año pasé de hacer librerías
+                    Java básicas a diseñar plataformas multi-aplicación con backend en Go/Rust,
+                    frontend en React, ML pipelines con inferencia en el edge, y herramientas para
+                    developers alrededor de generación de código y agentes de AI. Cada proyecto me
+                    empuja a stacks nuevos y me obliga a entender por qué cada decisión técnica
+                    importa para el problema que estoy resolviendo.
                   </p>
                 </div>
               </div>
@@ -86,16 +85,21 @@ export default function SobreMiPage() {
               <div>
                 <h2 className="text-2xl font-bold mb-4">Mi Enfoque</h2>
                 <div className="space-y-4 text-muted-foreground">
-                  <p>
-                    Creo firmemente en la importancia de escribir código limpio, mantenible y bien
-                    documentado. Mi proceso de desarrollo siempre incluye:
-                  </p>
+                  <p>Tres principios que aplico:</p>
                   <ul className="list-disc list-inside space-y-2 ml-4">
-                    <li>Análisis detallado de requisitos y planificación estratégica</li>
-                    <li>Diseño de arquitecturas escalables y modulares</li>
-                    <li>Implementación con las mejores prácticas y estándares de la industria</li>
-                    <li>Testing exhaustivo para garantizar calidad y confiabilidad</li>
-                    <li>Optimización continua de rendimiento y experiencia de usuario</li>
+                    <li>
+                      <strong>Conceptos antes que código.</strong> No toco una línea hasta entender
+                      qué problema estoy resolviendo y por qué la decisión de hoy importa para el
+                      sistema de mañana.
+                    </li>
+                    <li>
+                      <strong>Honestidad sobre tradeoffs.</strong> Cada decisión técnica tiene una
+                      contrapartida. Mi job es elegir conscientemente y poder explicar el porqué.
+                    </li>
+                    <li>
+                      <strong>Iterar sobre uso real.</strong> Lo que no se usa no se aprende.
+                      Prefiero algo chico funcionando temprano que algo grande funcionando tarde.
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -104,12 +108,37 @@ export default function SobreMiPage() {
                 <h2 className="text-2xl font-bold mb-4">Áreas de Expertise</h2>
                 <div className="space-y-4 text-muted-foreground">
                   <ul className="list-disc list-inside space-y-2 ml-4">
-                    <li>Desarrollo Full-stack con frameworks modernos</li>
-                    <li>Arquitectura de APIs REST con Spring Boot</li>
-                    <li>Optimización de PostgreSQL y diseño de bases de datos</li>
-                    <li>Implementación de modelos de Machine Learning</li>
-                    <li>Patrones de arquitectura (Atomic Design, SOLID)</li>
-                    <li>Liderazgo técnico combinando expertise técnico y de negocio</li>
+                    <li>
+                      Plataformas multi-aplicación end-to-end (backend + frontend + edge + ML)
+                    </li>
+                    <li>
+                      Backend en Java/Spring Boot, Go (Gin), Rust (Axum/Tokio), Python (FastAPI)
+                    </li>
+                    <li>
+                      Generación de código contract-first sobre SQL y OpenAPI (multi-target, IR,
+                      templates)
+                    </li>
+                    <li>
+                      Edge computing industrial: Modbus TCP/RTU, MQTT, ML inference local con ONNX,
+                      OTA con firma
+                    </li>
+                    <li>
+                      ML production-grade: training Python (scikit-learn) → inferencia Rust con
+                      parity tests, drift monitoring, SHAP
+                    </li>
+                    <li>
+                      AI tooling: servidores MCP, sistemas multi-agente, SAST/SCA (Semgrep, Trivy,
+                      Gitleaks)
+                    </li>
+                    <li>
+                      Frontend moderno: React 19, Next.js, Vite, Mantine, Zustand, Zod, React Flow
+                    </li>
+                    <li>
+                      DevOps: Docker, Terraform, GitLab CI, GitHub Actions, monorepo orchestration
+                    </li>
+                    <li>
+                      Spec-Driven Development con OpenSpec, conventional commits, semantic-release
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -148,10 +177,21 @@ export default function SobreMiPage() {
                   </div>
 
                   <div className="relative pl-8">
+                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-purple-500/10 border-2 border-purple-500 flex items-center justify-center">
+                      <BookOpen className="w-3 h-3 text-purple-500" />
+                    </div>
+                    <h4 className="font-semibold text-sm">
+                      ONE Tech Foundation G8 — Data Science, ETL y ML
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-1">Alura LATAM</p>
+                    <p className="text-xs text-muted-foreground">2024 - 2025</p>
+                  </div>
+
+                  <div className="relative pl-8">
                     <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-orange-500/10 border-2 border-orange-500 flex items-center justify-center">
                       <Code2 className="w-3 h-3 text-orange-500" />
                     </div>
-                    <h4 className="font-semibold text-sm">Java Oriented Object Development</h4>
+                    <h4 className="font-semibold text-sm">Java y Spring Boot G6 — ONE</h4>
                     <p className="text-xs text-muted-foreground mt-1">Alura LATAM</p>
                     <p className="text-xs text-muted-foreground">2024</p>
                   </div>

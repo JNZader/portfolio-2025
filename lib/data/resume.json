@@ -1,7 +1,7 @@
 {
   "personalInfo": {
     "name": "Javier Norberto Zader",
-    "title": "Técnico en Desarrollo de Software · Backend Java Developer",
+    "title": "Software Developer",
     "email_encoded": "am56YWRlckBnbWFpbC5jb20=",
     "phone": "",
     "location": "Córdoba, Argentina",
@@ -9,110 +9,87 @@
     "linkedin": "https://linkedin.com/in/jnzader",
     "github": "https://github.com/jnzader"
   },
-  "summary": "Técnico en Desarrollo de Software especializado en backend Java (Spring Boot), con experiencia en el desarrollo de APIs REST, aplicaciones móviles (Java/XML para Android) y soluciones de ciencia de datos y machine learning. Formado en ETL, modelado de datos, estadística aplicada y ML (Alura ONE), con proyectos que resolvieron problemas de negocio y salud. Certificado en redes (CCNA). Orientado a resultados, aplico buenas prácticas de arquitectura, pruebas y metodologías ágiles para crear software escalable y eficiente.",
+  "summary": "Software developer que construye sistemas completos a través del stack. Backend en Java/Spring, Go y Rust; frontend en React/Next.js/TypeScript; pipelines de ML en Python con inference en el edge vía ONNX; y herramientas para developers alrededor de code generation, agentes de AI y desarrollo guiado por especificaciones (SDD). Cómodo tomando proyectos end-to-end, desde protocolos industriales (Modbus, MQTT) hasta arquitectura de plataforma multi-lenguaje. Trabajos recientes: una plataforma de generación de código multi-lenguaje (APiGen), un diseñador visual de microservicios (Studio), y una plataforma industrial de monitoreo con edge ML (Biogas).",
   "experience": [
     {
-      "company": "Proyectos Personales & Freelance",
-      "position": "Desarrollador Backend y Ciencia de Datos",
+      "company": "Proyectos personales y freelance",
+      "position": "Software Developer · Full-stack y plataformas",
       "location": "Córdoba, Argentina",
       "startDate": "2024",
       "endDate": "Presente",
-      "highlights": []
+      "highlights": [
+        "Diseño y construcción end-to-end de plataformas con backends multi-lenguaje (Java/Spring 4, Go/Gin, Rust/Axum), frontends en React 19/Next.js y pipelines de ML con ONNX para inferencia en el edge.",
+        "Arquitectura modular tipo monorepo: 22 módulos en APiGen (4 libs + 4 generadores + 13 feature packs + capa MCP), 5 apps coordinadas en Biogas (backend, edge-gateway en Rust, ML service, frontend, mobile).",
+        "Generación de código contract-first sobre SQL y OpenAPI, con override de plantillas, validación previa a la generación y CLI/server/IDE plugin/MCP server consumiendo un único engine.",
+        "Edge industrial en Rust: Modbus TCP/RTU para PLCs, SQLite offline-first con cola de sincronización, ONNX inference local (<50ms), LLM on-device, OTA con firma ed25519, dashboard PWA embebido.",
+        "Arquitectura ML en 3 capas (predictiva, anomaly detection, edge inference) con SHAP para explicabilidad, parity tests entre Python y Rust, versionado de modelos en object storage S3-compatible.",
+        "Tooling de AI: servidores MCP, sistemas multi-agente para code review, integración con Semgrep/Trivy/Gitleaks/PMD, CLIs en Python y Rust con foco en developer experience.",
+        "Workflow disciplinado: Spec-Driven Development con OpenSpec, conventional commits, semantic-release, lint plugins custom para forzar single-source-of-truth, Playwright (e2e + CT) y JMH benchmarks como gates de CI."
+      ]
     }
   ],
   "projects": [
     {
-      "name": "FiveStock -- Sistema de Gestión de Inventarios",
-      "description": "Plataforma web para PyMEs que centraliza gestión de productos, categorías, marcas y personal.",
+      "name": "APiGen — Plataforma de generación de código multi-lenguaje",
+      "description": "Plataforma contract-first que convierte un schema SQL o un contrato OpenAPI en un servicio backend listo para producción. 12 lenguajes target, 15+ bases de datos, 3 stacks cloud.",
       "highlights": [
-        "Autenticación con roles y permisos, Kardex de inventario, y reportes PDF de stock.",
-        "Implementación de temas (claro/oscuro) y formularios con validación.",
-        "Stack: React 19, Vite, Supabase (PostgreSQL), TanStack Query, Zustand, Styled Components."
+        "Pipeline desacoplado parsing → IR → templates: agregar Kotlin no toca el parser; agregar GraphQL no toca el codegen.",
+        "22 módulos (4 libs, 4 generators, 13 feature packs opt-in, 1 MCP). Cada feature pack versiona independiente.",
+        "Una sola engine expuesta por CLI, HTTP server, IDE plugin y MCP server — sin duplicación.",
+        "Stack: Java 25, Spring Boot 4, Gradle, Docker, Kubernetes, Terraform, OpenAPI, GraphQL, gRPC, JMH benchmarks, contract testing."
       ]
     },
     {
-      "name": "ApiGen -- Generador de APIs REST Genéricas",
-      "description": "Plantilla reusable para acelerar en un 40% la creación de servicios CRUD con arquitectura robusta.",
+      "name": "APiGen Studio — Diseñador visual de microservicios",
+      "description": "Editor visual de APIs y arquitecturas de microservicios. Modela entidades, conexiones service-to-service, gateway routes y event/message flows; exporta el proyecto multi-servicio para alimentar APiGen.",
       "highlights": [
-        "Incluye auditoría con Hibernate Envers, validación de datos, mapeo DTO automático y paginación nativa.",
-        "Manejo centralizado de excepciones y controladores genéricos.",
-        "Stack: Java 21, Spring Boot 3.2.3, JPA, MySQL, Maven, Lombok."
+        "Microservices Designer más allá del modelado de entidades: services + connections + gateway routes + event/message designer + multi-service export.",
+        "Auto-layout con ELK para grafos con relaciones, fallback a grid; el layout es lógica del producto, no decoración.",
+        "Client-heavy con autosave en IndexedDB, historial de snapshots y safety snapshots pre-import.",
+        "Stack: React 19, TypeScript 5.9, Vite 7, Mantine 8, Zustand, Zod, React Flow, ELK, Playwright (e2e + Component Testing), Vitest."
       ]
     },
     {
-      "name": "TelecomX -- Análisis de Evasión de Clientes (EDA)",
-      "description": "Análisis exploratorio para identificar factores de churn y preparar dataset modelable.",
+      "name": "Biogas Platform — Plataforma industrial de monitoreo",
+      "description": "Plataforma integral para plantas de biogás. Reemplaza la gestión manual basada en Excel con ingesta en tiempo real, AI en 3 capas (predictiva, anomaly detection, edge inference) y workflows operativos multi-rol.",
       "highlights": [
-        "Extracción JSON, normalización y limpieza; visualizaciones para contrato, antigüedad, cargos y fibra óptica.",
-        "Hallazgos: contratos mes a mes y mayor cargo mensual correlacionan fuertemente con churn.",
-        "Stack: Python, Pandas, Matplotlib, Seaborn, Jupyter."
+        "Edge gateway en Rust como nodo industrial autónomo: Modbus TCP/RTU a PLCs, SQLite local con cola de sincronización, ONNX inference <50ms, LLM on-device con llama.cpp, OTA con firma ed25519, dashboard PWA embebido (74 archivos Rust, v2.1.0).",
+        "Pipeline ML production-grade: training en Python (scikit-learn) → export ONNX → inferencia en Rust con parity tests bit-identical. SHAP para explicabilidad, drift monitoring con PSI.",
+        "Monorepo de 5 apps coordinadas (Go backend, Rust edge-gateway, Python ML service, React/Vite frontend, mobile Ionic+Capacitor); OpenSpec/SDD desde día 1; plugin Biome custom para enforce SSOT.",
+        "Stack: Go + GORM + Gin, PostgreSQL, Redis, Mosquitto MQTT, Rust + Tokio + Axum, ONNX Runtime, Python + scikit-learn, React 19, Vite, Mantine, GitLab CI/CD, Caddy."
       ]
     },
     {
-      "name": "TelecomX -- Predicción de Churn (ML)",
-      "description": "Modelado supervisado para anticipar cancelaciones y priorizar retención.",
+      "name": "ghagga — AI multi-agent code review",
+      "description": "Producto de code review impulsado por AI con varias formas de distribución (SaaS, GitHub Action y CLI). Combina 12+ herramientas de static analysis con health scoring y export SARIF.",
       "highlights": [
-        "Entrené Random Forest, Logistic Regression, SVM, KNN y Decision Tree con One-Hot Encoding, normalización y SMOTE.",
-        "Mejor modelo: Random Forest con F1-Score 84.55% y AUC-ROC 92.15%; recomendaciones de negocio para reducir churn.",
-        "Stack: Scikit-learn, Pandas, NumPy, imbalanced-learn."
+        "Sistema multi-agente: distintos agentes especializados (security, quality, performance) revisan en paralelo y se sintetizan en un informe único.",
+        "Integraciones con Semgrep, Trivy, Gitleaks, PMD, Biome, Ruff y más; export SARIF para integrarse con SecOps/SAST pipelines.",
+        "GitHub App + CLI + dashboard SaaS: la misma engine atendiendo tres canales de distribución.",
+        "Stack: TypeScript, GitHub App, Semgrep, Trivy, multi-agent orchestration."
       ]
     },
     {
-      "name": "ForoHub -- API REST de Foro de Discusión",
-      "description": "Backend seguro con CRUD de tópicos y gestión de usuarios.",
+      "name": "Consorcio Canalero — Sistema de gestión hídrica",
+      "description": "Plataforma para el Consorcio Canalero 10 de Mayo (Bell Ville). Monitoreo satelital de canales, reportes ciudadanos y gestión administrativa.",
       "highlights": [
-        "Spring Security + JWT para autenticación/autorización; migraciones con Flyway.",
-        "Arquitectura en capas (entity, repository, service, controller, config) y pruebas básicas.",
-        "Stack: Java 21, Spring Boot 3.3.x, Spring Data JPA, MySQL, Lombok, Maven."
+        "Integración con Google Earth Engine para monitoreo satelital + MapLibre para visualización geoespacial en el frontend.",
+        "Backend Python (FastAPI) con persistencia en Supabase; frontend React + Mantine; generación de reportes PDF.",
+        "Screaming Architecture aplicada para mantener el dominio (gestión hídrica) explícito en la estructura del código.",
+        "Stack: React, TypeScript, Mantine, MapLibre, Python, FastAPI, Supabase, Google Earth Engine, Docker."
       ]
     },
     {
-      "name": "Predictor de Diabetes (TP14)",
-      "description": "Aplicación de escritorio para diagnóstico temprano mediante regresión logística.",
+      "name": "mcp-llm-bridge — Servidor MCP para enrutar LLMs",
+      "description": "Servidor Model Context Protocol que rutea las llamadas LLM a través de suscripciones CLI existentes (Claude, Gemini, Codex, Copilot) — sin necesidad de tokens de API.",
       "highlights": [
-        "Procesa 8 indicadores clínicos y muestra resultados en tiempo real con probabilidad porcentual.",
-        "Interfaz gráfica con Tkinter y manejo de validaciones.",
-        "Stack: Python, Pandas, NumPy, Scikit-learn, Tkinter."
-      ]
-    },
-    {
-      "name": "Sistema de Gestión Nutricional (colaborativo)",
-      "description": "Aplicación de escritorio para administración de pacientes, planes y dietas personalizadas.",
-      "highlights": [
-        "Base de datos normalizada con relaciones complejas.",
-        "Interfaz desarrollada en Swing con trabajo ágil en equipo.",
-        "Stack: Java, Swing, MySQL."
+        "Multi-provider con fallback chains configurables; dashboard de uso y observabilidad con OpenTelemetry.",
+        "Persistencia local en SQLite con encriptación de credenciales.",
+        "Stack: TypeScript, Hono, MCP, SQLite, OpenTelemetry, multi-provider routing."
       ]
     }
   ],
   "education": [
-    {
-      "institution": "Alura Latam",
-      "degree": "ONE Tech Foundation G8 -- Data Science, ETL y ML",
-      "location": "Online",
-      "startDate": "2024",
-      "endDate": "2025",
-      "details": [
-        "Estadísticas y Machine Learning (68h)",
-        "Aprendiendo a hacer ETL con Pandas/NumPy y visualización (61h)",
-        "Modelado de datos con Python (40h)",
-        "Principiante en Programación (70h)",
-        "Emprendimiento, Agilidad y Desarrollo Personal"
-      ]
-    },
-    {
-      "institution": "Alura Latam",
-      "degree": "Java y Spring Boot G6 -- ONE",
-      "location": "Online",
-      "startDate": "2024",
-      "endDate": "2024",
-      "details": [
-        "Java y Spring Boot G6 (104h): Spring Boot 3 (API REST, seguridad, documentación), JPA/Hibernate, Streams/Lambdas.",
-        "Java Orientado a Objetos (45h) y Java Web con Spring (34h).",
-        "Principiante en Programación (58h), Desarrollo Personal y Agilidad (70h+).",
-        "Data/SQL (36h): SQL con MySQL (DML, Procedures)."
-      ]
-    },
     {
       "institution": "Universidad Gastón Dachary",
       "degree": "Técnico en Desarrollo de Software",
@@ -120,6 +97,32 @@
       "startDate": "2023-12",
       "endDate": "2025-07",
       "details": []
+    },
+    {
+      "institution": "Alura Latam",
+      "degree": "ONE Tech Foundation G8 — Data Science, ETL y ML",
+      "location": "Online",
+      "startDate": "2024",
+      "endDate": "2025",
+      "details": [
+        "Estadísticas y Machine Learning (68h)",
+        "ETL con Pandas/NumPy y visualización (61h)",
+        "Modelado de datos con Python (40h)",
+        "Principiante en Programación (70h)",
+        "Emprendimiento, Agilidad y Desarrollo Personal"
+      ]
+    },
+    {
+      "institution": "Alura Latam",
+      "degree": "Java y Spring Boot G6 — ONE",
+      "location": "Online",
+      "startDate": "2024",
+      "endDate": "2024",
+      "details": [
+        "Java y Spring Boot G6 (104h): API REST con Spring Boot 3, seguridad, documentación, JPA/Hibernate, Streams/Lambdas.",
+        "Java Orientado a Objetos (45h) y Java Web con Spring (34h).",
+        "SQL con MySQL (DML, Procedures) (36h)."
+      ]
     },
     {
       "institution": "Argentina Programa",
@@ -139,19 +142,85 @@
     }
   ],
   "skills": {
-    "Lenguajes": ["Java", "Python", "JavaScript", "SQL", "TypeScript", "XML"],
-    "Frameworks": ["Spring Boot", "Hibernate", "React", "React Native"],
-    "Bases de Datos": ["PostgreSQL", "MySQL", "SQLite", "MariaDB"],
-    "Data/ML": ["Pandas", "NumPy", "Matplotlib", "Scikit-learn"],
-    "Testing": ["JUnit", "Mockito"],
-    "DevOps": ["Git", "GitHub", "GitHub Actions"],
-    "Herramientas": ["IntelliJ", "Eclipse", "NetBeans", "Android Studio"],
-    "Metodologías": ["Scrum", "SOLID", "POO", "UML"]
+    "Lenguajes": ["Java", "Go", "Rust", "Python", "TypeScript", "JavaScript", "Kotlin", "SQL"],
+    "Backend": ["Spring Boot 4", "Gin (Go)", "FastAPI", "Axum (Rust)", "Hono", "Tokio", "Node.js"],
+    "Frontend": [
+      "React 19",
+      "Next.js",
+      "Vite",
+      "Mantine",
+      "Tailwind CSS",
+      "Zustand",
+      "Zod",
+      "React Flow",
+      "ELK",
+      "Ionic + Capacitor"
+    ],
+    "Bases de Datos": [
+      "PostgreSQL",
+      "MySQL",
+      "Redis",
+      "MongoDB",
+      "SQLite",
+      "MariaDB",
+      "Supabase",
+      "IndexedDB"
+    ],
+    "ML / AI / Agents": [
+      "scikit-learn",
+      "ONNX Runtime",
+      "llama.cpp",
+      "SHAP",
+      "LiteLLM",
+      "MCP (Model Context Protocol)",
+      "Multi-agent systems",
+      "Pandas",
+      "NumPy"
+    ],
+    "Industrial / IoT / Edge": [
+      "Modbus TCP/RTU",
+      "MQTT (Mosquitto)",
+      "Edge computing",
+      "OTA (firma ed25519)",
+      "Prometheus",
+      "NATS"
+    ],
+    "GIS / Geo": ["Google Earth Engine", "MapLibre", "PDF generation"],
+    "DevOps / Cloud": [
+      "Docker",
+      "Terraform",
+      "GitLab CI",
+      "GitHub Actions",
+      "Vercel",
+      "Cloudflare Pages",
+      "Caddy"
+    ],
+    "Testing / Quality": [
+      "Playwright (e2e + Component Testing)",
+      "Vitest",
+      "JUnit",
+      "Mockito",
+      "Pytest",
+      "JMH",
+      "SonarQube",
+      "Biome",
+      "ESLint"
+    ],
+    "APIs / Spec": [
+      "OpenAPI",
+      "GraphQL",
+      "gRPC",
+      "OpenSpec / SDD",
+      "Conventional Commits",
+      "Semantic Release"
+    ],
+    "Herramientas": ["Git", "Linux", "Prisma", "IntelliJ", "VS Code", "Android Studio"]
   },
   "softSkills": [
     "Trabajo en equipo y comunicación efectiva.",
-    "Liderazgo de proyectos y gestión de tiempos.",
-    "Adaptabilidad y aprendizaje continuo."
+    "Liderazgo técnico y arquitectura de decisiones.",
+    "Aprendizaje continuo y adaptabilidad a stacks nuevos.",
+    "Honestidad sobre tradeoffs y disposición a iterar."
   ],
   "languages": [
     { "name": "Español", "level": "Nativo" },
