@@ -146,12 +146,18 @@ const LOCAL_PROJECTS: SanityProject[] = [
       bullet(
         '15+ databases supported — PostgreSQL, MySQL, MariaDB, Oracle, SQL Server, SQLite, MongoDB, Cassandra, Redis, and more.'
       ),
+      bullet('REST, GraphQL and gRPC from the same model — no logic duplication across protocols.'),
       bullet(
-        '100+ enterprise features across modules — auth, soft delete, multi-tenancy, audit logs, GDPR/SOC2/PCI compliance reports.'
+        'Enterprise features built in by default: soft delete, multi-tenancy, Hibernate Envers auditing, optimistic locking, GDPR/SOC2/PCI compliance reports — 100+ across modules.'
+      ),
+      bullet(
+        'Multi-level cache out of the box: Caffeine (in-process) + Redis (distributed), with cache-aside policies generated per entity.'
       ),
       bullet('3 cloud target stacks — AWS, GCP, Azure, with Terraform output.'),
       bullet('60% line / 50% branch coverage minimum, gated in CI.'),
-      bullet('Contract tests on the core library + JMH microbenchmarks on the generation engine.'),
+      bullet(
+        'Contract tests (Spring Cloud Contract) on the core library + JMH microbenchmarks on the generation engine.'
+      ),
       block("What I'd Reconsider", 'h2'),
       block(
         'Growing breadth-first. APiGen scaled outward fast — 12 languages, 15 databases, 13 feature packs — while Java/Spring is the only target where I have full operational confidence. The platform looks comprehensive on paper, but a user landing on Elixir or Clojure gets a less mature path than a user landing on Java.'
@@ -167,6 +173,9 @@ const LOCAL_PROJECTS: SanityProject[] = [
         'features/ — 13 opt-in packs (graphql, grpc, gateway, chaos, recommendation, analytics, bff, notifications, search, observability, and more).'
       ),
       bullet('mcp/ — Java + Python MCP servers exposing the engine to AI assistants.'),
+      bullet(
+        'Container variants: standard Dockerfile + Dockerfile.native for GraalVM native-image compilation when startup time and memory footprint matter.'
+      ),
       block(
         'The build graph stays clean because the contract is enforced by the shared BOM plus separation of API and implementation modules. No cycles, no shared mutable state across modules.'
       ),
@@ -270,6 +279,9 @@ const LOCAL_PROJECTS: SanityProject[] = [
         'Auto-layout with ELK (layered when relations exist) and grid fallback. Same logic applied to service-to-service maps.'
       ),
       bullet('IndexedDB autosave, retained snapshot history, version recovery flows.'),
+      bullet(
+        'Multi-format export — ZIP of a ready-to-run Spring Boot project, JSON model, SQL DDL, and PNG/SVG canvas diagrams. Multi-service export bundles individual services or one combined archive.'
+      ),
       bullet(
         'Keyboard-first editing with full shortcut coverage. WCAG 2.1 AA accessibility for non-canvas surfaces.'
       ),
@@ -433,7 +445,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
         'Anomaly detection layer — 32 engineered features (temporal, change, z-score, co-variation, data quality, biogas-domain) fed into ensemble voting with dynamic per-sensor thresholds. SHAP attributions explain why a reading was flagged.'
       ),
       bullet(
-        'Predictive AI layer — LSTM + Random Forest models predicting biogas production 7 days ahead and equipment failures 4-24 hours in advance, plus optimization recommendations for operating parameters.'
+        'Predictive AI layer — LSTM + Prophet for biogas/energy forecasting, Random Forest + XGBoost for equipment failure prediction 4-24 hours in advance, plus optimization recommendations for operating parameters. Continuous learning with automated retraining; PSI-based drift detection monitors model degradation in production.'
       ),
       block(
         'Each layer is independent: edge keeps working if the cloud is offline; anomaly detection works without the predictive layer; the predictive layer can be retrained without touching the edge runtime. The separation is what makes the system operable, not just impressive.'
@@ -459,7 +471,10 @@ const LOCAL_PROJECTS: SanityProject[] = [
         'Autonomous edge gateway in Rust (v2.1.0) — Modbus TCP/RTU to PLCs, offline-first SQLite with sync queue, sub-50ms ONNX anomaly inference, on-device LLM with AI agents, OTA model updates with ed25519 signature verification, embedded dashboard PWA.'
       ),
       bullet(
-        'Three-layer AI: edge anomaly detection, cloud anomaly analysis with SHAP explainability, predictive layer with 7-day biogas forecasts and 4-24h failure predictions.'
+        'Three-layer AI: edge anomaly detection (Isolation Forest + Autoencoder), cloud anomaly analysis with SHAP explainability, predictive layer with LSTM + Prophet forecasts and Random Forest + XGBoost failure predictions 4-24h ahead.'
+      ),
+      bullet(
+        'Predictive maintenance based on real equipment condition replaces reactive or calendar-based maintenance, reducing unplanned downtime.'
       ),
       bullet(
         'Role-aware UI for operators, technical staff, supervisors, and owners — distinct views and permissions, not toggles on a single dashboard.'
