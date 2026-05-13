@@ -10,7 +10,7 @@ type RGB = [number, number, number];
 // Page geometry (A4 in mm)
 const PAGE_WIDTH = 210;
 const PAGE_HEIGHT = 297;
-const MARGIN = 12; // ~0.47 inch -- tighter margins, equal on both sides
+const MARGIN = 10; // ~0.39 inch -- tighter margins, equal on both sides
 const CONTENT_WIDTH = PAGE_WIDTH - 2 * MARGIN;
 
 // Colors mirrored from the LaTeX template
@@ -233,7 +233,10 @@ function renderExperienceWithProjects(
 function renderSkillsTable(ctx: PDFContext, skills: ResumeData['skills']): void {
   renderSectionHeader(ctx, 'Habilidades Técnicas');
 
-  const categoryColWidth = CONTENT_WIDTH * 0.28;
+  // Narrower category column (24% instead of 28%) so the items list starts
+  // further left and has more horizontal room before wrapping. The widest
+  // category label ("Industrial / IoT / Edge:") still fits at this ratio.
+  const categoryColWidth = CONTENT_WIDTH * 0.24;
   const itemsX = MARGIN + categoryColWidth;
   const itemsWidth = CONTENT_WIDTH - categoryColWidth;
 
