@@ -28,8 +28,9 @@
   "projects": [
     {
       "name": "APiGen — Plataforma de generación de código",
-      "description": "Plataforma que toma un schema SQL o un contrato OpenAPI y genera el código de un servicio backend. Soporta varios lenguajes target.",
+      "description": "Cada nuevo backend repite las mismas estructuras (entidad, repo, service, controller, DTOs, security, observability) con variaciones inconsistentes entre equipos. APiGen toma un schema SQL o un contrato OpenAPI y genera un servicio backend listo para producción con features enterprise por default, expuesto vía CLI, HTTP, IDE plugin o MCP.",
       "highlights": [
+        "Estado: side project propio. Repo público con la idea original (Dec 2024); la versión actual es una plataforma privada multi-lenguaje.",
         "Pipeline desacoplado: el parser y los templates no se conocen entre sí, lo que permite agregar lenguajes nuevos sin romper lo que ya funciona.",
         "22 Gradle modules organizados en librerías, generadores y feature packs opcionales. El mismo engine se usa desde CLI, servidor HTTP, plugin de IDE o servidor MCP.",
         "Multi-protocolo: el mismo modelo expone REST + GraphQL + gRPC sin reescribir lógica de negocio.",
@@ -39,8 +40,9 @@
     },
     {
       "name": "APiGen Studio — Editor visual de microservicios",
-      "description": "Editor en el browser para diseñar visualmente APIs y arquitecturas de microservicios. Modela entidades, conexiones entre servicios y exporta el proyecto para alimentar APiGen.",
+      "description": "Las arquitecturas de microservicios típicamente se diseñan en diagramas sueltos que después no se traducen directamente en código. Studio permite modelar visualmente entidades, conexiones entre servicios, gateway routes y flujos de eventos en el browser, y exportar el proyecto multi-servicio para alimentar APiGen.",
       "highlights": [
+        "Estado: side project propio. Demo pública en apigen-web.vercel.app.",
         "No es solo modelado de entidades: diseña arquitecturas de microservicios completas (services, conexiones, gateway routes, flujos de eventos).",
         "Cuando los nodos tienen relaciones entre sí, la librería ELK los acomoda automáticamente para minimizar cruces de líneas; cuando son nodos sueltos, caen en una grilla regular.",
         "Export multiformato: ZIP de proyecto Spring Boot listo para correr, JSON del modelo, SQL DDL, y diagrama PNG/SVG del canvas.",
@@ -50,8 +52,9 @@
     },
     {
       "name": "Biogas Platform — Plataforma industrial de monitoreo",
-      "description": "Plataforma para plantas de biogás. Reemplaza la gestión manual con planillas Excel: ingesta de datos en tiempo real, monitoreo, detección de anomalías y predicciones de mantenimiento.",
+      "description": "Las plantas de biogás dependen de planillas Excel y mantenimiento reactivo, sin visibilidad en tiempo real del estado de los equipos. La plataforma centraliza ingesta de datos desde sensores, monitoreo en tiempo real, detección de anomalías y predicciones de mantenimiento.",
       "highlights": [
+        "Estado: side project propio con dominio validado por un ingeniero ambiental que conoce el día a día de las plantas de biogás.",
         "Edge gateway en Rust como nodo industrial autónomo: lee PLCs por Modbus TCP/RTU, almacena local en SQLite, hace inferencia ONNX (<50ms), funciona offline.",
         "Modelos específicos por tarea: edge (Isolation Forest + Autoencoder para anomalías), cloud (LSTM + Prophet para forecasting de biogás/energía, Random Forest + XGBoost para predicción de fallos 4-24h adelante). SHAP para explicabilidad de cada predicción.",
         "Pipeline ML production-grade: training en Python con scikit-learn, export a ONNX, deploy en Rust con tests de paridad bit-identical. Continuous learning con retraining automático y drift detection (PSI) que monitorea degradación de modelos en producción.",
@@ -62,8 +65,9 @@
     },
     {
       "name": "ghagga — Code review con AI multi-agente",
-      "description": "Sistema de code review impulsado por AI distribuido como SaaS, GitHub Action y CLI. Combina varios agentes especializados con herramientas de análisis estático para producir un informe único por pull request.",
+      "description": "Los code reviews manuales no escalan: dependen del tiempo, foco y experiencia del reviewer. ghagga combina agentes especializados de AI con herramientas de análisis estático para producir un informe único por pull request, disponible como SaaS, GitHub Action y CLI.",
       "highlights": [
+        "Estado: producto en desarrollo. SaaS, GitHub App y CLI distribuidos desde el mismo monorepo.",
         "Distintos agentes especializados (security, quality, performance) revisan en paralelo y se sintetizan en un informe único.",
         "12+ herramientas de análisis estático integradas (Semgrep, Trivy, Gitleaks, PMD, Biome, Ruff, etc.) con export SARIF para integrar con pipelines SecOps/SAST existentes.",
         "Health score por PR como métrica unificada que combina los hallazgos de los agentes y de los analizadores estáticos.",
@@ -73,8 +77,9 @@
     },
     {
       "name": "Consorcio Canalero — Sistema de gestión",
-      "description": "Plataforma para el Consorcio Canalero 10 de Mayo (Bell Ville). Centraliza monitoreo satelital de la red hídrica, canal de reportes ciudadanos y gestión administrativa del consorcio en una sola aplicación.",
+      "description": "El Consorcio Canalero 10 de Mayo (Bell Ville) gestionaba la red hídrica, reportes ciudadanos y administración en herramientas separadas. La plataforma centraliza monitoreo satelital, reportes ciudadanos y gestión administrativa del consorcio en una sola aplicación.",
       "highlights": [
+        "Estado: trabajo freelance para un cliente real (Consorcio Canalero 10 de Mayo, Bell Ville).",
         "Integración con Google Earth Engine para monitoreo satelital + MapLibre con Mapbox GL Draw para visualización y edición geoespacial en el frontend.",
         "Tile server Martin (Rust) sirve datos vectoriales desde PostGIS al frontend en tiempo real, con caché de tiles PMTiles.",
         "Pipelines ETL en Python procesan datos espaciales (canales, escuelas, propiedades rurales) y los normalizan antes de cargarlos en PostGIS.",
@@ -84,8 +89,9 @@
     },
     {
       "name": "mcp-llm-bridge — LLM gateway y servidor MCP",
-      "description": "Servicio único que cumple dos roles: gateway HTTP compatible con la API de OpenAI para herramientas externas, y servidor MCP para clientes como Claude Code o Cursor. Centraliza 11 proveedores de LLM (API keys y suscripciones CLI) detrás de un vault cifrado.",
+      "description": "Cada herramienta de AI requiere configurar credenciales y proveedores por separado, sin control centralizado de costos ni routing inteligente. mcp-llm-bridge cumple dos roles: gateway HTTP compatible con la API de OpenAI para herramientas externas, y servidor MCP para clientes como Claude Code o Cursor. Centraliza 11 proveedores de LLM (API keys y suscripciones CLI) detrás de un vault cifrado.",
       "highlights": [
+        "Estado: side project propio. Gateway live en gateway.javierzader.com.",
         "11 provider adapters: 5 API directos (Anthropic, OpenAI, Google, etc.) y 6 CLI-backed (Claude Code, Gemini CLI, Codex, Copilot, Qwen, OpenCode).",
         "Vault cifrado para credenciales, con scope por proyecto y fallback a `_global`.",
         "Task-aware routing: elige el provider óptimo según el tipo de tarea (generation, refactor, summary, code), con override por proyecto.",
@@ -202,11 +208,6 @@
     ],
     "Herramientas": ["Git", "Linux", "Prisma", "IntelliJ", "VS Code", "Android Studio"]
   },
-  "softSkills": [
-    "Trabajo en equipo y comunicación clara.",
-    "Disposición a aprender stacks nuevos.",
-    "Conciencia de las implicancias en las decisiones técnicas."
-  ],
   "languages": [
     { "name": "Español", "level": "Nativo" },
     { "name": "Inglés", "level": "Intermedio (lectura técnica fluida)" }
