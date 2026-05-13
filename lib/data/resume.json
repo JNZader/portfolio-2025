@@ -36,7 +36,7 @@
         "Pipeline desacoplado parsing → IR → templates: agregar Kotlin no toca el parser; agregar GraphQL no toca el codegen.",
         "22 módulos (4 libs, 4 generators, 13 feature packs opt-in, 1 MCP). Cada feature pack versiona independiente.",
         "Una sola engine expuesta por CLI, HTTP server, IDE plugin y MCP server — sin duplicación.",
-        "Stack: Java 25, Spring Boot 4, Gradle, Docker, Kubernetes, Terraform, OpenAPI, GraphQL, gRPC, JMH benchmarks, contract testing."
+        "Stack: Java 25, Spring Boot 4, Gradle, Docker, Terraform, OpenAPI, GraphQL, gRPC, JMH benchmarks, contract testing."
       ]
     },
     {
