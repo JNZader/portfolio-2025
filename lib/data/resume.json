@@ -9,83 +9,80 @@
     "linkedin": "https://linkedin.com/in/jnzader",
     "github": "https://github.com/jnzader"
   },
-  "summary": "Software developer que construye sistemas completos a través del stack. Backend en Java/Spring, Go y Rust; frontend en React/Next.js/TypeScript; pipelines de ML en Python con inference en el edge vía ONNX; y herramientas para developers alrededor de code generation, agentes de AI y desarrollo guiado por especificaciones (SDD). Cómodo tomando proyectos end-to-end, desde protocolos industriales (Modbus, MQTT) hasta arquitectura de plataforma multi-lenguaje. Trabajos recientes: una plataforma de generación de código multi-lenguaje (APiGen), un diseñador visual de microservicios (Studio), y una plataforma industrial de monitoreo con edge ML (Biogas).",
+  "summary": "Software developer en Córdoba. Trabajo en backend (Java, Go, Rust), frontend (React, Next.js), pipelines de ML y herramientas para developers. Me interesa entender los problemas antes de escribir código y elegir las decisiones técnicas con conciencia de sus implicancias.",
   "experience": [
     {
       "company": "Proyectos personales y freelance",
-      "position": "Software Developer · Full-stack y plataformas",
+      "position": "Software Developer",
       "location": "Córdoba, Argentina",
       "startDate": "2024",
       "endDate": "Presente",
       "highlights": [
-        "Diseño y construcción end-to-end de plataformas con backends multi-lenguaje (Java/Spring 4, Go/Gin, Rust/Axum), frontends en React 19/Next.js y pipelines de ML con ONNX para inferencia en el edge.",
-        "Arquitectura modular tipo monorepo: 22 módulos en APiGen (4 libs + 4 generadores + 13 feature packs + capa MCP), 5 apps coordinadas en Biogas (backend, edge-gateway en Rust, ML service, frontend, mobile).",
-        "Generación de código contract-first sobre SQL y OpenAPI, con override de plantillas, validación previa a la generación y CLI/server/IDE plugin/MCP server consumiendo un único engine.",
-        "Edge industrial en Rust: Modbus TCP/RTU para PLCs, SQLite offline-first con cola de sincronización, ONNX inference local (<50ms), LLM on-device, OTA con firma ed25519, dashboard PWA embebido.",
-        "Arquitectura ML en 3 capas (predictiva, anomaly detection, edge inference) con SHAP para explicabilidad, parity tests entre Python y Rust, versionado de modelos en object storage S3-compatible.",
-        "Tooling de AI: servidores MCP, sistemas multi-agente para code review, integración con Semgrep/Trivy/Gitleaks/PMD, CLIs en Python y Rust con foco en developer experience.",
-        "Workflow disciplinado: Spec-Driven Development con OpenSpec, conventional commits, semantic-release, lint plugins custom para forzar single-source-of-truth, Playwright (e2e + CT) y JMH benchmarks como gates de CI."
+        "Diseñé y construí 3 proyectos grandes: APiGen (plataforma de generación de código), APiGen Studio (editor visual para microservicios) y Biogas Platform (monitoreo de plantas industriales con sensores en tiempo real y modelos predictivos). Detalles abajo.",
+        "También construí ghagga (sistema de code review con AI multi-agente) y herramientas para mi propio flujo de trabajo: plantillas para arrancar proyectos nuevos, instalación y configuración automática de máquinas de desarrollo, y configuraciones de AI CLIs.",
+        "Trabajo con tests automatizados, conventional commits y especificaciones escritas antes del código (OpenSpec) en los proyectos donde corresponde.",
+        "Uso AI assistants (Claude Code, Codex, opencode) como parte central del workflow, no como ayuda esporádica."
       ]
     }
   ],
   "projects": [
     {
-      "name": "APiGen — Plataforma de generación de código multi-lenguaje",
-      "description": "Plataforma contract-first que convierte un schema SQL o un contrato OpenAPI en un servicio backend listo para producción. 12 lenguajes target, 15+ bases de datos, 3 stacks cloud.",
+      "name": "APiGen — Plataforma de generación de código",
+      "description": "Plataforma que toma un schema SQL o un contrato OpenAPI y genera el código de un servicio backend. Soporta varios lenguajes target.",
       "highlights": [
-        "Pipeline desacoplado parsing → IR → templates: agregar Kotlin no toca el parser; agregar GraphQL no toca el codegen.",
-        "22 módulos (4 libs, 4 generators, 13 feature packs opt-in, 1 MCP). Cada feature pack versiona independiente.",
-        "Una sola engine expuesta por CLI, HTTP server, IDE plugin y MCP server — sin duplicación.",
-        "Stack: Java 25, Spring Boot 4, Gradle, Docker, Terraform, OpenAPI, GraphQL, gRPC, JMH benchmarks, contract testing."
+        "Pipeline desacoplado: el parser y los templates no se conocen entre sí, lo que permite agregar lenguajes nuevos sin romper lo que ya funciona.",
+        "Estructura modular: 22 Gradle modules organizados en librerías, generadores y feature packs opcionales.",
+        "La misma engine se puede usar desde CLI, servidor HTTP, plugin de IDE o servidor MCP.",
+        "Stack: Java 25, Spring Boot 4, Gradle, Docker, OpenAPI, GraphQL, gRPC."
       ]
     },
     {
-      "name": "APiGen Studio — Diseñador visual de microservicios",
-      "description": "Editor visual de APIs y arquitecturas de microservicios. Modela entidades, conexiones service-to-service, gateway routes y event/message flows; exporta el proyecto multi-servicio para alimentar APiGen.",
+      "name": "APiGen Studio — Editor visual de microservicios",
+      "description": "Editor en el browser para diseñar visualmente APIs y arquitecturas de microservicios. Modela entidades, conexiones entre servicios y exporta el proyecto para alimentar APiGen.",
       "highlights": [
-        "Microservices Designer más allá del modelado de entidades: services + connections + gateway routes + event/message designer + multi-service export.",
-        "Auto-layout con ELK para grafos con relaciones, fallback a grid; el layout es lógica del producto, no decoración.",
-        "Client-heavy con autosave en IndexedDB, historial de snapshots y safety snapshots pre-import.",
-        "Stack: React 19, TypeScript 5.9, Vite 7, Mantine 8, Zustand, Zod, React Flow, ELK, Playwright (e2e + Component Testing), Vitest."
+        "No es solo modelado de entidades: diseña arquitecturas de microservicios completas (services, conexiones, gateway routes, flujos de eventos).",
+        "Layout automático con ELK para grafos con relaciones; cae a grilla cuando no hay relaciones.",
+        "Autosave en IndexedDB con historial de snapshots y safety snapshots antes de imports destructivos.",
+        "Stack: React 19, TypeScript 5.9, Vite 7, Mantine 8, Zustand, Zod, React Flow, ELK, Playwright, Vitest."
       ]
     },
     {
       "name": "Biogas Platform — Plataforma industrial de monitoreo",
-      "description": "Plataforma integral para plantas de biogás. Reemplaza la gestión manual basada en Excel con ingesta en tiempo real, AI en 3 capas (predictiva, anomaly detection, edge inference) y workflows operativos multi-rol.",
+      "description": "Plataforma para plantas de biogás. Reemplaza la gestión manual con planillas Excel: ingesta de datos en tiempo real, monitoreo, detección de anomalías y predicciones de mantenimiento.",
       "highlights": [
-        "Edge gateway en Rust como nodo industrial autónomo: Modbus TCP/RTU a PLCs, SQLite local con cola de sincronización, ONNX inference <50ms, LLM on-device con llama.cpp, OTA con firma ed25519, dashboard PWA embebido (74 archivos Rust, v2.1.0).",
-        "Pipeline ML production-grade: training en Python (scikit-learn) → export ONNX → inferencia en Rust con parity tests bit-identical. SHAP para explicabilidad, drift monitoring con PSI.",
-        "Monorepo de 5 apps coordinadas (Go backend, Rust edge-gateway, Python ML service, React/Vite frontend, mobile Ionic+Capacitor); OpenSpec/SDD desde día 1; plugin Biome custom para enforce SSOT.",
-        "Stack: Go + GORM + Gin, PostgreSQL, Redis, Mosquitto MQTT, Rust + Tokio + Axum, ONNX Runtime, Python + scikit-learn, React 19, Vite, Mantine, GitLab CI/CD, Caddy."
+        "Edge gateway en Rust como nodo industrial autónomo: lee PLCs por Modbus TCP/RTU, almacena local en SQLite, hace inferencia ONNX (<50ms), funciona offline.",
+        "Pipeline de ML en 3 capas: training en Python con scikit-learn, exportación a ONNX, deploy en Rust con tests de paridad para asegurar que las salidas coinciden.",
+        "Monorepo con 5 apps: backend Go, edge gateway Rust, servicio de ML en Python, frontend React, app mobile (Ionic).",
+        "Stack: Go + GORM + Gin, PostgreSQL, Redis, Mosquitto MQTT, Rust + Tokio + Axum, ONNX Runtime, Python, scikit-learn, React 19."
       ]
     },
     {
-      "name": "ghagga — AI multi-agent code review",
-      "description": "Producto de code review impulsado por AI con varias formas de distribución (SaaS, GitHub Action y CLI). Combina 12+ herramientas de static analysis con health scoring y export SARIF.",
+      "name": "ghagga — Code review con AI multi-agente",
+      "description": "Sistema de code review impulsado por AI, con varias formas de distribución (SaaS, GitHub Action y CLI). Combina herramientas de análisis estático con un agente AI multi-perspectiva.",
       "highlights": [
-        "Sistema multi-agente: distintos agentes especializados (security, quality, performance) revisan en paralelo y se sintetizan en un informe único.",
-        "Integraciones con Semgrep, Trivy, Gitleaks, PMD, Biome, Ruff y más; export SARIF para integrarse con SecOps/SAST pipelines.",
-        "GitHub App + CLI + dashboard SaaS: la misma engine atendiendo tres canales de distribución.",
-        "Stack: TypeScript, GitHub App, Semgrep, Trivy, multi-agent orchestration."
+        "Distintos agentes especializados (security, quality, performance) revisan en paralelo y se sintetizan en un informe único.",
+        "Integraciones con Semgrep, Trivy, Gitleaks y otras herramientas de análisis estático.",
+        "La misma engine atiende 3 canales: GitHub App, CLI y dashboard SaaS.",
+        "Stack: TypeScript, GitHub App, Semgrep, Trivy."
       ]
     },
     {
       "name": "Consorcio Canalero — Sistema de gestión hídrica",
       "description": "Plataforma para el Consorcio Canalero 10 de Mayo (Bell Ville). Monitoreo satelital de canales, reportes ciudadanos y gestión administrativa.",
       "highlights": [
-        "Integración con Google Earth Engine para monitoreo satelital + MapLibre para visualización geoespacial en el frontend.",
-        "Backend Python (FastAPI) con persistencia en Supabase; frontend React + Mantine; generación de reportes PDF.",
-        "Screaming Architecture aplicada para mantener el dominio (gestión hídrica) explícito en la estructura del código.",
-        "Stack: React, TypeScript, Mantine, MapLibre, Python, FastAPI, Supabase, Google Earth Engine, Docker."
+        "Integración con Google Earth Engine para monitoreo satelital + MapLibre con Mapbox GL Draw para visualización y edición geoespacial en el frontend.",
+        "Backend Python con FastAPI y persistencia en Supabase.",
+        "Stack: React, TypeScript, Mantine, MapLibre, Mapbox GL Draw, Python, FastAPI, Supabase, Google Earth Engine, Docker."
       ]
     },
     {
-      "name": "mcp-llm-bridge — Servidor MCP para enrutar LLMs",
-      "description": "Servidor Model Context Protocol que rutea las llamadas LLM a través de suscripciones CLI existentes (Claude, Gemini, Codex, Copilot) — sin necesidad de tokens de API.",
+      "name": "mcp-llm-bridge — Servidor MCP para LLMs",
+      "description": "Servidor que rutea llamadas LLM a través de suscripciones CLI existentes (Claude, Gemini, Codex, Copilot) en lugar de pagar tokens de API.",
       "highlights": [
-        "Multi-provider con fallback chains configurables; dashboard de uso y observabilidad con OpenTelemetry.",
+        "Multi-provider con cadenas de fallback configurables.",
+        "Dashboard de uso y observabilidad con OpenTelemetry.",
         "Persistencia local en SQLite con encriptación de credenciales.",
-        "Stack: TypeScript, Hono, MCP, SQLite, OpenTelemetry, multi-provider routing."
+        "Stack: TypeScript, Hono, MCP, SQLite, OpenTelemetry."
       ]
     }
   ],
@@ -107,9 +104,7 @@
       "details": [
         "Estadísticas y Machine Learning (68h)",
         "ETL con Pandas/NumPy y visualización (61h)",
-        "Modelado de datos con Python (40h)",
-        "Principiante en Programación (70h)",
-        "Emprendimiento, Agilidad y Desarrollo Personal"
+        "Modelado de datos con Python (40h)"
       ]
     },
     {
@@ -119,7 +114,7 @@
       "startDate": "2024",
       "endDate": "2024",
       "details": [
-        "Java y Spring Boot G6 (104h): API REST con Spring Boot 3, seguridad, documentación, JPA/Hibernate, Streams/Lambdas.",
+        "Java y Spring Boot G6 (104h): API REST con Spring Boot 3, seguridad, JPA/Hibernate, Streams/Lambdas.",
         "Java Orientado a Objetos (45h) y Java Web con Spring (34h).",
         "SQL con MySQL (DML, Procedures) (36h)."
       ]
@@ -166,14 +161,13 @@
       "Supabase",
       "IndexedDB"
     ],
-    "ML / AI / Agents": [
+    "ML / AI": [
       "scikit-learn",
       "ONNX Runtime",
       "llama.cpp",
       "SHAP",
       "LiteLLM",
       "MCP (Model Context Protocol)",
-      "Multi-agent systems",
       "Pandas",
       "NumPy"
     ],
@@ -181,22 +175,14 @@
       "Modbus TCP/RTU",
       "MQTT (Mosquitto)",
       "Edge computing",
-      "OTA (firma ed25519)",
+      "OTA con firma ed25519",
       "Prometheus",
       "NATS"
     ],
-    "GIS / Geo": ["Google Earth Engine", "MapLibre", "PDF generation"],
-    "DevOps / Cloud": [
-      "Docker",
-      "Terraform",
-      "GitLab CI",
-      "GitHub Actions",
-      "Vercel",
-      "Cloudflare Pages",
-      "Caddy"
-    ],
-    "Testing / Quality": [
-      "Playwright (e2e + Component Testing)",
+    "GIS / Geo": ["Google Earth Engine", "MapLibre", "Mapbox GL Draw"],
+    "DevOps": ["Docker", "GitLab CI", "GitHub Actions", "Vercel", "Cloudflare Pages", "Caddy"],
+    "Testing": [
+      "Playwright",
       "Vitest",
       "JUnit",
       "Mockito",
@@ -210,17 +196,16 @@
       "OpenAPI",
       "GraphQL",
       "gRPC",
-      "OpenSpec / SDD",
+      "OpenSpec",
       "Conventional Commits",
       "Semantic Release"
     ],
     "Herramientas": ["Git", "Linux", "Prisma", "IntelliJ", "VS Code", "Android Studio"]
   },
   "softSkills": [
-    "Trabajo en equipo y comunicación efectiva.",
-    "Liderazgo técnico y arquitectura de decisiones.",
-    "Aprendizaje continuo y adaptabilidad a stacks nuevos.",
-    "Honestidad sobre tradeoffs y disposición a iterar."
+    "Trabajo en equipo y comunicación clara.",
+    "Disposición a aprender stacks nuevos.",
+    "Conciencia de las implicancias en las decisiones técnicas."
   ],
   "languages": [
     { "name": "Español", "level": "Nativo" },

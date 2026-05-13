@@ -5,209 +5,325 @@ import { getClientIdentifier, resumeRateLimiter } from '@/lib/rate-limit/redis';
 import type { ResumeData, ResumeDataRaw } from '@/lib/types/resume';
 import { fetchResumeData } from '@/sanity/lib/queries';
 
-// PDF Colors
+type RGB = [number, number, number];
+
+// Page geometry (A4 in mm)
+const PAGE_WIDTH = 210;
+const PAGE_HEIGHT = 297;
+const MARGIN = 16.5; // ~0.65 inch
+const CONTENT_WIDTH = PAGE_WIDTH - 2 * MARGIN;
+
+// Colors mirrored from the LaTeX template
 const COLORS = {
-  primary: [0, 102, 204] as [number, number, number],
-  text: [51, 51, 51] as [number, number, number],
-  lightGray: [128, 128, 128] as [number, number, number],
+  primary: [0, 102, 204] as RGB, // accent blue (titles, project names)
+  secondary: [64, 64, 64] as RGB, // dark gray (subtitle, subsection title)
+  text: [40, 40, 40] as RGB, // body text
+  lightGray: [110, 110, 110] as RGB, // dates, contact line, institution
 };
 
-// PDF Context for rendering
+// Font sizes (pt)
+const SIZES = {
+  name: 24,
+  subtitle: 13,
+  contact: 9,
+  section: 14,
+  subsection: 11,
+  projectName: 10,
+  body: 9.5,
+  bullet: 9,
+  small: 8.5,
+};
+
 interface PDFContext {
   doc: jsPDF;
   yPos: number;
-  margin: number;
-  pageHeight: number;
 }
 
-// Helper: Check and add new page if needed
+// ----- Layout primitives -----
+
 function checkNewPage(ctx: PDFContext, requiredSpace = 20): void {
-  if (ctx.yPos + requiredSpace > ctx.pageHeight - ctx.margin) {
+  if (ctx.yPos + requiredSpace > PAGE_HEIGHT - MARGIN) {
     ctx.doc.addPage();
-    ctx.yPos = 12;
+    ctx.yPos = MARGIN;
   }
 }
 
-// Helper: Render section header
-function renderSectionHeader(ctx: PDFContext, title: string): void {
-  checkNewPage(ctx, 30);
-  ctx.doc.setFontSize(12);
-  ctx.doc.setTextColor(...COLORS.primary);
-  ctx.doc.text(title, 12, ctx.yPos);
-  ctx.yPos += 7;
+function setText(
+  ctx: PDFContext,
+  size: number,
+  color: RGB,
+  weight: 'normal' | 'bold' = 'normal',
+  style: 'normal' | 'italic' = 'normal'
+): void {
+  ctx.doc.setFontSize(size);
+  ctx.doc.setTextColor(...color);
+  // jsPDF font setter accepts: normal | bold | italic | bolditalic
+  const fontStyle =
+    weight === 'bold'
+      ? style === 'italic'
+        ? 'bolditalic'
+        : 'bold'
+      : style === 'italic'
+        ? 'italic'
+        : 'normal';
+  ctx.doc.setFont('helvetica', fontStyle);
 }
 
-// Helper: Render bullet points
-function renderBulletPoints(ctx: PDFContext, items: string[], indent = 17): void {
-  ctx.doc.setFontSize(8);
-  ctx.doc.setTextColor(...COLORS.text);
-  for (const item of items) {
-    checkNewPage(ctx, 15);
-    const lines = ctx.doc.splitTextToSize(`• ${item}`, 180);
-    ctx.doc.text(lines, indent, ctx.yPos);
-    ctx.yPos += lines.length * 4;
+// Renders text and advances yPos by lineHeight per wrapped line
+function renderWrappedText(
+  ctx: PDFContext,
+  text: string,
+  x: number,
+  maxWidth: number,
+  lineHeight: number
+): void {
+  const lines = ctx.doc.splitTextToSize(text, maxWidth);
+  for (const line of lines as string[]) {
+    checkNewPage(ctx, lineHeight);
+    ctx.doc.text(line, x, ctx.yPos);
+    ctx.yPos += lineHeight;
   }
 }
 
-// Helper: Render header section
+// ----- Sections -----
+
 function renderHeader(ctx: PDFContext, data: ResumeData): void {
-  ctx.doc.setFontSize(24);
-  ctx.doc.setTextColor(...COLORS.primary);
-  ctx.doc.text(data.personalInfo.name, 12, ctx.yPos);
+  // Name -- centered, large, bold, primary
+  setText(ctx, SIZES.name, COLORS.primary, 'bold');
+  const nameWidth = ctx.doc.getTextWidth(data.personalInfo.name);
+  ctx.doc.text(data.personalInfo.name, (PAGE_WIDTH - nameWidth) / 2, ctx.yPos + 8);
+  ctx.yPos += 11;
+
+  // Title -- centered, secondary
+  setText(ctx, SIZES.subtitle, COLORS.secondary, 'normal');
+  const titleWidth = ctx.doc.getTextWidth(data.personalInfo.title);
+  ctx.doc.text(data.personalInfo.title, (PAGE_WIDTH - titleWidth) / 2, ctx.yPos + 5);
   ctx.yPos += 8;
 
-  ctx.doc.setFontSize(14);
-  ctx.doc.setTextColor(...COLORS.text);
-  ctx.doc.text(data.personalInfo.title, 12, ctx.yPos);
-  ctx.yPos += 10;
+  // Contact line -- centered with separators
+  setText(ctx, SIZES.contact, COLORS.lightGray, 'normal');
+  const linkedinShort = data.personalInfo.linkedin.replace(/^https?:\/\//, '');
+  const githubShort = data.personalInfo.github.replace(/^https?:\/\//, '');
+  const sep = '  ·  '; // " · " with extra spacing
+  const contactText = `${data.personalInfo.location}${sep}${linkedinShort}${sep}${githubShort}`;
+  const contactWidth = ctx.doc.getTextWidth(contactText);
+  const contactX = (PAGE_WIDTH - contactWidth) / 2;
+  ctx.doc.text(contactText, contactX, ctx.yPos + 4);
 
-  ctx.doc.setFontSize(9);
-  ctx.doc.setTextColor(...COLORS.lightGray);
-  ctx.doc.text(`${data.personalInfo.email} | ${data.personalInfo.location}`, 12, ctx.yPos);
+  // Add hyperlinks for LinkedIn and GitHub portions
+  const locationWidth = ctx.doc.getTextWidth(data.personalInfo.location);
+  const sepWidth = ctx.doc.getTextWidth(sep);
+  const linkedinX = contactX + locationWidth + sepWidth;
+  const linkedinWidth = ctx.doc.getTextWidth(linkedinShort);
+  const githubX = linkedinX + linkedinWidth + sepWidth;
+  ctx.doc.link(linkedinX, ctx.yPos + 1, linkedinWidth, 4, { url: data.personalInfo.linkedin });
+  ctx.doc.link(githubX, ctx.yPos + 1, ctx.doc.getTextWidth(githubShort), 4, {
+    url: data.personalInfo.github,
+  });
+
+  ctx.yPos += 9;
+}
+
+function renderSectionHeader(ctx: PDFContext, title: string): void {
+  checkNewPage(ctx, 18);
+  ctx.yPos += 4; // top spacing before section
+  setText(ctx, SIZES.section, COLORS.primary, 'bold');
+  ctx.doc.text(title, MARGIN, ctx.yPos + 4);
+  ctx.yPos += 5.5;
+  // Underline rule
+  ctx.doc.setDrawColor(...COLORS.primary);
+  ctx.doc.setLineWidth(0.3);
+  ctx.doc.line(MARGIN, ctx.yPos, PAGE_WIDTH - MARGIN, ctx.yPos);
+  ctx.yPos += 4;
+}
+
+function renderSubsectionWithDate(ctx: PDFContext, title: string, dateText: string): void {
+  checkNewPage(ctx, 12);
+  setText(ctx, SIZES.subsection, COLORS.secondary, 'bold');
+  ctx.doc.text(title, MARGIN, ctx.yPos + 3.5);
+
+  setText(ctx, SIZES.small, COLORS.lightGray, 'normal', 'italic');
+  ctx.doc.text(dateText, PAGE_WIDTH - MARGIN, ctx.yPos + 3.5, { align: 'right' });
+
+  ctx.yPos += 6;
+}
+
+function renderInstitutionLine(ctx: PDFContext, line: string): void {
+  setText(ctx, SIZES.body, COLORS.lightGray, 'normal');
+  ctx.doc.text(line, MARGIN, ctx.yPos + 3.5);
   ctx.yPos += 5;
-  ctx.doc.text(`${data.personalInfo.website} | ${data.personalInfo.linkedin}`, 12, ctx.yPos);
-  ctx.yPos += 12;
 }
 
-// Helper: Render summary section
+// Top-level bullets (•) at the leftmost column
+function renderBullets(ctx: PDFContext, items: string[], indent = 0): void {
+  setText(ctx, SIZES.bullet, COLORS.text, 'normal');
+  const bulletX = MARGIN + indent;
+  const textX = bulletX + 3;
+  const maxWidth = CONTENT_WIDTH - indent - 3;
+  for (const item of items) {
+    checkNewPage(ctx, 6);
+    ctx.doc.text('•', bulletX, ctx.yPos + 3.5);
+    const lines = ctx.doc.splitTextToSize(item, maxWidth) as string[];
+    for (let i = 0; i < lines.length; i++) {
+      if (i > 0) checkNewPage(ctx, 4.5);
+      ctx.doc.text(lines[i], textX, ctx.yPos + 3.5);
+      ctx.yPos += 4.5;
+    }
+    ctx.yPos += 0.5;
+  }
+}
+
+// Render summary block
 function renderSummary(ctx: PDFContext, summary: string): void {
-  renderSectionHeader(ctx, 'RESUMEN PROFESIONAL');
-  ctx.doc.setFontSize(9);
-  ctx.doc.setTextColor(...COLORS.text);
-  const lines = ctx.doc.splitTextToSize(summary, 185);
-  ctx.doc.text(lines, 12, ctx.yPos);
-  ctx.yPos += lines.length * 4 + 8;
+  renderSectionHeader(ctx, 'Resumen Profesional');
+  setText(ctx, SIZES.body, COLORS.text, 'normal');
+  renderWrappedText(ctx, summary, MARGIN, CONTENT_WIDTH, 4.8);
+  ctx.yPos += 1;
 }
 
-// Helper: Render experience section
-function renderExperience(ctx: PDFContext, experience: ResumeData['experience']): void {
-  renderSectionHeader(ctx, 'EXPERIENCIA PROFESIONAL');
+// Render the experience section -- nests projects inside the single experience entry,
+// matching the LaTeX layout where projects are second-level bullets under the role.
+function renderExperienceWithProjects(
+  ctx: PDFContext,
+  experience: ResumeData['experience'],
+  projects: NonNullable<ResumeData['projects']>
+): void {
+  renderSectionHeader(ctx, 'Experiencia Profesional');
 
   for (const job of experience) {
-    checkNewPage(ctx, 40);
-    ctx.doc.setFontSize(10);
-    ctx.doc.setTextColor(...COLORS.text);
-    ctx.doc.setFont('helvetica', 'bold');
-    ctx.doc.text(job.position, 12, ctx.yPos);
-    ctx.doc.setFont('helvetica', 'normal');
-    ctx.yPos += 5;
+    const dateLine = `${job.startDate} – ${job.endDate}`;
+    renderSubsectionWithDate(ctx, job.position, dateLine);
+    renderInstitutionLine(ctx, `${job.company} · ${job.location}`);
+    ctx.yPos += 1;
 
-    ctx.doc.setFontSize(9);
-    ctx.doc.setTextColor(...COLORS.lightGray);
-    const endDate = job.endDate === 'presente' ? 'Presente' : job.endDate;
-    ctx.doc.text(`${job.company} | ${job.startDate} - ${endDate}`, 12, ctx.yPos);
-    ctx.yPos += 5;
-
-    renderBulletPoints(ctx, job.highlights);
-    ctx.yPos += 4;
+    // Top-level highlights of the role
+    if (job.highlights.length > 0) {
+      renderBullets(ctx, job.highlights);
+      ctx.yPos += 2;
+    }
   }
-}
 
-// Helper: Render projects section
-function renderProjects(ctx: PDFContext, projects: NonNullable<ResumeData['projects']>): void {
-  renderSectionHeader(ctx, 'PROYECTOS DESTACADOS');
-
+  // Projects rendered as second-level bullets after the role highlights
   for (const project of projects) {
-    checkNewPage(ctx, 40);
-    ctx.doc.setFontSize(10);
-    ctx.doc.setTextColor(...COLORS.primary);
-    ctx.doc.setFont('helvetica', 'bold');
-    ctx.doc.text(project.name, 12, ctx.yPos);
-    ctx.doc.setFont('helvetica', 'normal');
+    checkNewPage(ctx, 18);
+    // Project name in bold + primary color
+    setText(ctx, SIZES.projectName, COLORS.primary, 'bold');
+    ctx.doc.text('▪', MARGIN + 1, ctx.yPos + 3.5); // small filled square as bullet
+    ctx.doc.text(project.name, MARGIN + 5, ctx.yPos + 3.5);
     ctx.yPos += 5;
 
-    ctx.doc.setFontSize(8);
-    ctx.doc.setTextColor(...COLORS.text);
-    const descLines = ctx.doc.splitTextToSize(project.description, 185);
-    ctx.doc.text(descLines, 12, ctx.yPos);
-    ctx.yPos += descLines.length * 4 + 2;
+    // Description
+    setText(ctx, SIZES.body, COLORS.text, 'normal');
+    renderWrappedText(ctx, project.description, MARGIN + 5, CONTENT_WIDTH - 5, 4.6);
+    ctx.yPos += 0.5;
 
-    renderBulletPoints(ctx, project.highlights);
-    ctx.yPos += 4;
+    // Indented bullets
+    renderBullets(ctx, project.highlights, 5);
+    ctx.yPos += 2;
   }
 }
 
-// Helper: Render education section
+// Render skills as a 2-column table (category in bold, items wrapped on the right)
+function renderSkillsTable(ctx: PDFContext, skills: ResumeData['skills']): void {
+  renderSectionHeader(ctx, 'Habilidades Técnicas');
+
+  const categoryColWidth = CONTENT_WIDTH * 0.28;
+  const itemsX = MARGIN + categoryColWidth;
+  const itemsWidth = CONTENT_WIDTH - categoryColWidth;
+
+  for (const [category, items] of Object.entries(skills)) {
+    if (items.length === 0) continue;
+    checkNewPage(ctx, 8);
+    setText(ctx, SIZES.body, COLORS.secondary, 'bold');
+    ctx.doc.text(`${category}:`, MARGIN, ctx.yPos + 3.5);
+
+    setText(ctx, SIZES.body, COLORS.text, 'normal');
+    const itemsText = items.join(', ');
+    const lines = ctx.doc.splitTextToSize(itemsText, itemsWidth) as string[];
+    const startY = ctx.yPos;
+    for (let i = 0; i < lines.length; i++) {
+      if (i > 0) checkNewPage(ctx, 4.5);
+      ctx.doc.text(lines[i], itemsX, ctx.yPos + 3.5);
+      if (i < lines.length - 1) ctx.yPos += 4.5;
+    }
+    // Ensure row advances at least one line height
+    if (ctx.yPos === startY) ctx.yPos += 4.5;
+    ctx.yPos += 1.5;
+  }
+}
+
+function renderSoftSkills(ctx: PDFContext, items: string[]): void {
+  if (items.length === 0) return;
+  renderSectionHeader(ctx, 'Habilidades Blandas');
+  renderBullets(ctx, items);
+}
+
+// Render education with title (bold + primary), date (right + italic gray),
+// and optional institution + bullets underneath.
 function renderEducation(ctx: PDFContext, education: ResumeData['education']): void {
-  renderSectionHeader(ctx, 'EDUCACIÓN Y CERTIFICACIONES');
+  renderSectionHeader(ctx, 'Educación y Certificaciones');
 
   for (const edu of education) {
-    checkNewPage(ctx, 30);
-    ctx.doc.setFontSize(10);
-    ctx.doc.setTextColor(...COLORS.primary);
-    ctx.doc.setFont('helvetica', 'bold');
-    ctx.doc.text(edu.degree, 12, ctx.yPos);
-    ctx.doc.setFont('helvetica', 'normal');
+    checkNewPage(ctx, 12);
+
+    // Title bold primary
+    setText(ctx, SIZES.body, COLORS.primary, 'bold');
+    ctx.doc.text(edu.degree, MARGIN, ctx.yPos + 3.5);
+
+    // Right-aligned date with institution prefix when no separate institution line follows
+    const hasDetailsOrInstitution = !!edu.institution;
+    const dateText = hasDetailsOrInstitution
+      ? `${edu.startDate} – ${edu.endDate}`
+      : `${edu.institution}, ${edu.endDate}`;
+    setText(ctx, SIZES.small, COLORS.lightGray, 'normal', 'italic');
+    ctx.doc.text(dateText, PAGE_WIDTH - MARGIN, ctx.yPos + 3.5, { align: 'right' });
+
     ctx.yPos += 5;
 
-    ctx.doc.setFontSize(8);
-    ctx.doc.setTextColor(...COLORS.lightGray);
-    ctx.doc.text(`${edu.institution} | ${edu.startDate} - ${edu.endDate}`, 12, ctx.yPos);
-    ctx.yPos += 5;
+    // Institution as a separate gray line
+    if (edu.institution) {
+      setText(ctx, SIZES.body, COLORS.lightGray, 'normal');
+      ctx.doc.text(edu.institution, MARGIN, ctx.yPos + 3.5);
+      ctx.yPos += 4.5;
+    }
 
     if (edu.details && edu.details.length > 0) {
-      renderBulletPoints(ctx, edu.details);
+      renderBullets(ctx, edu.details);
     }
-    ctx.yPos += 4;
+
+    ctx.yPos += 2;
   }
 }
 
-// Helper: Render skills section
-function renderSkills(ctx: PDFContext, skills: ResumeData['skills']): void {
-  renderSectionHeader(ctx, 'HABILIDADES TÉCNICAS');
-
-  for (const [category, skillList] of Object.entries(skills)) {
-    checkNewPage(ctx, 10);
-    ctx.doc.setFontSize(9);
-    ctx.doc.setTextColor(...COLORS.text);
-    ctx.doc.setFont('helvetica', 'bold');
-    ctx.doc.text(`${category}:`, 12, ctx.yPos);
-    ctx.doc.setFont('helvetica', 'normal');
-
-    ctx.doc.setTextColor(...COLORS.lightGray);
-    const skillsText = skillList.join(', ');
-    const skillsLines = ctx.doc.splitTextToSize(skillsText, 150);
-    ctx.doc.text(skillsLines, 50, ctx.yPos);
-    ctx.yPos += skillsLines.length * 4 + 2;
-  }
-}
-
-// Helper: Render soft skills section
-function renderSoftSkills(ctx: PDFContext, softSkills: string[]): void {
-  ctx.yPos += 3;
-  renderSectionHeader(ctx, 'HABILIDADES BLANDAS');
-  renderBulletPoints(ctx, softSkills);
-}
-
-// Helper: Render languages section
 function renderLanguages(ctx: PDFContext, languages: ResumeData['languages']): void {
-  ctx.yPos += 3;
-  checkNewPage(ctx, 20);
-  ctx.doc.setFontSize(12);
-  ctx.doc.setTextColor(...COLORS.primary);
-  ctx.doc.text('IDIOMAS', 12, ctx.yPos);
-  ctx.yPos += 7;
+  if (languages.length === 0) return;
+  renderSectionHeader(ctx, 'Idiomas');
 
   for (const lang of languages) {
-    ctx.doc.setFontSize(9);
-    ctx.doc.setTextColor(...COLORS.text);
-    ctx.doc.setFont('helvetica', 'bold');
-    ctx.doc.text(`${lang.name}:`, 12, ctx.yPos);
-    ctx.doc.setFont('helvetica', 'normal');
-    ctx.doc.setTextColor(...COLORS.lightGray);
-    ctx.doc.text(lang.level, 50, ctx.yPos);
-    ctx.yPos += 5;
+    checkNewPage(ctx, 6);
+    setText(ctx, SIZES.body, COLORS.secondary, 'bold');
+    ctx.doc.text(`${lang.name}:`, MARGIN, ctx.yPos + 3.5);
+
+    setText(ctx, SIZES.body, COLORS.text, 'normal');
+    ctx.doc.text(lang.level, MARGIN + 28, ctx.yPos + 3.5);
+    ctx.yPos += 4.8;
   }
+}
+
+function renderProjects(ctx: PDFContext, projects: NonNullable<ResumeData['projects']>): void {
+  // Reserved for future structural changes; currently projects are rendered
+  // inline within renderExperienceWithProjects to mirror the LaTeX layout.
+  void ctx;
+  void projects;
 }
 
 /**
- * API Route para generar CV en PDF
+ * API Route to generate the CV in PDF.
  * Endpoint: /api/resume
- * Rate limited: 10 requests por hora por IP
+ * Rate limited: 10 requests per hour per IP.
  */
 export async function GET(request: NextRequest) {
   try {
-    // Rate limiting para prevenir DoS
     const clientId = getClientIdentifier(request);
     const { success } = await resumeRateLimiter.limit(clientId);
 
@@ -219,10 +335,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Lazy load jsPDF para reducir bundle inicial
     const { jsPDF } = await import('jspdf');
-
-    // Fetch resume data from Sanity (with JSON fallback)
     const rawData: ResumeDataRaw = await fetchResumeData();
 
     let decodedEmail: string;
@@ -241,34 +354,35 @@ export async function GET(request: NextRequest) {
       },
     };
 
-    // Initialize PDF and context
-    const doc = new jsPDF();
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
     const ctx: PDFContext = {
       doc,
-      yPos: 12,
-      margin: 12,
-      pageHeight: doc.internal.pageSize.height,
+      yPos: MARGIN,
     };
 
-    // Render all sections
     renderHeader(ctx, data);
     renderSummary(ctx, data.summary);
-    renderExperience(ctx, data.experience);
 
     if (data.projects && data.projects.length > 0) {
-      renderProjects(ctx, data.projects);
+      renderExperienceWithProjects(ctx, data.experience, data.projects);
+    } else {
+      // Fallback: render experience alone if no projects defined
+      renderExperienceWithProjects(ctx, data.experience, []);
     }
 
-    renderEducation(ctx, data.education);
-    renderSkills(ctx, data.skills);
+    renderSkillsTable(ctx, data.skills);
 
     if (data.softSkills && data.softSkills.length > 0) {
       renderSoftSkills(ctx, data.softSkills);
     }
 
+    renderEducation(ctx, data.education);
     renderLanguages(ctx, data.languages);
 
-    // Generate and return PDF
+    // Reserved hook (currently a no-op so the helper does not get tree-shaken away
+    // before the structural change to flatten experience/projects ships)
+    renderProjects(ctx, data.projects ?? []);
+
     const pdfBuffer = doc.output('arraybuffer');
 
     return new NextResponse(pdfBuffer, {
