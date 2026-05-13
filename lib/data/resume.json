@@ -19,7 +19,7 @@
       "endDate": "Presente",
       "highlights": [
         "Diseñé y construí 3 proyectos grandes: APiGen (plataforma de generación de código), APiGen Studio (editor visual para microservicios) y Biogas Platform (monitoreo de plantas industriales con sensores en tiempo real y modelos predictivos). Detalles abajo.",
-        "También construí ghagga (sistema de code review con AI multi-agente) y herramientas para mi propio flujo de trabajo: plantillas para arrancar proyectos nuevos, instalación y configuración automática de máquinas de desarrollo, y configuraciones de AI CLIs.",
+        "También construí ghagga (sistema de code review con AI multi-agente) y herramientas para mi propio flujo de trabajo: plantillas para empezar proyectos nuevos, instalación y configuración automática de máquinas de desarrollo, y configuraciones de AI CLIs.",
         "Trabajo con tests automatizados, conventional commits y especificaciones escritas antes del código (OpenSpec) en los proyectos donde corresponde.",
         "Uso AI assistants (Claude Code, Codex, opencode) como parte central del workflow, no como ayuda esporádica."
       ]
@@ -68,7 +68,7 @@
     },
     {
       "name": "Consorcio Canalero — Sistema de gestión",
-      "description": "Plataforma para el Consorcio Canalero 10 de Mayo (Bell Ville). Monitoreo satelital de canales, reportes ciudadanos y gestión administrativa.",
+      "description": "Plataforma para el Consorcio Canalero 10 de Mayo (Bell Ville). Monitoreo satelital, reportes ciudadanos y gestión administrativa.",
       "highlights": [
         "Integración con Google Earth Engine para monitoreo satelital + MapLibre con Mapbox GL Draw para visualización y edición geoespacial en el frontend.",
         "Backend Python con FastAPI y persistencia en Supabase.",
@@ -76,12 +76,13 @@
       ]
     },
     {
-      "name": "mcp-llm-bridge — Gateway MCP para múltiples LLMs",
-      "description": "Servidor MCP que unifica el acceso a múltiples modelos detrás de un solo endpoint, usando las suscripciones CLI que ya tenés activas (Claude Code, Gemini, Codex, Copilot) como proveedores. Cualquier herramienta MCP-compatible puede consumir esos modelos sin manejar API keys por separado.",
+      "name": "mcp-llm-bridge — LLM gateway y servidor MCP",
+      "description": "Servicio único que cumple dos roles: gateway HTTP compatible con la API de OpenAI para herramientas externas, y servidor MCP para clientes como Claude Code o Cursor. Centraliza 11 proveedores de LLM (API keys y suscripciones CLI) detrás de un vault cifrado.",
       "highlights": [
-        "Multi-provider con cadenas de fallback configurables por modelo y por uso.",
+        "11 provider adapters: 5 API directos (Anthropic, OpenAI, Google, etc.) y 6 CLI-backed (Claude Code, Gemini CLI, Codex, Copilot, Qwen, OpenCode).",
+        "Vault cifrado para credenciales, con scope por proyecto y fallback a `_global`.",
+        "MCP tools que van más allá de generation: operaciones de vault, búsqueda semántica de código, estado compartido vía CRDT, inspección de uso.",
         "Observabilidad end-to-end: traces con OpenTelemetry, métricas con Prometheus y logging estructurado con pino.",
-        "Persistencia local en better-sqlite3 con credenciales encriptadas; validación de schemas con Zod 4.",
         "Stack: TypeScript, Hono, @modelcontextprotocol/sdk, better-sqlite3, OpenTelemetry, Prometheus, pino, Zod 4."
       ]
     }

@@ -75,7 +75,7 @@ export default function SobreMiPage() {
                     En el último año me enfoqué en construir proyectos completos end-to-end:
                     backends en Java/Spring, Go y Rust; frontends en React; pipelines de ML con
                     inferencia en el edge; y herramientas para developers: code review con AI
-                    multi-agente, plantillas para arrancar proyectos nuevos, e instalación y
+                    multi-agente, plantillas para empezar proyectos nuevos, e instalación y
                     configuración automática de herramientas de developer en máquinas nuevas. Cada
                     proyecto me empuja a stacks nuevos.
                   </p>
