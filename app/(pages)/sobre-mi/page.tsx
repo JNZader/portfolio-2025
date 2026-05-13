@@ -44,7 +44,7 @@ export default function SobreMiPage() {
               </div>
               <SectionTitle size="xl">Sobre mí</SectionTitle>
               <SectionDescription size="lg" className="mx-auto">
-                Construyo plataformas end-to-end — del backend al edge, del ML al frontend
+                Construyo soluciones de software end-to-end — backend, frontend, AI, ML, edge
               </SectionDescription>
             </SectionHeader>
           </RevealOnScroll>
@@ -66,78 +66,72 @@ export default function SobreMiPage() {
                 <h2 className="text-2xl font-bold mb-4">Mi Historia</h2>
                 <div className="space-y-4 text-muted-foreground">
                   <p>
-                    Hola, soy Javier. Software developer en Córdoba, Argentina. Vengo de una mezcla
-                    rara: 20+ años en tecnología y 11 años como productor agropecuario, así que mi
-                    forma de pensar problemas combina rigor técnico con la realidad de operar
-                    negocios y lidiar con la complejidad del campo.
+                    Hola, soy Javier. Software developer en Córdoba. Soy Técnico en Desarrollo de
+                    Software (Universidad Gastón Dachary, 2025), y antes de dedicarme a esto pasé
+                    varios años como productor agropecuario, lo que me dio una idea bastante directa
+                    de cómo es operar algo con tiempos y consecuencias reales.
                   </p>
                   <p>
-                    Hoy construyo plataformas end-to-end. En el último año pasé de hacer librerías
-                    Java básicas a diseñar plataformas multi-aplicación con backend en Go/Rust,
-                    frontend en React, ML pipelines con inferencia en el edge, y herramientas para
-                    developers alrededor de generación de código y agentes de AI. Cada proyecto me
-                    empuja a stacks nuevos y me obliga a entender por qué cada decisión técnica
-                    importa para el problema que estoy resolviendo.
+                    En el último año me enfoqué en construir proyectos completos end-to-end:
+                    backends en Java/Spring, Go y Rust; frontends en React; pipelines de ML con
+                    inferencia en el edge; y herramientas para developers: code review con AI
+                    multi-agente, plantillas para arrancar proyectos nuevos, e instalación y
+                    configuración automática de herramientas de developer en máquinas nuevas. Cada
+                    proyecto me empuja a stacks nuevos.
                   </p>
                 </div>
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold mb-4">Mi Enfoque</h2>
+                <h2 className="text-2xl font-bold mb-4">Cómo trabajo</h2>
                 <div className="space-y-4 text-muted-foreground">
-                  <p>Tres principios que aplico:</p>
                   <ul className="list-disc list-inside space-y-2 ml-4">
                     <li>
-                      <strong>Conceptos antes que código.</strong> No toco una línea hasta entender
-                      qué problema estoy resolviendo y por qué la decisión de hoy importa para el
-                      sistema de mañana.
+                      <strong>Entender el problema antes de escribir código.</strong> Le dedico
+                      tiempo a leer, discutir y mapear lo que tengo que resolver antes de tirar la
+                      primera línea.
                     </li>
                     <li>
-                      <strong>Honestidad sobre tradeoffs.</strong> Cada decisión técnica tiene una
-                      contrapartida. Mi job es elegir conscientemente y poder explicar el porqué.
-                    </li>
-                    <li>
-                      <strong>Iterar sobre uso real.</strong> Lo que no se usa no se aprende.
-                      Prefiero algo chico funcionando temprano que algo grande funcionando tarde.
+                      <strong>Decisiones técnicas con su tradeoff explícito.</strong> Cada elección
+                      tiene una contrapartida; trato de elegirlas conscientemente y poder explicar
+                      por qué.
                     </li>
                   </ul>
                 </div>
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold mb-4">Áreas de Expertise</h2>
+                <h2 className="text-2xl font-bold mb-4">Áreas en las que trabajo</h2>
                 <div className="space-y-4 text-muted-foreground">
                   <ul className="list-disc list-inside space-y-2 ml-4">
                     <li>
-                      Plataformas multi-aplicación end-to-end (backend + frontend + edge + ML)
+                      <strong>Backend:</strong> Java/Spring Boot, Go (Gin), Rust (Axum/Tokio),
+                      Python (FastAPI)
                     </li>
                     <li>
-                      Backend en Java/Spring Boot, Go (Gin), Rust (Axum/Tokio), Python (FastAPI)
+                      <strong>Frontend:</strong> React, Next.js, Vite, Mantine, Zustand, Zod, React
+                      Flow
                     </li>
                     <li>
-                      Generación de código contract-first sobre SQL y OpenAPI (multi-target, IR,
-                      templates)
+                      <strong>Generación de código contract-first</strong> sobre SQL y OpenAPI
                     </li>
                     <li>
-                      Edge computing industrial: Modbus TCP/RTU, MQTT, ML inference local con ONNX,
-                      OTA con firma
+                      <strong>Edge industrial:</strong> Modbus TCP/RTU, MQTT, ML inference local con
+                      ONNX
                     </li>
                     <li>
-                      ML production-grade: training Python (scikit-learn) → inferencia Rust con
-                      parity tests, drift monitoring, SHAP
+                      <strong>ML pipelines:</strong> training en Python, inferencia en Rust con
+                      parity tests, SHAP para explicabilidad
                     </li>
                     <li>
-                      AI tooling: servidores MCP, sistemas multi-agente, SAST/SCA (Semgrep, Trivy,
-                      Gitleaks)
+                      <strong>AI tooling:</strong> servidores MCP, sistemas multi-agente,
+                      integración con SAST/SCA (Semgrep, Trivy, Gitleaks)
                     </li>
                     <li>
-                      Frontend moderno: React 19, Next.js, Vite, Mantine, Zustand, Zod, React Flow
+                      <strong>DevOps:</strong> Docker, Terraform, GitLab CI, GitHub Actions
                     </li>
                     <li>
-                      DevOps: Docker, Terraform, GitLab CI, GitHub Actions, monorepo orchestration
-                    </li>
-                    <li>
-                      Spec-Driven Development con OpenSpec, conventional commits, semantic-release
+                      <strong>Spec-Driven Development</strong> con OpenSpec, conventional commits
                     </li>
                   </ul>
                 </div>
