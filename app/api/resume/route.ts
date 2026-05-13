@@ -23,9 +23,9 @@ const COLORS = {
 
 // Font sizes (pt). Tuned to fit the full CV in two A4 pages.
 const SIZES = {
-  name: 22,
-  subtitle: 12,
-  contact: 8.5,
+  name: 19,
+  subtitle: 11,
+  contact: 8,
   section: 13,
   subsection: 10.5,
   projectName: 9.5,
@@ -96,14 +96,14 @@ function renderHeader(ctx: PDFContext, data: ResumeData): void {
   // Name -- centered, large, bold, primary
   setText(ctx, SIZES.name, COLORS.primary, 'bold');
   const nameWidth = ctx.doc.getTextWidth(data.personalInfo.name);
-  ctx.doc.text(data.personalInfo.name, (PAGE_WIDTH - nameWidth) / 2, ctx.yPos + 8);
-  ctx.yPos += 11;
+  ctx.doc.text(data.personalInfo.name, (PAGE_WIDTH - nameWidth) / 2, ctx.yPos + 7);
+  ctx.yPos += 8.5;
 
   // Title -- centered, secondary
   setText(ctx, SIZES.subtitle, COLORS.secondary, 'normal');
   const titleWidth = ctx.doc.getTextWidth(data.personalInfo.title);
-  ctx.doc.text(data.personalInfo.title, (PAGE_WIDTH - titleWidth) / 2, ctx.yPos + 5);
-  ctx.yPos += 8;
+  ctx.doc.text(data.personalInfo.title, (PAGE_WIDTH - titleWidth) / 2, ctx.yPos + 4);
+  ctx.yPos += 6;
 
   // Contact line -- centered with separators
   setText(ctx, SIZES.contact, COLORS.lightGray, 'normal');
@@ -113,7 +113,7 @@ function renderHeader(ctx: PDFContext, data: ResumeData): void {
   const contactText = `${data.personalInfo.location}${sep}${linkedinShort}${sep}${githubShort}`;
   const contactWidth = ctx.doc.getTextWidth(contactText);
   const contactX = (PAGE_WIDTH - contactWidth) / 2;
-  ctx.doc.text(contactText, contactX, ctx.yPos + 4);
+  ctx.doc.text(contactText, contactX, ctx.yPos + 3.5);
 
   // Add hyperlinks for LinkedIn and GitHub portions
   const locationWidth = ctx.doc.getTextWidth(data.personalInfo.location);
@@ -121,17 +121,17 @@ function renderHeader(ctx: PDFContext, data: ResumeData): void {
   const linkedinX = contactX + locationWidth + sepWidth;
   const linkedinWidth = ctx.doc.getTextWidth(linkedinShort);
   const githubX = linkedinX + linkedinWidth + sepWidth;
-  ctx.doc.link(linkedinX, ctx.yPos + 1, linkedinWidth, 4, { url: data.personalInfo.linkedin });
-  ctx.doc.link(githubX, ctx.yPos + 1, ctx.doc.getTextWidth(githubShort), 4, {
+  ctx.doc.link(linkedinX, ctx.yPos + 0.8, linkedinWidth, 3.5, { url: data.personalInfo.linkedin });
+  ctx.doc.link(githubX, ctx.yPos + 0.8, ctx.doc.getTextWidth(githubShort), 3.5, {
     url: data.personalInfo.github,
   });
 
-  ctx.yPos += 9;
+  ctx.yPos += 6;
 }
 
 function renderSectionHeader(ctx: PDFContext, title: string): void {
-  checkNewPage(ctx, 16);
-  ctx.yPos += 2; // top spacing before section
+  checkNewPage(ctx, 14);
+  ctx.yPos += 1.2; // top spacing before section
   setText(ctx, SIZES.section, COLORS.primary, 'bold');
   ctx.doc.text(title, MARGIN, ctx.yPos + 4);
   ctx.yPos += 5;
@@ -139,7 +139,7 @@ function renderSectionHeader(ctx: PDFContext, title: string): void {
   ctx.doc.setDrawColor(...COLORS.primary);
   ctx.doc.setLineWidth(0.3);
   ctx.doc.line(MARGIN, ctx.yPos, PAGE_WIDTH - MARGIN, ctx.yPos);
-  ctx.yPos += 2.5;
+  ctx.yPos += 2;
 }
 
 function renderSubsectionWithDate(ctx: PDFContext, title: string, dateText: string): void {
@@ -225,7 +225,7 @@ function renderExperienceWithProjects(
 
     // Indented bullets
     renderBullets(ctx, project.highlights, 5);
-    ctx.yPos += 0.8;
+    ctx.yPos += 0.4;
   }
 }
 
