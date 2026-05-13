@@ -97,13 +97,12 @@ function renderHeader(ctx: PDFContext, data: ResumeData): void {
   setText(ctx, SIZES.name, COLORS.primary, 'bold');
   const nameWidth = ctx.doc.getTextWidth(data.personalInfo.name);
   ctx.doc.text(data.personalInfo.name, (PAGE_WIDTH - nameWidth) / 2, ctx.yPos + 7);
-  ctx.yPos += 8.5;
+  ctx.yPos += 9;
 
-  // Title -- centered, secondary
-  setText(ctx, SIZES.subtitle, COLORS.secondary, 'normal');
-  const titleWidth = ctx.doc.getTextWidth(data.personalInfo.title);
-  ctx.doc.text(data.personalInfo.title, (PAGE_WIDTH - titleWidth) / 2, ctx.yPos + 4);
-  ctx.yPos += 6;
+  // Subtitle ("Software Developer") intentionally skipped here -- it was
+  // duplicating the position rendered in the Experience section just below
+  // and the opening word of the summary. Kept in personalInfo.title so
+  // other surfaces (SEO metadata, sobre-mi page) still have it available.
 
   // Contact line -- centered with separators
   setText(ctx, SIZES.contact, COLORS.lightGray, 'normal');
