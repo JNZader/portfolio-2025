@@ -113,9 +113,6 @@ export default function SobreMiPage() {
                       Flow
                     </li>
                     <li>
-                      <strong>Generación de código contract-first</strong> sobre SQL y OpenAPI
-                    </li>
-                    <li>
                       <strong>Edge industrial:</strong> Modbus TCP/RTU, MQTT, ML inference local con
                       ONNX
                     </li>
@@ -128,7 +125,7 @@ export default function SobreMiPage() {
                       integración con SAST/SCA (Semgrep, Trivy, Gitleaks)
                     </li>
                     <li>
-                      <strong>DevOps:</strong> Docker, Terraform, GitLab CI, GitHub Actions
+                      <strong>DevOps:</strong> Docker, GitLab CI, GitHub Actions
                     </li>
                     <li>
                       <strong>Spec-Driven Development</strong> con OpenSpec, conventional commits

@@ -1,7 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import {
   Box,
-  Cloud,
   Code2,
   Database,
   GitBranch,
@@ -55,7 +54,6 @@ export const SKILLS_DATA: SkillsData = {
   ],
   devops: [
     { name: 'Docker', icon: Server, color: 'text-blue-600 dark:text-blue-400' },
-    { name: 'Terraform', icon: Cloud, color: 'text-purple-600 dark:text-purple-400' },
     { name: 'Git', icon: GitBranch, color: 'text-orange-600 dark:text-orange-400' },
     { name: 'GitHub', icon: GitBranch, color: 'text-foreground' },
     { name: 'CI/CD', icon: Target, color: 'text-green-600 dark:text-green-400' },

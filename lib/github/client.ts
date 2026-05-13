@@ -75,7 +75,11 @@ export async function getFeaturedRepos(username?: string): Promise<GitHubRepo[]>
       q: query,
       sort: 'updated',
       order: 'desc',
-      per_page: 6,
+      // Use the API maximum so the topic filter below operates on the full
+      // result set; with ~15 repos in the user's account the previous value
+      // of 6 silently dropped projects (ghagga, repoforge) that did have the
+      // "portfolio" topic but lived outside the most-recently-updated window.
+      per_page: 100,
     });
 
     logger.info('GitHub repos fetched', {
