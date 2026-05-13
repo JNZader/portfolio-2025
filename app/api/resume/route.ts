@@ -10,7 +10,7 @@ type RGB = [number, number, number];
 // Page geometry (A4 in mm)
 const PAGE_WIDTH = 210;
 const PAGE_HEIGHT = 297;
-const MARGIN = 16.5; // ~0.65 inch
+const MARGIN = 12; // ~0.47 inch -- tighter margins, equal on both sides
 const CONTENT_WIDTH = PAGE_WIDTH - 2 * MARGIN;
 
 // Colors mirrored from the LaTeX template
@@ -206,9 +206,10 @@ function renderExperienceWithProjects(
   // Projects rendered as second-level bullets after the role highlights
   for (const project of projects) {
     checkNewPage(ctx, 18);
-    // Project name in bold + primary color
+    // Project name in bold + primary color. Use "•" (in the Helvetica WinAnsi
+    // set) rather than "▪" because the latter renders as a tofu glyph in jsPDF.
     setText(ctx, SIZES.projectName, COLORS.primary, 'bold');
-    ctx.doc.text('▪', MARGIN + 1, ctx.yPos + 3.5); // small filled square as bullet
+    ctx.doc.text('•', MARGIN + 1, ctx.yPos + 3.5);
     ctx.doc.text(project.name, MARGIN + 5, ctx.yPos + 3.5);
     ctx.yPos += 5;
 
