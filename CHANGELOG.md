@@ -1,6 +1,53 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+## [2.2.0](https://github.com/JNZader/portfolio-2025/compare/v2.1.2...v2.2.0) (2026-05-21)
+
+
+### Features
+
+* **cv:** expand project highlights with concrete tech and business value ([73efb70](https://github.com/JNZader/portfolio-2025/commits/73efb705f404391cda6b856c7e08f3025f4a2f9c))
+* **cv:** integrate problem statements and project status into projects ([13f5665](https://github.com/JNZader/portfolio-2025/commits/13f566559145f9d350d671e494da2e0805a8477e))
+* **cv:** rewrite resume to reflect actual stack and projects ([411ca19](https://github.com/JNZader/portfolio-2025/commits/411ca19e71aee5fc7a58b9bae024fa110ad79b83))
+* **cv:** rewrite resume tone and pdf layout to mirror latex template ([8101cfb](https://github.com/JNZader/portfolio-2025/commits/8101cfb10e98f9c004ac8b0730c947bd9cce2e3e))
+* **projects:** add curated case studies to portfolio ([f9c5fb5](https://github.com/JNZader/portfolio-2025/commits/f9c5fb55e7c5aa75925e7848f844875c21723359))
+* **projects:** apply same research findings to case studies ([46b68ab](https://github.com/JNZader/portfolio-2025/commits/46b68abb7ba710da0e4af394ab39f1929e6a54f2))
+* **projects:** expand curated case studies ([3a8be76](https://github.com/JNZader/portfolio-2025/commits/3a8be76a56a45081f59af28b3c4a528bd06ea37f))
+* **projects:** rewrite apigen case study and link origin repo ([35a34f1](https://github.com/JNZader/portfolio-2025/commits/35a34f18a36aeec60042a813bc27cf7ef83c0251))
+
+
+### Bug Fixes
+
+* **ci:** reduce GitHub Actions consumption ~54% ([8978999](https://github.com/JNZader/portfolio-2025/commits/8978999b16b2d19b608fccc93cfd8fd8937b4435))
+* **cv:** copy + grammar fixes and skills overlap bug ([004af9f](https://github.com/JNZader/portfolio-2025/commits/004af9fed6301bdf2f9d4afc219650ab98734b96))
+* **cv:** drop kubernetes from apigen project stack line ([f512352](https://github.com/JNZader/portfolio-2025/commits/f512352dbd12db74a831804801ead50c1690ffa5))
+* **cv:** drop Supabase from skills now that no active project uses it ([2239fac](https://github.com/JNZader/portfolio-2025/commits/2239facb7735c23dcf10ec0fe0a9727dd28d3642))
+* **cv:** remove the two extra 'Software Developer' mentions ([4818823](https://github.com/JNZader/portfolio-2025/commits/4818823acc320f16353b61073d681daa8a365e69))
+* **cv:** shrink header and trim section/project spacing to lift Idiomas onto page 2 ([0163ac7](https://github.com/JNZader/portfolio-2025/commits/0163ac72db717bf1f1516ca30125a793fd1a63b7))
+* **cv:** smaller copy fixes and richer mcp-llm-bridge description ([ed436e3](https://github.com/JNZader/portfolio-2025/commits/ed436e3434dc7ddbe00852eb28ede799dd18c6d5))
+* **cv:** stop project description from overlapping its name ([75bff77](https://github.com/JNZader/portfolio-2025/commits/75bff77586d8f34612aaa55e0028ee07aa3c7596))
+* **cv:** summary preposition and correct consorcio backend stack ([6f0412d](https://github.com/JNZader/portfolio-2025/commits/6f0412dcc6bbbcceea5ab7d8226f181110c07d7e)), closes [#2](https://github.com/JNZader/portfolio-2025/issues/2)
+* **cv:** tighten skills table typography to reclaim vertical space ([e6e63d5](https://github.com/JNZader/portfolio-2025/commits/e6e63d5e58215f0e23f30c881c87682ba790ac10))
+* **cv:** tighten typography and spacing to fit the cv in two pages ([b7708ea](https://github.com/JNZader/portfolio-2025/commits/b7708ea260b8c3701ca1fadf589f4d1e4534dc03))
+* **cv:** tighter equal margins and printable project bullet glyph ([c674e19](https://github.com/JNZader/portfolio-2025/commits/c674e1908981c3d3a3f74afd172d327850badd21))
+* **cv:** tighter, more concrete closing line in summary ([470632b](https://github.com/JNZader/portfolio-2025/commits/470632bd2a521ae85415253734650e75af33c02c))
+* **cv:** trim margins to 10mm and shift skills items column left ([b11c6c1](https://github.com/JNZader/portfolio-2025/commits/b11c6c19cd8272f7294ec2837a47f58652083bc1))
+* **deps:** patch CVE-2026-44578 and bulk dep updates within caret ranges ([07e062c](https://github.com/JNZader/portfolio-2025/commits/07e062ca0a9ce3d9f612c3168438eafb5b114717))
+* **projects:** correct biogas mobile app stack ([88168d8](https://github.com/JNZader/portfolio-2025/commits/88168d8c8f110a84cfd15817ae4d73ec0745035c))
+* **projects:** include all portfolio-tagged repos and drop stale items ([5865f17](https://github.com/JNZader/portfolio-2025/commits/5865f1707196b48c4fcb8c869081fc231b74ff5a))
+
+
+### Documentation
+
+* **about:** rewrite sobre-mi tone -- less marketing, more honest ([e4de1f5](https://github.com/JNZader/portfolio-2025/commits/e4de1f51bf3beed46821cbcfa33cf739e2c680d1))
+* audit backlog with Tier S + Tier A high-ROI improvements ([4cba5c6](https://github.com/JNZader/portfolio-2025/commits/4cba5c6e3daa64c96d363e0c4ffc3d94f5cc587f))
+* **projects:** deepen apigen case studies ([7b2cf93](https://github.com/JNZader/portfolio-2025/commits/7b2cf93da1ad4183d76420911195966ed3636f1f))
+* **projects:** enrich biogas case study with ai architecture ([15dcb3d](https://github.com/JNZader/portfolio-2025/commits/15dcb3def1142b58869f0c7b38c76fb641fb9cee))
+* **projects:** give biogas edge gateway its real weight ([b929b37](https://github.com/JNZader/portfolio-2025/commits/b929b37e7fbb0dda39f03dd7dad9840e2e1554ec)), closes [#1](https://github.com/JNZader/portfolio-2025/issues/1)
+* **projects:** make case study tone more objective ([b0aeff3](https://github.com/JNZader/portfolio-2025/commits/b0aeff3cfbffa31eaf813fd4489f2db22f666f52))
+* **projects:** refine case study copy ([59ae82a](https://github.com/JNZader/portfolio-2025/commits/59ae82add4956a40b5da6c3469875a3c23e77e49))
+* **projects:** rewrite studio and biogas case studies ([1500150](https://github.com/JNZader/portfolio-2025/commits/1500150e7f63de1df507cc2bbff7160351752e74))
 
 ### [2.1.2](https://github.com/JNZader/portfolio-2025/compare/v2.1.1...v2.1.2) (2026-03-20)
 
