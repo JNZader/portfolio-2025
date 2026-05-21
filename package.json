@@ -102,7 +102,7 @@
     "@axe-core/playwright": "^4.11.1",
     "@axe-core/react": "^4.11.1",
     "@biomejs/biome": "^2.4.7",
-    "@commitlint/cli": "^20.5.0",
+    "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^20.5.0",
     "@lhci/cli": "^0.15.1",
     "@next/bundle-analyzer": "^16.1.6",
