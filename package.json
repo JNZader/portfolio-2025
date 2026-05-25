@@ -64,7 +64,7 @@
     "framer-motion": "^12.39.0",
     "js-cookie": "^3.0.7",
     "jspdf": "^4.2.1",
-    "lucide-react": "^0.577.0",
+    "lucide-react": "^1.16.0",
     "mermaid": "^11.13.0",
     "nanoid": "^5.1.7",
     "next": "^16.1.6",
