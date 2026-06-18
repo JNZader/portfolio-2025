@@ -3,6 +3,7 @@
  */
 
 import type { Project } from '@/lib/github/types';
+import { getImageUrl } from '@/sanity/lib/image';
 import type { Project as SanityProject } from '@/types/sanity';
 
 /**
@@ -14,8 +15,12 @@ export function convertSanityProject(sanityProject: SanityProject): Project {
     title: sanityProject.title,
     description: sanityProject.excerpt,
     tech: sanityProject.technologies || [],
+    // Resolve the real Sanity CDN URL from the image asset. Previously this
+    // pointed at a static /projects/{slug}.jpg that doesn't exist in /public,
+    // so every Sanity project's <Image> 404'd. getImageUrl builds a cdn.sanity.io
+    // URL (already allowed in next.config remotePatterns + CSP).
     image: sanityProject.mainImage?.asset?._ref
-      ? `/projects/${sanityProject.slug.current}.jpg`
+      ? getImageUrl(sanityProject.mainImage, 1200)
       : undefined,
     url: sanityProject.demoUrl ?? sanityProject.githubUrl ?? '#',
     github: sanityProject.githubUrl,
