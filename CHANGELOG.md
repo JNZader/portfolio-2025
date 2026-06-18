@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.3.1](https://github.com/JNZader/portfolio-2025/compare/v2.3.0...v2.3.1) (2026-06-18)
+
+
+### Performance Improvements
+
+* **projects:** pre-render project detail pages with generateStaticParams ([#146](https://github.com/JNZader/portfolio-2025/issues/146)) ([f0eb1c7](https://github.com/JNZader/portfolio-2025/commits/f0eb1c797f86ba888f70af290cef2929dda4d798))
+
 ## [2.3.0](https://github.com/JNZader/portfolio-2025/compare/v2.2.3...v2.3.0) (2026-06-18)
 
 
