@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
 import { type ReactNode, Suspense } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { AnnouncerProvider } from '@/components/a11y/ScreenReaderAnnouncer';
@@ -11,6 +11,7 @@ import { ClientComponents } from '@/components/layout/ClientComponents';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { BackToTop } from '@/components/ui/BackToTop';
+import { RippleListener } from '@/components/ui/RippleListener';
 import { VercelAnalyticsProvider } from '@/lib/analytics/vercel';
 import { SITE_URL } from '@/lib/config/site-config';
 import { ThemeProvider } from '@/lib/design/theme-provider';
@@ -34,6 +35,18 @@ const inter = Inter({
     'Ubuntu',
     'sans-serif',
   ],
+  adjustFontFallback: true,
+});
+
+// Display grotesk for headings — 'swap' so the distinctive face actually
+// renders (the whole point of a display font); adjustFontFallback keeps CLS low.
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-display',
+  weight: ['500', '700'],
+  preload: true,
+  fallback: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
   adjustFontFallback: true,
 });
 
@@ -98,7 +111,7 @@ export default function RootLayout({
       lang="es"
       suppressHydrationWarning
       data-scroll-behavior="smooth"
-      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
     >
       <ResourceHints />
       <body className="font-sans antialiased">
@@ -155,6 +168,7 @@ export default function RootLayout({
             <Suspense fallback={null}>
               <BackToTop />
             </Suspense>
+            <RippleListener />
             <Suspense fallback={null}>
               <WebVitals />
             </Suspense>

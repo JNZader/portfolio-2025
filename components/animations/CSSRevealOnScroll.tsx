@@ -42,15 +42,15 @@ export function CSSRevealOnScroll({
       visible: 'opacity-100',
     },
     'slide-up': {
-      hidden: 'opacity-0 translate-y-16',
+      hidden: 'opacity-0 translate-y-8',
       visible: 'opacity-100 translate-y-0',
     },
     'slide-left': {
-      hidden: 'opacity-0 -translate-x-16',
+      hidden: 'opacity-0 -translate-x-8',
       visible: 'opacity-100 translate-x-0',
     },
     'slide-right': {
-      hidden: 'opacity-0 translate-x-16',
+      hidden: 'opacity-0 translate-x-8',
       visible: 'opacity-100 translate-x-0',
     },
     scale: {
@@ -73,10 +73,11 @@ export function CSSRevealOnScroll({
   return (
     <div
       ref={ref}
-      className={cn('transition-all ease-out', isVisible ? visible : hidden, className)}
+      className={cn('transition-all', isVisible ? visible : hidden, className)}
       style={{
         transitionDuration: `${duration}ms`,
         transitionDelay: `${delay * 1000}ms`,
+        transitionTimingFunction: 'var(--ease-spring)',
       }}
     >
       {children}
