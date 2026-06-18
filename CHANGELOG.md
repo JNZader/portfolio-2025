@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.3.0](https://github.com/JNZader/portfolio-2025/compare/v2.2.3...v2.3.0) (2026-06-18)
+
+
+### Features
+
+* **seo:** Tier S backlog — domain consistency, OG fixes, CV CTA ([#144](https://github.com/JNZader/portfolio-2025/issues/144)) ([fe547cf](https://github.com/JNZader/portfolio-2025/commits/fe547cf1c84959e5b97fe2cc23d95b97974423d0))
+
+
+### Bug Fixes
+
+* **projects:** resolve Sanity project images from CDN instead of missing static path ([#145](https://github.com/JNZader/portfolio-2025/issues/145)) ([36dbba9](https://github.com/JNZader/portfolio-2025/commits/36dbba9c0c5098fbe1890a649376589f19a021b3))
+
 ## [2.2.3](https://github.com/JNZader/portfolio-2025/compare/v2.2.2...v2.2.3) (2026-05-21)
 
 ## [2.2.2](https://github.com/JNZader/portfolio-2025/compare/v2.2.1...v2.2.2) (2026-05-21)
