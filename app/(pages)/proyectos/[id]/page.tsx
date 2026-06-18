@@ -70,6 +70,39 @@ async function getAllProjects(): Promise<Project[]> {
   ];
 }
 
+/**
+ * Pre-render the curated/Sanity project detail pages at build time (SSG),
+ * mirroring the blog. Eliminates the serverless cold start on a cold first
+ * visit. GitHub-only projects aren't pre-rendered here (avoids hitting the
+ * GitHub API on every build); they fall back to on-demand ISR via the default
+ * dynamicParams behaviour and the `revalidate` above.
+ */
+export async function generateStaticParams() {
+  // Skip static generation in CI with dummy credentials
+  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+  if (!projectId || projectId === 'dummy-project-id') {
+    return [];
+  }
+
+  try {
+    const projects = await sanityFetch<SanityProject[]>({
+      query: projectsQuery,
+      tags: ['project'],
+    });
+
+    return mergeLocalAndSanityProjects(projects)
+      .map(convertSanityProject)
+      .map((project) => ({ id: project.id }));
+  } catch (error) {
+    logger.warn('Failed to fetch project ids for static generation', {
+      service: 'projects',
+      path: '/proyectos/[id]',
+      error: (error as Error).message,
+    });
+    return [];
+  }
+}
+
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const resolvedParams = await params;
   const projects = await getAllProjects();
