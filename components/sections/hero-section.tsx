@@ -1,4 +1,4 @@
-import { ArrowRight, FileText, Mail, Sparkles } from 'lucide-react';
+import { ArrowRight, Download, Mail, Sparkles } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
@@ -98,11 +98,22 @@ export function HeroSection({
                 />
               </Link>
             </Button>
-            {secondaryCta && (
+            {/* CV download — promoted from a tiny social icon to a prominent
+                above-the-fold CTA. Plain <a download> (not next/Link) so the
+                PDF attachment from /api/resume downloads instead of SPA-navigating. */}
+            {socialLinks?.cv && (
               <Button size="lg" variant="outline-glow" className="btn-ripple" asChild>
+                <a href={socialLinks.cv} download>
+                  <Download className="mr-2 h-4 w-4" aria-hidden="true" />
+                  Descargar CV
+                </a>
+              </Button>
+            )}
+            {secondaryCta && (
+              <Button size="lg" variant="ghost" className="btn-ripple" asChild>
                 <Link href={secondaryCta.href}>
+                  <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
                   {secondaryCta.text}
-                  <Mail className="ml-2 h-4 w-4" aria-hidden="true" />
                 </Link>
               </Button>
             )}
@@ -142,18 +153,6 @@ export function HeroSection({
                     aria-label="Visitar perfil de LinkedIn"
                   >
                     <FaLinkedin className="h-5 w-5" aria-hidden="true" />
-                  </a>
-                </Button>
-              )}
-              {socialLinks.cv && (
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="hover:bg-primary/10 hover:text-primary transition-colors"
-                  asChild
-                >
-                  <a href={socialLinks.cv} aria-label="Descargar currículum vitae">
-                    <FileText className="h-5 w-5" aria-hidden="true" />
                   </a>
                 </Button>
               )}

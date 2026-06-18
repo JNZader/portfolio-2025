@@ -1,10 +1,10 @@
+import { SITE_URL } from '@/lib/config/site-config';
 import { logger } from '@/lib/monitoring/logger';
 import { sanityFetch } from '@/sanity/lib/client';
 import { urlForImage } from '@/sanity/lib/image';
 import { postsQuery } from '@/sanity/lib/queries';
 import type { Post } from '@/types/sanity';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://javierzader.dev';
 const AUTHOR_NAME = 'Javier Zader';
 
 /**

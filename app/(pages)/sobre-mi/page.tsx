@@ -46,6 +46,11 @@ export default function SobreMiPage() {
               <SectionDescription size="lg" className="mx-auto">
                 Construyo soluciones de software end-to-end — backend, frontend, AI, ML, edge
               </SectionDescription>
+              {/* Prominent above-the-fold CV download (S5). The sidebar Contacto
+                  card keeps a second copy for visitors who scroll. */}
+              <div className="flex justify-center mt-8">
+                <DownloadCVButton />
+              </div>
             </SectionHeader>
           </RevealOnScroll>
         </div>

@@ -131,8 +131,8 @@ Items que aparecieron en la auditoría pero que descarto por ROI bajo o riesgo >
 - **Organization schema** — Sos persona, no empresa. Agrega ruido al JSON-LD sin beneficio.
 - **Verificar React Compiler con benchmarks** — Está enabled en `next.config.ts:11`, funciona. Obsesión sin retorno.
 - **Refactor de HTML responses en API routes** (newsletter/confirm, data-deletion/confirm) — 500 LOC de boilerplate pero solo se ve en flujos GDPR/newsletter confirm que casi nadie pisa. Bajo ROI.
-- **TypeScript 6.0 major upgrade** — Sesión aparte. Major de TS cascadea decenas de errores nuevos.
-- **lucide-react 0.x → 1.x major** — Hay que verificar uno por uno los íconos. Sin urgencia.
+- ~~**TypeScript 6.0 major upgrade**~~ — ✅ HECHO (PR #132, 2026-06). Se mergeó `typescript@6.0.3` sin cascada de errores.
+- ~~**lucide-react 0.x → 1.x major**~~ — ✅ HECHO (PR #138, 2026-06-18). Bump a `1.16.0` verificado con build verde — los 45 íconos siguen resolviendo.
 - **Tests para Server Actions + API routes** — Importante para vos, **invisible para el visitor**. Va después de Tier S y A.
 - **Env validation con Zod** — Misma razón. Importante pero no mueve conversión.
 - **Sentry tags/user context** — Solo importa cuando algo falla. No urgente para portfolio.

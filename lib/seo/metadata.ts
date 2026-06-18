@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
+import { SITE_URL } from '@/lib/config/site-config';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://javierzader.dev';
 const SITE_NAME = 'Javier Zader - Backend Java Developer';
 const SITE_DESCRIPTION =
   'Backend Java Developer con más de 20 años de experiencia en tecnología, especializado en Spring Boot, React y arquitecturas modernas';
@@ -28,7 +28,6 @@ export function generateMetadata({
   keywords?: string[];
 }): Metadata {
   const url = `${SITE_URL}${path}`;
-  const ogImage = image ?? `${SITE_URL}/og-image.png`;
 
   return {
     title: `${title} | ${SITE_NAME}`,
@@ -44,7 +43,6 @@ export function generateMetadata({
       canonical: url,
       languages: {
         'es-ES': url,
-        'en-US': url.replace(SITE_URL, `${SITE_URL}/en`),
       },
     },
 
@@ -56,14 +54,19 @@ export function generateMetadata({
       siteName: SITE_NAME,
       title,
       description,
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
+      // Only set an explicit OG image when one is passed. Otherwise we fall
+      // back to Next's file-based dynamic OG (app/opengraph-image.tsx), which
+      // actually exists — avoids advertising a missing /og-image.png (404).
+      ...(image && {
+        images: [
+          {
+            url: image,
+            width: 1200,
+            height: 630,
+            alt: title,
+          },
+        ],
+      }),
       ...(type === 'article' && {
         publishedTime,
         modifiedTime,
@@ -71,12 +74,13 @@ export function generateMetadata({
       }),
     },
 
-    // Verification
-    verification: {
-      google: 'google-site-verification-code',
-      // yandex: 'yandex-verification-code',
-      // bing: 'bing-verification-code',
-    },
+    // Verification — only emitted when the token is configured (env var).
+    // Avoids shipping a placeholder that GSC can't verify.
+    ...(process.env.GOOGLE_SITE_VERIFICATION && {
+      verification: {
+        google: process.env.GOOGLE_SITE_VERIFICATION,
+      },
+    }),
 
     // Robots
     robots: {
