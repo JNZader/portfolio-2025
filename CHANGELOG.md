@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.4.0](https://github.com/JNZader/portfolio-2025/compare/v2.3.1...v2.4.0) (2026-06-18)
+
+
+### Features
+
+* **ux:** motion & visual-depth quick wins from 5vr review ([#147](https://github.com/JNZader/portfolio-2025/issues/147)) ([b4e9a0a](https://github.com/JNZader/portfolio-2025/commits/b4e9a0a87a3b0b57fc51a2fba6d7f6627c303a5a))
+
 ## [2.3.1](https://github.com/JNZader/portfolio-2025/compare/v2.3.0...v2.3.1) (2026-06-18)
 
 
