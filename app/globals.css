@@ -324,15 +324,19 @@
       inset 0 1px 0 0 rgb(255 255 255 / 0.05);
   }
 
-  /* Display typography for headings */
+  /* Display typography for headings — distinct grotesk display face
+     (Space Grotesk, loaded via next/font) instead of falling back to the
+     system/body stack. Gives headings their own character. */
   .text-display {
+    font-family: var(--font-display), var(--font-inter);
     font-weight: 700;
     letter-spacing: -0.025em;
     line-height: 1.1;
   }
 
   .text-display-lg {
-    font-weight: 800;
+    font-family: var(--font-display), var(--font-inter);
+    font-weight: 700;
     letter-spacing: -0.03em;
     line-height: 1.05;
   }

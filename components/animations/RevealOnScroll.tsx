@@ -22,8 +22,10 @@ interface RevealOnScrollProps {
 }
 
 // Default variants (backwards compatible)
+// Travel reduced 75 → 40px so the spring easing's slight overshoot stays
+// subtle (and never clips large text). Elements "emerge", not "drop in".
 const defaultVariants: Variants = {
-  hidden: { opacity: 0, y: 75 },
+  hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -78,7 +80,10 @@ export function RevealOnScroll({
         transform: getTransformStyle(currentVariant),
         transitionDelay: `${delay * 1000}ms`,
         transitionDuration: '600ms',
-        transitionTimingFunction: 'cubic-bezier(0.6, -0.05, 0.01, 0.99)',
+        // Spring easing (overshoot + settle) — was a dead token in globals.css.
+        // Replaces the prior curve which had a negative initial velocity
+        // (micro-hesitation that killed momentum on reveal).
+        transitionTimingFunction: 'var(--ease-spring)',
       }}
     >
       {children}
@@ -117,7 +122,7 @@ export function StaggeredReveal({
 
 // Specific animation variants (backwards compatible exports)
 export const slideUpVariants: Variants = {
-  hidden: { opacity: 0, y: 60 },
+  hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0 },
 };
 
