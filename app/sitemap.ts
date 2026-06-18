@@ -1,10 +1,9 @@
 import type { MetadataRoute } from 'next';
+import { SITE_URL } from '@/lib/config/site-config';
 import { logger } from '@/lib/monitoring/logger';
 import { sanityFetch } from '@/sanity/lib/client';
 import { postsQuery, projectsQuery } from '@/sanity/lib/queries';
 import type { Post, Project } from '@/types/sanity';
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://javierzader.dev';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages

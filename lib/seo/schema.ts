@@ -1,6 +1,5 @@
 import type { BlogPosting, BreadcrumbList, Person, WebSite, WithContext } from 'schema-dts';
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://javierzader.dev';
+import { SITE_URL } from '@/lib/config/site-config';
 
 /**
  * Generate Person schema (for homepage)

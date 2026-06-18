@@ -12,6 +12,7 @@ import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { BackToTop } from '@/components/ui/BackToTop';
 import { VercelAnalyticsProvider } from '@/lib/analytics/vercel';
+import { SITE_URL } from '@/lib/config/site-config';
 import { ThemeProvider } from '@/lib/design/theme-provider';
 import { ResourceHints } from '@/lib/performance/resource-hints';
 import './globals.css';
@@ -47,7 +48,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://javierzader.com'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'Javier Zader - Portfolio',
     template: '%s | Javier Zader',
@@ -69,7 +70,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'es_ES',
-    url: 'https://javierzader.com',
+    url: SITE_URL,
     title: 'Javier Zader - Backend Java Developer',
     description:
       'Backend Java Developer especializado en Spring Boot, React y arquitecturas modernas. Más de 20 años de experiencia en tecnología.',

@@ -1,8 +1,12 @@
 import { ImageResponse } from 'next/og';
+import { SITE_URL } from '@/lib/config/site-config';
 import { logger } from '@/lib/monitoring/logger';
 import { sanityFetch } from '@/sanity/lib/client';
 import { postBySlugQuery } from '@/sanity/lib/queries';
 import type { Post } from '@/types/sanity';
+
+// Bare domain (no protocol) for display in the OG card footer.
+const SITE_DOMAIN = SITE_URL.replace(/^https?:\/\//, '');
 
 export const size = {
   width: 1200,
@@ -132,7 +136,7 @@ export default async function Image({ params }: Props) {
             color: 'rgba(255, 255, 255, 0.7)',
           }}
         >
-          javierzader.dev
+          {SITE_DOMAIN}
         </div>
       </div>
     </div>,
