@@ -46,7 +46,7 @@ Estos cambios mejoran SEO básico, social sharing y conversión. Bajo riesgo, al
 - **Fix (corto plazo):** Sacar el alternate de `en-US`. Dejar solo `es-ES`.
 - **Fix (largo plazo, si querés bilingüe):** Implementar i18n routing real (`next-intl` o equivalente) — esto es una feature aparte, no parte de Tier S.
 - **Effort:** 5 min (sacar las líneas).
-- **Status:** ☐
+- **Status:** ☑ HECHO — verificado 2026-06-19: ya NO existe el alternate `en-US: '/en'`. `metadata.ts` declara solo `es-ES` (línea 44-46); el único otro `alternates` (layout.tsx:92) es para RSS, no hreflang. Resuelto previamente (probablemente PR #144). Sin cambio de código necesario.
 
 ### S5 · CV escondido — sin CTA visible en el hero
 
