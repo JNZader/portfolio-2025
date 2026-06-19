@@ -63,20 +63,22 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Javier Zader - Portfolio',
+    default: 'Javier Zader — Backend Developer · Sistemas end-to-end',
     template: '%s | Javier Zader',
   },
   description:
-    'Backend Java Developer especializado en Spring Boot, React y arquitecturas modernas. Más de 20 años de experiencia en tecnología.',
+    'Backend Developer: sistemas end-to-end en Java, Go y Rust, plataformas industriales con ML en el edge y herramientas de desarrollo con IA. 20+ años en tecnología.',
   keywords: [
-    'portfolio',
-    'desarrollo web',
-    'next.js',
-    'react',
-    'typescript',
+    'backend developer',
     'java',
     'spring boot',
-    'backend developer',
+    'go',
+    'rust',
+    'machine learning',
+    'edge ml',
+    'ai tooling',
+    'code generation',
+    'sistemas end-to-end',
   ],
   authors: [{ name: 'Javier Zader' }],
   creator: 'Javier Zader',
@@ -84,9 +86,9 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'es_ES',
     url: SITE_URL,
-    title: 'Javier Zader - Backend Java Developer',
+    title: 'Javier Zader — Backend Developer · Sistemas end-to-end',
     description:
-      'Backend Java Developer especializado en Spring Boot, React y arquitecturas modernas. Más de 20 años de experiencia en tecnología.',
+      'Backend Developer: sistemas end-to-end en Java, Go y Rust, plataformas industriales con ML en el edge y herramientas de desarrollo con IA. 20+ años en tecnología.',
     siteName: 'Javier Zader Portfolio',
   },
   alternates: {
