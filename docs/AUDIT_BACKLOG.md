@@ -10,7 +10,7 @@ ROI is measured by impact on **portfolio conversion** (visitor → CV download o
 
 ## TIER S — Quick wins críticos (~1.5-2h total)
 
-Los seis cambios juntos mejoran SEO básico, social sharing y conversión. Bajo riesgo, alto impacto. **Empezar por acá.**
+Estos cambios mejoran SEO básico, social sharing y conversión. Bajo riesgo, alto impacto. **Empezar por acá.**
 
 ### S1 · Google Site Verification es un placeholder literal
 
@@ -37,23 +37,6 @@ Los seis cambios juntos mejoran SEO básico, social sharing y conversión. Bajo 
   ```
   Importar desde los 3 archivos.
 - **Effort:** 10 min.
-- **Status:** ☐
-
-### S3 · Twitter cards missing
-
-- **Files:** `app/layout.tsx`, `lib/seo/metadata.ts`
-- **Problem:** No hay `twitter: {...}` en metadata. Cuando alguien comparte en X/LinkedIn, no aparece preview rico.
-- **Fix:** Agregar al metadata default:
-  ```ts
-  twitter: {
-    card: 'summary_large_image',
-    title: '...',
-    description: '...',
-    images: ['/og-image.png'],
-    creator: '@<handle>', // si tiene Twitter
-  }
-  ```
-- **Effort:** 5 min.
 - **Status:** ☐
 
 ### S4 · `hreflang` apunta a `/en` que no existe
@@ -127,6 +110,7 @@ Estos no son "quick wins" pero te separan del 80% de portfolios. Hacerlos cuando
 
 Items que aparecieron en la auditoría pero que descarto por ROI bajo o riesgo > beneficio:
 
+- ~~**S3 · Twitter cards**~~ — DESCARTADO (2026-06-19, decisión del autor). X/Twitter es canal **personal, no profesional**; la audiencia profesional está en LinkedIn (que usa `og:`, ya completo). Además X hace fallback a las tags `og:` existentes, así que un link compartido en X igual muestra preview. ROI ~0 para el caso de uso.
 - **Breadcrumb schema en home** — Los breadcrumbs de la home no aparecen en SERP. Cero ROI.
 - **Organization schema** — Sos persona, no empresa. Agrega ruido al JSON-LD sin beneficio.
 - **Verificar React Compiler con benchmarks** — Está enabled en `next.config.ts:11`, funciona. Obsesión sin retorno.
