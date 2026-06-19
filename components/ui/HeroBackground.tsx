@@ -34,9 +34,9 @@ export function HeroBackground({
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.15),rgba(255,255,255,0))]" />
       </div>
 
-      {/* Gradient mesh effect - subtle color orbs */}
+      {/* Gradient mesh effect - subtle color orbs (parallaxes on scroll, see globals.css) */}
       {showGradientMesh && (
-        <div className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="hero-mesh-parallax absolute inset-0 -z-10 overflow-hidden">
           <div
             className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/[0.12] rounded-full blur-3xl"
             style={{ transform: 'translate(-50%, -50%)' }}

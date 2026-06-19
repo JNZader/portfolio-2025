@@ -30,7 +30,7 @@ export function ScrollIndicator({
       aria-label="Explorar contenido"
     >
       <span className="text-xs font-medium uppercase tracking-wider">Explorar</span>
-      <div className="relative">
+      <div className="relative animate-scroll-cue motion-reduce:animate-none">
         <ChevronDown className="w-6 h-6" aria-hidden="true" />
         <div className="absolute inset-0 bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>

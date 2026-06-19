@@ -74,6 +74,10 @@ const nextConfig: NextConfig = {
   // Experimental features
   experimental: {
     optimizeCss: true,
+    // Cross-route View Transitions — App Router navigations are wrapped in
+    // startViewTransition automatically; styled via ::view-transition-*(root)
+    // in globals.css (reduced-motion-safe).
+    viewTransition: true,
     optimizePackageImports: [
       'lucide-react',
       'date-fns',
