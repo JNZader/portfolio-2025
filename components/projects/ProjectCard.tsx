@@ -26,7 +26,7 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
           <>
             <Image
               src={project.image}
-              alt={project.title}
+              alt=""
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               priority={priority}
@@ -143,7 +143,7 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Ver código en GitHub"
+                  aria-label={`Ver repositorio de ${project.title} en GitHub`}
                 >
                   <FaGithub className="h-4 w-4" />
                 </a>
@@ -160,7 +160,7 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
                   href={project.demo}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Ver demo"
+                  aria-label={`Ver demo de ${project.title}`}
                 >
                   <ExternalLink className="h-4 w-4" />
                 </a>

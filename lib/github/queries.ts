@@ -1,37 +1,38 @@
-import { withCache } from './cache';
 import { getFeaturedRepos, getRepoReadme, getReposByTopic, normalizeGitHubRepo } from './client';
 import type { Project } from './types';
 
+/*
+ * No in-process cache here on purpose. The consuming routes use ISR
+ * (`export const revalidate = 3600`), so Next caches the rendered output for an
+ * hour — a module-level Map would be a no-op in serverless (per-instance memory,
+ * cold-empty on the path that matters), so it was removed. (Names kept as
+ * `getCached*` to avoid churning callers.)
+ */
+
 /**
- * Obtener proyectos featured con cache
- * Incluye extracción de imagen de preview del README
+ * Featured projects from GitHub, with README preview images fetched in parallel.
  */
 export async function getCachedFeaturedProjects(): Promise<Project[]> {
-  return withCache('github-featured-projects', async () => {
-    const repos = await getFeaturedRepos();
+  const repos = await getFeaturedRepos();
 
-    // Fetch READMEs in parallel for preview images
-    const readmes = await Promise.all(
-      repos.map((repo) => getRepoReadme(repo.owner.login, repo.name).catch(() => null))
-    );
+  // Fetch READMEs in parallel for preview images
+  const readmes = await Promise.all(
+    repos.map((repo) => getRepoReadme(repo.owner.login, repo.name).catch(() => null))
+  );
 
-    return repos.map((repo, index) => normalizeGitHubRepo(repo, readmes[index] ?? undefined));
-  });
+  return repos.map((repo, index) => normalizeGitHubRepo(repo, readmes[index] ?? undefined));
 }
 
 /**
- * Obtener proyectos por topic con cache
- * Incluye extracción de imagen de preview del README
+ * Projects by GitHub topic, with README preview images fetched in parallel.
  */
 export async function getCachedProjectsByTopic(topic: string): Promise<Project[]> {
-  return withCache(`github-projects-${topic}`, async () => {
-    const repos = await getReposByTopic(topic);
+  const repos = await getReposByTopic(topic);
 
-    // Fetch READMEs in parallel for preview images
-    const readmes = await Promise.all(
-      repos.map((repo) => getRepoReadme(repo.owner.login, repo.name).catch(() => null))
-    );
+  // Fetch READMEs in parallel for preview images
+  const readmes = await Promise.all(
+    repos.map((repo) => getRepoReadme(repo.owner.login, repo.name).catch(() => null))
+  );
 
-    return repos.map((repo, index) => normalizeGitHubRepo(repo, readmes[index] ?? undefined));
-  });
+  return repos.map((repo, index) => normalizeGitHubRepo(repo, readmes[index] ?? undefined));
 }

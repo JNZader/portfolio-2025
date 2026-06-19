@@ -42,7 +42,9 @@ export default function SobreMiPage() {
                   className="rounded-full ring-4 ring-primary/20 hover:ring-primary/40 transition-all hover:scale-110 duration-500"
                 />
               </div>
-              <SectionTitle size="xl">Sobre mí</SectionTitle>
+              <SectionTitle size="xl" as="h1">
+                Sobre mí
+              </SectionTitle>
               <SectionDescription size="lg" className="mx-auto">
                 Construyo soluciones de software end-to-end — backend, frontend, AI, ML, edge
               </SectionDescription>

@@ -13,17 +13,30 @@ import { sanityFetch } from '@/sanity/lib/client';
 import { categoriesQuery, paginatedPostsQuery } from '@/sanity/lib/queries';
 import type { Category, Post } from '@/types/sanity';
 
-export const metadata: Metadata = {
-  title: 'Blog - Portfolio 2025',
-  description: 'Artículos sobre desarrollo web, programación y tecnología.',
-};
-
 interface BlogPageProps {
   searchParams: Promise<{
     page?: string;
     category?: string;
     search?: string;
   }>;
+}
+
+export async function generateMetadata({
+  searchParams,
+}: Readonly<BlogPageProps>): Promise<Metadata> {
+  const params = await searchParams;
+  const isFiltered = Boolean(params.search || params.category || params.page);
+
+  return {
+    title: 'Blog - Portfolio 2025',
+    description: 'Artículos sobre desarrollo web, programación y tecnología.',
+    // Filtered views (search/category/page) are thin/duplicate of /blog.
+    // Keep them out of the index but follow links, and canonicalize to /blog.
+    ...(isFiltered && {
+      robots: { index: false, follow: true },
+      alternates: { canonical: '/blog' },
+    }),
+  };
 }
 
 export default async function BlogPage({ searchParams }: Readonly<BlogPageProps>) {

@@ -1,20 +1,25 @@
-import { ArrowLeft, ExternalLink, Star } from 'lucide-react';
+import { ArrowLeft, Download, ExternalLink, Mail, Star } from 'lucide-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FaGithub } from 'react-icons/fa';
+import type { CreativeWork, SoftwareSourceCode, WithContext } from 'schema-dts';
 import { PortableTextRenderer } from '@/components/blog/PortableTextRenderer';
 import { MarkdownContent } from '@/components/markdown/MarkdownContent';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
+import { SITE_URL } from '@/lib/config/site-config';
 import { mergeLocalAndSanityProjects } from '@/lib/data/projects';
 import { getRepoReadme } from '@/lib/github/client';
 import { getCachedFeaturedProjects } from '@/lib/github/queries';
 import type { Project } from '@/lib/github/types';
 import { logger } from '@/lib/monitoring/logger';
+import { generateBreadcrumbSchema } from '@/lib/seo/schema';
 import { convertSanityProject } from '@/lib/utils/project';
 import { getTechIcon } from '@/lib/utils/tech-icons';
 import { sanityFetch } from '@/sanity/lib/client';
@@ -117,6 +122,21 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   return {
     title: project.title,
     description: project.description,
+    openGraph: {
+      title: project.title,
+      description: project.description,
+      type: 'article',
+      images: project.image
+        ? [
+            {
+              url: project.image,
+              width: 1200,
+              height: 630,
+              alt: project.title,
+            },
+          ]
+        : undefined,
+    },
   };
 }
 
@@ -145,8 +165,64 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
 
   const hasLinks = Boolean(project.demo || project.github);
 
+  // Structured data: SoftwareSourceCode when a repo exists, CreativeWork otherwise.
+  const projectUrl = `${SITE_URL}/proyectos/${project.id}`;
+  const author = {
+    '@type': 'Person' as const,
+    name: 'Javier Zader',
+    url: SITE_URL,
+  };
+  const projectSchema: WithContext<SoftwareSourceCode | CreativeWork> = project.github
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareSourceCode',
+        name: project.title,
+        description: project.description,
+        url: projectUrl,
+        codeRepository: project.github,
+        ...(project.demo ? { sameAs: project.demo } : {}),
+        programmingLanguage: project.tech,
+        keywords: project.tech.join(', '),
+        author,
+        ...(project.publishedAt ? { datePublished: project.publishedAt } : {}),
+        image: project.image,
+      }
+    : {
+        '@context': 'https://schema.org',
+        '@type': 'CreativeWork',
+        name: project.title,
+        description: project.description,
+        url: projectUrl,
+        ...(project.demo ? { sameAs: project.demo } : {}),
+        keywords: project.tech.join(', '),
+        author,
+        ...(project.publishedAt ? { datePublished: project.publishedAt } : {}),
+        image: project.image,
+      };
+
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Inicio', url: '/' },
+    { name: 'Proyectos', url: '/proyectos' },
+    { name: project.title, url: `/proyectos/${project.id}` },
+  ]);
+
   return (
     <>
+      {/* JSON-LD Structured Data */}
+      <JsonLd data={projectSchema} />
+      <JsonLd data={breadcrumbSchema} />
+
+      {/* Breadcrumbs */}
+      <Container className="pt-8 pb-4">
+        <Breadcrumbs
+          items={[
+            { name: 'Inicio', href: '/' },
+            { name: 'Proyectos', href: '/proyectos' },
+            { name: project.title, href: `/proyectos/${project.id}` },
+          ]}
+        />
+      </Container>
+
       {/* Back Button */}
       <div className="border-b border-border">
         <Container>
@@ -320,6 +396,30 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+
+            {/* Closing conversion CTA */}
+            <div className="mt-16 text-center bg-card p-8 md:p-12 rounded-xl border border-border">
+              <h2 className="text-2xl md:text-3xl font-bold mb-3">
+                ¿Te interesa trabajar conmigo?
+              </h2>
+              <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+                Hablemos sobre tu próximo proyecto o conocé más sobre mi experiencia.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button asChild>
+                  <Link href="/contacto">
+                    <Mail className="mr-2 h-4 w-4" />
+                    Contactar
+                  </Link>
+                </Button>
+                <Button variant="outline" asChild>
+                  <a href="/api/resume" download>
+                    <Download className="mr-2 h-4 w-4" />
+                    Descargar CV
+                  </a>
+                </Button>
               </div>
             </div>
           </div>

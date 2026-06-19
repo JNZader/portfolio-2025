@@ -162,58 +162,6 @@
     --color-chart-4: oklch(65% 0.18 295);
     --color-chart-5: oklch(68% 0.2 350);
   }
-
-  /* Apply dark theme immediately based on system preference (before JS loads) */
-  @media (prefers-color-scheme: dark) {
-    :root:not(.light) {
-      --color-background: oklch(10% 0 0);
-      --color-foreground: oklch(98% 0 0);
-      --color-card: oklch(16% 0 0);
-      --color-card-foreground: oklch(98% 0 0);
-      --color-popover: oklch(14% 0 0);
-      --color-popover-foreground: oklch(98% 0 0);
-      --color-primary: oklch(70% 0.18 250);
-      --color-primary-50: oklch(25% 0.05 250);
-      --color-primary-100: oklch(30% 0.08 250);
-      --color-primary-600: oklch(75% 0.2 250);
-      --color-primary-700: oklch(80% 0.18 250);
-      --color-primary-foreground: oklch(9% 0 0);
-      --color-secondary: oklch(18% 0 0);
-      --color-secondary-foreground: oklch(98% 0 0);
-      --color-muted: oklch(18% 0 0);
-      --color-muted-foreground: oklch(78% 0 0);
-      --color-accent: oklch(18% 0 0);
-      --color-accent-foreground: oklch(98% 0 0);
-      --color-accent-warm: oklch(70% 0.18 45);
-      --color-accent-warm-foreground: oklch(9% 0 0);
-      --color-tertiary: oklch(65% 0.2 300);
-      --color-tertiary-foreground: oklch(9% 0 0);
-      --color-destructive: oklch(45% 0.22 27);
-      --color-destructive-foreground: oklch(98% 0 0);
-      --color-error: oklch(65% 0.22 27);
-      --color-error-foreground: oklch(98% 0 0);
-      --color-success: oklch(70% 0.18 150);
-      --color-success-foreground: oklch(9% 0 0);
-      --color-warning: oklch(75% 0.2 85);
-      --color-warning-foreground: oklch(12% 0 0);
-      --color-warning-light: oklch(30% 0.1 85);
-      --color-info: oklch(65% 0.15 230);
-      --color-info-foreground: oklch(9% 0 0);
-      --color-border: oklch(25% 0 0);
-      --color-input: oklch(18% 0 0);
-      --color-ring: oklch(70% 0.18 250);
-      --color-gray-300: oklch(65% 0 0);
-      --color-gray-500: oklch(50% 0 0);
-      --color-gray-800: oklch(35% 0 0);
-      --color-gray-900: oklch(25% 0 0);
-      --color-gray-950: oklch(15% 0 0);
-      --color-chart-1: oklch(60% 0.2 255);
-      --color-chart-2: oklch(55% 0.18 185);
-      --color-chart-3: oklch(62% 0.22 75);
-      --color-chart-4: oklch(65% 0.18 295);
-      --color-chart-5: oklch(68% 0.2 350);
-    }
-  }
 }
 
 @layer base {
@@ -455,6 +403,12 @@
     opacity: 0;
   }
 
+  .animate-hero-reveal-6 {
+    animation: heroReveal 0.8s var(--ease-out) forwards;
+    animation-delay: 500ms;
+    opacity: 0;
+  }
+
   /* Button ripple effect */
   .btn-ripple {
     position: relative;
@@ -519,28 +473,6 @@
 
   .shine-effect:hover::before {
     left: 150%;
-  }
-
-  /* Line clamp utilities */
-  .line-clamp-1 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-  }
-
-  .line-clamp-2 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
-
-  .line-clamp-3 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
   }
 }
 
