@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.5.0](https://github.com/JNZader/portfolio-2025/compare/v2.4.0...v2.5.0) (2026-06-19)
+
+
+### Features
+
+* 5vr [#2](https://github.com/JNZader/portfolio-2025/issues/2) — positioning, SEO correctness, conversion, a11y, perf ([#150](https://github.com/JNZader/portfolio-2025/issues/150)) ([a72572d](https://github.com/JNZader/portfolio-2025/commits/a72572d3e185f7fe42c7fd5b937c44ffba24e890))
+* **hero:** immersive hero — real apigen terminal + scroll-depth, cue & view transitions ([#148](https://github.com/JNZader/portfolio-2025/issues/148)) ([bd917de](https://github.com/JNZader/portfolio-2025/commits/bd917de341df5c0620b3ac0a20dd64d77915f4b9))
+
+
+### Documentation
+
+* **backlog:** discard S3 (Twitter cards) — X is personal not professional ([#149](https://github.com/JNZader/portfolio-2025/issues/149)) ([939814a](https://github.com/JNZader/portfolio-2025/commits/939814a5799d63eecd928994843b2feb9f327a53))
+
 ## [2.4.0](https://github.com/JNZader/portfolio-2025/compare/v2.3.1...v2.4.0) (2026-06-18)
 
 
