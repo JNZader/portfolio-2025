@@ -102,7 +102,7 @@ Estos no son "quick wins" pero te separan del 80% de portfolios. Hacerlos cuando
 - **Problem:** Tiene `revalidate: 3600` (ISR 1h) pero no pre-genera al build. Visita fría = serverless cold start = +200-400ms FCP.
 - **Fix:** Agregar `generateStaticParams()` que devuelva la lista de proyectos del CMS al build time. Mantener `revalidate` para updates de Sanity.
 - **Effort:** 15 min.
-- **Status:** ☐
+- **Status:** ❌ INVÁLIDO — descartado 2026-06-19. El ítem confunde la page de lista con las de detalle. `generateStaticParams` aplica SOLO a rutas dinámicas (`[id]`), no a `/proyectos/page.tsx` (page común). Y esa page YA tiene `export const revalidate = 3600` (línea 22) → Next la pre-renderiza estática al build (ISR), sin cold-start. El `generateStaticParams` real para las páginas de detalle (`[id]`) ya se hizo en PR #146. Único riesgo de cold-start sería un fetch con `cache:'no-store'`/`cookies()`/`headers()` — otro fix, no este.
 
 ---
 
