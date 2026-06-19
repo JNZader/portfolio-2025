@@ -2,6 +2,7 @@ import { ArrowRight, Download, Mail, Sparkles } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { HeroTerminal } from '@/components/sections/HeroTerminal';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
 import { HeroBackground } from '@/components/ui/HeroBackground';
@@ -50,8 +51,10 @@ export function HeroSection({
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <HeroBackground />
 
-      <Container className="text-center relative z-10">
-        <div className="max-w-4xl mx-auto space-y-8 pb-20">
+      <Container className="relative z-10">
+        <div className="grid items-center gap-12 pb-20 lg:grid-cols-2 lg:gap-10">
+          {/* Left column — text + CTAs (stacks first on mobile) */}
+          <div className="mx-auto max-w-2xl space-y-8 text-center lg:mx-0 lg:text-left">
           {/* Greeting Badge with stagger animation */}
           {greeting && (
             <div className="animate-hero-reveal-1 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm text-base font-medium glass">
@@ -82,12 +85,12 @@ export function HeroSection({
           </h1>
 
           {/* Description with better styling */}
-          <p className="animate-hero-reveal-3 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="animate-hero-reveal-3 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed">
             {description}
           </p>
 
           {/* CTA Buttons with enhanced styling */}
-          <div className="animate-hero-reveal-4 flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="animate-hero-reveal-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
             <Button size="lg" className="btn-ripple shine-effect" asChild>
               <Link href={primaryCta.href}>
                 <Sparkles className="mr-2 h-4 w-4" aria-hidden="true" />
@@ -121,7 +124,7 @@ export function HeroSection({
 
           {/* Social Links with hover effects */}
           {socialLinks && (
-            <div className="animate-hero-reveal-5 flex justify-center gap-3">
+            <div className="animate-hero-reveal-5 flex justify-center lg:justify-start gap-3">
               {socialLinks.github && (
                 <Button
                   size="icon"
@@ -171,13 +174,20 @@ export function HeroSection({
             </div>
           )}
 
-          {/* Scroll Indicator */}
-          {showScrollIndicator && (
-            <div className="animate-hero-reveal-5 absolute bottom-8 left-1/2 transform -translate-x-1/2">
-              <ScrollIndicator targetId="content" />
-            </div>
-          )}
+          </div>
+
+          {/* Right column — animated backend terminal (stacks below text on mobile) */}
+          <div className="animate-hero-reveal-3 w-full max-w-xl mx-auto lg:mx-0 lg:justify-self-end">
+            <HeroTerminal />
+          </div>
         </div>
+
+        {/* Scroll Indicator */}
+        {showScrollIndicator && (
+          <div className="animate-hero-reveal-5 absolute bottom-8 left-1/2 transform -translate-x-1/2">
+            <ScrollIndicator targetId="content" />
+          </div>
+        )}
       </Container>
     </section>
   );

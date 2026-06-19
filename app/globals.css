@@ -688,6 +688,73 @@
   }
 }
 
+/* Scroll cue: gentle bounce on the hero "Explorar" chevron. */
+@keyframes scrollCueBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+@layer utilities {
+  .animate-scroll-cue {
+    animation: scrollCueBounce 1.8s ease-in-out infinite;
+  }
+}
+
+/*
+ * Scroll-driven depth: the hero's decorative gradient mesh parallaxes (drifts +
+ * fades) as the hero scrolls out of view. Compositor-only (transform/opacity),
+ * runs off the main thread. Progressive enhancement — browsers without
+ * scroll-driven animations just keep the static mesh — and reduced-motion-safe.
+ */
+@keyframes heroMeshParallax {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(48px);
+    opacity: 0.7;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-mesh-parallax {
+      animation: heroMeshParallax linear both;
+      animation-timeline: view();
+      animation-range: cover;
+      will-change: transform;
+    }
+  }
+}
+
+/*
+ * Cross-route View Transitions — a subtle root cross-fade on navigation.
+ * Enabled via experimental.viewTransition in next.config.ts; App Router wraps
+ * navigations in startViewTransition automatically. Reduced-motion disables it
+ * (the `*` rule below doesn't reach ::view-transition pseudo-elements).
+ */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: 160ms ease both fadeOut;
+  }
+  ::view-transition-new(root) {
+    animation: 220ms ease 40ms both fadeOut reverse;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *,
