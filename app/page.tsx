@@ -63,9 +63,9 @@ export default function HomePage() {
       {/* Hero Section */}
       <HeroSection
         greeting="¡Hola!"
-        jobTitle="Backend Developer · Java & Spring Boot"
+        jobTitle="Backend Developer · Sistemas end-to-end"
         title="Javier Zader"
-        description="Desarrollador backend con más de 20 años en tecnología. Experiencia en soporte técnico, mantenimiento de sistemas y desarrollo de software con Java, Spring Boot y React."
+        description="Sistemas backend en Java, Go y Rust — desde plataformas industriales con ML predictivo en el edge (detección de anomalías, predicción de fallos) hasta herramientas de desarrollo con IA (generación de código, code review automático). 20+ años en tecnología."
         // CTA hierarchy: Descargar CV (filled, lowest-friction recruiter action) >
         // Ver Proyectos (outline) > Contactar (ghost). CV renders as <a download>
         // so the /api/resume PDF attachment downloads instead of SPA-navigating.
