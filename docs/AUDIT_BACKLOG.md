@@ -83,7 +83,7 @@ Estos no son "quick wins" pero te separan del 80% de portfolios. Hacerlos cuando
   2. Agregar 1-2 testimonials reales (de ex-jefes, colegas, clientes). Si no hay disponibles, contactar a alguien de tu red.
   3. Reforzar el `/sobre-mi` con un bloque "Cómo trabajo" (proceso, comunicación, etc.).
 - **Effort:** 3 horas (incluye redactar copy y conseguir testimonios).
-- **Status:** ☐
+- **Status:** ❌ DESCARTADO (2026-06-19, decisión del autor).
 
 ### A2 · Project cards sin métricas de impacto
 
@@ -94,7 +94,7 @@ Estos no son "quick wins" pero te separan del 80% de portfolios. Hacerlos cuando
   - **Biogas:** "N plantas monitoreadas en tiempo real, alertas que evitaron X paradas no planificadas."
   - **Consorcio:** "Reemplazó proceso manual de X actores, redujo gestión de Y a Z minutos."
 - **Effort:** 1-2 horas (depende de qué métricas tenés a mano).
-- **Status:** ☐
+- **Status:** ❌ DESCARTADO (2026-06-19, decisión del autor).
 
 ### A3 · `/proyectos` sin `generateStaticParams` — cold start en cada visita fría
 
