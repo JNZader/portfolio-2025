@@ -46,7 +46,7 @@ Estos cambios mejoran SEO básico, social sharing y conversión. Bajo riesgo, al
 - **Fix (corto plazo):** Sacar el alternate de `en-US`. Dejar solo `es-ES`.
 - **Fix (largo plazo, si querés bilingüe):** Implementar i18n routing real (`next-intl` o equivalente) — esto es una feature aparte, no parte de Tier S.
 - **Effort:** 5 min (sacar las líneas).
-- **Status:** ☐
+- **Status:** ☑ HECHO — verificado 2026-06-19: ya NO existe el alternate `en-US: '/en'`. `metadata.ts` declara solo `es-ES` (línea 44-46); el único otro `alternates` (layout.tsx:92) es para RSS, no hreflang. Resuelto previamente (probablemente PR #144). Sin cambio de código necesario.
 
 ### S5 · CV escondido — sin CTA visible en el hero
 
@@ -83,7 +83,7 @@ Estos no son "quick wins" pero te separan del 80% de portfolios. Hacerlos cuando
   2. Agregar 1-2 testimonials reales (de ex-jefes, colegas, clientes). Si no hay disponibles, contactar a alguien de tu red.
   3. Reforzar el `/sobre-mi` con un bloque "Cómo trabajo" (proceso, comunicación, etc.).
 - **Effort:** 3 horas (incluye redactar copy y conseguir testimonios).
-- **Status:** ☐
+- **Status:** ❌ DESCARTADO (2026-06-19, decisión del autor).
 
 ### A2 · Project cards sin métricas de impacto
 
@@ -94,7 +94,7 @@ Estos no son "quick wins" pero te separan del 80% de portfolios. Hacerlos cuando
   - **Biogas:** "N plantas monitoreadas en tiempo real, alertas que evitaron X paradas no planificadas."
   - **Consorcio:** "Reemplazó proceso manual de X actores, redujo gestión de Y a Z minutos."
 - **Effort:** 1-2 horas (depende de qué métricas tenés a mano).
-- **Status:** ☐
+- **Status:** ❌ DESCARTADO (2026-06-19, decisión del autor).
 
 ### A3 · `/proyectos` sin `generateStaticParams` — cold start en cada visita fría
 
@@ -102,7 +102,7 @@ Estos no son "quick wins" pero te separan del 80% de portfolios. Hacerlos cuando
 - **Problem:** Tiene `revalidate: 3600` (ISR 1h) pero no pre-genera al build. Visita fría = serverless cold start = +200-400ms FCP.
 - **Fix:** Agregar `generateStaticParams()` que devuelva la lista de proyectos del CMS al build time. Mantener `revalidate` para updates de Sanity.
 - **Effort:** 15 min.
-- **Status:** ☐
+- **Status:** ❌ INVÁLIDO — descartado 2026-06-19. El ítem confunde la page de lista con las de detalle. `generateStaticParams` aplica SOLO a rutas dinámicas (`[id]`), no a `/proyectos/page.tsx` (page común). Y esa page YA tiene `export const revalidate = 3600` (línea 22) → Next la pre-renderiza estática al build (ISR), sin cold-start. El `generateStaticParams` real para las páginas de detalle (`[id]`) ya se hizo en PR #146. Único riesgo de cold-start sería un fetch con `cache:'no-store'`/`cookies()`/`headers()` — otro fix, no este.
 
 ---
 

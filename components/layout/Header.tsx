@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
 import { MAIN_NAVIGATION } from '@/lib/constants/navigation';
 import { MobileMenuButton } from './MobileMenuButton';
@@ -43,9 +44,12 @@ export default function Header() {
             ))}
           </div>
 
-          {/* Desktop theme toggle - Client component */}
-          <div className="hidden md:flex md:flex-1 md:justify-end">
+          {/* Desktop theme toggle + Contacto CTA - Client component */}
+          <div className="hidden md:flex md:flex-1 md:justify-end md:items-center md:gap-3">
             <ThemeToggle />
+            <Button size="sm" asChild>
+              <Link href="/contacto">Contacto</Link>
+            </Button>
           </div>
 
           {/* Mobile controls - Client components */}

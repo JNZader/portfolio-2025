@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { SITE_URL } from '@/lib/config/site-config';
 
-const SITE_NAME = 'Javier Zader - Backend Java Developer';
+const SITE_NAME = 'Javier Zader — Backend Developer · Sistemas end-to-end';
 const SITE_DESCRIPTION =
-  'Backend Java Developer con más de 20 años de experiencia en tecnología, especializado en Spring Boot, React y arquitecturas modernas';
+  'Backend Developer: sistemas end-to-end en Java, Go y Rust, plataformas industriales con ML en el edge y herramientas de desarrollo con IA. 20+ años en tecnología.';
 
 /**
  * Generate metadata for a page

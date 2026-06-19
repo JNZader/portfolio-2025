@@ -37,7 +37,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-110 hover:-translate-y-1 rounded-md p-1 -m-1 hover:ring-2 hover:ring-primary/20 focus-visible:ring-2 focus-visible:ring-primary"
-                  aria-label="GitHub"
+                  aria-label="Visitar perfil de GitHub"
                 >
                   <FaGithub className="h-5 w-5" />
                 </Link>
@@ -46,7 +46,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-110 hover:-translate-y-1 rounded-md p-1 -m-1 hover:ring-2 hover:ring-primary/20 focus-visible:ring-2 focus-visible:ring-primary"
-                  aria-label="LinkedIn"
+                  aria-label="Visitar perfil de LinkedIn"
                 >
                   <FaLinkedin className="h-5 w-5" />
                 </Link>

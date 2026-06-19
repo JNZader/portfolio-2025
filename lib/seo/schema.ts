@@ -10,7 +10,7 @@ export function generatePersonSchema(): WithContext<Person> {
     '@type': 'Person',
     name: 'Javier Norberto Zader',
     url: SITE_URL,
-    image: `${SITE_URL}/profile.jpg`,
+    image: `${SITE_URL}/images/profile.jpg`,
     jobTitle: 'Backend Java Developer',
     description:
       'Backend Java Developer con más de 20 años de experiencia en tecnología, especializado en Spring Boot, React y arquitecturas modernas. Técnico en Desarrollo de Software.',
@@ -86,7 +86,7 @@ export function generateBlogPostingSchema(post: {
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
-    image: post.image ?? `${SITE_URL}/og-image.png`,
+    image: post.image ?? `${SITE_URL}/images/portfolio-preview.png`,
     url: `${SITE_URL}/blog/${post.slug}`,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt ?? post.publishedAt,
@@ -98,10 +98,6 @@ export function generateBlogPostingSchema(post: {
     publisher: {
       '@type': 'Organization',
       name: 'Javier Zader',
-      logo: {
-        '@type': 'ImageObject',
-        url: `${SITE_URL}/logo.png`,
-      },
     },
     keywords: post.keywords?.join(', '),
     mainEntityOfPage: {

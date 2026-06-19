@@ -57,16 +57,16 @@ export function HeroBackground({
         <>
           <div
             className="absolute -top-40 -right-40 w-80 h-80 bg-primary/[0.15] rounded-full blur-2xl md:blur-3xl animate-float hidden md:block"
-            style={{ willChange: 'transform', contain: 'paint' }}
+            style={{ contain: 'paint' }}
           />
           <div
             className="absolute -bottom-40 -left-40 w-80 h-80 bg-tertiary/[0.15] rounded-full blur-2xl md:blur-3xl animate-float hidden md:block"
-            style={{ animationDelay: '1s', willChange: 'transform', contain: 'paint' }}
+            style={{ animationDelay: '1s', contain: 'paint' }}
           />
           {/* Third subtle blob */}
           <div
             className="absolute top-1/3 -left-20 w-60 h-60 bg-accent-warm/[0.08] rounded-full blur-2xl animate-float hidden lg:block"
-            style={{ animationDelay: '2s', willChange: 'transform', contain: 'paint' }}
+            style={{ animationDelay: '2s', contain: 'paint' }}
           />
         </>
       )}

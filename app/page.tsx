@@ -1,4 +1,4 @@
-import { Award, Briefcase, Target, TrendingUp } from 'lucide-react';
+import { Award, Briefcase, Layers, TrendingUp } from 'lucide-react';
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
@@ -44,7 +44,9 @@ const STATS = [
   { value: '20+', label: 'Años en Tecnología', icon: TrendingUp },
   { value: '15+', label: 'Proyectos Completados', icon: Briefcase },
   { value: '4+', label: 'Certificaciones', icon: Award },
-  { value: '100%', label: 'Compromiso', icon: Target },
+  // Defensible from SKILLS_DATA (backend 6 + frontend 6 + databases 4 + devops 5
+  // = 21 technologies listed across the site); rounded down to 20+.
+  { value: '20+', label: 'Tecnologías', icon: Layers },
 ];
 
 export default function HomePage() {
@@ -61,9 +63,13 @@ export default function HomePage() {
       {/* Hero Section */}
       <HeroSection
         greeting="¡Hola!"
-        jobTitle="Backend Developer · Java & Spring Boot"
+        jobTitle="Backend Developer · Sistemas end-to-end"
         title="Javier Zader"
-        description="Desarrollador backend con más de 20 años en tecnología. Experiencia en soporte técnico, mantenimiento de sistemas y desarrollo de software con Java, Spring Boot y React."
+        description="Sistemas backend en Java, Go y Rust — desde plataformas industriales con ML predictivo en el edge (detección de anomalías, predicción de fallos) hasta herramientas de desarrollo con IA (generación de código, code review automático). 20+ años en tecnología."
+        // CTA hierarchy: Descargar CV (filled, lowest-friction recruiter action) >
+        // Ver Proyectos (outline) > Contactar (ghost). CV renders as <a download>
+        // so the /api/resume PDF attachment downloads instead of SPA-navigating.
+        cvHref="/api/resume"
         primaryCta={{
           text: 'Ver Proyectos',
           href: '/proyectos',
@@ -75,7 +81,6 @@ export default function HomePage() {
         socialLinks={{
           github: 'https://github.com/JNZader',
           linkedin: 'https://www.linkedin.com/in/jnzader/',
-          cv: '/api/resume',
         }}
       />
 
