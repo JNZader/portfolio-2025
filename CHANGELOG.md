@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.8.0](https://github.com/JNZader/portfolio-2025/compare/v2.7.0...v2.8.0) (2026-06-20)
+
+
+### Features
+
+* **case-study:** architecture diagrams in APiGen case study (Mermaid) ([#153](https://github.com/JNZader/portfolio-2025/issues/153)) ([1a6096b](https://github.com/JNZader/portfolio-2025/commits/1a6096bcb6184a69417a9f933f2afd4bb910d9a5))
+
 ## [2.7.0](https://github.com/JNZader/portfolio-2025/compare/v2.6.0...v2.7.0) (2026-06-20)
 
 
