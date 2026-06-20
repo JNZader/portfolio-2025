@@ -62,7 +62,7 @@ export function HeroSection({
       <Container className="relative z-10">
         <div className="grid items-center gap-12 pb-20 lg:grid-cols-2 lg:gap-10">
           {/* Left column — text + CTAs (stacks first on mobile) */}
-          <div className="mx-auto max-w-2xl space-y-8 text-center lg:mx-0 lg:text-left">
+          <div className="mx-auto min-w-0 max-w-2xl space-y-8 text-center lg:mx-0 lg:text-left">
             {/* Greeting Badge with stagger animation */}
             {greeting && (
               <div className="animate-hero-reveal-1 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm text-base font-medium glass">
@@ -178,8 +178,10 @@ export function HeroSection({
             )}
           </div>
 
-          {/* Right column — animated backend terminal (stacks below text on mobile) */}
-          <div className="animate-hero-reveal-3 w-full max-w-xl mx-auto lg:mx-0 lg:justify-self-end">
+          {/* Right column — animated backend terminal (stacks below text on mobile).
+              min-w-0 evita que el min-content del terminal (banner ASCII en
+              whitespace-pre) ensanche la columna del grid y desborde el layout. */}
+          <div className="animate-hero-reveal-3 w-full min-w-0 max-w-xl mx-auto lg:mx-0 lg:justify-self-end">
             <HeroTerminal />
             {/* Always-visible caption: states the achievement for mobile (no hover),
                 non-technical recruiters, and SEO — the terminal itself is aria-hidden. */}

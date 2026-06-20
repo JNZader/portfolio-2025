@@ -10,14 +10,20 @@ interface CVButtonProps {
   viewHref?: string;
 }
 
+// Marker "btn-*" para que el reset global de globals.css
+// (`a:not([class*='btn'])`) NO subraye estos anchors. h-14/px-6/rounded-md
+// para matchear la altura y el radio de los demás CTA del hero (Button lg).
+const HALF_BASE =
+  'btn-cv flex h-14 items-center justify-center gap-2 whitespace-nowrap px-6 font-medium no-underline transition-colors duration-200';
+
 /**
- * Botón de CV con acción dividida.
+ * Botón de CV con acción dividida (segmentado).
  *
- * En reposo muestra solo "Descargar CV" (filled, acción primaria). Al hacer
- * hover o foco con teclado (desktop) revela a su izquierda "Ver online" → /cv.
- * En dispositivos sin hover (touch) ambas opciones quedan SIEMPRE visibles, así
- * que la versión HTML del CV es alcanzable en mobile y deja un <a href="/cv">
- * crawleable en el DOM. CSS puro, sin JavaScript.
+ * Dos mitades SIEMPRE visibles: "Descargar CV" (filled, acción primaria) y
+ * "Ver online" → /cv (versión HTML indexable). No usa hover-expand, así que no
+ * mueve el layout, y funciona igual en mobile (no depende de hover). Deja un
+ * <a href="/cv"> crawleable en el DOM. Full-width en mobile, content-width en
+ * desktop, para alinear con los demás CTA del hero.
  */
 export function CVButton({
   className,
@@ -25,37 +31,36 @@ export function CVButton({
   viewHref = '/cv',
 }: Readonly<CVButtonProps>) {
   return (
-    <div className={cn('group inline-flex items-stretch overflow-hidden rounded-lg', className)}>
-      {/* Ver online — colapsado en reposo; se revela on hover/focus o en touch. */}
-      <Link
-        href={viewHref}
-        className={cn(
-          'flex items-center gap-2 whitespace-nowrap border-2 border-r-0 border-primary',
-          'bg-primary/10 font-medium text-primary',
-          'max-w-0 overflow-hidden px-0 opacity-0',
-          'transition-all duration-200 ease-out',
-          'group-hover:max-w-[12rem] group-hover:px-5 group-hover:opacity-100',
-          'group-focus-within:max-w-[12rem] group-focus-within:px-5 group-focus-within:opacity-100',
-          '[@media(hover:none)]:max-w-[12rem] [@media(hover:none)]:px-5 [@media(hover:none)]:opacity-100'
-        )}
-      >
-        <Eye className="h-4 w-4 shrink-0" aria-hidden="true" />
-        Ver online
-      </Link>
-
-      {/* Descargar CV — acción primaria, siempre visible. */}
+    <div
+      className={cn(
+        'inline-flex w-full items-stretch overflow-hidden rounded-lg sm:w-auto',
+        className
+      )}
+    >
+      {/* Descargar CV — acción primaria, filled. */}
       <a
         href={pdfHref}
         download
         className={cn(
-          'flex items-center gap-2 whitespace-nowrap rounded-lg bg-primary px-6 py-3',
-          'font-medium text-primary-foreground transition-all duration-200 hover:bg-primary/90',
-          'group-hover:rounded-l-none group-focus-within:rounded-l-none [@media(hover:none)]:rounded-l-none'
+          HALF_BASE,
+          'flex-1 sm:flex-none bg-primary text-primary-foreground hover:bg-primary/90'
         )}
       >
         <Download className="h-4 w-4 shrink-0" aria-hidden="true" />
         Descargar CV
       </a>
+
+      {/* Ver online — versión HTML, secundaria. */}
+      <Link
+        href={viewHref}
+        className={cn(
+          HALF_BASE,
+          'flex-1 sm:flex-none border-l border-primary/20 bg-primary/10 text-primary hover:bg-primary/20'
+        )}
+      >
+        <Eye className="h-4 w-4 shrink-0" aria-hidden="true" />
+        Ver online
+      </Link>
     </div>
   );
 }
