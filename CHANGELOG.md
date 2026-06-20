@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.7.0](https://github.com/JNZader/portfolio-2025/compare/v2.6.0...v2.7.0) (2026-06-20)
+
+
+### Features
+
+* **cv:** indexable HTML CV page with split download/view button ([#152](https://github.com/JNZader/portfolio-2025/issues/152)) ([a6d7a5a](https://github.com/JNZader/portfolio-2025/commits/a6d7a5ae6c41d190fe7c531867b4e3fce3282b98))
+
 ## [2.6.0](https://github.com/JNZader/portfolio-2025/compare/v2.5.0...v2.6.0) (2026-06-20)
 
 
