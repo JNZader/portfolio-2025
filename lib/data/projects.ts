@@ -344,6 +344,23 @@ const LOCAL_PROJECTS: SanityProject[] = [
       block(
         'Tradeoff: scope. A single-app generator is a tractable product; a multi-service designer is much larger surface area. More features means more places to break, more interactions to validate, and more decisions to design. The bet is that the depth pays back on architectures with three or more services.'
       ),
+      mermaid(
+        `flowchart LR
+  subgraph CANVAS["Canvas (React Flow)"]
+    ENT["Entities + relations"]
+    SVC["Services"]
+    GW["Gateway routes"]
+    EV["Event / message flows"]
+  end
+  CANVAS --> MODEL["Studio model (Zod-validated)"]
+  MODEL --> EXPORT["Multi-format export"]
+  EXPORT --> ZIP["Spring Boot ZIP"]
+  EXPORT --> JSON["JSON model"]
+  EXPORT --> DDL["SQL DDL"]
+  EXPORT --> IMG["PNG / SVG"]
+  ZIP -->|feeds| APIGEN["APiGen"]`,
+        'Lo que diseñás en el canvas se exporta como una arquitectura multi-servicio (no una sola app) y alimenta a APiGen. Ese es el diferenciador.'
+      ),
       block('2. Layout as logic, not decoration', 'h3'),
       block(
         'When there are relations between nodes, Studio uses ELK for layered graph layout. When there are not, it falls back to grid placement. The same approach applies to service-to-service maps. Layout is part of the product logic — predictable, deterministic, repeatable across imports — not a cosmetic pass at the end.'
@@ -357,6 +374,20 @@ const LOCAL_PROJECTS: SanityProject[] = [
       ),
       block(
         'Persistence is the safety net. Autosave to IndexedDB on every meaningful change. Snapshot history retained per project so users can roll back. Pre-import safety snapshots so a destructive import can be recovered if the merge goes wrong. The principle: client-heavy is fine when no work can be lost.'
+      ),
+      mermaid(
+        `flowchart TD
+  subgraph CLIENT["Browser - no backend round-trip"]
+    RF["React Flow canvas"]
+    ZS["Zustand stores (per concern)"]
+    ZOD["Zod validation"]
+    ELK["ELK layout / grid fallback"]
+  end
+  CLIENT --> IDB["IndexedDB"]
+  IDB --> AS["Autosave on every change"]
+  IDB --> SNAP["Snapshot history"]
+  IDB --> PRE["Pre-import safety snapshot"]`,
+        'Todo el modelado corre en el cliente; IndexedDB es la red de seguridad (autosave + historial + snapshot pre-import). Client-heavy sin perder trabajo.'
       ),
       block('What Studio Can Do Today', 'h2'),
       bullet(
@@ -446,6 +477,15 @@ const LOCAL_PROJECTS: SanityProject[] = [
       block(
         'A full operations platform for biogas plants. Sensors stream data over MQTT to a Go backend; the data lands in PostgreSQL with time-series-friendly schemas; operators use a web dashboard and a mobile app for daily workflows; a Python ML pipeline trains models that get deployed to a Rust edge service for sub-50ms inference at the plant; an AI assistant helps operators query the system in plain language. The original Excel workflow disappears.'
       ),
+      mermaid(
+        `flowchart LR
+  PLC["PLCs / sensors"] -->|Modbus TCP/RTU| EDGE["Rust edge gateway"]
+  EDGE -->|"HTTP batch sync (offline-first)"| BACK["Go backend (Gin)"]
+  BROKER["Mosquitto MQTT"] --> BACK
+  BACK --> DB["PostgreSQL + Redis"]
+  BACK --> APPS["Web + mobile (role-aware)"]`,
+        'Topología edge→cloud: el gateway Rust opera local (offline-first) y sincroniza con el backend cuando hay link; los sensores también entran por MQTT.'
+      ),
       block('Constraints I Set', 'h2'),
       bullet(
         'Edge has to work without internet. Plants can lose connectivity for hours; operations and anomaly detection must keep running locally.'
@@ -527,6 +567,16 @@ const LOCAL_PROJECTS: SanityProject[] = [
       block(
         'Tradeoff: scope and maintenance weight. The edge gateway is essentially its own product inside the platform — it ships its own version (2.1.0), its own configuration model (edge.toml), its own dashboard, its own CLI tooling for commissioning (validate config, dry-run a register read, convert a CSV of tags into an edge.toml draft). That breadth is the right answer for an industrial node, but it is a non-trivial amount of code to keep healthy alongside the rest of the platform.'
       ),
+      mermaid(
+        `flowchart LR
+  TRAIN["Python training (scikit-learn)"] --> EXP["Export to ONNX"]
+  EXP --> PARITY{"Parity: Rust == Python?"}
+  PARITY -->|pass| S3["Versioned in S3 storage"]
+  PARITY -->|fail| TRAIN
+  S3 --> OTA["OTA deploy (ed25519-signed)"]
+  OTA --> RT["Rust edge runtime"]`,
+        'Ciclo de vida del modelo: entrenado en Python, exportado a ONNX, y un test de paridad (Rust == Python, bit-identical) es el gate antes de versionar y desplegar por OTA firmado.'
+      ),
       block('2. Three-layer AI architecture', 'h3'),
       block(
         'Instead of treating ML as a feature stuck onto a screen, the platform has three explicit AI layers, each with its own purpose, latency budget, and lifecycle:'
@@ -545,6 +595,15 @@ const LOCAL_PROJECTS: SanityProject[] = [
       ),
       block(
         'Tradeoff: model lifecycle weight. Three layers means three training pipelines, three model registries, three deployment paths, three sets of drift monitoring. It is a lot of infrastructure for a single dev to maintain — only worth it because each layer pays back operationally.'
+      ),
+      mermaid(
+        `flowchart TD
+  R["Every sensor reading"] --> L1["Edge inference: Isolation Forest + Autoencoder (ONNX, <50ms)"]
+  L1 --> L2["Anomaly detection: 32 features, ensemble voting, SHAP"]
+  L2 --> L3["Predictive: LSTM + Prophet forecast, RF + XGBoost failure 4-24h"]
+  L3 --> DRIFT["Continuous learning + PSI drift monitoring"]
+  DRIFT -. retrain .-> L3`,
+        'Tres capas de IA independientes: el edge sigue detectando anomalías aunque el cloud esté caído; la capa predictiva se reentrena sin tocar el runtime del edge.'
       ),
       block('3. Spec-driven development with OpenSpec from day one', 'h3'),
       block(
@@ -590,6 +649,19 @@ const LOCAL_PROJECTS: SanityProject[] = [
       ),
       block('Architecture Snapshot', 'h2'),
       block('Monorepo with five applications and supporting packages:'),
+      mermaid(
+        `flowchart TD
+  SPEC["OpenSpec contracts (single source of truth)"]
+  subgraph MONO["Monorepo"]
+    BACK["apps/backend - Go + Gin"]
+    EDGE["apps/edge - Rust gateway"]
+    ML["apps/ml - Python service"]
+    WEB["apps/web - React + Vite"]
+    MOBILE["apps/mobile"]
+  end
+  SPEC -. governs .-> MONO`,
+        '5 apps en un monorepo, con OpenSpec como contrato único entre ellas (validado en lint con un plugin Biome propio).'
+      ),
       bullet(
         'apps/backend — Go + GORM + Gin, REST API, MQTT subscriber, OpenSpec source of truth.'
       ),
