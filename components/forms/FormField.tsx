@@ -1,8 +1,9 @@
-import { Check, X } from 'lucide-react';
+import { Check, ChevronDown, X } from 'lucide-react';
 import {
   forwardRef,
   type InputHTMLAttributes,
   type ReactNode,
+  type SelectHTMLAttributes,
   type TextareaHTMLAttributes,
 } from 'react';
 import { cn } from '@/lib/utils';
@@ -16,6 +17,17 @@ interface BaseFieldProps {
 
 type InputFieldProps = BaseFieldProps & InputHTMLAttributes<HTMLInputElement>;
 type TextareaFieldProps = BaseFieldProps & TextareaHTMLAttributes<HTMLTextAreaElement>;
+
+export interface SelectOption {
+  value: string;
+  label: string;
+}
+
+type SelectFieldProps = BaseFieldProps &
+  SelectHTMLAttributes<HTMLSelectElement> & {
+    options: readonly SelectOption[];
+    placeholder?: string;
+  };
 
 // Shared classes for both input and textarea
 const BASE_FIELD_CLASSES = [
@@ -195,3 +207,78 @@ export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>
 );
 
 TextareaField.displayName = 'TextareaField';
+
+/**
+ * Select field con label fijo y validación visual.
+ *
+ * A diferencia de InputField/TextareaField no usa floating label: el truco
+ * `peer-placeholder-shown` no aplica a `<select>`, así que el label vive
+ * arriba de forma permanente (equivalente al estado "focused" de los inputs).
+ * La opción placeholder tiene `value=""` para que el schema (enum) la rechace
+ * cuando es required.
+ */
+export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
+  ({ label, error, success, required, className, id, options, placeholder, ...props }, ref) => {
+    const fieldId = generateFieldId(id, label);
+
+    return (
+      <div className="relative">
+        <select
+          ref={ref}
+          id={fieldId}
+          defaultValue=""
+          className={cn(
+            BASE_FIELD_CLASSES,
+            'h-12 appearance-none pr-10',
+            getInputStateClasses(error, success),
+            className
+          )}
+          aria-invalid={!!error}
+          aria-describedby={error ? `${fieldId}-error` : undefined}
+          required={required}
+          {...props}
+        >
+          {placeholder && (
+            <option value="" disabled>
+              {placeholder}
+            </option>
+          )}
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+
+        {/* Label fijo arriba */}
+        <label
+          htmlFor={fieldId}
+          className={cn(
+            'absolute left-3 top-2 text-xs font-medium pointer-events-none transition-all duration-200',
+            getLabelStateClasses(error, success)
+          )}
+        >
+          {label}
+          {required && <span className="ml-1">*</span>}
+        </label>
+
+        {/* Chevron */}
+        <ChevronDown className="pointer-events-none absolute right-3 top-3.5 w-5 h-5 text-muted-foreground" />
+
+        {/* Error message */}
+        {error && (
+          <p
+            id={`${fieldId}-error`}
+            className="mt-1.5 text-sm text-error flex items-start gap-1"
+            role="alert"
+          >
+            <X className="w-4 h-4 mt-0.5 flex-shrink-0" />
+            {error}
+          </p>
+        )}
+      </div>
+    );
+  }
+);
+
+SelectField.displayName = 'SelectField';

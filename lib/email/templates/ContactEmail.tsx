@@ -27,14 +27,18 @@ import {
 interface ContactEmailProps {
   name: string;
   email: string;
-  subject: string;
+  reason: string;
+  company?: string;
+  timeline?: string;
   message: string;
 }
 
 export default function ContactEmail({
   name,
   email,
-  subject,
+  reason,
+  company,
+  timeline,
   message,
 }: Readonly<ContactEmailProps>) {
   return (
@@ -64,9 +68,23 @@ export default function ContactEmail({
           </Section>
 
           <Section style={section}>
-            <Text style={label}>Asunto:</Text>
-            <Text style={value}>{subject}</Text>
+            <Text style={label}>Motivo:</Text>
+            <Text style={value}>{reason}</Text>
           </Section>
+
+          {company && (
+            <Section style={section}>
+              <Text style={label}>Empresa:</Text>
+              <Text style={value}>{company}</Text>
+            </Section>
+          )}
+
+          {timeline && (
+            <Section style={section}>
+              <Text style={label}>Timeline:</Text>
+              <Text style={value}>{timeline}</Text>
+            </Section>
+          )}
 
           <Hr style={hr} />
 
