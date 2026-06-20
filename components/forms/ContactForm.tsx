@@ -11,9 +11,22 @@ import { SendIcon, SpinnerIcon } from '@/components/ui/icons';
 import { trackContactSubmit } from '@/lib/analytics/events';
 import { logger } from '@/lib/monitoring/logger';
 import { showError, showSuccess } from '@/lib/utils/toast';
-import { type ContactFormData, contactSchema } from '@/lib/validations/contact';
+import {
+  CONTACT_REASONS,
+  CONTACT_TIMELINES,
+  type ContactFormData,
+  contactSchema,
+} from '@/lib/validations/contact';
 import { quickValidateEmail } from '@/lib/validations/email-validator-client';
-import { InputField, TextareaField } from './FormField';
+import { InputField, SelectField, type SelectOption, TextareaField } from './FormField';
+
+const REASON_OPTIONS: readonly SelectOption[] = Object.entries(CONTACT_REASONS).map(
+  ([value, label]) => ({ value, label })
+);
+
+const TIMELINE_OPTIONS: readonly SelectOption[] = Object.entries(CONTACT_TIMELINES).map(
+  ([value, label]) => ({ value, label })
+);
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -59,7 +72,9 @@ export function ContactForm() {
       const formData = new FormData();
       formData.append('name', data.name);
       formData.append('email', data.email);
-      formData.append('subject', data.subject);
+      formData.append('reason', data.reason);
+      if (data.company) formData.append('company', data.company);
+      if (data.timeline) formData.append('timeline', data.timeline);
       formData.append('message', data.message);
 
       // Llamar Server Action
@@ -170,13 +185,31 @@ export function ContactForm() {
         {...register('email')}
       />
 
-      {/* Subject */}
-      <InputField
-        label="Asunto"
-        type="text"
-        error={errors.subject?.message}
+      {/* Reason (reemplaza al antiguo "Asunto") */}
+      <SelectField
+        label="Motivo de contacto"
+        placeholder="Elegí un motivo"
+        options={REASON_OPTIONS}
+        error={errors.reason?.message}
         required
-        {...register('subject')}
+        {...register('reason')}
+      />
+
+      {/* Company (opcional) */}
+      <InputField
+        label="Empresa u organización (opcional)"
+        type="text"
+        error={errors.company?.message}
+        {...register('company')}
+      />
+
+      {/* Timeline (opcional) */}
+      <SelectField
+        label="¿Para cuándo lo necesitás? (opcional)"
+        placeholder="Sin definir"
+        options={TIMELINE_OPTIONS}
+        error={errors.timeline?.message}
+        {...register('timeline')}
       />
 
       {/* Message */}

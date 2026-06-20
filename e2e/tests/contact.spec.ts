@@ -25,7 +25,7 @@ test.describe('Contact Form', () => {
     // Fill form
     await main.getByRole('textbox', { name: /nombre/i }).fill(testData.contact.name);
     await main.getByRole('textbox', { name: /^email/i }).fill(email);
-    await main.getByLabel(/asunto/i).fill('Test Subject');
+    await main.getByLabel(/motivo/i).selectOption('job');
     await main.getByRole('textbox', { name: /mensaje/i }).fill(testData.contact.message);
 
     // Submit
@@ -51,7 +51,7 @@ test.describe('Contact Form', () => {
     // Should show errors (messages from contactSchema validation)
     await expect(page.getByText(/nombre.*al menos 2 caracteres/i)).toBeVisible();
     await expect(page.getByText(/email.*requerido/i)).toBeVisible();
-    await expect(page.getByText(/asunto.*al menos 5 caracteres/i)).toBeVisible();
+    await expect(page.getByText(/elegí un motivo/i)).toBeVisible();
     await expect(page.getByText(/mensaje.*al menos 10 caracteres/i)).toBeVisible();
   });
 
@@ -60,7 +60,7 @@ test.describe('Contact Form', () => {
 
     await main.getByRole('textbox', { name: /nombre/i }).fill(testData.contact.name);
     await main.getByRole('textbox', { name: /^email/i }).fill('invalid-email');
-    await main.getByLabel(/asunto/i).fill('Test Subject');
+    await main.getByLabel(/motivo/i).selectOption('job');
     await main.getByRole('textbox', { name: /mensaje/i }).fill(testData.contact.message);
 
     await main.getByRole('button', { name: /enviar/i }).click();
@@ -83,7 +83,7 @@ test.describe('Contact Form', () => {
 
     await main.getByRole('textbox', { name: /nombre/i }).fill(testData.contact.name);
     await main.getByRole('textbox', { name: /^email/i }).fill(email);
-    await main.getByLabel(/asunto/i).fill('Test Subject');
+    await main.getByLabel(/motivo/i).selectOption('job');
     await main.getByRole('textbox', { name: /mensaje/i }).fill(testData.contact.message);
 
     // Get the submit button before clicking (its text will change to "Enviando...")
@@ -102,7 +102,7 @@ test.describe('Contact Form', () => {
 
     await main.getByRole('textbox', { name: /nombre/i }).fill(testData.contact.name);
     await main.getByRole('textbox', { name: /^email/i }).fill(testData.contact.email());
-    await main.getByLabel(/asunto/i).fill('Test Subject');
+    await main.getByLabel(/motivo/i).selectOption('job');
     await main.getByRole('textbox', { name: /mensaje/i }).fill(testData.contact.longMessage);
 
     await main.getByRole('button', { name: /enviar/i }).click();

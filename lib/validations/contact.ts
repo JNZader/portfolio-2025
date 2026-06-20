@@ -3,6 +3,30 @@ import { z } from 'zod';
 import { REGEX_PATTERNS } from '@/lib/constants';
 
 /**
+ * Motivos de contacto — `key` se guarda/valida, `label` se muestra en el email.
+ * Mantener las keys sincronizadas con el `z.enum` de abajo.
+ */
+export const CONTACT_REASONS = {
+  job: 'Oportunidad laboral (full-time)',
+  freelance: 'Proyecto freelance',
+  consulting: 'Consultoría / asesoría',
+  other: 'Otro',
+} as const;
+
+/**
+ * Timeline estimado (opcional) — mismo patrón key/label que los motivos.
+ */
+export const CONTACT_TIMELINES = {
+  immediate: 'Inmediato / Urgente',
+  short: '1-3 meses',
+  mid: '3-6 meses',
+  exploring: 'Solo explorando',
+} as const;
+
+export type ContactReason = keyof typeof CONTACT_REASONS;
+export type ContactTimeline = keyof typeof CONTACT_TIMELINES;
+
+/**
  * Schema de validación para formulario de contacto
  */
 export const contactSchema = z.object({
@@ -21,10 +45,17 @@ export const contactSchema = z.object({
     .regex(REGEX_PATTERNS.email, 'Email inválido')
     .max(255, 'El email es demasiado largo'),
 
-  subject: z
-    .string()
-    .min(5, 'El asunto debe tener al menos 5 caracteres')
-    .max(200, 'El asunto debe tener máximo 200 caracteres'),
+  // Motivo de contacto (reemplaza al antiguo "asunto" de texto libre).
+  // El select arranca en '' → el enum lo rechaza y dispara el mensaje custom.
+  reason: z.enum(['job', 'freelance', 'consulting', 'other'], {
+    error: 'Elegí un motivo para que pueda priorizar tu mensaje',
+  }),
+
+  // Empresa u organización (opcional).
+  company: z.string().max(100, 'El nombre de la empresa es demasiado largo').optional(),
+
+  // Timeline estimado (opcional). El select vacío manda '' → lo aceptamos.
+  timeline: z.enum(['immediate', 'short', 'mid', 'exploring']).or(z.literal('')).optional(),
 
   message: z
     .string()
@@ -44,7 +75,9 @@ export const sanitizeContactData = (data: ContactFormData): ContactFormData => {
   return {
     name: data.name.trim(),
     email: data.email.trim().toLowerCase(),
-    subject: data.subject.trim(),
+    reason: data.reason,
+    company: data.company?.trim() || undefined,
+    timeline: data.timeline || undefined,
     message: data.message.trim(),
   };
 };

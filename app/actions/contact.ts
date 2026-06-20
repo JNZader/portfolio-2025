@@ -7,7 +7,13 @@ import ContactEmail from '@/lib/email/templates/ContactEmail';
 import { logger } from '@/lib/monitoring/logger';
 import { measureAsync, trackEmailSend } from '@/lib/monitoring/performance';
 import { contactRateLimiter, getClientIdentifier } from '@/lib/rate-limit/redis';
-import { contactSchema, sanitizeContactData, sanitizeText } from '@/lib/validations/contact';
+import {
+  CONTACT_REASONS,
+  CONTACT_TIMELINES,
+  contactSchema,
+  sanitizeContactData,
+  sanitizeText,
+} from '@/lib/validations/contact';
 import { validateEmail } from '@/lib/validations/email-validator';
 
 /**
@@ -25,7 +31,9 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
   const rawData = {
     name: formData.get('name') as string,
     email: formData.get('email') as string,
-    subject: formData.get('subject') as string,
+    reason: formData.get('reason') as string,
+    company: formData.get('company') ?? undefined,
+    timeline: formData.get('timeline') ?? undefined,
     message: formData.get('message') as string,
   };
 
@@ -50,13 +58,21 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
     // 4. Sanitizar datos
     const data = sanitizeContactData(validationResult.data);
 
-    // 5. Sanitización adicional contra XSS
+    // 5. Sanitización adicional contra XSS.
+    // reason/timeline son keys controladas → no necesitan sanitizado de HTML.
     const sanitizedData = {
       name: sanitizeText(data.name),
       email: sanitizeText(data.email),
-      subject: sanitizeText(data.subject),
+      company: data.company ? sanitizeText(data.company) : undefined,
       message: sanitizeText(data.message),
     };
+
+    // Labels legibles y asunto compuesto: "[Motivo] · Empresa · Timeline".
+    const reasonLabel = CONTACT_REASONS[data.reason];
+    const timelineLabel = data.timeline ? CONTACT_TIMELINES[data.timeline] : undefined;
+    const emailSubject = `[${reasonLabel}]${
+      sanitizedData.company ? ` · ${sanitizedData.company}` : ''
+    }${timelineLabel ? ` · ${timelineLabel}` : ''}`;
 
     // 6. Validación avanzada de email (DNS/MX records, dominios desechables)
     // Nota: Los typos se validan solo en el cliente, el servidor no los rechaza
@@ -111,11 +127,13 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
       resend.emails.send({
         from: emailConfig.from,
         to: emailConfig.to,
-        subject: `✅ Nuevo Contacto: ${sanitizedData.subject}`,
+        subject: `✅ Nuevo Contacto: ${emailSubject}`,
         react: ContactEmail({
           name: sanitizedData.name,
           email: sanitizedData.email,
-          subject: sanitizedData.subject,
+          reason: reasonLabel,
+          company: sanitizedData.company,
+          timeline: timelineLabel,
           message: `✅ Email verificado (dominio: ${emailValidation.domain}, MX records: OK)\n\n${sanitizedData.message}`,
         }),
         // Tags y headers para facilitar filtrado en Gmail
@@ -135,7 +153,7 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
     if (ownerEmailResult.error) {
       logger.error('Failed to send contact email', ownerEmailResult.error as Error, {
         email: sanitizedData.email,
-        subject: sanitizedData.subject,
+        subject: emailSubject,
       });
       return {
         success: false,
@@ -172,7 +190,7 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
     // 10. Success
     logger.info('Contact form submitted successfully', {
       email: sanitizedData.email,
-      subject: sanitizedData.subject,
+      subject: emailSubject,
       emailId: ownerEmailResult.data?.id,
     });
 
