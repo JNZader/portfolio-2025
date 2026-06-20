@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.6.0](https://github.com/JNZader/portfolio-2025/compare/v2.5.0...v2.6.0) (2026-06-20)
+
+
+### Features
+
+* **contact:** qualify leads with reason select + optional company/timeline ([#151](https://github.com/JNZader/portfolio-2025/issues/151)) ([c63e922](https://github.com/JNZader/portfolio-2025/commits/c63e92227a7fc4f1b548c77dc32c60d511c461d1))
+
 ## [2.5.0](https://github.com/JNZader/portfolio-2025/compare/v2.4.0...v2.5.0) (2026-06-19)
 
 
