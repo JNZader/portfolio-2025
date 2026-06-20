@@ -14,7 +14,7 @@ const navigation = [...MAIN_NAVIGATION];
  */
 export default function Header() {
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/60 backdrop-blur-xl backdrop-saturate-150 shadow-sm supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-40 w-full border-b bg-background/60 backdrop-blur-xl backdrop-saturate-150 shadow-sm supports-[backdrop-filter]:bg-background/60 print:hidden">
       <Container>
         <nav
           id="main-navigation"

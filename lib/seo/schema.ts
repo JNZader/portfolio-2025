@@ -1,5 +1,6 @@
 import type { BlogPosting, BreadcrumbList, Person, WebSite, WithContext } from 'schema-dts';
 import { SITE_URL } from '@/lib/config/site-config';
+import type { ResumeDataRaw } from '@/lib/types/resume';
 
 /**
  * Generate Person schema (for homepage)
@@ -38,6 +39,43 @@ export function generatePersonSchema(): WithContext<Person> {
       '@type': 'PostalAddress',
       addressLocality: 'Córdoba',
       addressCountry: 'Argentina',
+    },
+  };
+}
+
+/**
+ * Generate Person schema from live resume data (for the /cv page).
+ *
+ * Unlike generatePersonSchema() — which is hardcoded for the homepage — this
+ * derives jobTitle, knowsAbout, and alumniOf from the actual resume data
+ * (Sanity with JSON fallback), so the structured data stays in sync with the
+ * CV content without manual edits.
+ */
+export function generateResumePersonSchema(data: ResumeDataRaw): WithContext<Person> {
+  // "Córdoba, Argentina" → locality + country
+  const [locality, country] = data.personalInfo.location.split(',').map((s) => s.trim());
+
+  // Flatten all skill categories into a single knowsAbout list.
+  const knowsAbout = Object.values(data.skills).flat();
+
+  // One Organization per education entry (deduped by institution name).
+  const institutions = [...new Set(data.education.map((e) => e.institution).filter(Boolean))];
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: data.personalInfo.name,
+    url: `${SITE_URL}/cv`,
+    image: `${SITE_URL}/images/profile.jpg`,
+    jobTitle: data.personalInfo.title,
+    description: data.summary,
+    sameAs: [data.personalInfo.github, data.personalInfo.linkedin].filter(Boolean),
+    knowsAbout,
+    alumniOf: institutions.map((name) => ({ '@type': 'Organization' as const, name })),
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: locality,
+      addressCountry: country,
     },
   };
 }

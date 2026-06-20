@@ -1,9 +1,10 @@
-import { ArrowRight, Download, Mail } from 'lucide-react';
+import { ArrowRight, Mail } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
+import { CVButton } from '@/components/ui/CVButton';
 import { HeroBackground } from '@/components/ui/HeroBackground';
 
 // Lazy-load below-the-fold / decorative client widgets so they don't inflate the
@@ -61,7 +62,7 @@ export function HeroSection({
       <Container className="relative z-10">
         <div className="grid items-center gap-12 pb-20 lg:grid-cols-2 lg:gap-10">
           {/* Left column — text + CTAs (stacks first on mobile) */}
-          <div className="mx-auto max-w-2xl space-y-8 text-center lg:mx-0 lg:text-left">
+          <div className="mx-auto min-w-0 max-w-2xl space-y-8 text-center lg:mx-0 lg:text-left">
             {/* Greeting Badge with stagger animation */}
             {greeting && (
               <div className="animate-hero-reveal-1 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm text-base font-medium glass">
@@ -100,14 +101,10 @@ export function HeroSection({
               primaryCta (outline) > secondaryCta (ghost). */}
             <div className="animate-hero-reveal-5 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               {cvHref && (
-                <Button size="lg" className="btn-ripple shine-effect" asChild>
-                  {/* Plain <a download> (not next/Link) so the PDF attachment from
-                    /api/resume downloads instead of SPA-navigating. */}
-                  <a href={cvHref} download>
-                    <Download className="mr-2 h-4 w-4" aria-hidden="true" />
-                    Descargar CV
-                  </a>
-                </Button>
+                // Split CV action: "Descargar CV" (filled, primary) que al
+                // hover/focus revela "Ver online" → /cv (versión HTML indexable).
+                // En touch ambas opciones quedan visibles. cvHref es el PDF.
+                <CVButton pdfHref={cvHref} />
               )}
               <Button size="lg" variant="outline-glow" className="btn-ripple" asChild>
                 <Link href={primaryCta.href}>
@@ -181,8 +178,10 @@ export function HeroSection({
             )}
           </div>
 
-          {/* Right column — animated backend terminal (stacks below text on mobile) */}
-          <div className="animate-hero-reveal-3 w-full max-w-xl mx-auto lg:mx-0 lg:justify-self-end">
+          {/* Right column — animated backend terminal (stacks below text on mobile).
+              min-w-0 evita que el min-content del terminal (banner ASCII en
+              whitespace-pre) ensanche la columna del grid y desborde el layout. */}
+          <div className="animate-hero-reveal-3 w-full min-w-0 max-w-xl mx-auto lg:mx-0 lg:justify-self-end">
             <HeroTerminal />
             {/* Always-visible caption: states the achievement for mobile (no hover),
                 non-technical recruiters, and SEO — the terminal itself is aria-hidden. */}

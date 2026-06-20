@@ -10,7 +10,7 @@ export default function Footer() {
   return (
     <footer
       id="footer"
-      className="relative border-t bg-background/95 backdrop-blur-sm overflow-hidden"
+      className="relative border-t bg-background/95 backdrop-blur-sm overflow-hidden print:hidden"
     >
       {/* Decorative gradient background */}
       <div className="absolute inset-0 -z-10 opacity-40 dark:opacity-20">
