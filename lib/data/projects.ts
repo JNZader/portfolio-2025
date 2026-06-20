@@ -556,13 +556,33 @@ function getProjectTimestamp(project: SanityProject): number {
   return new Date(project.publishedAt).getTime();
 }
 
+/**
+ * Hybrid merge: Sanity stays the source of truth for CMS-managed fields
+ * (image, URLs, technologies, featured, dates, excerpt) so nothing authored in
+ * Studio is discarded. The version-controlled local case study only contributes
+ * the prose `body` — where the architecture diagrams live — and fills any field
+ * Sanity left empty. Projects that exist only in Sanity or only locally render
+ * entirely from their single source.
+ */
 export function mergeLocalAndSanityProjects(remoteProjects: SanityProject[]): SanityProject[] {
   const projectMap = new Map<string, SanityProject>();
+  const localBySlug = new Map(LOCAL_PROJECTS.map((project) => [project.slug.current, project]));
 
-  for (const project of remoteProjects) {
-    projectMap.set(project.slug.current, project);
+  for (const remote of remoteProjects) {
+    const local = localBySlug.get(remote.slug.current);
+    if (local) {
+      // Field-level merge: keep all Sanity fields, but let the curated local
+      // body (with diagrams) win when present.
+      projectMap.set(remote.slug.current, {
+        ...remote,
+        body: local.body && local.body.length > 0 ? local.body : remote.body,
+      });
+    } else {
+      projectMap.set(remote.slug.current, remote);
+    }
   }
 
+  // Local-only projects (absent from Sanity) render entirely from local.
   for (const project of LOCAL_PROJECTS) {
     if (!projectMap.has(project.slug.current)) {
       projectMap.set(project.slug.current, project);
