@@ -2,6 +2,7 @@ import { PortableText, type PortableTextComponents } from '@portabletext/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { PortableTextBlock } from 'sanity';
+import { MermaidDiagram } from '@/components/markdown/MermaidDiagram';
 import { slugifyHeading } from '@/lib/utils/toc';
 import { getImageUrl } from '@/sanity/lib/image';
 import { CodeBlock } from './CodeBlock';
@@ -158,6 +159,22 @@ const components: PortableTextComponents = {
           language={codeValue.language ?? 'typescript'}
           filename={codeValue.filename}
         />
+      );
+    },
+
+    // Architecture / Mermaid diagrams
+    mermaid: ({ value }: { value: unknown }) => {
+      const diagram = value as { chart?: string; caption?: string };
+      if (!diagram.chart) return null;
+      return (
+        <figure className="my-8">
+          <MermaidDiagram chart={diagram.chart} />
+          {diagram.caption && (
+            <figcaption className="mt-2 text-center text-sm text-muted-foreground">
+              {diagram.caption}
+            </figcaption>
+          )}
+        </figure>
       );
     },
   },

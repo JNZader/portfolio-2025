@@ -46,6 +46,17 @@ function bullet(text: string): PortableTextBlock {
   } as PortableTextBlock;
 }
 
+// Architecture diagram block (rendered by PortableTextRenderer's `mermaid` type).
+// Cast through unknown: this is a custom PortableText block, not a standard one.
+function mermaid(chart: string, caption?: string): PortableTextBlock {
+  return {
+    _key: `mermaid-${chart.replace(/[^a-z0-9]+/gi, '-').slice(0, 24) || 'diagram'}`,
+    _type: 'mermaid',
+    chart,
+    caption,
+  } as unknown as PortableTextBlock;
+}
+
 const LOCAL_PROJECTS: SanityProject[] = [
   {
     _id: 'apigen',
@@ -82,6 +93,24 @@ const LOCAL_PROJECTS: SanityProject[] = [
       block('What APiGen Does', 'h2'),
       block(
         'Point it at a SQL schema or OpenAPI spec. Get back a production-shaped service: REST endpoints, persistence layer, security wired, observability instrumented, Dockerfile, Kubernetes manifests, CI pipeline. You can preview before generating, override templates locally without forking, and drive the same engine from CLI, HTTP server, IDE plugin, or MCP.'
+      ),
+      mermaid(
+        `erDiagram
+  CUSTOMER ||--o{ ORDER : places
+  CUSTOMER ||--o{ ADDRESS : has
+  CUSTOMER ||--o{ REVIEW : writes
+  CUSTOMER ||--o{ WISHLIST : owns
+  ORDER ||--|{ ORDERITEM : contains
+  COUPON ||--o{ ORDER : applied
+  PRODUCT ||--o{ ORDERITEM : "appears in"
+  PRODUCT ||--o{ PRODUCTVARIANT : has
+  PRODUCT ||--o{ PRODUCTIMAGE : has
+  PRODUCT ||--o{ REVIEW : receives
+  PRODUCT }o--|| CATEGORY : "in"
+  PRODUCT }o--|| BRAND : by
+  PRODUCT ||--o{ PRODUCTTAG : has
+  TAG ||--o{ PRODUCTTAG : in`,
+        'Schema de ejemplo (14 tablas) que apigen consume en el demo del hero. Relaciones inferidas de los nombres — no del .sql real (repo privado); a corregir si difiere.'
       ),
       block('Constraints I Set', 'h2'),
       bullet(
@@ -122,6 +151,27 @@ const LOCAL_PROJECTS: SanityProject[] = [
       block(
         'Tradeoff: the IR is rigid by design. There is no shortcut from "this OpenAPI quirk" straight to "this Java annotation". Every shortcut has to round-trip through the IR, or the abstraction stops paying off.'
       ),
+      mermaid(
+        `flowchart LR
+  SQL["SQL schema"] --> P["Parsers"]
+  OAS["OpenAPI contract"] --> P
+  P --> IR["Normalized IR"]
+  IR --> GEN["Language generators"]
+  GEN --> OUT["12 target languages"]
+  PACKS["Feature packs (opt-in)"] -. compose .-> GEN`,
+        'Parsers y templates no se conocen entre sí: todo pasa por el IR. Por eso sumar un lenguaje no toca el parser SQL, y sumar un protocolo no toca el pipeline de codegen.'
+      ),
+      mermaid(
+        `sequenceDiagram
+  actor Dev
+  Dev->>CLI: apigen generate --from sql
+  CLI->>Parser: parse SQL / OpenAPI
+  Parser->>IR: build normalized IR
+  IR->>Generators: render per target language
+  Generators-->>CLI: 197 files (5 layers/table + scaffold)
+  CLI-->>Dev: ./shop-api ready to run`,
+        'El mismo pipeline visto en runtime: un `apigen generate` de punta a punta, del schema a 197 archivos que arrancan. Es el run real del terminal del hero.'
+      ),
       block('2. Features as opt-in Gradle modules', 'h3'),
       block(
         'APiGen ships 22 modules: 4 libraries, 4 generators, 13 feature packs (gateway, GraphQL, gRPC, chaos engineering, recommendation, analytics, BFF, notifications, search, observability, and more), and an MCP layer.'
@@ -138,6 +188,14 @@ const LOCAL_PROJECTS: SanityProject[] = [
       ),
       block(
         'Choosing this on day one forced the engine to be library-shaped from the start, not a CLI with an API bolted on later. That made the MCP integration almost free when it landed.'
+      ),
+      mermaid(
+        `flowchart TD
+  CLI["CLI"] --> ENG["Generation engine (core + IR)"]
+  HTTP["HTTP server"] --> ENG
+  IDE["IDE plugin"] --> ENG
+  MCP["MCP server"] --> ENG`,
+        'El mismo engine detrás de las cuatro superficies. Por ser library-shaped desde el día uno, integrar MCP fue casi gratis.'
       ),
       block('What APiGen Can Do Today', 'h2'),
       bullet(
@@ -157,6 +215,13 @@ const LOCAL_PROJECTS: SanityProject[] = [
       bullet('60% line / 50% branch coverage minimum, gated in CI.'),
       bullet(
         'Contract tests (Spring Cloud Contract) on the core library + JMH microbenchmarks on the generation engine.'
+      ),
+      mermaid(
+        `flowchart LR
+  MODEL["Domain model (from IR)"] --> REST["REST controllers"]
+  MODEL --> GQL["GraphQL resolvers"]
+  MODEL --> GRPC["gRPC services"]`,
+        'Un solo modelo, derivado del IR, expone los tres protocolos — sin reescribir lógica de negocio.'
       ),
       block("What I'd Reconsider", 'h2'),
       block(
@@ -178,6 +243,34 @@ const LOCAL_PROJECTS: SanityProject[] = [
       ),
       block(
         'The build graph stays clean because the contract is enforced by the shared BOM plus separation of API and implementation modules. No cycles, no shared mutable state across modules.'
+      ),
+      mermaid(
+        `flowchart TD
+  subgraph LIBS["libs/ — foundation"]
+    CORE["core: engine + IR"]
+    SEC["security"]
+    EXC["exceptions"]
+    BOM["bom: shared deps"]
+  end
+  subgraph GEN["generator/"]
+    CODEGEN["codegen"]
+    CLI["cli"]
+    SERVER["server"]
+    IDE["ide-plugins"]
+  end
+  subgraph FEAT["features/: 13 opt-in packs"]
+    PACKS["graphql, grpc, gateway, analytics, +9"]
+  end
+  subgraph MCPL["mcp/"]
+    MCPS["Java + Python servers"]
+  end
+  CLI --> CODEGEN
+  SERVER --> CODEGEN
+  IDE --> CODEGEN
+  CODEGEN --> CORE
+  FEAT -. opt-in .-> CODEGEN
+  MCPL --> CORE`,
+        '22 módulos en 4 capas. generator/ depende del core+IR; los feature packs se enchufan en codegen sin tocar el core; el BOM gobierna versiones. Sin ciclos.'
       ),
     ],
   },
@@ -527,13 +620,33 @@ function getProjectTimestamp(project: SanityProject): number {
   return new Date(project.publishedAt).getTime();
 }
 
+/**
+ * Hybrid merge: Sanity stays the source of truth for CMS-managed fields
+ * (image, URLs, technologies, featured, dates, excerpt) so nothing authored in
+ * Studio is discarded. The version-controlled local case study only contributes
+ * the prose `body` — where the architecture diagrams live — and fills any field
+ * Sanity left empty. Projects that exist only in Sanity or only locally render
+ * entirely from their single source.
+ */
 export function mergeLocalAndSanityProjects(remoteProjects: SanityProject[]): SanityProject[] {
   const projectMap = new Map<string, SanityProject>();
+  const localBySlug = new Map(LOCAL_PROJECTS.map((project) => [project.slug.current, project]));
 
-  for (const project of remoteProjects) {
-    projectMap.set(project.slug.current, project);
+  for (const remote of remoteProjects) {
+    const local = localBySlug.get(remote.slug.current);
+    if (local) {
+      // Field-level merge: keep all Sanity fields, but let the curated local
+      // body (with diagrams) win when present.
+      projectMap.set(remote.slug.current, {
+        ...remote,
+        body: local.body && local.body.length > 0 ? local.body : remote.body,
+      });
+    } else {
+      projectMap.set(remote.slug.current, remote);
+    }
   }
 
+  // Local-only projects (absent from Sanity) render entirely from local.
   for (const project of LOCAL_PROJECTS) {
     if (!projectMap.has(project.slug.current)) {
       projectMap.set(project.slug.current, project);
