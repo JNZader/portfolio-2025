@@ -94,6 +94,24 @@ const LOCAL_PROJECTS: SanityProject[] = [
       block(
         'Point it at a SQL schema or OpenAPI spec. Get back a production-shaped service: REST endpoints, persistence layer, security wired, observability instrumented, Dockerfile, Kubernetes manifests, CI pipeline. You can preview before generating, override templates locally without forking, and drive the same engine from CLI, HTTP server, IDE plugin, or MCP.'
       ),
+      mermaid(
+        `erDiagram
+  CUSTOMER ||--o{ ORDER : places
+  CUSTOMER ||--o{ ADDRESS : has
+  CUSTOMER ||--o{ REVIEW : writes
+  CUSTOMER ||--o{ WISHLIST : owns
+  ORDER ||--|{ ORDERITEM : contains
+  COUPON ||--o{ ORDER : applied
+  PRODUCT ||--o{ ORDERITEM : "appears in"
+  PRODUCT ||--o{ PRODUCTVARIANT : has
+  PRODUCT ||--o{ PRODUCTIMAGE : has
+  PRODUCT ||--o{ REVIEW : receives
+  PRODUCT }o--|| CATEGORY : "in"
+  PRODUCT }o--|| BRAND : by
+  PRODUCT ||--o{ PRODUCTTAG : has
+  TAG ||--o{ PRODUCTTAG : in`,
+        'Schema de ejemplo (14 tablas) que apigen consume en el demo del hero. Relaciones inferidas de los nombres — no del .sql real (repo privado); a corregir si difiere.'
+      ),
       block('Constraints I Set', 'h2'),
       bullet(
         'Contract-first only. Source of truth is the SQL schema or OpenAPI file. No config DSL layered on top.'
@@ -143,6 +161,17 @@ const LOCAL_PROJECTS: SanityProject[] = [
   PACKS["Feature packs (opt-in)"] -. compose .-> GEN`,
         'Parsers y templates no se conocen entre sí: todo pasa por el IR. Por eso sumar un lenguaje no toca el parser SQL, y sumar un protocolo no toca el pipeline de codegen.'
       ),
+      mermaid(
+        `sequenceDiagram
+  actor Dev
+  Dev->>CLI: apigen generate --from sql
+  CLI->>Parser: parse SQL / OpenAPI
+  Parser->>IR: build normalized IR
+  IR->>Generators: render per target language
+  Generators-->>CLI: 197 files (5 layers/table + scaffold)
+  CLI-->>Dev: ./shop-api ready to run`,
+        'El mismo pipeline visto en runtime: un `apigen generate` de punta a punta, del schema a 197 archivos que arrancan. Es el run real del terminal del hero.'
+      ),
       block('2. Features as opt-in Gradle modules', 'h3'),
       block(
         'APiGen ships 22 modules: 4 libraries, 4 generators, 13 feature packs (gateway, GraphQL, gRPC, chaos engineering, recommendation, analytics, BFF, notifications, search, observability, and more), and an MCP layer.'
@@ -187,6 +216,13 @@ const LOCAL_PROJECTS: SanityProject[] = [
       bullet(
         'Contract tests (Spring Cloud Contract) on the core library + JMH microbenchmarks on the generation engine.'
       ),
+      mermaid(
+        `flowchart LR
+  MODEL["Domain model (from IR)"] --> REST["REST controllers"]
+  MODEL --> GQL["GraphQL resolvers"]
+  MODEL --> GRPC["gRPC services"]`,
+        'Un solo modelo, derivado del IR, expone los tres protocolos — sin reescribir lógica de negocio.'
+      ),
       block("What I'd Reconsider", 'h2'),
       block(
         'Growing breadth-first. APiGen scaled outward fast — 12 languages, 15 databases, 13 feature packs — while Java/Spring is the only target where I have full operational confidence. The platform looks comprehensive on paper, but a user landing on Elixir or Clojure gets a less mature path than a user landing on Java.'
@@ -207,6 +243,34 @@ const LOCAL_PROJECTS: SanityProject[] = [
       ),
       block(
         'The build graph stays clean because the contract is enforced by the shared BOM plus separation of API and implementation modules. No cycles, no shared mutable state across modules.'
+      ),
+      mermaid(
+        `flowchart TD
+  subgraph LIBS["libs/ — foundation"]
+    CORE["core: engine + IR"]
+    SEC["security"]
+    EXC["exceptions"]
+    BOM["bom: shared deps"]
+  end
+  subgraph GEN["generator/"]
+    CODEGEN["codegen"]
+    CLI["cli"]
+    SERVER["server"]
+    IDE["ide-plugins"]
+  end
+  subgraph FEAT["features/: 13 opt-in packs"]
+    PACKS["graphql, grpc, gateway, analytics, +9"]
+  end
+  subgraph MCPL["mcp/"]
+    MCPS["Java + Python servers"]
+  end
+  CLI --> CODEGEN
+  SERVER --> CODEGEN
+  IDE --> CODEGEN
+  CODEGEN --> CORE
+  FEAT -. opt-in .-> CODEGEN
+  MCPL --> CORE`,
+        '22 módulos en 4 capas. generator/ depende del core+IR; los feature packs se enchufan en codegen sin tocar el core; el BOM gobierna versiones. Sin ciclos.'
       ),
     ],
   },
