@@ -46,6 +46,17 @@ function bullet(text: string): PortableTextBlock {
   } as PortableTextBlock;
 }
 
+// Architecture diagram block (rendered by PortableTextRenderer's `mermaid` type).
+// Cast through unknown: this is a custom PortableText block, not a standard one.
+function mermaid(chart: string, caption?: string): PortableTextBlock {
+  return {
+    _key: `mermaid-${chart.replace(/[^a-z0-9]+/gi, '-').slice(0, 24) || 'diagram'}`,
+    _type: 'mermaid',
+    chart,
+    caption,
+  } as unknown as PortableTextBlock;
+}
+
 const LOCAL_PROJECTS: SanityProject[] = [
   {
     _id: 'apigen',
@@ -122,6 +133,16 @@ const LOCAL_PROJECTS: SanityProject[] = [
       block(
         'Tradeoff: the IR is rigid by design. There is no shortcut from "this OpenAPI quirk" straight to "this Java annotation". Every shortcut has to round-trip through the IR, or the abstraction stops paying off.'
       ),
+      mermaid(
+        `flowchart LR
+  SQL["SQL schema"] --> P["Parsers"]
+  OAS["OpenAPI contract"] --> P
+  P --> IR["Normalized IR"]
+  IR --> GEN["Language generators"]
+  GEN --> OUT["12 target languages"]
+  PACKS["Feature packs (opt-in)"] -. compose .-> GEN`,
+        'Parsers y templates no se conocen entre sí: todo pasa por el IR. Por eso sumar un lenguaje no toca el parser SQL, y sumar un protocolo no toca el pipeline de codegen.'
+      ),
       block('2. Features as opt-in Gradle modules', 'h3'),
       block(
         'APiGen ships 22 modules: 4 libraries, 4 generators, 13 feature packs (gateway, GraphQL, gRPC, chaos engineering, recommendation, analytics, BFF, notifications, search, observability, and more), and an MCP layer.'
@@ -138,6 +159,14 @@ const LOCAL_PROJECTS: SanityProject[] = [
       ),
       block(
         'Choosing this on day one forced the engine to be library-shaped from the start, not a CLI with an API bolted on later. That made the MCP integration almost free when it landed.'
+      ),
+      mermaid(
+        `flowchart TD
+  CLI["CLI"] --> ENG["Generation engine (core + IR)"]
+  HTTP["HTTP server"] --> ENG
+  IDE["IDE plugin"] --> ENG
+  MCP["MCP server"] --> ENG`,
+        'El mismo engine detrás de las cuatro superficies. Por ser library-shaped desde el día uno, integrar MCP fue casi gratis.'
       ),
       block('What APiGen Can Do Today', 'h2'),
       bullet(
