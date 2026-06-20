@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.9.0](https://github.com/JNZader/portfolio-2025/compare/v2.8.0...v2.9.0) (2026-06-20)
+
+
+### Features
+
+* **case-study:** architecture diagrams for Biogas Platform + APiGen Studio ([#154](https://github.com/JNZader/portfolio-2025/issues/154)) ([19893ac](https://github.com/JNZader/portfolio-2025/commits/19893ac0ef9045b6190d4f69ce83d5b1e5ce4a36))
+
 ## [2.8.0](https://github.com/JNZader/portfolio-2025/compare/v2.7.0...v2.8.0) (2026-06-20)
 
 
