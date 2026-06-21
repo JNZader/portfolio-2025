@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.9.1](https://github.com/JNZader/portfolio-2025/compare/v2.9.0...v2.9.1) (2026-06-21)
+
+
+### Documentation
+
+* track the 4 big-bet roadmap items and their status ([2348348](https://github.com/JNZader/portfolio-2025/commits/23483487d166d90af5fcf5901fefd87dd5a0f8d9)), closes [post-5vr-#2](https://github.com/JNZader/portfolio-2025/issues/2) [#1](https://github.com/JNZader/portfolio-2025/issues/1) [#2](https://github.com/JNZader/portfolio-2025/issues/2) [#3](https://github.com/JNZader/portfolio-2025/issues/3) [#4](https://github.com/JNZader/portfolio-2025/issues/4) [#4](https://github.com/JNZader/portfolio-2025/issues/4)
+
 ## [2.9.0](https://github.com/JNZader/portfolio-2025/compare/v2.8.0...v2.9.0) (2026-06-20)
 
 
