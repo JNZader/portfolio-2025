@@ -88,7 +88,7 @@
     "remark-gfm": "^4.0.1",
     "resend": "^6.12.4",
     "sanitize-html": "^2.17.5",
-    "sanity-plugin-markdown": "^8.0.7",
+    "sanity-plugin-markdown": "^9.0.0",
     "schema-dts": "^2.0.0",
     "sharp": "^0.35.1",
     "swr": "^2.4.1",
