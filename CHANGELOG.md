@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.9.3](https://github.com/JNZader/portfolio-2025/compare/v2.9.2...v2.9.3) (2026-07-02)
+
+
+### Bug Fixes
+
+* **hero:** sync terminal demo with apigen HEAD ([a696d13](https://github.com/JNZader/portfolio-2025/commits/a696d1384215b85bb707c1b5e8222437f31f1198)), closes [apigen#456](https://github.com/JNZader/portfolio-2025/issues/456)
+
 ## [2.9.2](https://github.com/JNZader/portfolio-2025/compare/v2.9.1...v2.9.2) (2026-07-02)
 
 
