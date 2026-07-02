@@ -100,6 +100,35 @@ const SCAFFOLD: Step[] = [
   'README.md',
 ].map((text) => ({ kind: 'created' as const, text }));
 
+// Response bodies are pretty-printed one property per line: long one-liners
+// wrapped mid-word at the terminal width and read as garbage. Keep every
+// line under ~64 chars so nothing wraps.
+const CATEGORY_BODY: Step[] = [
+  '{',
+  '  "id": 102,',
+  '  "activo": true,',
+  '  "name": "Electronics",',
+  '  "slug": "electronics",',
+  '  "description": null,',
+  '  "imageUrl": null,',
+  '  "displayOrder": null,',
+  '  "isActive": null,',
+  '  "parentId": null',
+  '}',
+].map((text) => ({ kind: 'json' as const, text }));
+
+// Shared `content` array of the paged/cursor/search responses.
+const CONTENT_ITEM: Step[] = [
+  '  "content": [',
+  '    {',
+  '      "id": 102,',
+  '      "name": "Electronics",',
+  '      "slug": "electronics",',
+  '      "activo": true',
+  '    }',
+  '  ],',
+].map((text) => ({ kind: 'json' as const, text }));
+
 // Three real acts: generate -> boot -> live request. Every line was verified
 // end-to-end against the 14-table ecommerce schema.
 const SCRIPT: Step[] = [
@@ -158,10 +187,13 @@ const SCRIPT: Step[] = [
   { kind: 'json', text: '  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJqdGki…",' },
   { kind: 'json', text: '  "tokenType": "Bearer",' },
   { kind: 'json', text: '  "expiresAt": "2026-06-19T03:27:00Z",' },
-  {
-    kind: 'json',
-    text: '  "user": { "id": 52, "username": "demo", "email": "d@shop.io", "role": "USER", "permissions": [] }',
-  },
+  { kind: 'json', text: '  "user": {' },
+  { kind: 'json', text: '    "id": 52,' },
+  { kind: 'json', text: '    "username": "demo",' },
+  { kind: 'json', text: '    "email": "d@shop.io",' },
+  { kind: 'json', text: '    "role": "USER",' },
+  { kind: 'json', text: '    "permissions": []' },
+  { kind: 'json', text: '  }' },
   { kind: 'json', text: '}' },
   { kind: 'cmd', text: '$ AUTH="Authorization: Bearer eyJhbGci…"' },
   { kind: 'blank' },
@@ -173,59 +205,46 @@ const SCRIPT: Step[] = [
   { kind: 'dim', text: 'Location: /api/v1/categories/102' },
   { kind: 'dim', text: 'X-RateLimit-Limit: 150    X-RateLimit-Remaining: 149' },
   { kind: 'dim', text: 'X-Request-Id: 42acf31ad6334cb1    ETag: "48489d75bdb775bf…"' },
-  {
-    kind: 'json',
-    text: '{ "id": 102, "activo": true, "name": "Electronics", "slug": "electronics",',
-  },
-  {
-    kind: 'json',
-    text: '  "description": null, "imageUrl": null, "displayOrder": null, "isActive": null, "parentId": null }',
-  },
+  ...CATEGORY_BODY,
   { kind: 'blank' },
 
   { kind: 'dim', text: '# read one' },
   { kind: 'cmd', text: '$ curl -s :8080/api/v1/categories/102 -H "$AUTH"' },
   { kind: 'res', text: 'HTTP/1.1 200 OK' },
-  {
-    kind: 'json',
-    text: '{ "id": 102, "activo": true, "name": "Electronics", "slug": "electronics",',
-  },
-  {
-    kind: 'json',
-    text: '  "description": null, "imageUrl": null, "displayOrder": null, "isActive": null, "parentId": null }',
-  },
+  ...CATEGORY_BODY,
   { kind: 'blank' },
 
   { kind: 'dim', text: '# list — Spring Page (content + pageable + sort + totals)' },
   { kind: 'cmd', text: '$ curl -s :8080/api/v1/categories -H "$AUTH"' },
   { kind: 'res', text: 'HTTP/1.1 200 OK' },
   { kind: 'json', text: '{' },
-  {
-    kind: 'json',
-    text: '  "content": [ { "id": 102, "name": "Electronics", "slug": "electronics", "activo": true } ],',
-  },
-  {
-    kind: 'json',
-    text: '  "pageable": { "pageNumber": 0, "pageSize": 20, "offset": 0, "paged": true },',
-  },
-  {
-    kind: 'json',
-    text: '  "totalElements": 1, "totalPages": 1, "number": 0, "size": 20, "first": true, "last": true',
-  },
+  ...CONTENT_ITEM,
+  { kind: 'json', text: '  "pageable": {' },
+  { kind: 'json', text: '    "pageNumber": 0,' },
+  { kind: 'json', text: '    "pageSize": 20,' },
+  { kind: 'json', text: '    "offset": 0,' },
+  { kind: 'json', text: '    "paged": true' },
+  { kind: 'json', text: '  },' },
+  { kind: 'json', text: '  "totalElements": 1,' },
+  { kind: 'json', text: '  "totalPages": 1,' },
+  { kind: 'json', text: '  "number": 0,' },
+  { kind: 'json', text: '  "size": 20,' },
+  { kind: 'json', text: '  "first": true,' },
+  { kind: 'json', text: '  "last": true' },
   { kind: 'json', text: '}' },
   { kind: 'blank' },
 
   { kind: 'dim', text: '# cursor pagination — content + pageInfo' },
   { kind: 'cmd', text: '$ curl -s ":8080/api/v1/categories/cursor?size=20" -H "$AUTH"' },
   { kind: 'res', text: 'HTTP/1.1 200 OK' },
-  {
-    kind: 'json',
-    text: '{ "content": [ { "id": 102, "name": "Electronics", "slug": "electronics", "activo": true } ],',
-  },
-  {
-    kind: 'json',
-    text: '  "pageInfo": { "size": 20, "hasNext": false, "hasPrevious": false } }',
-  },
+  { kind: 'json', text: '{' },
+  ...CONTENT_ITEM,
+  { kind: 'json', text: '  "pageInfo": {' },
+  { kind: 'json', text: '    "size": 20,' },
+  { kind: 'json', text: '    "hasNext": false,' },
+  { kind: 'json', text: '    "hasPrevious": false' },
+  { kind: 'json', text: '  }' },
+  { kind: 'json', text: '}' },
   { kind: 'blank' },
 
   { kind: 'dim', text: '# search — dynamic filter (field:op:value) + sort + pagination' },
@@ -234,24 +253,25 @@ const SCRIPT: Step[] = [
     text: '$ curl -s ":8080/api/v1/categories?filter=name:like:Elec&sort=name,asc" -H "$AUTH"',
   },
   { kind: 'res', text: 'HTTP/1.1 200 OK' },
-  {
-    kind: 'json',
-    text: '{ "content": [ { "id": 102, "name": "Electronics", "slug": "electronics", "activo": true } ],',
-  },
-  {
-    kind: 'json',
-    text: '  "sort": { "sorted": true, "unsorted": false }, "totalElements": 1, "totalPages": 1 }',
-  },
+  { kind: 'json', text: '{' },
+  ...CONTENT_ITEM,
+  { kind: 'json', text: '  "sort": { "sorted": true, "unsorted": false },' },
+  { kind: 'json', text: '  "totalElements": 1,' },
+  { kind: 'json', text: '  "totalPages": 1' },
+  { kind: 'json', text: '}' },
   { kind: 'blank' },
 
   { kind: 'dim', text: '# full update — PUT' },
   { kind: 'cmd', text: '$ curl -s -X PUT :8080/api/v1/categories/102 -H "$AUTH" \\' },
   { kind: 'cont', text: '     -d \'{"name":"Electronics & Gadgets","slug":"electronics"}\'' },
   { kind: 'res', text: 'HTTP/1.1 200 OK' },
-  {
-    kind: 'json',
-    text: '{ "id": 102, "activo": true, "name": "Electronics & Gadgets", "slug": "electronics", … }',
-  },
+  { kind: 'json', text: '{' },
+  { kind: 'json', text: '  "id": 102,' },
+  { kind: 'json', text: '  "activo": true,' },
+  { kind: 'json', text: '  "name": "Electronics & Gadgets",' },
+  { kind: 'json', text: '  "slug": "electronics",' },
+  { kind: 'json', text: '  …' },
+  { kind: 'json', text: '}' },
   { kind: 'blank' },
 
   { kind: 'dim', text: '# partial update — PATCH (only the fields you send)' },
@@ -260,10 +280,13 @@ const SCRIPT: Step[] = [
     text: '$ curl -s -X PATCH :8080/api/v1/categories/102 -H "$AUTH" -d \'{"slug":"tech"}\'',
   },
   { kind: 'res', text: 'HTTP/1.1 200 OK' },
-  {
-    kind: 'json',
-    text: '{ "id": 102, "activo": true, "name": "Electronics & Gadgets", "slug": "tech", … }',
-  },
+  { kind: 'json', text: '{' },
+  { kind: 'json', text: '  "id": 102,' },
+  { kind: 'json', text: '  "activo": true,' },
+  { kind: 'json', text: '  "name": "Electronics & Gadgets",' },
+  { kind: 'json', text: '  "slug": "tech",' },
+  { kind: 'json', text: '  …' },
+  { kind: 'json', text: '}' },
   { kind: 'blank' },
 
   { kind: 'dim', text: '# exists — HEAD (headers only, no body)' },
@@ -282,10 +305,13 @@ const SCRIPT: Step[] = [
   { kind: 'dim', text: '# restore the soft-deleted row' },
   { kind: 'cmd', text: '$ curl -s -X POST :8080/api/v1/categories/102/restore -H "$AUTH"' },
   { kind: 'res', text: 'HTTP/1.1 200 OK' },
-  {
-    kind: 'json',
-    text: '{ "id": 102, "activo": true, "name": "Electronics & Gadgets", "slug": "tech", … }',
-  },
+  { kind: 'json', text: '{' },
+  { kind: 'json', text: '  "id": 102,' },
+  { kind: 'json', text: '  "activo": true,' },
+  { kind: 'json', text: '  "name": "Electronics & Gadgets",' },
+  { kind: 'json', text: '  "slug": "tech",' },
+  { kind: 'json', text: '  …' },
+  { kind: 'json', text: '}' },
   { kind: 'blank' },
 
   // …and it fails loudly and correctly — full RFC 7807 Problem Details (captured verbatim).

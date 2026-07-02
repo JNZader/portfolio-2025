@@ -101,9 +101,9 @@ export function HeroSection({
               primaryCta (outline) > secondaryCta (ghost). */}
             <div className="animate-hero-reveal-5 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               {cvHref && (
-                // Split CV action: "Descargar CV" (filled, primary) que al
-                // hover/focus revela "Ver online" → /cv (versión HTML indexable).
-                // En touch ambas opciones quedan visibles. cvHref es el PDF.
+                // Split CV action: "Descargar CV" (filled, primary) + "Ver"
+                // → /cv (versión HTML indexable). Ambas mitades siempre
+                // visibles, también en touch. cvHref es el PDF.
                 <CVButton pdfHref={cvHref} />
               )}
               <Button size="lg" variant="outline-glow" className="btn-ripple" asChild>
