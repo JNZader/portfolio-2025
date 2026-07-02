@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.9.2](https://github.com/JNZader/portfolio-2025/compare/v2.9.1...v2.9.2) (2026-07-02)
+
+
+### Bug Fixes
+
+* **hero:** shorten CV split-button label and pretty-print terminal JSON ([d970fbf](https://github.com/JNZader/portfolio-2025/commits/d970fbf6f17c6639a7398ff20c16abd3265209ca))
+
 ## [2.9.1](https://github.com/JNZader/portfolio-2025/compare/v2.9.0...v2.9.1) (2026-06-21)
 
 
