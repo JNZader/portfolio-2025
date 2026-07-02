@@ -405,7 +405,7 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
                 ¿Te interesa trabajar conmigo?
               </h2>
               <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                Hablemos sobre tu próximo proyecto o conocé más sobre mi experiencia.
+                Hablemos sobre tu próximo proyecto o conoce más sobre mi experiencia.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild>

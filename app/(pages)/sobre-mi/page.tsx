@@ -74,7 +74,8 @@ export default function SobreMiPage() {
                 <div className="space-y-4 text-muted-foreground">
                   <p>
                     Hola, soy Javier. Software developer en Córdoba. Soy Técnico en Desarrollo de
-                    Software (Universidad Gastón Dachary, 2025), y antes de dedicarme a esto pasé
+                    Software (Universidad Gastón Dachary, 2025). Mi camino en tecnología empezó hace
+                    más de 20 años en soporte técnico y mantenimiento de equipos; después pasé
                     varios años como productor agropecuario, lo que me dio una idea bastante directa
                     de cómo es operar algo con tiempos y consecuencias reales.
                   </p>
@@ -200,7 +201,7 @@ export default function SobreMiPage() {
                     </div>
                     <h4 className="font-semibold text-sm">Argentina Programa</h4>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Intermediate Java Developer
+                      Desarrollador Java Intermedio
                     </p>
                     <p className="text-xs text-muted-foreground">2022 - 2023</p>
                   </div>
@@ -209,7 +210,7 @@ export default function SobreMiPage() {
                     <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-blue-500/10 border-2 border-blue-500 flex items-center justify-center">
                       <Award className="w-3 h-3 text-blue-500" />
                     </div>
-                    <h4 className="font-semibold text-sm">CCNA Certification</h4>
+                    <h4 className="font-semibold text-sm">Certificación CCNA</h4>
                     <p className="text-xs text-muted-foreground mt-1">Fundación Proydesa</p>
                     <p className="text-xs text-muted-foreground">2009</p>
                   </div>

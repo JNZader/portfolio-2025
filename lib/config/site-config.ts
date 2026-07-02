@@ -12,8 +12,8 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://javierzader
 
 export const SITE_CONFIG = {
   name: 'Javier Zader',
-  title: 'Javier Zader - Backend Java Developer',
-  description: 'Backend Java Developer especializado en Spring Boot y microservicios',
+  title: 'Javier Zader - Backend Developer',
+  description: 'Backend Developer · Sistemas end-to-end en Java, Go y Rust',
   url: SITE_URL,
   locale: 'es-AR',
   author: {
@@ -26,6 +26,8 @@ export const SITE_CONFIG = {
     'Backend Developer',
     'Java Developer',
     'Spring Boot',
+    'Go',
+    'Rust',
     'React',
     'Next.js',
     'TypeScript',

@@ -34,7 +34,7 @@ export default async function Image() {
         }}
       >
         <div>Javier Zader</div>
-        <div style={{ fontSize: 32, opacity: 0.9 }}>Backend Java Developer</div>
+        <div style={{ fontSize: 32, opacity: 0.9 }}>Backend Developer · Sistemas end-to-end</div>
       </div>
     </div>,
     {

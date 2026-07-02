@@ -28,8 +28,8 @@ export default function Footer() {
                 JZ
               </Link>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Backend Java Developer especializado en crear soluciones robustas, escalables y
-                mantenibles con Spring Boot y tecnologías modernas.
+                Backend Developer especializado en sistemas end-to-end con Java, Go y Rust —
+                soluciones robustas, escalables y mantenibles.
               </p>
               <div className="flex gap-4">
                 <Link

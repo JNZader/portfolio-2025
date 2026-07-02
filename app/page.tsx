@@ -20,11 +20,11 @@ import { generatePersonSchema, generateWebSiteSchema } from '@/lib/seo/schema';
 export const metadata: Metadata = {
   title: 'Inicio',
   description:
-    'Desarrollador backend con más de 20 años en tecnología. Experiencia en soporte técnico, mantenimiento de sistemas y desarrollo de software con Java, Spring Boot y React.',
+    'Desarrollador backend con más de 20 años en tecnología: de soporte técnico y producción agropecuaria al desarrollo de sistemas end-to-end con Java, Go y Rust.',
   openGraph: {
     title: 'Javier Zader - Backend Developer',
     description:
-      'Desarrollador backend con más de 20 años en tecnología. Especializado en Java, Spring Boot y React.',
+      'Desarrollador backend con más de 20 años en tecnología. Sistemas end-to-end con Java, Go y Rust.',
   },
 };
 
@@ -42,7 +42,8 @@ const NewsletterHero = dynamic(
 
 const STATS = [
   { value: '20+', label: 'Años en Tecnología', icon: TrendingUp },
-  { value: '15+', label: 'Proyectos Completados', icon: Briefcase },
+  // Defensible from resume.json: the CV lists exactly 6 end-to-end projects.
+  { value: '6', label: 'Sistemas End-to-End', icon: Briefcase },
   { value: '4+', label: 'Certificaciones', icon: Award },
   // Defensible from SKILLS_DATA (backend 6 + frontend 6 + databases 4 + devops 5
   // = 21 technologies listed across the site); rounded down to 20+.
@@ -135,12 +136,13 @@ export default function HomePage() {
                     <p>
                       Con más de 20 años en el mundo tecnológico, mi camino comenzó en soporte
                       técnico y mantenimiento de equipos, lo que me dio una base sólida para
-                      entender los sistemas desde su núcleo.
+                      entender los sistemas desde su núcleo. Después pasé varios años como productor
+                      agropecuario, operando algo con tiempos y consecuencias reales.
                     </p>
                     <p>
-                      Esa experiencia práctica me llevó naturalmente al desarrollo de software,
-                      donde hoy me especializo en Java y Spring Boot. Siempre estoy aprendiendo
-                      nuevas tecnologías para seguir creciendo profesionalmente.
+                      Esa doble experiencia práctica me trajo de vuelta al software: hoy construyo
+                      sistemas end-to-end con Java, Go y Rust, y sigo aprendiendo nuevas tecnologías
+                      para seguir creciendo profesionalmente.
                     </p>
                   </div>
                 </div>

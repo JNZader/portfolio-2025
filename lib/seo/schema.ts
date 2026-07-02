@@ -12,14 +12,17 @@ export function generatePersonSchema(): WithContext<Person> {
     name: 'Javier Norberto Zader',
     url: SITE_URL,
     image: `${SITE_URL}/images/profile.jpg`,
-    jobTitle: 'Backend Java Developer',
+    jobTitle: 'Backend Developer',
     description:
-      'Backend Java Developer con más de 20 años de experiencia en tecnología, especializado en Spring Boot, React y arquitecturas modernas. Técnico en Desarrollo de Software.',
-    sameAs: ['https://github.com/JNZader', 'https://linkedin.com/in/jnzader'],
+      'Backend Developer con más de 20 años en tecnología, especializado en sistemas end-to-end con Java, Go y Rust — de plataformas industriales con ML en el edge a herramientas de desarrollo con IA. Técnico en Desarrollo de Software.',
+    sameAs: ['https://github.com/JNZader', 'https://www.linkedin.com/in/jnzader/'],
     knowsAbout: [
       'Java',
       'Spring Boot',
-      'Spring Framework',
+      'Go',
+      'Rust',
+      'Python',
+      'Machine Learning',
       'React',
       'Next.js',
       'Node.js',
@@ -89,8 +92,7 @@ export function generateWebSiteSchema(): WithContext<WebSite> {
     '@type': 'WebSite',
     name: 'Javier Zader - Portfolio',
     url: SITE_URL,
-    description:
-      'Backend Java Developer especializado en Spring Boot, React y arquitecturas modernas',
+    description: 'Backend Developer · Sistemas end-to-end en Java, Go y Rust',
     author: {
       '@type': 'Person',
       name: 'Javier Zader',
