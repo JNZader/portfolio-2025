@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react';
  * verified every line with real execution (curl, not mocks):
  *   1. `apigen generate` scaffolds a COMPLETE Spring Boot project — every table
  *      becomes 5 clean-architecture layers, plus build.gradle / Application /
- *      Dockerfile / tests = 197 files.
+ *      Dockerfile / tests = 199 files.
  *   2. `./gradlew bootRun` actually boots it (Spring Boot 4 / Java 25 / Postgres /
  *      Hikari / Hibernate / Tomcat).
  *   3. Real `curl`s exercise the whole generated surface: auth (access+refresh JWT),
@@ -112,7 +112,6 @@ const CATEGORY_BODY: Step[] = [
   '  "description": null,',
   '  "imageUrl": null,',
   '  "displayOrder": null,',
-  '  "isActive": null,',
   '  "parentId": null',
   '}',
 ].map((text) => ({ kind: 'json' as const, text }));
@@ -142,7 +141,7 @@ const SCRIPT: Step[] = [
   { kind: 'dim', text: 'Scaffolding project files …' },
   ...SCAFFOLD,
   { kind: 'blank' },
-  { kind: 'good', text: 'Generation complete — 197 files in ./shop-api' },
+  { kind: 'good', text: 'Generation complete — 199 files in ./shop-api' },
   { kind: 'blank' },
 
   // Act 2 — boot (the full Spring Boot 4 startup log, not summarized)
