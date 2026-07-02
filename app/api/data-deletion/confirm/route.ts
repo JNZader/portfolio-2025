@@ -4,6 +4,7 @@ import { resend } from '@/lib/email/resend';
 import { logger } from '@/lib/monitoring/logger';
 import { confirmRateLimiter, getClientIdentifier } from '@/lib/rate-limit/redis';
 import { deleteUserData } from '@/lib/services/gdpr';
+import { escapeHtml } from '@/lib/utils/string';
 
 interface DeletionTokenData {
   email: string;
@@ -65,7 +66,7 @@ export async function GET(request: NextRequest) {
             <h2>Datos Eliminados Correctamente</h2>
             <p>Hemos procesado tu solicitud de eliminación de datos.</p>
             <p>Toda la información asociada a tu email ha sido eliminada permanentemente de nuestros sistemas.</p>
-            ${reason ? `<p><strong>Razón indicada:</strong> ${reason}</p>` : ''}
+            ${reason ? `<p><strong>Razón indicada:</strong> ${escapeHtml(reason)}</p>` : ''}
             <p style="color: #666; font-size: 14px;">
               Si esto fue un error, puedes volver a suscribirte en cualquier momento.
             </p>

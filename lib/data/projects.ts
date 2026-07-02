@@ -96,21 +96,24 @@ const LOCAL_PROJECTS: SanityProject[] = [
       ),
       mermaid(
         `erDiagram
+  CATEGORY ||--o{ CATEGORY : "parent of"
   CUSTOMER ||--o{ ORDER : places
   CUSTOMER ||--o{ ADDRESS : has
   CUSTOMER ||--o{ REVIEW : writes
   CUSTOMER ||--o{ WISHLIST : owns
+  ADDRESS ||--o{ ORDER : "ships / bills"
   ORDER ||--|{ ORDERITEM : contains
-  COUPON ||--o{ ORDER : applied
   PRODUCT ||--o{ ORDERITEM : "appears in"
+  PRODUCTVARIANT ||--o{ ORDERITEM : specifies
   PRODUCT ||--o{ PRODUCTVARIANT : has
   PRODUCT ||--o{ PRODUCTIMAGE : has
   PRODUCT ||--o{ REVIEW : receives
+  PRODUCT ||--o{ WISHLIST : "saved in"
   PRODUCT }o--|| CATEGORY : "in"
   PRODUCT }o--|| BRAND : by
   PRODUCT ||--o{ PRODUCTTAG : has
   TAG ||--o{ PRODUCTTAG : in`,
-        'Schema de ejemplo (14 tablas) que apigen consume en el demo del hero. Relaciones inferidas de los nombres — no del .sql real (repo privado); a corregir si difiere.'
+        'El schema de ejemplo (14 tablas) que apigen consume en el demo del hero — relaciones tomadas del examples/ecommerce-schema.sql real del repo. coupons no aparece: no tiene FKs (el cupón se resuelve por código).'
       ),
       block('Constraints I Set', 'h2'),
       bullet(
@@ -168,9 +171,9 @@ const LOCAL_PROJECTS: SanityProject[] = [
   CLI->>Parser: parse SQL / OpenAPI
   Parser->>IR: build normalized IR
   IR->>Generators: render per target language
-  Generators-->>CLI: 197 files (5 layers/table + scaffold)
+  Generators-->>CLI: 199 files (5 layers/table + scaffold)
   CLI-->>Dev: ./shop-api ready to run`,
-        'El mismo pipeline visto en runtime: un `apigen generate` de punta a punta, del schema a 197 archivos que arrancan. Es el run real del terminal del hero.'
+        'El mismo pipeline visto en runtime: un `apigen generate` de punta a punta, del schema a 199 archivos que arrancan. Es el run real del terminal del hero.'
       ),
       block('2. Features as opt-in Gradle modules', 'h3'),
       block(

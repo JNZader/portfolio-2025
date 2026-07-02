@@ -1,6 +1,8 @@
 import type { MetadataRoute } from 'next';
 import { SITE_URL } from '@/lib/config/site-config';
+import { mergeLocalAndSanityProjects } from '@/lib/data/projects';
 import { logger } from '@/lib/monitoring/logger';
+import { convertSanityProject } from '@/lib/utils/project';
 import { sanityFetch } from '@/sanity/lib/client';
 import { postsQuery, projectsQuery } from '@/sanity/lib/queries';
 import type { Post, Project } from '@/types/sanity';
@@ -10,37 +12,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: SITE_URL,
-      lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,
     },
     {
       url: `${SITE_URL}/sobre-mi`,
-      lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
       url: `${SITE_URL}/proyectos`,
-      lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
       url: `${SITE_URL}/blog`,
-      lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
       url: `${SITE_URL}/contacto`,
-      lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 0.7,
     },
     {
       url: `${SITE_URL}/cv`,
-      lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
@@ -66,15 +62,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
-  // Dynamic projects (opcional, si quieres incluir proyectos individuales)
+  // Dynamic projects. IMPORTANT: /proyectos/[id] matches by the unified
+  // Project.id (Sanity _id, or the handmade _id of local projects), NOT by
+  // slug — mirror generateStaticParams so every sitemap URL actually resolves.
   let projectPages: MetadataRoute.Sitemap = [];
   try {
     const projects = await sanityFetch<Project[]>({
       query: projectsQuery,
       tags: ['project'],
     });
-    projectPages = projects.map((project) => ({
-      url: `${SITE_URL}/proyectos/${project.slug.current}`,
+    projectPages = mergeLocalAndSanityProjects(projects).map((project) => ({
+      url: `${SITE_URL}/proyectos/${convertSanityProject(project).id}`,
       lastModified: new Date(project._updatedAt ?? project.publishedAt),
       changeFrequency: 'monthly',
       priority: 0.6,

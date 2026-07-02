@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { sendContactEmail } from '@/app/actions/contact';
@@ -33,6 +33,13 @@ export function ContactForm() {
   const [emailSuggestion, setEmailSuggestion] = useState<string | null>(null);
   const [pendingData, setPendingData] = useState<ContactFormData | null>(null);
   const { announce } = useAnnouncer();
+  const suggestionRef = useRef<HTMLDivElement>(null);
+
+  // El panel de sugerencia se inserta arriba del form: sin foco un usuario de
+  // teclado/SR envía y "no pasa nada". Llevamos el foco al panel al aparecer.
+  useEffect(() => {
+    if (emailSuggestion) suggestionRef.current?.focus();
+  }, [emailSuggestion]);
 
   const {
     register,
@@ -58,6 +65,10 @@ export function ContactForm() {
       if (emailCheck.suggestion && !pendingData) {
         setEmailSuggestion(emailCheck.suggestion);
         setPendingData(data);
+        announce(
+          `Detectamos un posible error en tu email. Confirma si quisiste escribir ${emailCheck.suggestion}`,
+          'assertive'
+        );
         setIsSubmitting(false);
         return;
       }
@@ -132,7 +143,12 @@ export function ContactForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
       {/* Sugerencia de email */}
       {emailSuggestion && (
-        <div className="rounded-lg border-2 border-[var(--color-primary)] bg-[var(--color-primary)]/10 p-4">
+        <div
+          ref={suggestionRef}
+          role="alert"
+          tabIndex={-1}
+          className="rounded-lg border-2 border-[var(--color-primary)] bg-[var(--color-primary)]/10 p-4"
+        >
           <div className="flex items-start gap-3">
             <span className="text-2xl">💡</span>
             <div className="flex-1">
