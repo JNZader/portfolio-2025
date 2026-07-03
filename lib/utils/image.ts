@@ -8,7 +8,11 @@ import { logger } from '@/lib/monitoring/logger';
  */
 export async function getBlurDataURL(src: string): Promise<string> {
   try {
-    const buffer = await fetch(src).then(async (res) => Buffer.from(await res.arrayBuffer()));
+    const res = await fetch(src);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch image for blur placeholder: ${res.status}`);
+    }
+    const buffer = Buffer.from(await res.arrayBuffer());
 
     const { base64 } = await getPlaiceholder(buffer, { size: 10 });
 

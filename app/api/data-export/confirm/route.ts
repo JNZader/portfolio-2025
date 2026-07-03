@@ -48,7 +48,9 @@ export async function GET(request: NextRequest) {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Content-Disposition': `attachment; filename="data-export-${email}-${Date.now()}.json"`,
+        // Slug del email en el filename: caracteres fuera de [a-z0-9._-]
+        // podrían romper/inyectar el header Content-Disposition.
+        'Content-Disposition': `attachment; filename="data-export-${email.replace(/[^a-z0-9._-]/gi, '_')}-${Date.now()}.json"`,
       },
     });
   } catch (error) {

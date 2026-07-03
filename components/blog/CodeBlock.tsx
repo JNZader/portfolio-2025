@@ -14,9 +14,15 @@ export function CodeBlock({ code, language, filename }: Readonly<CodeBlockProps>
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    // clipboard puede rechazar (permiso denegado / contexto no seguro):
+    // sin catch sería una unhandled rejection.
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Silencioso: el botón simplemente no marca "copiado".
+    }
   };
 
   return (

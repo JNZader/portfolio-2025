@@ -1,5 +1,7 @@
-'use client';
-
+// Server component: react-markdown corre perfecto en RSC, así el parser y sus
+// plugins (~50-70 KB gz) quedan fuera del bundle cliente y el artículo llega
+// como HTML del servidor. Las hojas interactivas (SyntaxHighlighter,
+// MermaidDiagram) son client components propios.
 import { CheckSquare, Code, ExternalLink, Info, List, Square, Table, Terminal } from 'lucide-react';
 import React from 'react';
 import type { Components } from 'react-markdown';
@@ -317,7 +319,7 @@ export function MarkdownContent({
   repoInfo,
 }: Readonly<MarkdownContentProps>) {
   // Create components with repoInfo context for GitHub image URL transformation
-  const components = React.useMemo(() => createMarkdownComponents(repoInfo), [repoInfo]);
+  const components = createMarkdownComponents(repoInfo);
 
   return (
     <div className={`markdown-content ${className}`}>

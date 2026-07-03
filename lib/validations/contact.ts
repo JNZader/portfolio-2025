@@ -48,7 +48,7 @@ export const contactSchema = z.object({
   // Motivo de contacto (reemplaza al antiguo "asunto" de texto libre).
   // El select arranca en '' → el enum lo rechaza y dispara el mensaje custom.
   reason: z.enum(['job', 'freelance', 'consulting', 'other'], {
-    error: 'Elegí un motivo para que pueda priorizar tu mensaje',
+    error: 'Elige un motivo para que pueda priorizar tu mensaje',
   }),
 
   // Empresa u organización (opcional).

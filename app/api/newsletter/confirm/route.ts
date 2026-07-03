@@ -72,7 +72,8 @@ export async function GET(request: NextRequest) {
     });
 
     if (!subscriber) {
-      logger.warn('Newsletter confirmation with invalid token', { token });
+      // No loguear el valor del token (higiene: los tokens no van a logs)
+      logger.warn('Newsletter confirmation with invalid token');
       return new NextResponse(
         `
         <!DOCTYPE html>

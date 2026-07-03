@@ -6,13 +6,17 @@ import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import { Input } from '@/components/ui/input';
-import { showError, showSuccess } from '@/lib/utils/toast';
+import { useGdprRequest } from '@/hooks/useGdprRequest';
 import { type DataDeletionInput, dataDeletionSchema } from '@/lib/validations/gdpr';
 
 export function DataDeletionForm() {
-  const [isLoading, setIsLoading] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingData, setPendingData] = useState<DataDeletionInput | null>(null);
+  const { isLoading, submit } = useGdprRequest(
+    '/api/data-deletion',
+    'Error al eliminar datos',
+    'Revisa tu email para confirmar la eliminación'
+  );
 
   const {
     register,
@@ -31,32 +35,11 @@ export function DataDeletionForm() {
 
   const handleConfirmedDeletion = async () => {
     if (!pendingData) return;
-
-    setIsLoading(true);
     setShowConfirmation(false);
-
-    try {
-      const response = await fetch('/api/data-deletion', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(pendingData),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        showError(result.message ?? 'Error al eliminar datos');
-        return;
-      }
-
-      showSuccess(result.message ?? 'Revisa tu email para confirmar la eliminación');
+    await submit(pendingData, () => {
       reset();
       setPendingData(null);
-    } catch (error) {
-      showError(error instanceof Error ? error.message : 'Error al eliminar datos');
-    } finally {
-      setIsLoading(false);
-    }
+    });
   };
 
   const handleCancelConfirmation = () => {

@@ -104,22 +104,28 @@ function renderHeader(ctx: PDFContext, data: ResumeData): void {
   // and the opening word of the summary. Kept in personalInfo.title so
   // other surfaces (SEO metadata, sobre-mi page) still have it available.
 
-  // Contact line -- centered with separators
+  // Contact line -- centered with separators. The email goes in the PDF:
+  // the anti-scraping obfuscation only matters on the web, and a recruiter
+  // holding the downloaded CV needs a way to reply.
   setText(ctx, SIZES.contact, COLORS.lightGray, 'normal');
   const linkedinShort = data.personalInfo.linkedin.replace(/^https?:\/\//, '');
   const githubShort = data.personalInfo.github.replace(/^https?:\/\//, '');
   const sep = '  ·  '; // " · " with extra spacing
-  const contactText = `${data.personalInfo.location}${sep}${linkedinShort}${sep}${githubShort}`;
+  const email = data.personalInfo.email;
+  const contactText = `${data.personalInfo.location}${sep}${email}${sep}${linkedinShort}${sep}${githubShort}`;
   const contactWidth = ctx.doc.getTextWidth(contactText);
   const contactX = (PAGE_WIDTH - contactWidth) / 2;
   ctx.doc.text(contactText, contactX, ctx.yPos + 3.5);
 
-  // Add hyperlinks for LinkedIn and GitHub portions
+  // Add hyperlinks for email, LinkedIn and GitHub portions
   const locationWidth = ctx.doc.getTextWidth(data.personalInfo.location);
   const sepWidth = ctx.doc.getTextWidth(sep);
-  const linkedinX = contactX + locationWidth + sepWidth;
+  const emailX = contactX + locationWidth + sepWidth;
+  const emailWidth = ctx.doc.getTextWidth(email);
+  const linkedinX = emailX + emailWidth + sepWidth;
   const linkedinWidth = ctx.doc.getTextWidth(linkedinShort);
   const githubX = linkedinX + linkedinWidth + sepWidth;
+  ctx.doc.link(emailX, ctx.yPos + 0.8, emailWidth, 3.5, { url: `mailto:${email}` });
   ctx.doc.link(linkedinX, ctx.yPos + 0.8, linkedinWidth, 3.5, { url: data.personalInfo.linkedin });
   ctx.doc.link(githubX, ctx.yPos + 0.8, ctx.doc.getTextWidth(githubShort), 3.5, {
     url: data.personalInfo.github,
@@ -353,7 +359,7 @@ export async function GET(request: NextRequest) {
       decodedEmail = Buffer.from(rawData.personalInfo.email_encoded, 'base64').toString('utf-8');
     } catch {
       logger.warn('Failed to decode email_encoded from resume data, using fallback');
-      decodedEmail = 'contacto@javierzader.com';
+      decodedEmail = 'jnzader@gmail.com';
     }
 
     const data: ResumeData = {

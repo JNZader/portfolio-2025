@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 import { BlogPostTracker } from '@/components/blog/BlogPostTracker';
 import { Comments } from '@/components/blog/Comments';
 import { MarkdownRenderer } from '@/components/blog/MarkdownRenderer';
@@ -38,6 +39,27 @@ interface PostPageProps {
   params: Promise<{
     slug: string;
   }>;
+}
+
+/**
+ * Related posts, como componente async propio: el fetch corre dentro del
+ * Suspense y se streamea, así el TTFB del artículo no paga este query.
+ */
+async function RelatedPostsSection({
+  slug,
+  categories,
+}: Readonly<{ slug: string; categories: Post['categories'] }>) {
+  const relatedPosts = await sanityFetch<Post[]>({
+    query: relatedPostsQuery,
+    params: {
+      slug,
+      categories: categories.map((cat) => cat.slug.current),
+    },
+    tags: ['post'],
+  });
+
+  if (relatedPosts.length === 0) return null;
+  return <RelatedPosts posts={relatedPosts} />;
 }
 
 /**
@@ -138,17 +160,6 @@ export default async function PostPage({ params }: Readonly<PostPageProps>) {
     ? generateTableOfContentsFromMarkdown(post.markdownBody)
     : generateTableOfContents(post.body);
 
-  // Fetch related posts
-  const categorySlugArray = post.categories.map((cat) => cat.slug.current);
-  const relatedPosts = await sanityFetch<Post[]>({
-    query: relatedPostsQuery,
-    params: {
-      slug,
-      categories: categorySlugArray,
-    },
-    tags: ['post'],
-  });
-
   // Full URL for share buttons — SITE_URL falls back to the real domain,
   // never example.com.
   const fullUrl = `${SITE_URL}/blog/${slug}`;
@@ -215,7 +226,10 @@ export default async function PostPage({ params }: Readonly<PostPageProps>) {
               </div>
 
               {/* Related posts */}
-              {relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} />}
+              {/* Streaming: los relacionados no bloquean el HTML del artículo */}
+              <Suspense fallback={null}>
+                <RelatedPostsSection slug={slug} categories={post.categories} />
+              </Suspense>
 
               {/* Comments */}
               <Comments term={`/blog/${slug}`} />

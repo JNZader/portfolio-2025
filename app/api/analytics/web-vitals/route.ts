@@ -76,61 +76,8 @@ export async function POST(request: NextRequest) {
   }
 }
 
-/**
- * GET endpoint to retrieve analytics stats
- */
-export async function GET() {
-  try {
-    // Calculate stats
-    const stats = {
-      total: vitalsData.length,
-      averages: calculateAverages(vitalsData),
-      last24h: vitalsData.filter(
-        (v) => new Date(v.timestamp) > new Date(Date.now() - 24 * 60 * 60 * 1000)
-      ),
-      byMetric: groupByMetric(vitalsData),
-    };
-
-    return NextResponse.json(stats);
-  } catch (error) {
-    logger.error('Error retrieving stats', error as Error, {
-      path: '/api/analytics/web-vitals',
-      service: 'analytics',
-    });
-    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
-  }
-}
-
-/**
- * Calculate average values per metric
- */
-function calculateAverages(data: WebVitalData[]) {
-  const metrics = ['LCP', 'FID', 'INP', 'CLS', 'FCP', 'TTFB'];
-  const averages: Record<string, number> = {};
-
-  for (const metric of metrics) {
-    const values = data.filter((d) => d.metric === metric).map((d) => d.value);
-    averages[metric] = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
-  }
-
-  return averages;
-}
-
-/**
- * Group data by metric type
- */
-function groupByMetric(data: WebVitalData[]) {
-  const grouped: Record<string, WebVitalData[]> = {};
-
-  for (const item of data) {
-    if (!grouped[item.metric]) {
-      grouped[item.metric] = [];
-    }
-    grouped[item.metric].push(item);
-  }
-
-  return grouped;
-}
+// El GET público que agregaba stats se eliminó: exponía métricas internas
+// sin auth y ningún consumidor lo usaba (el dashboard real es Sentry/GA).
 
 // Support OPTIONS for CORS if needed
 export async function OPTIONS() {

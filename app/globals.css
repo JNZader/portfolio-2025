@@ -26,9 +26,11 @@
   --color-tertiary-foreground: oklch(100% 0 0);
   --color-destructive: oklch(60% 0.22 27);
   --color-destructive-foreground: oklch(98% 0 0);
-  --color-error: oklch(60% 0.22 27);
+  /* L bajado (60→50 / 65→48) para dar 4.5:1+ como TEXTO sobre blanco
+     (mensajes de error/éxito de formularios). Dark mode tiene sus overrides. */
+  --color-error: oklch(50% 0.2 27);
   --color-error-foreground: oklch(98% 0 0);
-  --color-success: oklch(65% 0.18 150);
+  --color-success: oklch(48% 0.14 150);
   --color-success-foreground: oklch(98% 0 0);
   --color-warning: oklch(68% 0.2 85); /* Improved contrast - WCAG AA 4.5:1+ */
   --color-warning-foreground: oklch(12% 0 0);

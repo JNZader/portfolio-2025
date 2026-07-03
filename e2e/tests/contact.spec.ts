@@ -18,28 +18,31 @@ test.describe('Contact Form', () => {
     await expect(main.getByRole('button', { name: /enviar/i })).toBeVisible();
   });
 
-  test('should submit form and show response', async ({ page }) => {
+  test('should show explicit error feedback when submission transport fails', async ({ page }) => {
+    // Determinístico: cortamos el POST de la server action y exigimos que el
+    // usuario VEA un error. El test anterior (success || error || toast) era
+    // tautológico — pasaba aunque el envío fallara en silencio. El camino de
+    // éxito real está cubierto por unit tests de la action con mocks.
+    await page.route('**/*', async (route) => {
+      if (route.request().method() === 'POST') {
+        await route.abort('failed');
+        return;
+      }
+      await route.continue();
+    });
+
     const email = testData.contact.email();
     const main = page.locator('main');
 
-    // Fill form
     await main.getByRole('textbox', { name: /nombre/i }).fill(testData.contact.name);
     await main.getByRole('textbox', { name: /^email/i }).fill(email);
     await main.getByLabel(/motivo/i).selectOption('job');
     await main.getByRole('textbox', { name: /mensaje/i }).fill(testData.contact.message);
 
-    // Submit
     await main.getByRole('button', { name: /enviar/i }).click();
 
-    // Wait for some response - either success or error (API might not be configured in CI)
-    await expect(async () => {
-      const successMessage = await page.getByText(/mensaje.*enviado/i).isVisible().catch(() => false);
-      const errorMessage = await page.getByText(/error|inesperado/i).isVisible().catch(() => false);
-      const hasToast = await page.locator('[role="status"], .toast, [data-sonner-toast]').count() > 0;
-
-      // Form should show some response after submission
-      expect(successMessage || errorMessage || hasToast).toBeTruthy();
-    }).toPass({ timeout: 15000 });
+    // El catch del form SIEMPRE tiene que mostrar feedback visible.
+    await expect(page.getByText(/error inesperado/i).first()).toBeVisible({ timeout: 15000 });
   });
 
   test('should show validation errors', async ({ page }) => {
@@ -51,7 +54,7 @@ test.describe('Contact Form', () => {
     // Should show errors (messages from contactSchema validation)
     await expect(page.getByText(/nombre.*al menos 2 caracteres/i)).toBeVisible();
     await expect(page.getByText(/email.*requerido/i)).toBeVisible();
-    await expect(page.getByText(/elegí un motivo/i)).toBeVisible();
+    await expect(page.getByText(/elige un motivo/i)).toBeVisible();
     await expect(page.getByText(/mensaje.*al menos 10 caracteres/i)).toBeVisible();
   });
 

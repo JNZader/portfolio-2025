@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     const confirmUrl = `${siteUrl}/api/data-deletion/confirm?token=${token}`;
 
     await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL ?? 'noreply@example.com',
+      from: process.env.RESEND_FROM_EMAIL ?? 'noreply@javierzader.com',
       to: email,
       subject: '⚠️ Confirma la eliminación de tus datos',
       html: `

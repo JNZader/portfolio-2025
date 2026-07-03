@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
     // Send confirmation email
     try {
       await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? 'noreply@example.com',
+        from: process.env.RESEND_FROM_EMAIL ?? 'noreply@javierzader.com',
         to: email,
         subject: 'Datos eliminados correctamente',
         html: `

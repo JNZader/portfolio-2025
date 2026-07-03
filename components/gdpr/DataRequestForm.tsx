@@ -1,15 +1,18 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { showError, showSuccess } from '@/lib/utils/toast';
+import { useGdprRequest } from '@/hooks/useGdprRequest';
 import { type DataExportInput, dataExportSchema } from '@/lib/validations/gdpr';
 
 export function DataRequestForm() {
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, submit } = useGdprRequest(
+    '/api/data-export',
+    'Error al solicitar datos',
+    'Revisa tu email para descargar tus datos'
+  );
 
   const {
     register,
@@ -21,29 +24,7 @@ export function DataRequestForm() {
   });
 
   const onSubmit = async (data: DataExportInput) => {
-    setIsLoading(true);
-
-    try {
-      const response = await fetch('/api/data-export', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        showError(result.message ?? 'Error al solicitar datos');
-        return;
-      }
-
-      showSuccess(result.message ?? 'Revisa tu email para descargar tus datos');
-      reset();
-    } catch (error) {
-      showError(error instanceof Error ? error.message : 'Error al exportar datos');
-    } finally {
-      setIsLoading(false);
-    }
+    await submit(data, reset);
   };
 
   return (

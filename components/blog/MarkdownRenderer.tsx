@@ -1,5 +1,5 @@
-'use client';
-
+// Server component: el parseo de markdown queda en el servidor (sin
+// react-markdown en el bundle del post). CodeBlock es la hoja client.
 import Link from 'next/link';
 import type React from 'react';
 import type { Components } from 'react-markdown';
