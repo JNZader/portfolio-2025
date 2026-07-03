@@ -1,9 +1,11 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { ErrorFeedback } from '@/components/error/ErrorFeedback';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
+import { Link } from '@/i18n/navigation';
 import { trackError } from '@/lib/analytics/errors';
 
 export default function ErrorPage({
@@ -14,6 +16,8 @@ export default function ErrorPage({
   reset: () => void;
 }>) {
   const [eventId, setEventId] = useState<string | undefined>();
+  const t = useTranslations('Error');
+  const tc = useTranslations('Common');
 
   useEffect(() => {
     // Track error to analytics and capture Sentry eventId
@@ -48,10 +52,8 @@ export default function ErrorPage({
 
         {/* Error Message */}
         <div>
-          <h2 className="text-2xl font-bold mb-2">¡Algo salió mal!</h2>
-          <p className="text-[var(--color-muted-foreground)]">
-            Ha ocurrido un error inesperado. Por favor, intenta de nuevo.
-          </p>
+          <h2 className="text-2xl font-bold mb-2">{t('title')}</h2>
+          <p className="text-[var(--color-muted-foreground)]">{t('description')}</p>
         </div>
 
         {/* Error Details (development only) */}
@@ -64,7 +66,7 @@ export default function ErrorPage({
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button onClick={() => reset()} size="lg">
-            Intentar de nuevo
+            {t('retry')}
           </Button>
           <Button
             onClick={() => {
@@ -73,7 +75,7 @@ export default function ErrorPage({
             variant="outline"
             size="lg"
           >
-            Volver al inicio
+            {tc('backHome')}
           </Button>
         </div>
 
@@ -86,11 +88,13 @@ export default function ErrorPage({
 
         {/* Help text */}
         <p className="text-sm text-[var(--color-muted-foreground)]">
-          Si el problema persiste, por favor{' '}
-          <a href="/contacto" className="text-primary hover:underline">
-            contáctanos
-          </a>
-          {'.'}
+          {t.rich('help', {
+            link: (chunks) => (
+              <Link href="/contacto" className="text-primary hover:underline">
+                {chunks}
+              </Link>
+            ),
+          })}
         </p>
       </div>
     </Container>

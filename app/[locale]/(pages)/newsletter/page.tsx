@@ -1,25 +1,35 @@
 import type { Metadata } from 'next';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { NewsletterForm } from '@/components/newsletter/NewsletterForm';
 import Container from '@/components/ui/Container';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Section from '@/components/ui/Section';
+import { localeAlternates } from '@/lib/seo/alternates';
 
-export const metadata: Metadata = {
-  title: 'Newsletter - Portfolio 2025',
-  description: 'Suscríbete a nuestra newsletter para recibir contenido exclusivo.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('NewsletterPage');
+  return {
+    title: t('metaTitle'),
+    alternates: await localeAlternates('/newsletter'),
+    description: t('metaDescription'),
+  };
+}
 
-export default function NewsletterPage() {
+export default async function NewsletterPage({
+  params,
+}: Readonly<{ params: Promise<{ locale: string }> }>) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations('NewsletterPage');
   return (
     <>
       {/* Hero */}
       <Section className="bg-[var(--color-muted)]">
         <Container>
           <div className="py-12 text-center">
-            <h1 className="text-4xl font-bold mb-4">Newsletter</h1>
+            <h1 className="text-4xl font-bold mb-4">{t('heroTitle')}</h1>
             <p className="text-lg text-[var(--color-muted-foreground)] max-w-2xl mx-auto">
-              Recibe contenido exclusivo, tips de programación y actualizaciones directamente en tu
-              inbox.
+              {t('heroSubtitle')}
             </p>
           </div>
         </Container>
@@ -33,8 +43,8 @@ export default function NewsletterPage() {
             <div>
               <Card>
                 <CardHeader>
-                  <CardTitle>Suscríbete Ahora</CardTitle>
-                  <CardDescription>Te enviaremos un email de confirmación</CardDescription>
+                  <CardTitle>{t('subscribeNow')}</CardTitle>
+                  <CardDescription>{t('confirmationNote')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <NewsletterForm />
@@ -43,28 +53,12 @@ export default function NewsletterPage() {
 
               {/* Benefits */}
               <div className="mt-12">
-                <h2 className="text-2xl font-bold mb-6">¿Qué recibirás?</h2>
+                <h2 className="text-2xl font-bold mb-6">{t('benefitsHeading')}</h2>
                 <div className="grid gap-6 sm:grid-cols-2">
-                  <BenefitCard
-                    icon="📝"
-                    title="Artículos Exclusivos"
-                    description="Contenido que no encontrarás en el blog público"
-                  />
-                  <BenefitCard
-                    icon="💡"
-                    title="Tips y Trucos"
-                    description="Mejores prácticas y soluciones a problemas comunes"
-                  />
-                  <BenefitCard
-                    icon="🚀"
-                    title="Actualizaciones"
-                    description="Entérate primero de nuevos proyectos y lanzamientos"
-                  />
-                  <BenefitCard
-                    icon="🎁"
-                    title="Recursos Gratis"
-                    description="Plantillas, snippets y herramientas útiles"
-                  />
+                  <BenefitCard icon="📝" title={t('b1t')} description={t('b1d')} />
+                  <BenefitCard icon="💡" title={t('b2t')} description={t('b2d')} />
+                  <BenefitCard icon="🚀" title={t('b3t')} description={t('b3d')} />
+                  <BenefitCard icon="🎁" title={t('b4t')} description={t('b4d')} />
                 </div>
               </div>
             </div>
@@ -74,26 +68,26 @@ export default function NewsletterPage() {
               {/* Stats */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Estadísticas</CardTitle>
+                  <CardTitle>{t('statsTitle')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <StatItem label="Frecuencia" value="Semanal" />
-                  <StatItem label="Suscriptores" value="1,234+" />
-                  <StatItem label="Open Rate" value="42%" />
+                  <StatItem label={t('statFrequency')} value={t('statFrequencyValue')} />
+                  <StatItem label={t('statSubscribers')} value="1,234+" />
+                  <StatItem label={t('statOpenRate')} value="42%" />
                 </CardContent>
               </Card>
 
               {/* Privacy */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Tu Privacidad</CardTitle>
+                  <CardTitle>{t('privacyTitle')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3 text-sm text-[var(--color-muted-foreground)]">
-                  <p>✅ Double opt-in (confirmación requerida)</p>
-                  <p>✅ Sin spam, solo contenido de calidad</p>
-                  <p>✅ Puedes darte de baja en cualquier momento</p>
-                  <p>✅ Tu email nunca será compartido</p>
-                  <p>✅ GDPR compliant</p>
+                  <p>✅ {t('p1')}</p>
+                  <p>✅ {t('p2')}</p>
+                  <p>✅ {t('p3')}</p>
+                  <p>✅ {t('p4')}</p>
+                  <p>✅ {t('p5')}</p>
                 </CardContent>
               </Card>
             </aside>

@@ -32,7 +32,7 @@ describe('NewsletterForm', () => {
     render(<NewsletterForm />);
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /suscribirme/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /suscribir/i })).toBeInTheDocument();
   });
 
   it('should submit form successfully', async () => {
@@ -44,7 +44,7 @@ describe('NewsletterForm', () => {
     render(<NewsletterForm />);
 
     const input = screen.getByLabelText(/email/i);
-    const button = screen.getByRole('button', { name: /suscribirme/i });
+    const button = screen.getByRole('button', { name: /suscribir/i });
 
     await userEvent.type(input, 'test@example.com');
     await userEvent.click(button);

@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { useForm } from 'react-hook-form';
@@ -20,20 +21,26 @@ import {
 import { quickValidateEmail } from '@/lib/validations/email-validator-client';
 import { InputField, SelectField, type SelectOption, TextareaField } from './FormField';
 
-const REASON_OPTIONS: readonly SelectOption[] = Object.entries(CONTACT_REASONS).map(
-  ([value, label]) => ({ value, label })
-);
-
-const TIMELINE_OPTIONS: readonly SelectOption[] = Object.entries(CONTACT_TIMELINES).map(
-  ([value, label]) => ({ value, label })
-);
+// Capitalize a key to its message suffix, e.g. 'job' → 'reasonJob'.
+const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [emailSuggestion, setEmailSuggestion] = useState<string | null>(null);
   const [pendingData, setPendingData] = useState<ContactFormData | null>(null);
   const { announce } = useAnnouncer();
+  const t = useTranslations('Contact');
   const suggestionRef = useRef<HTMLDivElement>(null);
+
+  // Option labels come from the Contact namespace; the keys (values) stay stable.
+  const reasonOptions: SelectOption[] = Object.keys(CONTACT_REASONS).map((value) => ({
+    value,
+    label: t(`reason${cap(value)}`),
+  }));
+  const timelineOptions: SelectOption[] = Object.keys(CONTACT_TIMELINES).map((value) => ({
+    value,
+    label: t(`timeline${cap(value)}`),
+  }));
 
   // El panel de sugerencia se inserta arriba del form: sin foco un usuario de
   // teclado/SR envía y "no pasa nada". Llevamos el foco al panel al aparecer.
@@ -65,17 +72,14 @@ export function ContactForm() {
       if (emailCheck.suggestion && !pendingData) {
         setEmailSuggestion(emailCheck.suggestion);
         setPendingData(data);
-        announce(
-          `Detectamos un posible error en tu email. Confirma si quisiste escribir ${emailCheck.suggestion}`,
-          'assertive'
-        );
+        announce(t('suggestAnnounce', { suggestion: emailCheck.suggestion }), 'assertive');
         setIsSubmitting(false);
         return;
       }
 
       // Si hay error (desechable), rechazar
       if (!emailCheck.isValid && !emailCheck.suggestion) {
-        showError(emailCheck.reason ?? 'Email inválido');
+        showError(emailCheck.reason ?? t('errorEmailInvalid'));
         setIsSubmitting(false);
         return;
       }
@@ -96,20 +100,20 @@ export function ContactForm() {
         trackContactSubmit();
 
         showSuccess(result.message);
-        announce('Formulario de contacto enviado exitosamente', 'polite');
+        announce(t('announceSuccess'), 'polite');
         reset(); // Limpiar formulario
         setEmailSuggestion(null);
         setPendingData(null);
       } else {
         showError(result.error);
-        announce('Error al procesar el formulario de contacto', 'assertive');
+        announce(t('announceError'), 'assertive');
       }
     } catch (error) {
       logger.error('Form submission error', error as Error, {
         service: 'contact-form',
       });
-      showError('Error inesperado. Por favor, intenta más tarde.');
-      announce('Error inesperado al enviar el mensaje', 'assertive');
+      showError(t('errorUnexpected'));
+      announce(t('announceUnexpected'), 'assertive');
     } finally {
       setIsSubmitting(false);
     }
@@ -152,9 +156,9 @@ export function ContactForm() {
           <div className="flex items-start gap-3">
             <span className="text-2xl">💡</span>
             <div className="flex-1">
-              <p className="font-medium mb-2">¿Quisiste decir?</p>
+              <p className="font-medium mb-2">{t('suggestTitle')}</p>
               <p className="text-sm text-[var(--color-muted-foreground)] mb-3">
-                Detectamos un posible error en tu email. ¿Querías escribir:
+                {t('suggestBody')}
               </p>
               <p className="font-mono font-bold text-[var(--color-primary)] mb-4">
                 {emailSuggestion}
@@ -166,7 +170,7 @@ export function ContactForm() {
                   size="sm"
                   className="flex-1 sm:flex-initial"
                 >
-                  ✓ Sí, usar ese email
+                  {t('suggestYes')}
                 </Button>
                 <Button
                   type="button"
@@ -175,7 +179,7 @@ export function ContactForm() {
                   size="sm"
                   className="flex-1 sm:flex-initial"
                 >
-                  No, mi email está bien
+                  {t('suggestNo')}
                 </Button>
               </div>
             </div>
@@ -185,7 +189,7 @@ export function ContactForm() {
 
       {/* Name */}
       <InputField
-        label="Nombre"
+        label={t('nameLabel')}
         type="text"
         error={errors.name?.message}
         required
@@ -195,7 +199,7 @@ export function ContactForm() {
 
       {/* Email */}
       <InputField
-        label="Email"
+        label={t('emailLabel')}
         type="email"
         error={errors.email?.message}
         required
@@ -205,9 +209,9 @@ export function ContactForm() {
 
       {/* Reason (reemplaza al antiguo "Asunto") */}
       <SelectField
-        label="Motivo de contacto"
-        placeholder="Elige un motivo"
-        options={REASON_OPTIONS}
+        label={t('reasonLabel')}
+        placeholder={t('reasonPlaceholder')}
+        options={reasonOptions}
         error={errors.reason?.message}
         required
         {...register('reason')}
@@ -215,7 +219,7 @@ export function ContactForm() {
 
       {/* Company (opcional) */}
       <InputField
-        label="Empresa u organización (opcional)"
+        label={t('companyLabel')}
         type="text"
         error={errors.company?.message}
         autoComplete="organization"
@@ -224,16 +228,16 @@ export function ContactForm() {
 
       {/* Timeline (opcional) */}
       <SelectField
-        label="¿Para cuándo lo necesitas? (opcional)"
-        placeholder="Sin definir"
-        options={TIMELINE_OPTIONS}
+        label={t('timelineLabel')}
+        placeholder={t('timelinePlaceholder')}
+        options={timelineOptions}
         error={errors.timeline?.message}
         {...register('timeline')}
       />
 
       {/* Message */}
       <TextareaField
-        label="Mensaje"
+        label={t('messageLabel')}
         rows={6}
         error={errors.message?.message}
         required
@@ -251,20 +255,18 @@ export function ContactForm() {
         {isSubmitting ? (
           <>
             <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />
-            Enviando...
+            {t('submitting')}
           </>
         ) : (
           <>
             <SendIcon className="mr-2 h-4 w-4" />
-            Enviar
+            {t('submit')}
           </>
         )}
       </Button>
 
       {/* Helper text */}
-      <p className="text-center text-sm text-[var(--color-muted-foreground)]">
-        Respondo normalmente en 24-48 horas hábiles
-      </p>
+      <p className="text-center text-sm text-[var(--color-muted-foreground)]">{t('formHelper')}</p>
     </form>
   );
 }

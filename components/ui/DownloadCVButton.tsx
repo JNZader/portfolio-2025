@@ -1,4 +1,5 @@
 import { Download } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 import { cn } from '@/lib/utils';
 
 interface DownloadCVButtonProps {
@@ -6,10 +7,11 @@ interface DownloadCVButtonProps {
   variant?: 'default' | 'outline';
 }
 
-export function DownloadCVButton({
+export async function DownloadCVButton({
   className,
   variant = 'default',
 }: Readonly<DownloadCVButtonProps>) {
+  const t = await getTranslations('Common');
   return (
     <a
       href="/api/resume"
@@ -23,7 +25,7 @@ export function DownloadCVButton({
       download
     >
       <Download className="w-4 h-4" aria-hidden="true" />
-      Descargar CV
+      {t('cvDownload')}
     </a>
   );
 }

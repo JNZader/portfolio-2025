@@ -1,32 +1,36 @@
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
+import { Link } from '@/i18n/navigation';
 import { MAIN_NAVIGATION } from '@/lib/constants/navigation';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import { MobileMenuButton } from './MobileMenuButton';
 import { NavLink } from './NavLink';
 import { ThemeToggle } from './ThemeToggle';
-
-const navigation = [...MAIN_NAVIGATION];
 
 /**
  * Header - Server Component
  * Static structure rendered on server, client components handle interactivity
  */
-export default function Header() {
+export default async function Header() {
+  const tNav = await getTranslations('Nav');
+  const tHeader = await getTranslations('Header');
+  const navigation = MAIN_NAVIGATION.map((item) => ({ name: tNav(item.key), href: item.href }));
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/60 backdrop-blur-xl backdrop-saturate-150 shadow-sm supports-[backdrop-filter]:bg-background/60 print:hidden">
       <Container>
         <nav
           id="main-navigation"
           className="flex h-16 items-center justify-between gap-8"
-          aria-label="Principal"
+          aria-label={tHeader('navAria')}
         >
           {/* Logo - Static */}
           <div className="flex lg:flex-1">
             <Link
               href="/"
               className="group -m-1.5 p-1.5 flex items-center gap-1"
-              aria-label="Ir a página de inicio"
+              aria-label={tHeader('logoAria')}
             >
               <span className="text-2xl font-black tracking-tight gradient-text-accent">JZ</span>
               <span className="hidden sm:inline text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors">
@@ -38,24 +42,26 @@ export default function Header() {
           {/* Desktop Navigation - Client component for active state */}
           <div className="hidden md:flex md:gap-x-8">
             {navigation.map((item) => (
-              <NavLink key={item.name} href={item.href}>
+              <NavLink key={item.href} href={item.href}>
                 {item.name}
               </NavLink>
             ))}
           </div>
 
-          {/* Desktop theme toggle + Contacto CTA - Client component */}
+          {/* Desktop theme toggle + language + Contacto CTA */}
           <div className="hidden md:flex md:flex-1 md:justify-end md:items-center md:gap-3">
+            <LanguageSwitcher />
             <ThemeToggle />
             <Button size="sm" asChild>
-              <Link href="/contacto">Contacto</Link>
+              <Link href="/contacto">{tHeader('contactCta')}</Link>
             </Button>
           </div>
 
           {/* Mobile controls - Client components */}
-          <div className="flex md:hidden gap-2">
+          <div className="flex md:hidden gap-2 items-center">
+            <LanguageSwitcher />
             <ThemeToggle compact />
-            <MobileMenuButton navigation={navigation} />
+            <MobileMenuButton navigation={navigation} openLabel={tHeader('openMenu')} />
           </div>
         </nav>
       </Container>

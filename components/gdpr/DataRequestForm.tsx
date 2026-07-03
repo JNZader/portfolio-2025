@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +9,7 @@ import { useGdprRequest } from '@/hooks/useGdprRequest';
 import { type DataExportInput, dataExportSchema } from '@/lib/validations/gdpr';
 
 export function DataRequestForm() {
+  const t = useTranslations('Gdpr');
   const { isLoading, submit } = useGdprRequest(
     '/api/data-export',
     'Error al solicitar datos',
@@ -31,12 +33,12 @@ export function DataRequestForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
         <label htmlFor="email" className="block text-sm font-medium mb-2">
-          Email
+          {t('emailLabel')}
         </label>
         <Input
           id="email"
           type="email"
-          placeholder="tu@email.com"
+          placeholder={t('emailPlaceholder')}
           autoComplete="email"
           {...register('email')}
         />
@@ -44,12 +46,10 @@ export function DataRequestForm() {
       </div>
 
       <Button type="submit" disabled={isLoading}>
-        {isLoading ? 'Enviando...' : 'Solicitar exportación'}
+        {isLoading ? t('submitting') : t('exportSubmit')}
       </Button>
 
-      <p className="text-sm text-[var(--color-foreground)]/60">
-        Recibirás un email con un enlace para descargar tus datos en formato JSON.
-      </p>
+      <p className="text-sm text-[var(--color-foreground)]/60">{t('exportHelper')}</p>
     </form>
   );
 }

@@ -1,11 +1,14 @@
 import { Heart } from 'lucide-react';
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import Container from '@/components/ui/Container';
+import { Link } from '@/i18n/navigation';
 import { MAIN_NAVIGATION } from '@/lib/constants/navigation';
 
-export default function Footer() {
+export default async function Footer() {
   const currentYear = new Date().getFullYear();
+  const t = await getTranslations('Footer');
+  const tNav = await getTranslations('Nav');
 
   return (
     <footer
@@ -27,49 +30,46 @@ export default function Footer() {
               <Link href="/" className="text-xl font-bold text-primary">
                 JZ
               </Link>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Backend Developer especializado en sistemas end-to-end con Java, Go y Rust —
-                soluciones robustas, escalables y mantenibles.
-              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{t('brand')}</p>
               <div className="flex gap-4">
-                <Link
+                <a
                   href="https://github.com/JNZader"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-110 hover:-translate-y-1 rounded-md p-1 -m-1 hover:ring-2 hover:ring-primary/20 focus-visible:ring-2 focus-visible:ring-primary"
-                  aria-label="Visitar perfil de GitHub"
+                  aria-label={t('githubAria')}
                 >
                   <FaGithub className="h-5 w-5" />
-                </Link>
-                <Link
+                </a>
+                <a
                   href="https://www.linkedin.com/in/jnzader/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-110 hover:-translate-y-1 rounded-md p-1 -m-1 hover:ring-2 hover:ring-primary/20 focus-visible:ring-2 focus-visible:ring-primary"
-                  aria-label="Visitar perfil de LinkedIn"
+                  aria-label={t('linkedinAria')}
                 >
                   <FaLinkedin className="h-5 w-5" />
-                </Link>
+                </a>
               </div>
               <Link
                 href="/contacto"
                 className="text-sm text-primary hover:text-primary-700 dark:hover:text-primary-600 transition-colors inline-block underline underline-offset-2 decoration-primary/40 hover:decoration-primary-700"
               >
-                Contactar →
+                {t('contactLink')}
               </Link>
             </div>
 
             {/* Navigation Column */}
-            <nav className="space-y-4 md:text-center" aria-label="Enlaces del pie de página">
-              <p className="font-semibold">Navegación</p>
+            <nav className="space-y-4 md:text-center" aria-label={t('navAria')}>
+              <p className="font-semibold">{t('navHeading')}</p>
               <ul className="space-y-2">
                 {MAIN_NAVIGATION.map((item) => (
-                  <li key={item.name}>
+                  <li key={item.key}>
                     <Link
                       href={item.href}
                       className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2 decoration-muted-foreground/40 hover:decoration-foreground"
                     >
-                      {item.name}
+                      {tNav(item.key)}
                     </Link>
                   </li>
                 ))}
@@ -78,19 +78,19 @@ export default function Footer() {
 
             {/* Services Column */}
             <div className="space-y-4 md:text-right">
-              <p className="font-semibold">Servicios</p>
+              <p className="font-semibold">{t('servicesHeading')}</p>
               <ul className="space-y-2">
                 <li>
-                  <span className="text-sm text-muted-foreground">Desarrollo Backend</span>
+                  <span className="text-sm text-muted-foreground">{t('serviceBackend')}</span>
                 </li>
                 <li>
-                  <span className="text-sm text-muted-foreground">APIs REST</span>
+                  <span className="text-sm text-muted-foreground">{t('serviceApis')}</span>
                 </li>
                 <li>
-                  <span className="text-sm text-muted-foreground">Aplicaciones Full Stack</span>
+                  <span className="text-sm text-muted-foreground">{t('serviceFullstack')}</span>
                 </li>
                 <li>
-                  <span className="text-sm text-muted-foreground">Consultoría Técnica</span>
+                  <span className="text-sm text-muted-foreground">{t('serviceConsulting')}</span>
                 </li>
               </ul>
             </div>
@@ -101,9 +101,11 @@ export default function Footer() {
         <div className="py-6 border-t">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
-              <span>© {currentYear} Javier Zader. Hecho con</span>
+              <span>
+                © {currentYear} Javier Zader. {t('madeWith')}
+              </span>
               <Heart className="h-4 w-4 text-red-500 fill-current" />
-              <span>y mucho mate 🧉</span>
+              <span>{t('andMate')}</span>
             </div>
 
             <div className="flex items-center gap-6">
@@ -111,15 +113,15 @@ export default function Footer() {
                 href="/privacy"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2 decoration-muted-foreground/40 hover:decoration-foreground"
               >
-                Privacidad
+                {t('privacy')}
               </Link>
               <Link
                 href="/data-request"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2 decoration-muted-foreground/40 hover:decoration-foreground"
               >
-                Datos GDPR
+                {t('gdpr')}
               </Link>
-              <span className="text-xs text-muted-foreground">Construido con Next.js</span>
+              <span className="text-xs text-muted-foreground">{t('builtWith')}</span>
             </div>
           </div>
         </div>

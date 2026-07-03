@@ -2,6 +2,7 @@ import { Award, BookOpen, Code2, GraduationCap } from 'lucide-react';
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { RevealOnScroll } from '@/components/animations';
 import { CVButton } from '@/components/ui/CVButton';
 import { DownloadCVButton } from '@/components/ui/DownloadCVButton';
@@ -10,6 +11,7 @@ import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
 import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
 import { SkillsList } from '@/components/ui/SkillsList';
 import { SKILLS_DATA } from '@/lib/constants';
+import { localeAlternates } from '@/lib/seo/alternates';
 
 // Lazy load ScrollIndicator - non-critical
 const ScrollIndicator = dynamic(
@@ -17,14 +19,21 @@ const ScrollIndicator = dynamic(
   { ssr: true }
 );
 
-export const metadata: Metadata = {
-  title: 'Sobre mí',
-  alternates: { canonical: '/sobre-mi' },
-  description:
-    'Conoce más sobre mi experiencia, habilidades y los proyectos que construyo: backend, frontend, edge ML y herramientas de IA.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('About');
+  return {
+    title: t('metaTitle'),
+    alternates: await localeAlternates('/sobre-mi'),
+    description: t('metaDescription'),
+  };
+}
 
-export default function SobreMiPage() {
+export default async function SobreMiPage({
+  params,
+}: Readonly<{ params: Promise<{ locale: string }> }>) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations('About');
   return (
     <>
       {/* Hero Section */}
@@ -45,11 +54,10 @@ export default function SobreMiPage() {
                 />
               </div>
               <SectionTitle size="xl" as="h1">
-                Sobre mí
+                {t('heroTitle')}
               </SectionTitle>
               <SectionDescription size="lg" className="mx-auto">
-                Construyo sistemas end-to-end — del dato al deploy: backend, frontend y ML en el
-                edge
+                {t('heroSubtitle')}
               </SectionDescription>
               {/* Prominent above-the-fold CV action (S5): mismo split-button que
                   el hero de la landing (Descargar + Ver → /cv), por consistencia.
@@ -75,74 +83,34 @@ export default function SobreMiPage() {
             {/* Main Content */}
             <RevealOnScroll className="lg:col-span-2 space-y-8">
               <div>
-                <h2 className="text-2xl font-bold mb-4">Mi Historia</h2>
+                <h2 className="text-2xl font-bold mb-4">{t('storyHeading')}</h2>
                 <div className="space-y-4 text-muted-foreground">
-                  <p>
-                    Hola, soy Javier. Técnico en Desarrollo de Software (Universidad Gastón Dachary,
-                    2025), trabajando desde Córdoba. Mi camino en tecnología empezó hace más de 20
-                    años en soporte técnico y mantenimiento de equipos; después pasé varios años
-                    como productor agropecuario — un rubro donde los errores no se arreglan con un
-                    rollback.
-                  </p>
-                  <p>
-                    En el último año me enfoqué en construir proyectos completos end-to-end:
-                    backends en Java/Spring, Go y Rust; frontends en React; pipelines de ML con
-                    inferencia en el edge; y herramientas para developers: code review con IA
-                    multi-agente, plantillas para empezar proyectos nuevos, e instalación y
-                    configuración automática de herramientas de developer en máquinas nuevas. Cada
-                    proyecto me empuja a stacks nuevos.
-                  </p>
+                  <p>{t('storyP1')}</p>
+                  <p>{t('storyP2')}</p>
                 </div>
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold mb-4">Cómo trabajo</h2>
+                <h2 className="text-2xl font-bold mb-4">{t('workHeading')}</h2>
                 <div className="space-y-4 text-muted-foreground">
                   <ul className="list-disc list-inside space-y-2 ml-4">
-                    <li>
-                      <strong>Entender el problema antes de escribir código.</strong> Le dedico
-                      tiempo a leer, discutir y mapear lo que tengo que resolver antes de tirar la
-                      primera línea.
-                    </li>
-                    <li>
-                      <strong>Decisiones técnicas con su tradeoff explícito.</strong> Cada elección
-                      tiene una contrapartida; trato de elegirlas conscientemente y poder explicar
-                      por qué.
-                    </li>
+                    <li>{t.rich('work1', { b: (c) => <strong>{c}</strong> })}</li>
+                    <li>{t.rich('work2', { b: (c) => <strong>{c}</strong> })}</li>
                   </ul>
                 </div>
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold mb-4">Áreas en las que trabajo</h2>
+                <h2 className="text-2xl font-bold mb-4">{t('areasHeading')}</h2>
                 <div className="space-y-4 text-muted-foreground">
                   <ul className="list-disc list-inside space-y-2 ml-4">
-                    <li>
-                      <strong>Backend:</strong> Java/Spring Boot, Go (Gin), Rust (Axum/Tokio),
-                      Python (FastAPI)
-                    </li>
-                    <li>
-                      <strong>Frontend:</strong> React, Next.js, Vite, Mantine, Zustand, Zod, React
-                      Flow
-                    </li>
-                    <li>
-                      <strong>Edge industrial:</strong> Modbus TCP/RTU, MQTT, ML inference local con
-                      ONNX
-                    </li>
-                    <li>
-                      <strong>ML pipelines:</strong> training en Python, inferencia en Rust con
-                      parity tests, SHAP para explicabilidad
-                    </li>
-                    <li>
-                      <strong>Herramientas de IA:</strong> servidores MCP, sistemas multi-agente,
-                      integración con SAST/SCA (Semgrep, Trivy, Gitleaks)
-                    </li>
-                    <li>
-                      <strong>DevOps:</strong> Docker, GitLab CI, GitHub Actions
-                    </li>
-                    <li>
-                      <strong>Spec-Driven Development</strong> con OpenSpec, conventional commits
-                    </li>
+                    <li>{t.rich('area1', { b: (c) => <strong>{c}</strong> })}</li>
+                    <li>{t.rich('area2', { b: (c) => <strong>{c}</strong> })}</li>
+                    <li>{t.rich('area3', { b: (c) => <strong>{c}</strong> })}</li>
+                    <li>{t.rich('area4', { b: (c) => <strong>{c}</strong> })}</li>
+                    <li>{t.rich('area5', { b: (c) => <strong>{c}</strong> })}</li>
+                    <li>{t.rich('area6', { b: (c) => <strong>{c}</strong> })}</li>
+                    <li>{t.rich('area7', { b: (c) => <strong>{c}</strong> })}</li>
                   </ul>
                 </div>
               </div>
@@ -152,20 +120,20 @@ export default function SobreMiPage() {
             <RevealOnScroll delay={0.2} className="space-y-8">
               {/* Skills */}
               <div className="bg-card p-6 rounded-lg border">
-                <h3 className="text-xl font-bold mb-4">Habilidades Técnicas</h3>
+                <h3 className="text-xl font-bold mb-4">{t('skillsHeading')}</h3>
                 <div className="space-y-4">
-                  <SkillsList title="Backend" skills={SKILLS_DATA.backend} />
-                  <SkillsList title="Frontend" skills={SKILLS_DATA.frontend} />
+                  <SkillsList title={t('skillBackend')} skills={SKILLS_DATA.backend} />
+                  <SkillsList title={t('skillFrontend')} skills={SKILLS_DATA.frontend} />
                   {SKILLS_DATA.databases && (
-                    <SkillsList title="Bases de Datos" skills={SKILLS_DATA.databases} />
+                    <SkillsList title={t('skillDatabases')} skills={SKILLS_DATA.databases} />
                   )}
-                  <SkillsList title="DevOps & Tools" skills={SKILLS_DATA.devops} />
+                  <SkillsList title={t('skillDevops')} skills={SKILLS_DATA.devops} />
                 </div>
               </div>
 
               {/* Education - Timeline */}
               <div className="bg-card p-6 rounded-lg border">
-                <h3 className="text-xl font-bold mb-6">Educación</h3>
+                <h3 className="text-xl font-bold mb-6">{t('eduHeading')}</h3>
                 <div className="space-y-6 relative">
                   {/* Timeline line */}
                   <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-border" />
@@ -175,7 +143,7 @@ export default function SobreMiPage() {
                     <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center">
                       <GraduationCap className="w-3 h-3 text-primary" />
                     </div>
-                    <h4 className="font-semibold text-sm">Técnico en Desarrollo de Software</h4>
+                    <h4 className="font-semibold text-sm">{t('edu1Degree')}</h4>
                     <p className="text-xs text-muted-foreground mt-1">Universidad Gastón Dachary</p>
                     <p className="text-xs text-muted-foreground">2023 - 2025</p>
                   </div>
@@ -184,9 +152,7 @@ export default function SobreMiPage() {
                     <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-purple-500/10 border-2 border-purple-500 flex items-center justify-center">
                       <BookOpen className="w-3 h-3 text-purple-500" />
                     </div>
-                    <h4 className="font-semibold text-sm">
-                      ONE Tech Foundation G8 — Data Science, ETL y ML
-                    </h4>
+                    <h4 className="font-semibold text-sm">{t('edu2Degree')}</h4>
                     <p className="text-xs text-muted-foreground mt-1">Alura LATAM</p>
                     <p className="text-xs text-muted-foreground">2024 - 2025</p>
                   </div>
@@ -195,7 +161,7 @@ export default function SobreMiPage() {
                     <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-orange-500/10 border-2 border-orange-500 flex items-center justify-center">
                       <Code2 className="w-3 h-3 text-orange-500" />
                     </div>
-                    <h4 className="font-semibold text-sm">Java y Spring Boot G6 — ONE</h4>
+                    <h4 className="font-semibold text-sm">{t('edu3Degree')}</h4>
                     <p className="text-xs text-muted-foreground mt-1">Alura LATAM</p>
                     <p className="text-xs text-muted-foreground">2024</p>
                   </div>
@@ -205,9 +171,7 @@ export default function SobreMiPage() {
                       <BookOpen className="w-3 h-3 text-green-500" />
                     </div>
                     <h4 className="font-semibold text-sm">Argentina Programa</h4>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Desarrollador Java Intermedio
-                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">{t('edu4Sub')}</p>
                     <p className="text-xs text-muted-foreground">2022 - 2023</p>
                   </div>
 
@@ -215,7 +179,7 @@ export default function SobreMiPage() {
                     <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-blue-500/10 border-2 border-blue-500 flex items-center justify-center">
                       <Award className="w-3 h-3 text-blue-500" />
                     </div>
-                    <h4 className="font-semibold text-sm">Certificación CCNA</h4>
+                    <h4 className="font-semibold text-sm">{t('edu5Degree')}</h4>
                     <p className="text-xs text-muted-foreground mt-1">Fundación Proydesa</p>
                     <p className="text-xs text-muted-foreground">2009</p>
                   </div>
@@ -224,7 +188,7 @@ export default function SobreMiPage() {
 
               {/* Contact Info */}
               <div className="bg-card p-6 rounded-lg border">
-                <h3 className="text-xl font-bold mb-4">Contacto</h3>
+                <h3 className="text-xl font-bold mb-4">{t('contactHeading')}</h3>
                 <div className="space-y-3 text-sm">
                   <div>
                     <strong className="block mb-1">Email:</strong>
@@ -235,10 +199,10 @@ export default function SobreMiPage() {
                     />
                   </div>
                   <p>
-                    <strong>Ubicación:</strong> Córdoba, Argentina
+                    <strong>{t('contactLocationLabel')}</strong> Córdoba, Argentina
                   </p>
                   <p>
-                    <strong>Disponibilidad:</strong> Abierto a nuevos proyectos
+                    <strong>{t('contactAvailabilityLabel')}</strong> {t('contactAvailability')}
                   </p>
                 </div>
                 <div className="mt-6">

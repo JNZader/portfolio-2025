@@ -7,18 +7,29 @@ import { sanityFetch } from '@/sanity/lib/client';
 import { postsQuery, projectsQuery } from '@/sanity/lib/queries';
 import type { Post, Project } from '@/types/sanity';
 
+// es (default) URL is prefix-less; en lives under /en. Each bilingual page is
+// emitted once (es url) with its English alternate declared via hreflang.
+const enUrl = (path: string) => `${SITE_URL}/en${path}`;
+const bilingualAlternates = (path: string) => ({
+  languages: { es: `${SITE_URL}${path}`, en: enUrl(path) },
+});
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Static pages
+  // Static pages. Only the fully-translated marketing pages (home, sobre-mi,
+  // contacto) declare es+en hreflang; cv/proyectos/blog stay Spanish-canonical
+  // until their content is translated (see i18n phasing).
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: SITE_URL,
       changeFrequency: 'daily',
       priority: 1,
+      alternates: bilingualAlternates('/'),
     },
     {
       url: `${SITE_URL}/sobre-mi`,
       changeFrequency: 'monthly',
       priority: 0.8,
+      alternates: bilingualAlternates('/sobre-mi'),
     },
     {
       url: `${SITE_URL}/proyectos`,
@@ -34,6 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${SITE_URL}/contacto`,
       changeFrequency: 'yearly',
       priority: 0.7,
+      alternates: bilingualAlternates('/contacto'),
     },
     {
       url: `${SITE_URL}/cv`,

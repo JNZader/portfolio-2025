@@ -2,11 +2,12 @@
 
 import { ArrowRight, ExternalLink, Star } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { FaGithub } from 'react-icons/fa';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Link } from '@/i18n/navigation';
 import type { Project } from '@/lib/github/types';
 
 interface ProjectCardProps {
@@ -15,6 +16,7 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project, priority = false }: Readonly<ProjectCardProps>) {
+  const t = useTranslations('Projects');
   return (
     <Card
       variant="interactive"
@@ -37,7 +39,7 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
           </>
         ) : (
           <div className="w-full h-full flex items-center justify-center text-muted-foreground bg-gradient-to-br from-muted to-muted/50">
-            <span className="text-sm">Sin imagen</span>
+            <span className="text-sm">{t('noImage')}</span>
           </div>
         )}
 
@@ -49,7 +51,7 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
               className="text-xs bg-gradient-to-r from-primary to-primary-600 border-0 shadow-lg shadow-primary/30"
             >
               <Star className="w-3 h-3 mr-1 fill-current animate-glow-pulse" />
-              Destacado
+              {t('badgeFeatured')}
             </Badge>
           </div>
         )}
@@ -63,10 +65,10 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
             {project.source === 'github' ? (
               <>
                 <FaGithub className="w-3 h-3 mr-1" />
-                GitHub
+                {t('sourceGithub')}
               </>
             ) : (
-              'Curado'
+              t('badgeCurated')
             )}
           </Badge>
         </div>
@@ -126,7 +128,7 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
         <div className="flex items-center justify-between mt-auto pt-4 border-t border-border/50">
           <Button variant="ghost" size="sm" asChild className="group/btn">
             <Link href={`/proyectos/${project.id}`}>
-              Ver detalles
+              {t('viewDetails')}
               <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform duration-200" />
             </Link>
           </Button>
@@ -143,7 +145,7 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`Ver repositorio de ${project.title} en GitHub`}
+                  aria-label={t('viewRepoAria', { title: project.title })}
                 >
                   <FaGithub className="h-4 w-4" />
                 </a>

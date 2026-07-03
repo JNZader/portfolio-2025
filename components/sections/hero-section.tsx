@@ -1,11 +1,12 @@
 import { ArrowRight, Mail } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
 import { CVButton } from '@/components/ui/CVButton';
 import { HeroBackground } from '@/components/ui/HeroBackground';
+import { Link } from '@/i18n/navigation';
 
 // Lazy-load below-the-fold / decorative client widgets so they don't inflate the
 // hero's First Load JS. ssr: true keeps them server-rendered (no layout shift).
@@ -43,7 +44,7 @@ interface HeroSectionProps {
   showScrollIndicator?: boolean;
 }
 
-export function HeroSection({
+export async function HeroSection({
   greeting = '¡Hola!',
   jobTitle,
   title,
@@ -55,6 +56,8 @@ export function HeroSection({
   socialLinks,
   showScrollIndicator = true,
 }: Readonly<HeroSectionProps>) {
+  const t = await getTranslations('Home');
+  const tc = await getTranslations('Common');
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <HeroBackground />
@@ -139,7 +142,7 @@ export function HeroSection({
                       href={socialLinks.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label="Visitar perfil de GitHub"
+                      aria-label={tc('aGithub')}
                     >
                       <FaGithub className="h-5 w-5" aria-hidden="true" />
                     </a>
@@ -156,7 +159,7 @@ export function HeroSection({
                       href={socialLinks.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label="Visitar perfil de LinkedIn"
+                      aria-label={tc('aLinkedin')}
                     >
                       <FaLinkedin className="h-5 w-5" aria-hidden="true" />
                     </a>
@@ -169,7 +172,7 @@ export function HeroSection({
                     className="hover:bg-primary/10 hover:text-primary transition-colors"
                     asChild
                   >
-                    <a href={`mailto:${socialLinks.email}`} aria-label="Enviar correo electrónico">
+                    <a href={`mailto:${socialLinks.email}`} aria-label={tc('aEmail')}>
                       <Mail className="h-5 w-5" aria-hidden="true" />
                     </a>
                   </Button>
@@ -186,8 +189,9 @@ export function HeroSection({
             {/* Always-visible caption: states the achievement for mobile (no hover),
                 non-technical recruiters, and SEO — the terminal itself is aria-hidden. */}
             <p className="mt-3 text-center text-xs text-muted-foreground lg:text-left">
-              <span className="font-medium text-foreground">apigen</span> — una herramienta que
-              construí: de un schema SQL a una API Spring Boot completa y corriendo.
+              {t.rich('apigenCaption', {
+                b: (chunks) => <span className="font-medium text-foreground">{chunks}</span>,
+              })}
             </p>
           </div>
         </div>
