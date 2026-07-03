@@ -33,9 +33,9 @@
         "Estado: side project propio con dominio validado por un ingeniero ambiental que conoce el día a día de las plantas de biogás.",
         "Edge gateway en Rust como nodo industrial autónomo: lee PLCs por Modbus TCP/RTU, almacena local en SQLite, hace inferencia ONNX (<50ms), funciona offline.",
         "Modelos específicos por tarea: edge (Isolation Forest + Autoencoder para anomalías), cloud (LSTM + Prophet para forecasting de biogás/energía, Random Forest + XGBoost para predicción de fallos 4-24h adelante). SHAP para explicabilidad de cada predicción.",
-        "Pipeline ML production-grade: training en Python con scikit-learn, export a ONNX, deploy en Rust con tests de paridad bit-identical. Continuous learning con retraining automático y drift detection (PSI) que monitorea degradación de modelos en producción.",
+        "Pipeline de ML de nivel producción: entrenamiento en Python con scikit-learn, exportación a ONNX, despliegue en Rust con tests de paridad bit a bit. Aprendizaje continuo con reentrenamiento automático y drift detection (PSI) que monitorea degradación de modelos en producción.",
         "Monorepo con 5 apps: backend Go, edge gateway Rust, servicio de ML en Python, frontend React, app mobile (Ionic).",
-        "Reduce downtime no planificado con mantenimiento predictivo basado en condición real de los equipos, en lugar de mantenimiento reactivo o calendarizado.",
+        "Prioriza el mantenimiento por la condición real de cada equipo, no por calendario fijo, reduciendo las paradas no planificadas.",
         "Stack: Go + GORM + Gin, PostgreSQL, Redis, Mosquitto MQTT, Rust + Tokio + Axum, ONNX Runtime, Python, scikit-learn, React 19."
       ]
     },
@@ -57,7 +57,7 @@
       "highlights": [
         "Estado: producto en desarrollo. SaaS, GitHub App, GitHub Action y CLI distribuidos desde el mismo monorepo.",
         "Distintos agentes especializados (security, quality, performance) revisan en paralelo y se sintetizan en un informe único.",
-        "12+ herramientas de análisis estático integradas (Semgrep, Trivy, Gitleaks, PMD, Biome, Ruff, etc.) con export SARIF para integrar con pipelines SecOps/SAST existentes.",
+        "12+ herramientas de análisis estático integradas (Semgrep, Trivy, Gitleaks, PMD, Biome, Ruff, etc.) con exportación SARIF para integrar con pipelines SecOps/SAST existentes.",
         "Health score por PR como métrica unificada que combina los hallazgos de los agentes y de los analizadores estáticos.",
         "Un solo core atiende los 3 canales: GitHub App, CLI y dashboard SaaS, dentro de un monorepo Turborepo con 4 apps y 3 packages.",
         "Stack: TypeScript, Turborepo + pnpm workspaces, Hono, BullMQ, Drizzle ORM, Vercel AI SDK, Octokit, React 19 + React Router 7 (dashboard), Commander (CLI), GitHub Action."
@@ -67,11 +67,11 @@
       "name": "APiGen — Plataforma de generación de código",
       "description": "Cada nuevo backend repite las mismas estructuras (entidad, repo, service, controller, DTOs, security, observability) con variaciones inconsistentes entre equipos. APiGen — que se maneja desde CLI, HTTP, plugin de IDE o MCP — toma un schema SQL o un contrato OpenAPI y genera un servicio listo para producción con features enterprise por default.",
       "highlights": [
-        "Estado: side project propio. Repo público con la idea original (Dec 2024); la versión actual es una plataforma privada multi-lenguaje.",
+        "Estado: side project propio. Repo público con la idea original (dic. 2024); la versión actual es una plataforma privada multi-lenguaje.",
         "Pipeline desacoplado: el parser y los templates no se conocen entre sí, lo que permite agregar lenguajes nuevos sin romper lo que ya funciona.",
-        "22 Gradle modules organizados en librerías, generadores y feature packs opcionales. El mismo engine se usa desde CLI, servidor HTTP, plugin de IDE o servidor MCP.",
+        "22 módulos Gradle organizados en librerías, generadores y feature packs opcionales. El mismo engine se usa desde CLI, servidor HTTP, plugin de IDE o servidor MCP.",
         "Multi-protocolo: el mismo modelo expone REST + GraphQL + gRPC sin reescribir lógica de negocio.",
-        "Enterprise features incluidas sin código adicional: soft delete, multi-tenancy, auditoría con Hibernate Envers, caché multinivel (Caffeine + Redis), optimistic locking.",
+        "Features enterprise incluidas sin código adicional: soft delete, multi-tenancy, auditoría con Hibernate Envers, caché multinivel (Caffeine + Redis), optimistic locking.",
         "Stack: Java 25, Spring Boot 4, Gradle, Caffeine, Redis, Docker (con Dockerfile.native para GraalVM), OpenAPI, GraphQL, gRPC, Prometheus, JMH benchmarks, Spring Cloud Contract."
       ]
     },
@@ -82,8 +82,8 @@
         "Estado: side project propio. Demo pública en apigen-web.vercel.app.",
         "No es solo modelado de entidades: diseña arquitecturas de microservicios completas (services, conexiones, gateway routes, flujos de eventos).",
         "Cuando los nodos tienen relaciones entre sí, la librería ELK los acomoda automáticamente para minimizar cruces de líneas; cuando son nodos sueltos, caen en una grilla regular.",
-        "Export multiformato: ZIP de proyecto Spring Boot listo para correr, JSON del modelo, SQL DDL, y diagrama PNG/SVG del canvas.",
-        "Autosave en IndexedDB con historial de snapshots y safety snapshots antes de imports destructivos. WCAG 2.1 AA con shortcuts de teclado — el editor de grafos funciona sin mouse.",
+        "Exportación multiformato: ZIP de proyecto Spring Boot listo para correr, JSON del modelo, SQL DDL, y diagrama PNG/SVG del canvas.",
+        "Autoguardado en IndexedDB con historial de snapshots y safety snapshots antes de importaciones destructivas. WCAG 2.1 AA con atajos de teclado — el editor de grafos funciona sin mouse.",
         "Stack: React 19, TypeScript 5.9, Vite 7, Mantine 8, Zustand, Zod, React Flow, ELK, Playwright, Vitest."
       ]
     },
@@ -92,10 +92,10 @@
       "description": "Cada herramienta de IA requiere configurar sus credenciales por separado, sin control centralizado de costos ni routing inteligente. mcp-llm-bridge cumple dos roles: gateway HTTP compatible con la API de OpenAI para herramientas externas, y servidor MCP para clientes como Claude Code o Cursor. Centraliza 11 proveedores de LLM (API keys y suscripciones CLI) detrás de un vault cifrado.",
       "highlights": [
         "Estado: side project propio. Gateway live en gateway.javierzader.com.",
-        "11 provider adapters: 5 API directos (Anthropic, OpenAI, Google, etc.) y 6 CLI-backed (Claude Code, Gemini CLI, Codex, Copilot, Qwen, OpenCode).",
+        "11 adaptadores de proveedor: 5 por API directa (Anthropic, OpenAI, Google, etc.) y 6 respaldados por CLI (Claude Code, Gemini CLI, Codex, Copilot, Qwen, OpenCode).",
         "Vault cifrado para credenciales, con scope por proyecto y fallback a `_global`.",
-        "Task-aware routing: elige el provider óptimo según el tipo de tarea (generation, refactor, summary, code), con override por proyecto.",
-        "MCP tools que van más allá de generation: operaciones de vault, búsqueda semántica de código, estado compartido vía CRDT, inspección de uso.",
+        "Routing según la tarea: elige el proveedor óptimo para cada tipo (generation, refactor, summary, code), con override por proyecto.",
+        "Herramientas MCP que van más allá de la generación: operaciones de vault, búsqueda semántica de código, estado compartido vía CRDT, inspección de uso.",
         "Observabilidad end-to-end: traces con OpenTelemetry, métricas con Prometheus y logging estructurado con pino.",
         "Stack: TypeScript, Hono, @modelcontextprotocol/sdk, better-sqlite3, OpenTelemetry, Prometheus, pino, Zod 4."
       ]
