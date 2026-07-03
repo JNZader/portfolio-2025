@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { RevealOnScroll } from '@/components/animations';
+import { CVButton } from '@/components/ui/CVButton';
 import { DownloadCVButton } from '@/components/ui/DownloadCVButton';
 import { HeroBackground } from '@/components/ui/HeroBackground';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
@@ -47,12 +48,15 @@ export default function SobreMiPage() {
                 Sobre mí
               </SectionTitle>
               <SectionDescription size="lg" className="mx-auto">
-                Construyo soluciones de software end-to-end — backend, frontend, AI, ML, edge
+                Construyo sistemas end-to-end — del dato al deploy: backend, frontend y ML en el
+                edge
               </SectionDescription>
-              {/* Prominent above-the-fold CV download (S5). The sidebar Contacto
-                  card keeps a second copy for visitors who scroll. */}
+              {/* Prominent above-the-fold CV action (S5): mismo split-button que
+                  el hero de la landing (Descargar + Ver → /cv), por consistencia.
+                  The sidebar Contacto card keeps a second copy for visitors who
+                  scroll. */}
               <div className="flex justify-center mt-8">
-                <DownloadCVButton />
+                <CVButton className="w-auto" />
               </div>
             </SectionHeader>
           </RevealOnScroll>
