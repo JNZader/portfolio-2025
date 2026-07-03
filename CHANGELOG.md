@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.10.2](https://github.com/JNZader/portfolio-2025/compare/v2.10.1...v2.10.2) (2026-07-03)
+
+
+### Bug Fixes
+
+* **sobre-mi:** drop duplicated developer/degree mention in intro ([949af6d](https://github.com/JNZader/portfolio-2025/commits/949af6d294e89197467c748112883987f51068bf))
+
 ## [2.10.1](https://github.com/JNZader/portfolio-2025/compare/v2.10.0...v2.10.1) (2026-07-03)
 
 
