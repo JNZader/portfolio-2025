@@ -137,8 +137,33 @@ export async function getRepo(owner: string, repo: string): Promise<GitHubRepo |
 /**
  * Obtener el README de un repositorio
  */
-export async function getRepoReadme(owner: string, repo: string): Promise<string | null> {
+export async function getRepoReadme(
+  owner: string,
+  repo: string,
+  locale = 'es'
+): Promise<string | null> {
   const octokit = getOctokit();
+
+  // Convención opt-in por repo: `README.md` es el canónico (inglés, el que ve
+  // GitHub en la home del repo) y `README.{locale}.md` son las traducciones.
+  // Para un locale no-canónico intentamos el archivo localizado; si no existe,
+  // caemos al README por defecto (no es un error, el repo simplemente no lo tradujo).
+  if (locale && locale !== 'en') {
+    try {
+      const { data } = await octokit.rest.repos.getContent({
+        owner,
+        repo,
+        path: `README.${locale}.md`,
+        mediaType: {
+          format: 'raw',
+        },
+      });
+
+      return data as unknown as string;
+    } catch {
+      // Sin README localizado → seguimos al README por defecto.
+    }
+  }
 
   try {
     const { data } = await octokit.rest.repos.getReadme({

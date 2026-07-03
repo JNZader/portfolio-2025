@@ -171,7 +171,7 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
     if (match) {
       const [, owner, repo] = match;
       repoInfo = { owner, repo };
-      readme = await getRepoReadme(owner, repo);
+      readme = await getRepoReadme(owner, repo, locale);
     }
   }
 
