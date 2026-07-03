@@ -99,10 +99,9 @@ function renderHeader(ctx: PDFContext, data: ResumeData): void {
   ctx.doc.text(data.personalInfo.name, (PAGE_WIDTH - nameWidth) / 2, ctx.yPos + 7);
   ctx.yPos += 9;
 
-  // Subtitle ("Software Developer") intentionally skipped here -- it was
-  // duplicating the position rendered in the Experience section just below
-  // and the opening word of the summary. Kept in personalInfo.title so
-  // other surfaces (SEO metadata, sobre-mi page) still have it available.
+  // Subtitle ("Backend Developer") intentionally skipped here -- it was
+  // duplicating the position rendered in the Experience section just below.
+  // Kept in personalInfo.title so other surfaces (SEO metadata) still have it.
 
   // Contact line -- centered with separators. The email goes in the PDF:
   // the anti-scraping obfuscation only matters on the web, and a recruiter

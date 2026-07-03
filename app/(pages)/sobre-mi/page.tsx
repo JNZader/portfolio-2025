@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title: 'Sobre mí',
   alternates: { canonical: '/sobre-mi' },
   description:
-    'Conoce más sobre mi experiencia, habilidades y los proyectos que construyo. Software developer trabajando en backend, frontend, edge ML y AI tooling.',
+    'Conoce más sobre mi experiencia, habilidades y los proyectos que construyo: backend, frontend, edge ML y AI tooling.',
 };
 
 export default function SobreMiPage() {

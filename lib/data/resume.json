@@ -1,25 +1,25 @@
 {
   "personalInfo": {
     "name": "Javier Norberto Zader",
-    "title": "Software Developer",
+    "title": "Backend Developer",
     "email_encoded": "am56YWRlckBnbWFpbC5jb20=",
     "phone": "",
     "location": "Córdoba, Argentina",
     "website": "https://javierzader.com",
-    "linkedin": "https://linkedin.com/in/jnzader",
-    "github": "https://github.com/jnzader"
+    "linkedin": "https://www.linkedin.com/in/jnzader/",
+    "github": "https://github.com/JNZader"
   },
   "summary": "Trabajo en backend (Java, Go, Rust), frontend (React, Next.js), pipelines de ML y herramientas para developers. Me tomo el tiempo de entender el problema antes de codear, y documento los tradeoffs de cada decisión técnica. Mi camino en tecnología empezó hace más de 20 años en soporte técnico y mantenimiento de equipos, con un paso intermedio como productor agropecuario antes de volcarme de lleno al software.",
   "experience": [
     {
       "company": "Proyectos personales y freelance",
-      "position": "Software Developer",
+      "position": "Backend Developer",
       "location": "Córdoba, Argentina",
       "startDate": "2024",
       "endDate": "Presente",
       "highlights": [
-        "Diseñé y construí 3 proyectos grandes: APiGen (plataforma de generación de código), APiGen Studio (editor visual para microservicios) y Biogas Platform (monitoreo de plantas industriales con sensores en tiempo real y modelos predictivos).",
-        "También construí ghagga (sistema de code review con AI multi-agente) y herramientas para mi propio flujo de trabajo: plantillas para empezar proyectos nuevos, instalación y configuración automática de máquinas de desarrollo, y configuraciones de AI CLIs.",
+        "Diseñé y construí 6 sistemas end-to-end: APiGen (plataforma de generación de código), APiGen Studio (editor visual de microservicios), Biogas Platform (monitoreo industrial con sensores en tiempo real y modelos predictivos), ghagga (code review con AI multi-agente), Consorcio Canalero (gestión hídrica, freelance para un cliente real) y mcp-llm-bridge (gateway de LLMs).",
+        "Además, herramientas para mi propio flujo de trabajo: plantillas para empezar proyectos nuevos, instalación y configuración automática de máquinas de desarrollo, y configuraciones de AI CLIs.",
         "Trabajo con tests automatizados, conventional commits y especificaciones escritas antes del código (OpenSpec) en los proyectos donde corresponde.",
         "Uso AI assistants (Claude Code, Codex, opencode) como parte central del workflow, no como ayuda esporádica."
       ]
@@ -152,7 +152,7 @@
     }
   ],
   "skills": {
-    "Lenguajes": ["Java", "Go", "Rust", "Python", "TypeScript", "JavaScript", "Kotlin", "SQL"],
+    "Lenguajes": ["Java", "Go", "Rust", "Python", "TypeScript", "JavaScript", "SQL"],
     "Backend": ["Spring Boot 4", "Gin (Go)", "FastAPI", "Axum (Rust)", "Hono", "Tokio", "Node.js"],
     "Frontend": [
       "React 19",
@@ -166,7 +166,7 @@
       "ELK",
       "Ionic + Capacitor"
     ],
-    "Bases de Datos": ["PostgreSQL", "MySQL", "Redis", "MongoDB", "SQLite", "MariaDB", "IndexedDB"],
+    "Bases de Datos": ["PostgreSQL", "MySQL", "Redis", "SQLite", "IndexedDB"],
     "ML / AI": [
       "scikit-learn",
       "ONNX Runtime",
@@ -187,17 +187,7 @@
     ],
     "GIS / Geo": ["Google Earth Engine", "MapLibre", "Mapbox GL Draw"],
     "DevOps": ["Docker", "GitLab CI", "GitHub Actions", "Vercel", "Cloudflare Pages", "Caddy"],
-    "Testing": [
-      "Playwright",
-      "Vitest",
-      "JUnit",
-      "Mockito",
-      "Pytest",
-      "JMH",
-      "SonarQube",
-      "Biome",
-      "ESLint"
-    ],
+    "Testing": ["Playwright", "Vitest", "JUnit", "Mockito", "Pytest", "JMH", "SonarQube", "Biome"],
     "APIs / Spec": [
       "OpenAPI",
       "GraphQL",
