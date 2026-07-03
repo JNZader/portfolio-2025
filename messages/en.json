@@ -71,7 +71,9 @@
   "Common": {
     "cvDownload": "Download CV",
     "cvView": "View",
-    "backHome": "Back to home"
+    "backHome": "Back to home",
+    "explore": "Explore",
+    "exploreAria": "Explore content"
   },
   "Error": {
     "title": "Something went wrong",
@@ -171,6 +173,59 @@
     "emailPlaceholder": "you@email.com",
     "subscribe": "Subscribe",
     "subscribing": "Subscribing…",
-    "disclaimer": "We'll send a confirmation email. No spam, promise."
+    "disclaimer": "We'll send a confirmation email. No spam, promise.",
+    "badge": "Newsletter",
+    "heading": "Don't miss an update",
+    "description": "Join developers getting weekly insights on the latest in web development, exclusive tutorials and useful resources.",
+    "subscribed": "Subscribed!",
+    "noSpam": "No spam",
+    "unsubscribe": "Unsubscribe anytime",
+    "benefit1": "Quality content, guaranteed",
+    "benefit2": "One email per week, max",
+    "benefit3": "Exclusive resources for subscribers"
+  },
+  "Cookies": {
+    "ariaLabel": "Cookie consent",
+    "closeAria": "Close and accept essential only",
+    "title": "Privacy preferences",
+    "subtitle": "Your privacy matters",
+    "body": "We use cookies to improve your experience and analyze traffic.",
+    "policyLink": "Privacy policy",
+    "essential": "Essential",
+    "essentialState": "Always on",
+    "analytics": "Analytics",
+    "analyticsDesc": "Anonymous usage metrics",
+    "marketing": "Marketing",
+    "marketingDesc": "Personalized content",
+    "save": "Save preferences",
+    "customize": "Customize",
+    "essentialOnly": "Essential only",
+    "acceptAll": "Accept all"
+  },
+  "Projects": {
+    "metaTitle": "Projects",
+    "metaDescription": "Explore my recent projects and work with interactive search",
+    "heroTitle": "My Projects",
+    "heroSubtitle": "A collection of {count} web apps, tools and experiments that show my development skills and experience.",
+    "searchPlaceholder": "Search projects by name, technology, description…",
+    "searchAria": "Search projects",
+    "clearSearchAria": "Clear search",
+    "filters": "Filters",
+    "clear": "Clear",
+    "sourceHeading": "Source",
+    "sourceAll": "All",
+    "sourceCurated": "Curated",
+    "sourceGithub": "GitHub",
+    "techHeading": "Technologies",
+    "techHint": "Showing projects using any of the selected technologies",
+    "count": "{filtered} of {total} projects",
+    "filteredSuffix": " (filtered)",
+    "emptyTitle": "No projects found",
+    "clearAll": "Clear all filters",
+    "badgeFeatured": "Featured",
+    "badgeCurated": "Curated",
+    "viewDetails": "View details",
+    "noImage": "No image",
+    "viewRepoAria": "View {title} repository on GitHub"
   }
 }

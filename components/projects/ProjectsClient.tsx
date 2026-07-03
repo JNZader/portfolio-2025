@@ -2,6 +2,7 @@
 
 import { Filter, Search, X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,7 @@ interface ProjectsClientProps {
 }
 
 export default function ProjectsClient({ projects }: Readonly<ProjectsClientProps>) {
+  const t = useTranslations('Projects');
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -116,8 +118,8 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
             type="search"
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
-            placeholder="Buscar proyectos por nombre, tecnología, descripción..."
-            aria-label="Buscar proyectos"
+            placeholder={t('searchPlaceholder')}
+            aria-label={t('searchAria')}
             className="w-full pl-10 pr-4 py-2 border border-input bg-background rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground"
           />
           {searchQuery && (
@@ -125,7 +127,7 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
               type="button"
               onClick={() => handleSearchChange('')}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              aria-label="Limpiar búsqueda"
+              aria-label={t('clearSearchAria')}
             >
               <X className="h-4 w-4" />
             </button>
@@ -142,7 +144,7 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
             className="gap-2"
           >
             <Filter className="h-4 w-4" />
-            Filtros
+            {t('filters')}
             {hasActiveFilters && (
               <Badge variant="secondary" className="ml-1 text-xs">
                 {activeFiltersCount}
@@ -153,7 +155,7 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
           {hasActiveFilters && (
             <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-2">
               <X className="h-4 w-4" />
-              Limpiar
+              {t('clear')}
             </Button>
           )}
         </div>
@@ -168,7 +170,7 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
           {/* Filtro por fuente — aria-pressed: la selección no puede comunicarse
               solo por la variante de color (filled vs outline) */}
           <div>
-            <h4 className="text-sm font-medium mb-2">Fuente</h4>
+            <h4 className="text-sm font-medium mb-2">{t('sourceHeading')}</h4>
             <div className="flex flex-wrap gap-2">
               <Button
                 variant={selectedSource === 'all' ? 'default' : 'outline'}
@@ -176,7 +178,7 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
                 onClick={() => handleSourceChange('all')}
                 aria-pressed={selectedSource === 'all'}
               >
-                Todos
+                {t('sourceAll')}
               </Button>
               <Button
                 variant={selectedSource === 'sanity' ? 'default' : 'outline'}
@@ -184,7 +186,7 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
                 onClick={() => handleSourceChange('sanity')}
                 aria-pressed={selectedSource === 'sanity'}
               >
-                Curados
+                {t('sourceCurated')}
               </Button>
               <Button
                 variant={selectedSource === 'github' ? 'default' : 'outline'}
@@ -192,14 +194,14 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
                 onClick={() => handleSourceChange('github')}
                 aria-pressed={selectedSource === 'github'}
               >
-                GitHub
+                {t('sourceGithub')}
               </Button>
             </div>
           </div>
 
           {/* Filtro por tecnología */}
           <div>
-            <h4 className="text-sm font-medium mb-2">Tecnologías</h4>
+            <h4 className="text-sm font-medium mb-2">{t('techHeading')}</h4>
             <div className="flex flex-wrap gap-2">
               {allTechs.map((tech) => (
                 <Button
@@ -216,9 +218,7 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
               ))}
             </div>
             {selectedTechs.length > 0 && (
-              <p className="text-xs text-muted-foreground mt-2">
-                Mostrando proyectos que usan alguna de las tecnologías seleccionadas
-              </p>
+              <p className="text-xs text-muted-foreground mt-2">{t('techHint')}</p>
             )}
           </div>
         </div>
@@ -227,8 +227,8 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
       {/* Resultados — live region: anuncia a SR el conteo al filtrar */}
       <div className="flex items-center justify-between text-sm text-muted-foreground">
         <p aria-live="polite">
-          {filteredProjects.length} de {projects.length} proyectos
-          {hasActiveFilters && ' (filtrados)'}
+          {t('count', { filtered: filteredProjects.length, total: projects.length })}
+          {hasActiveFilters && t('filteredSuffix')}
         </p>
 
         {hasActiveFilters && (
@@ -240,7 +240,7 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
             )}
             {selectedSource !== 'all' && (
               <Badge variant="outline" className="text-xs">
-                {selectedSource === 'sanity' ? 'Curados' : 'GitHub'}
+                {selectedSource === 'sanity' ? t('sourceCurated') : t('sourceGithub')}
               </Badge>
             )}
             {selectedTechs.map((tech) => (
@@ -265,11 +265,11 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
           <div className="mx-auto w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
             <Search className="h-8 w-8 text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-semibold mb-2">No se encontraron proyectos</h3>
+          <h3 className="text-lg font-semibold mb-2">{t('emptyTitle')}</h3>
           <p className="text-muted-foreground mb-4">Intenta ajustar tus filtros o búsqueda</p>
           {hasActiveFilters && (
             <Button variant="outline" onClick={clearFilters}>
-              Limpiar todos los filtros
+              {t('clearAll')}
             </Button>
           )}
         </div>

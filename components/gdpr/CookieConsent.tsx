@@ -2,6 +2,7 @@
 
 import Cookies from 'js-cookie';
 import { BarChart3, Cookie, Megaphone, Settings2, Shield, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { setDefaultGAConsent, updateGAConsent } from '@/lib/analytics/consent';
@@ -50,6 +51,7 @@ function ToggleSwitch({ id, checked, onChange, disabled }: Readonly<ToggleSwitch
 }
 
 export function CookieConsent() {
+  const t = useTranslations('Cookies');
   const [show, setShow] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -141,7 +143,7 @@ export function CookieConsent() {
         'fixed inset-x-0 bottom-0 z-50 p-4 transition-all duration-300 ease-out',
         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
       )}
-      aria-label="Consentimiento de cookies"
+      aria-label={t('ariaLabel')}
     >
       <div className="mx-auto max-w-2xl">
         <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-background/95 backdrop-blur-xl shadow-2xl">
@@ -156,15 +158,15 @@ export function CookieConsent() {
                   <Cookie className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">Preferencias de privacidad</h3>
-                  <p className="text-xs text-muted-foreground">Tu privacidad es importante</p>
+                  <h3 className="font-semibold text-foreground">{t('title')}</h3>
+                  <p className="text-xs text-muted-foreground">{t('subtitle')}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={acceptEssential}
                 className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-                aria-label="Cerrar y aceptar solo esenciales"
+                aria-label={t('closeAria')}
               >
                 <X className="h-4 w-4" />
               </button>
@@ -172,12 +174,12 @@ export function CookieConsent() {
 
             {/* Description */}
             <p className="text-sm text-muted-foreground mb-5">
-              Usamos cookies para mejorar tu experiencia y analizar el tráfico.{' '}
+              {t('body')}{' '}
               <a
                 href="/privacy"
                 className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
               >
-                Política de privacidad
+                {t('policyLink')}
               </a>
             </p>
 
@@ -192,9 +194,9 @@ export function CookieConsent() {
                     </div>
                     <div>
                       <label htmlFor="essential" className="font-medium text-sm text-foreground">
-                        Esenciales
+                        {t('essential')}
                       </label>
-                      <p className="text-xs text-muted-foreground">Siempre activas</p>
+                      <p className="text-xs text-muted-foreground">{t('essentialState')}</p>
                     </div>
                   </div>
                   <ToggleSwitch
@@ -213,9 +215,9 @@ export function CookieConsent() {
                     </div>
                     <div>
                       <label htmlFor="analytics" className="font-medium text-sm text-foreground">
-                        Analíticas
+                        {t('analytics')}
                       </label>
-                      <p className="text-xs text-muted-foreground">Métricas anónimas de uso</p>
+                      <p className="text-xs text-muted-foreground">{t('analyticsDesc')}</p>
                     </div>
                   </div>
                   <ToggleSwitch
@@ -235,9 +237,9 @@ export function CookieConsent() {
                     </div>
                     <div>
                       <label htmlFor="marketing" className="font-medium text-sm text-foreground">
-                        Marketing
+                        {t('marketing')}
                       </label>
-                      <p className="text-xs text-muted-foreground">Contenido personalizado</p>
+                      <p className="text-xs text-muted-foreground">{t('marketingDesc')}</p>
                     </div>
                   </div>
                   <ToggleSwitch
@@ -255,7 +257,7 @@ export function CookieConsent() {
             <div className="flex flex-col-reverse sm:flex-row gap-2">
               {showDetails ? (
                 <Button onClick={saveCustom} variant="outline" className="flex-1 rounded-xl">
-                  Guardar preferencias
+                  {t('save')}
                 </Button>
               ) : (
                 <Button
@@ -264,17 +266,17 @@ export function CookieConsent() {
                   className="flex-1 rounded-xl text-muted-foreground hover:text-foreground"
                 >
                   <Settings2 className="mr-2 h-4 w-4" />
-                  Personalizar
+                  {t('customize')}
                 </Button>
               )}
               <Button onClick={acceptEssential} variant="outline" className="flex-1 rounded-xl">
-                Solo necesarias
+                {t('essentialOnly')}
               </Button>
               <Button
                 onClick={acceptAll}
                 className="flex-1 rounded-xl bg-primary hover:bg-primary/90"
               >
-                Aceptar todas
+                {t('acceptAll')}
               </Button>
             </div>
           </div>

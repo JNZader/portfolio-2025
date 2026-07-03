@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckCircle, Loader2, Mail } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,13 +15,8 @@ interface NewsletterCardProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-function getButtonText(status: string): string {
-  if (status === 'loading') return 'Suscribiendo...';
-  if (status === 'success') return '¡Suscrito!';
-  return 'Suscribirse';
-}
-
 function NewsletterCard({ className, size = 'lg' }: Readonly<NewsletterCardProps>) {
+  const t = useTranslations('Newsletter');
   const { status, subscribe } = useNewsletterSubscription();
 
   const {
@@ -73,16 +69,16 @@ function NewsletterCard({ className, size = 'lg' }: Readonly<NewsletterCardProps
       <form
         onSubmit={handleSubmit(onSubmit)}
         className={currentSize.form}
-        aria-label="Newsletter"
+        aria-label={t('ariaLabel')}
         noValidate
       >
         <label htmlFor="newsletter-email" className="sr-only">
-          Email para newsletter
+          {t('emailLabel')}
         </label>
         <Input
           id="newsletter-email"
           type="email"
-          placeholder="tu@email.com"
+          placeholder={t('emailPlaceholder')}
           autoComplete="email"
           disabled={status === 'loading' || status === 'success'}
           className={cn(currentSize.input, 'flex-1', errors.email && 'border-destructive')}
@@ -99,7 +95,11 @@ function NewsletterCard({ className, size = 'lg' }: Readonly<NewsletterCardProps
         >
           {status === 'loading' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {status === 'success' && <CheckCircle className="mr-2 h-4 w-4" />}
-          {getButtonText(status)}
+          {status === 'loading'
+            ? t('subscribing')
+            : status === 'success'
+              ? t('subscribed')
+              : t('subscribe')}
         </Button>
       </form>
 
@@ -109,11 +109,11 @@ function NewsletterCard({ className, size = 'lg' }: Readonly<NewsletterCardProps
         <div className="flex items-center gap-4 text-xs text-muted-foreground mt-4">
           <div className="flex items-center gap-1">
             <CheckCircle className="h-3 w-3" />
-            <span>Sin spam</span>
+            <span>{t('noSpam')}</span>
           </div>
           <div className="flex items-center gap-1">
             <CheckCircle className="h-3 w-3" />
-            <span>Desuscríbete cuando quieras</span>
+            <span>{t('unsubscribe')}</span>
           </div>
         </div>
       )}
@@ -122,6 +122,7 @@ function NewsletterCard({ className, size = 'lg' }: Readonly<NewsletterCardProps
 }
 
 export function NewsletterHero() {
+  const t = useTranslations('Newsletter');
   return (
     <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       <div className="container max-w-4xl mx-auto px-4">
@@ -129,13 +130,10 @@ export function NewsletterHero() {
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
               <Mail className="h-4 w-4" />
-              Newsletter
+              {t('badge')}
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold">No te pierdas ninguna actualización</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Únete a desarrolladores que reciben insights semanales sobre las últimas tendencias en
-              desarrollo web, tutoriales exclusivos y recursos útiles.
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold">{t('heading')}</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{t('description')}</p>
           </div>
 
           <NewsletterCard
@@ -146,15 +144,15 @@ export function NewsletterHero() {
           <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-green-600" />
-              <span>Contenido de calidad garantizado</span>
+              <span>{t('benefit1')}</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-green-600" />
-              <span>1 email por semana máximo</span>
+              <span>{t('benefit2')}</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-green-600" />
-              <span>Recursos exclusivos para suscriptores</span>
+              <span>{t('benefit3')}</span>
             </div>
           </div>
         </div>
