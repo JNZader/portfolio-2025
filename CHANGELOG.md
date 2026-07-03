@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.12.0](https://github.com/JNZader/portfolio-2025/compare/v2.11.0...v2.12.0) (2026-07-03)
+
+
+### Features
+
+* **ci:** local CI simulator + resync lockfile ([a759b9a](https://github.com/JNZader/portfolio-2025/commits/a759b9a4da8ea3c081ff48a2c8c3c2e3b3bf35b8))
+
 ## [2.11.0](https://github.com/JNZader/portfolio-2025/compare/v2.10.4...v2.11.0) (2026-07-03)
 
 
