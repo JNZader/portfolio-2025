@@ -54,7 +54,10 @@ export function generatePersonSchema(): WithContext<Person> {
  * (Sanity with JSON fallback), so the structured data stays in sync with the
  * CV content without manual edits.
  */
-export function generateResumePersonSchema(data: ResumeDataRaw): WithContext<Person> {
+export function generateResumePersonSchema(
+  data: ResumeDataRaw,
+  locale = 'es'
+): WithContext<Person> {
   // "Córdoba, Argentina" → locality + country
   const [locality, country] = data.personalInfo.location.split(',').map((s) => s.trim());
 
@@ -68,7 +71,7 @@ export function generateResumePersonSchema(data: ResumeDataRaw): WithContext<Per
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: data.personalInfo.name,
-    url: `${SITE_URL}/cv`,
+    url: locale === 'en' ? `${SITE_URL}/en/cv` : `${SITE_URL}/cv`,
     image: `${SITE_URL}/images/profile.jpg`,
     jobTitle: data.personalInfo.title,
     description: data.summary,

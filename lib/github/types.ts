@@ -66,5 +66,6 @@ export interface Project {
   repoIsOrigin?: boolean;
   publishedAt?: string;
   body?: PortableTextBlock[];
+  bodyEn?: PortableTextBlock[];
   readme?: string;
 }

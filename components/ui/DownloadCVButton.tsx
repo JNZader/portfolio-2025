@@ -1,5 +1,5 @@
 import { Download } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import { cn } from '@/lib/utils';
 
 interface DownloadCVButtonProps {
@@ -12,9 +12,11 @@ export async function DownloadCVButton({
   variant = 'default',
 }: Readonly<DownloadCVButtonProps>) {
   const t = await getTranslations('Common');
+  const locale = await getLocale();
+  const pdfHref = locale === 'en' ? '/api/resume?locale=en' : '/api/resume';
   return (
     <a
-      href="/api/resume"
+      href={pdfHref}
       className={cn(
         'inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105',
         variant === 'default'

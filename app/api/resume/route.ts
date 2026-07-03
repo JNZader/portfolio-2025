@@ -39,6 +39,56 @@ interface PDFContext {
   yPos: number;
 }
 
+// Section headers and error strings per locale. The PDF can't use next-intl's
+// React helpers, so the copy lives here keyed by locale.
+type PdfLocale = 'es' | 'en';
+
+interface PdfLabels {
+  summary: string;
+  experience: string;
+  skills: string;
+  softSkills: string;
+  education: string;
+  languages: string;
+  rateLimit: string;
+  error: string;
+}
+
+const PDF_LABELS: Record<PdfLocale, PdfLabels> = {
+  es: {
+    summary: 'Resumen Profesional',
+    experience: 'Experiencia Profesional',
+    skills: 'Habilidades Técnicas',
+    softSkills: 'Habilidades Blandas',
+    education: 'Educación y Certificaciones',
+    languages: 'Idiomas',
+    rateLimit: 'Demasiadas solicitudes. Intenta de nuevo en 1 hora.',
+    error: 'Error generando PDF',
+  },
+  en: {
+    summary: 'Professional Summary',
+    experience: 'Professional Experience',
+    skills: 'Technical Skills',
+    softSkills: 'Soft Skills',
+    education: 'Education & Certifications',
+    languages: 'Languages',
+    rateLimit: 'Too many requests. Please try again in 1 hour.',
+    error: 'Error generating PDF',
+  },
+};
+
+function resolvePdfLocale(request: NextRequest): PdfLocale {
+  return request.nextUrl.searchParams.get('locale') === 'en' ? 'en' : 'es';
+}
+
+async function loadResumeRaw(locale: PdfLocale): Promise<ResumeDataRaw> {
+  if (locale === 'en') {
+    const { default: en } = await import('@/lib/data/resume.en.json');
+    return en as ResumeDataRaw;
+  }
+  return fetchResumeData();
+}
+
 // ----- Layout primitives -----
 
 function checkNewPage(ctx: PDFContext, requiredSpace = 20): void {
@@ -183,8 +233,8 @@ function renderBullets(ctx: PDFContext, items: string[], indent = 0): void {
 }
 
 // Render summary block
-function renderSummary(ctx: PDFContext, summary: string): void {
-  renderSectionHeader(ctx, 'Resumen Profesional');
+function renderSummary(ctx: PDFContext, summary: string, labels: PdfLabels): void {
+  renderSectionHeader(ctx, labels.summary);
   setText(ctx, SIZES.body, COLORS.text, 'normal');
   renderWrappedText(ctx, summary, MARGIN, CONTENT_WIDTH, 4.2);
   ctx.yPos += 0.5;
@@ -195,9 +245,10 @@ function renderSummary(ctx: PDFContext, summary: string): void {
 function renderExperienceWithProjects(
   ctx: PDFContext,
   experience: ResumeData['experience'],
-  projects: NonNullable<ResumeData['projects']>
+  projects: NonNullable<ResumeData['projects']>,
+  labels: PdfLabels
 ): void {
-  renderSectionHeader(ctx, 'Experiencia Profesional');
+  renderSectionHeader(ctx, labels.experience);
 
   for (const job of experience) {
     const dateLine = `${job.startDate} – ${job.endDate}`;
@@ -234,8 +285,8 @@ function renderExperienceWithProjects(
 }
 
 // Render skills as a 2-column table (category in bold, items wrapped on the right)
-function renderSkillsTable(ctx: PDFContext, skills: ResumeData['skills']): void {
-  renderSectionHeader(ctx, 'Habilidades Técnicas');
+function renderSkillsTable(ctx: PDFContext, skills: ResumeData['skills'], labels: PdfLabels): void {
+  renderSectionHeader(ctx, labels.skills);
 
   // Narrower category column (24% instead of 28%) so the items list starts
   // further left and has more horizontal room before wrapping. The widest
@@ -267,16 +318,20 @@ function renderSkillsTable(ctx: PDFContext, skills: ResumeData['skills']): void 
   }
 }
 
-function renderSoftSkills(ctx: PDFContext, items: string[]): void {
+function renderSoftSkills(ctx: PDFContext, items: string[], labels: PdfLabels): void {
   if (items.length === 0) return;
-  renderSectionHeader(ctx, 'Habilidades Blandas');
+  renderSectionHeader(ctx, labels.softSkills);
   renderBullets(ctx, items);
 }
 
 // Render education with title (bold + primary), date (right + italic gray),
 // and optional institution + bullets underneath.
-function renderEducation(ctx: PDFContext, education: ResumeData['education']): void {
-  renderSectionHeader(ctx, 'Educación y Certificaciones');
+function renderEducation(
+  ctx: PDFContext,
+  education: ResumeData['education'],
+  labels: PdfLabels
+): void {
+  renderSectionHeader(ctx, labels.education);
 
   for (const edu of education) {
     checkNewPage(ctx, 10);
@@ -310,9 +365,13 @@ function renderEducation(ctx: PDFContext, education: ResumeData['education']): v
   }
 }
 
-function renderLanguages(ctx: PDFContext, languages: ResumeData['languages']): void {
+function renderLanguages(
+  ctx: PDFContext,
+  languages: ResumeData['languages'],
+  labels: PdfLabels
+): void {
   if (languages.length === 0) return;
-  renderSectionHeader(ctx, 'Idiomas');
+  renderSectionHeader(ctx, labels.languages);
 
   for (const lang of languages) {
     checkNewPage(ctx, 5);
@@ -338,20 +397,22 @@ function renderProjects(ctx: PDFContext, projects: NonNullable<ResumeData['proje
  * Rate limited: 10 requests per hour per IP.
  */
 export async function GET(request: NextRequest) {
+  const locale = resolvePdfLocale(request);
+  const labels = PDF_LABELS[locale];
   try {
     const clientId = getClientIdentifier(request);
     const { success } = await resumeRateLimiter.limit(clientId);
 
     if (!success) {
       logger.warn('Resume rate limit exceeded', { ip: clientId });
-      return new NextResponse('Demasiadas solicitudes. Intenta de nuevo en 1 hora.', {
+      return new NextResponse(labels.rateLimit, {
         status: 429,
         headers: { 'Retry-After': '3600' },
       });
     }
 
     const { jsPDF } = await import('jspdf');
-    const rawData: ResumeDataRaw = await fetchResumeData();
+    const rawData: ResumeDataRaw = await loadResumeRaw(locale);
 
     let decodedEmail: string;
     try {
@@ -376,23 +437,23 @@ export async function GET(request: NextRequest) {
     };
 
     renderHeader(ctx, data);
-    renderSummary(ctx, data.summary);
+    renderSummary(ctx, data.summary, labels);
 
     if (data.projects && data.projects.length > 0) {
-      renderExperienceWithProjects(ctx, data.experience, data.projects);
+      renderExperienceWithProjects(ctx, data.experience, data.projects, labels);
     } else {
       // Fallback: render experience alone if no projects defined
-      renderExperienceWithProjects(ctx, data.experience, []);
+      renderExperienceWithProjects(ctx, data.experience, [], labels);
     }
 
-    renderSkillsTable(ctx, data.skills);
+    renderSkillsTable(ctx, data.skills, labels);
 
     if (data.softSkills && data.softSkills.length > 0) {
-      renderSoftSkills(ctx, data.softSkills);
+      renderSoftSkills(ctx, data.softSkills, labels);
     }
 
-    renderEducation(ctx, data.education);
-    renderLanguages(ctx, data.languages);
+    renderEducation(ctx, data.education, labels);
+    renderLanguages(ctx, data.languages, labels);
 
     // Reserved hook (currently a no-op so the helper does not get tree-shaken away
     // before the structural change to flatten experience/projects ships)
@@ -412,6 +473,6 @@ export async function GET(request: NextRequest) {
       path: '/api/resume',
       method: 'GET',
     });
-    return new NextResponse('Error generando PDF', { status: 500 });
+    return new NextResponse(labels.error, { status: 500 });
   }
 }
