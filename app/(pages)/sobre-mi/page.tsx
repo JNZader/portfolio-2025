@@ -74,11 +74,11 @@ export default function SobreMiPage() {
                 <h2 className="text-2xl font-bold mb-4">Mi Historia</h2>
                 <div className="space-y-4 text-muted-foreground">
                   <p>
-                    Hola, soy Javier. Software developer en Córdoba. Soy Técnico en Desarrollo de
-                    Software (Universidad Gastón Dachary, 2025). Mi camino en tecnología empezó hace
-                    más de 20 años en soporte técnico y mantenimiento de equipos; después pasé
-                    varios años como productor agropecuario — un rubro donde los errores no se
-                    arreglan con un rollback.
+                    Hola, soy Javier. Técnico en Desarrollo de Software (Universidad Gastón Dachary,
+                    2025), trabajando desde Córdoba. Mi camino en tecnología empezó hace más de 20
+                    años en soporte técnico y mantenimiento de equipos; después pasé varios años
+                    como productor agropecuario — un rubro donde los errores no se arreglan con un
+                    rollback.
                   </p>
                   <p>
                     En el último año me enfoqué en construir proyectos completos end-to-end:
