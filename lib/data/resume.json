@@ -28,7 +28,7 @@
   "projects": [
     {
       "name": "Biogas Platform — Plataforma industrial de monitoreo",
-      "description": "Las plantas de biogás dependen de planillas Excel y mantenimiento reactivo, sin visibilidad en tiempo real del estado de los equipos. La plataforma centraliza ingesta de datos desde sensores, monitoreo en tiempo real, detección de anomalías y predicciones de mantenimiento.",
+      "description": "Las plantas de biogás dependen de planillas Excel, sin visibilidad en tiempo real del estado de los equipos. Un gateway en el borde (edge) lee los sensores con inferencia de ML local que funciona offline, y en la nube el sistema detecta anomalías y predice fallos horas antes de que ocurran — pasando de un mantenimiento reactivo a uno predictivo.",
       "highlights": [
         "Estado: side project propio con dominio validado por un ingeniero ambiental que conoce el día a día de las plantas de biogás.",
         "Edge gateway en Rust como nodo industrial autónomo: lee PLCs por Modbus TCP/RTU, almacena local en SQLite, hace inferencia ONNX (<50ms), funciona offline.",
@@ -41,7 +41,7 @@
     },
     {
       "name": "Consorcio Canalero — Sistema de gestión",
-      "description": "El Consorcio Canalero 10 de Mayo (Bell Ville) gestionaba la red hídrica, reportes ciudadanos y administración en herramientas separadas. La plataforma centraliza monitoreo satelital, reportes ciudadanos y gestión administrativa del consorcio en una sola aplicación.",
+      "description": "El Consorcio Canalero 10 de Mayo (Bell Ville) gestionaba la red hídrica, los reportes ciudadanos y la administración en herramientas separadas. La plataforma los unifica en una sola aplicación, sumando monitoreo satelital de los canales sobre datos geoespaciales.",
       "highlights": [
         "Estado: trabajo freelance para un cliente real (Consorcio Canalero 10 de Mayo, Bell Ville).",
         "Integración con Google Earth Engine para monitoreo satelital + MapLibre con Mapbox GL Draw para visualización y edición geoespacial en el frontend.",
@@ -59,13 +59,13 @@
         "Distintos agentes especializados (security, quality, performance) revisan en paralelo y se sintetizan en un informe único.",
         "12+ herramientas de análisis estático integradas (Semgrep, Trivy, Gitleaks, PMD, Biome, Ruff, etc.) con export SARIF para integrar con pipelines SecOps/SAST existentes.",
         "Health score por PR como métrica unificada que combina los hallazgos de los agentes y de los analizadores estáticos.",
-        "El mismo engine atiende 3 canales: GitHub App, CLI y dashboard SaaS, dentro de un monorepo Turborepo con 4 apps y 3 packages.",
+        "Un solo core atiende los 3 canales: GitHub App, CLI y dashboard SaaS, dentro de un monorepo Turborepo con 4 apps y 3 packages.",
         "Stack: TypeScript, Turborepo + pnpm workspaces, Hono, BullMQ, Drizzle ORM, Vercel AI SDK, Octokit, React 19 + React Router 7 (dashboard), Commander (CLI), GitHub Action."
       ]
     },
     {
       "name": "APiGen — Plataforma de generación de código",
-      "description": "Cada nuevo backend repite las mismas estructuras (entidad, repo, service, controller, DTOs, security, observability) con variaciones inconsistentes entre equipos. APiGen toma un schema SQL o un contrato OpenAPI y genera un servicio backend listo para producción con features enterprise por default, expuesto vía CLI, HTTP, IDE plugin o MCP.",
+      "description": "Cada nuevo backend repite las mismas estructuras (entidad, repo, service, controller, DTOs, security, observability) con variaciones inconsistentes entre equipos. APiGen toma un schema SQL o un contrato OpenAPI y genera un servicio listo para producción con features enterprise por default, expuesto vía CLI, HTTP, IDE plugin o MCP.",
       "highlights": [
         "Estado: side project propio. Repo público con la idea original (Dec 2024); la versión actual es una plataforma privada multi-lenguaje.",
         "Pipeline desacoplado: el parser y los templates no se conocen entre sí, lo que permite agregar lenguajes nuevos sin romper lo que ya funciona.",
@@ -89,7 +89,7 @@
     },
     {
       "name": "mcp-llm-bridge — LLM gateway y servidor MCP",
-      "description": "Cada herramienta de AI requiere configurar credenciales y proveedores por separado, sin control centralizado de costos ni routing inteligente. mcp-llm-bridge cumple dos roles: gateway HTTP compatible con la API de OpenAI para herramientas externas, y servidor MCP para clientes como Claude Code o Cursor. Centraliza 11 proveedores de LLM (API keys y suscripciones CLI) detrás de un vault cifrado.",
+      "description": "Cada herramienta de AI requiere configurar sus credenciales por separado, sin control centralizado de costos ni routing inteligente. mcp-llm-bridge cumple dos roles: gateway HTTP compatible con la API de OpenAI para herramientas externas, y servidor MCP para clientes como Claude Code o Cursor. Centraliza 11 proveedores de LLM (API keys y suscripciones CLI) detrás de un vault cifrado.",
       "highlights": [
         "Estado: side project propio. Gateway live en gateway.javierzader.com.",
         "11 provider adapters: 5 API directos (Anthropic, OpenAI, Google, etc.) y 6 CLI-backed (Claude Code, Gemini CLI, Codex, Copilot, Qwen, OpenCode).",
