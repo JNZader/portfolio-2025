@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.10.0](https://github.com/JNZader/portfolio-2025/compare/v2.9.3...v2.10.0) (2026-07-03)
+
+
+### Features
+
+* **tests:** cover server actions and harden remaining audit items ([b8fad17](https://github.com/JNZader/portfolio-2025/commits/b8fad1773541528ca544a170f01fd13fee8ebe59))
+
+
+### Bug Fixes
+
+* **content:** unify positioning, origin story and verifiable stats ([de70b37](https://github.com/JNZader/portfolio-2025/commits/de70b37d2ebe180124c8cc248b60a184dfc94bac))
+* escape gdpr email html, sitemap project ids, silent email suggestion ([f416558](https://github.com/JNZader/portfolio-2025/commits/f4165587c048b6a12028f375685cee020b20385e))
+* seo, a11y and perf quick wins from the exhaustive audit ([7046166](https://github.com/JNZader/portfolio-2025/commits/7046166d562421fa0a558b6e1fb1a584ed4eee91))
+
 ## [2.9.3](https://github.com/JNZader/portfolio-2025/compare/v2.9.2...v2.9.3) (2026-07-02)
 
 
