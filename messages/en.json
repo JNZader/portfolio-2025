@@ -34,5 +34,42 @@
     "label": "Change language",
     "toEs": "Ver en español",
     "toEn": "View in English"
+  },
+  "Home": {
+    "metaTitle": "Home",
+    "metaDescription": "Backend developer with 20+ years in tech: from IT support and farming to building end-to-end systems with Java, Go and Rust.",
+    "ogTitle": "Javier Zader - Backend Developer",
+    "ogDescription": "Backend developer with 20+ years in tech. End-to-end systems with Java, Go and Rust.",
+    "heroGreeting": "Hi!",
+    "heroJobTitle": "Backend Developer · End-to-end systems",
+    "heroDescription": "Backend systems in Java, Go and Rust — from industrial platforms with predictive ML at the edge (anomaly detection, failure prediction) to AI-powered developer tooling (code generation, automated code review). 20+ years in tech.",
+    "heroCtaProjects": "View Projects",
+    "heroCtaContact": "Get in touch",
+    "statYears": "Years in Tech",
+    "statSystems": "End-to-End Systems",
+    "statSystemsSublabel": "data → backend → frontend → deploy",
+    "statCertifications": "Certifications",
+    "statTechnologies": "Technologies",
+    "aboutHeading": "About Me",
+    "aboutSubtitle": "Developer passionate about building robust, scalable technical solutions",
+    "journeyHeading": "My Journey",
+    "journeyP1": "With over 20 years in tech, my path started in IT support and equipment maintenance, which gave me a solid grasp of how systems work from the core out. I then spent several years as a farmer — a field where mistakes don't get fixed with a rollback.",
+    "journeyP2": "That hands-on, dual background brought me back to software: today I build end-to-end systems with Java, Go and Rust — meaning I own every layer of a system, from the data and the backend to the frontend and the deploy — and I keep learning new technologies to keep growing.",
+    "approachHeading": "My Approach",
+    "approach1": "Scalable, modular architectures",
+    "approach2": "Clean, maintainable and well-documented code",
+    "approach3": "Thorough testing to guarantee quality",
+    "approach4": "Continuous performance optimization",
+    "skillsHeading": "Technical Skills",
+    "experienceHeading": "Experience",
+    "roleTitle": "Backend Developer",
+    "roleYears": "20+ years in tech",
+    "certsTitle": "Certifications",
+    "certsDetail": "4+ technical certifications",
+    "apigenCaption": "<b>apigen</b> — a tool I built: from a SQL schema to a complete, running Spring Boot API."
+  },
+  "Common": {
+    "cvDownload": "Download CV",
+    "cvView": "View"
   }
 }

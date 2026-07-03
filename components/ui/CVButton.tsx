@@ -1,5 +1,6 @@
 import { Download, Eye } from 'lucide-react';
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 
 interface CVButtonProps {
@@ -25,11 +26,12 @@ const HALF_BASE =
  * <a href="/cv"> crawleable en el DOM. Full-width en mobile, content-width en
  * desktop, para alinear con los demás CTA del hero.
  */
-export function CVButton({
+export async function CVButton({
   className,
   pdfHref = '/api/resume',
   viewHref = '/cv',
 }: Readonly<CVButtonProps>) {
+  const t = await getTranslations('Common');
   return (
     <div
       className={cn(
@@ -47,7 +49,7 @@ export function CVButton({
         )}
       >
         <Download className="h-4 w-4 shrink-0" aria-hidden="true" />
-        Descargar CV
+        {t('cvDownload')}
       </a>
 
       {/* Ver — versión HTML, secundaria. Label corto para que no se corte. */}
@@ -59,7 +61,7 @@ export function CVButton({
         )}
       >
         <Eye className="h-4 w-4 shrink-0" aria-hidden="true" />
-        Ver
+        {t('cvView')}
       </Link>
     </div>
   );

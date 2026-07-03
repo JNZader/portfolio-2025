@@ -34,5 +34,42 @@
     "label": "Cambiar idioma",
     "toEs": "Ver en español",
     "toEn": "Ver en inglés"
+  },
+  "Home": {
+    "metaTitle": "Inicio",
+    "metaDescription": "Desarrollador backend con más de 20 años en tecnología: de soporte técnico y producción agropecuaria al desarrollo de sistemas end-to-end con Java, Go y Rust.",
+    "ogTitle": "Javier Zader - Backend Developer",
+    "ogDescription": "Desarrollador backend con más de 20 años en tecnología. Sistemas end-to-end con Java, Go y Rust.",
+    "heroGreeting": "¡Hola!",
+    "heroJobTitle": "Backend Developer · Sistemas end-to-end",
+    "heroDescription": "Sistemas backend en Java, Go y Rust — desde plataformas industriales con ML predictivo en el edge (detección de anomalías, predicción de fallos) hasta herramientas de desarrollo con IA (generación de código, code review automático). 20+ años en tecnología.",
+    "heroCtaProjects": "Ver Proyectos",
+    "heroCtaContact": "Contactar",
+    "statYears": "Años en Tecnología",
+    "statSystems": "Sistemas End-to-End",
+    "statSystemsSublabel": "datos → backend → frontend → deploy",
+    "statCertifications": "Certificaciones",
+    "statTechnologies": "Tecnologías",
+    "aboutHeading": "Sobre Mí",
+    "aboutSubtitle": "Desarrollador apasionado por crear soluciones tecnológicas robustas y escalables",
+    "journeyHeading": "Mi Trayectoria",
+    "journeyP1": "Con más de 20 años en el mundo tecnológico, mi camino comenzó en soporte técnico y mantenimiento de equipos, lo que me dio una base sólida para entender los sistemas desde su núcleo. Después pasé varios años como productor agropecuario — un rubro donde los errores no se arreglan con un rollback.",
+    "journeyP2": "Esa doble experiencia práctica me trajo de vuelta al software: hoy construyo sistemas end-to-end con Java, Go y Rust — es decir, me hago cargo de todas las capas de un sistema, desde los datos y el backend hasta el frontend y el deploy — y sigo aprendiendo nuevas tecnologías para seguir creciendo profesionalmente.",
+    "approachHeading": "Mi Enfoque",
+    "approach1": "Arquitecturas escalables y modulares",
+    "approach2": "Código limpio, mantenible y bien documentado",
+    "approach3": "Testing exhaustivo para garantizar calidad",
+    "approach4": "Optimización continua de rendimiento",
+    "skillsHeading": "Habilidades Técnicas",
+    "experienceHeading": "Experiencia",
+    "roleTitle": "Backend Developer",
+    "roleYears": "20+ años en tecnología",
+    "certsTitle": "Certificaciones",
+    "certsDetail": "4+ certificaciones técnicas",
+    "apigenCaption": "<b>apigen</b> — una herramienta que construí: de un schema SQL a una API Spring Boot completa y corriendo."
+  },
+  "Common": {
+    "cvDownload": "Descargar CV",
+    "cvView": "Ver"
   }
 }

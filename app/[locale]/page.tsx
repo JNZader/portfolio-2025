@@ -1,6 +1,7 @@
 import { Award, Briefcase, Layers, TrendingUp } from 'lucide-react';
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Suspense } from 'react';
 import { RevealOnScroll, StaggeredReveal } from '@/components/animations';
 import { NewsletterSkeleton } from '@/components/newsletter/NewsletterSkeleton';
@@ -19,15 +20,14 @@ import { localeAlternates } from '@/lib/seo/alternates';
 import { generatePersonSchema, generateWebSiteSchema } from '@/lib/seo/schema';
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('Home');
   return {
-    title: 'Inicio',
+    title: t('metaTitle'),
     alternates: await localeAlternates('/'),
-    description:
-      'Desarrollador backend con más de 20 años en tecnología: de soporte técnico y producción agropecuaria al desarrollo de sistemas end-to-end con Java, Go y Rust.',
+    description: t('metaDescription'),
     openGraph: {
-      title: 'Javier Zader - Backend Developer',
-      description:
-        'Desarrollador backend con más de 20 años en tecnología. Sistemas end-to-end con Java, Go y Rust.',
+      title: t('ogTitle'),
+      description: t('ogDescription'),
     },
   };
 }
@@ -44,24 +44,26 @@ const NewsletterHero = dynamic(
   }
 );
 
-// `sublabel` (opcional) se renderiza chico bajo el label — define el término
-// para lectores no técnicos sin depender de tooltips (inútiles en mobile).
+// Labels/sublabels resolve from the `Home` message namespace. `sublabelKey`
+// (optional) renders small under the label — defines the term for non-technical
+// readers without relying on tooltips (useless on mobile).
 const STATS = [
-  { value: '20+', label: 'Años en Tecnología', icon: TrendingUp },
+  { value: '20+', key: 'statYears', icon: TrendingUp },
   // Defensible from resume.json: the CV lists exactly 6 end-to-end projects.
-  {
-    value: '6',
-    label: 'Sistemas End-to-End',
-    sublabel: 'datos → backend → frontend → deploy',
-    icon: Briefcase,
-  },
-  { value: '4+', label: 'Certificaciones', icon: Award },
+  { value: '6', key: 'statSystems', sublabelKey: 'statSystemsSublabel', icon: Briefcase },
+  { value: '4+', key: 'statCertifications', icon: Award },
   // Defensible from SKILLS_DATA (backend 6 + frontend 6 + databases 4 + devops 5
   // = 21 technologies listed across the site); rounded down to 20+.
-  { value: '20+', label: 'Tecnologías', icon: Layers },
-];
+  { value: '20+', key: 'statTechnologies', icon: Layers },
+] as const;
 
-export default function HomePage() {
+export default async function HomePage({
+  params,
+}: Readonly<{ params: Promise<{ locale: string }> }>) {
+  const { locale } = await params;
+  // Opt into static rendering while using translations.
+  setRequestLocale(locale);
+  const t = await getTranslations('Home');
   // Generate structured data schemas
   const personSchema = generatePersonSchema();
   const websiteSchema = generateWebSiteSchema();
@@ -74,20 +76,20 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <HeroSection
-        greeting="¡Hola!"
-        jobTitle="Backend Developer · Sistemas end-to-end"
+        greeting={t('heroGreeting')}
+        jobTitle={t('heroJobTitle')}
         title="Javier Zader"
-        description="Sistemas backend en Java, Go y Rust — desde plataformas industriales con ML predictivo en el edge (detección de anomalías, predicción de fallos) hasta herramientas de desarrollo con IA (generación de código, code review automático). 20+ años en tecnología."
+        description={t('heroDescription')}
         // CTA hierarchy: Descargar CV (filled, lowest-friction recruiter action) >
         // Ver Proyectos (outline) > Contactar (ghost). CV renders as <a download>
         // so the /api/resume PDF attachment downloads instead of SPA-navigating.
         cvHref="/api/resume"
         primaryCta={{
-          text: 'Ver Proyectos',
+          text: t('heroCtaProjects'),
           href: '/proyectos',
         }}
         secondaryCta={{
-          text: 'Contactar',
+          text: t('heroCtaContact'),
           href: '/contacto',
         }}
         socialLinks={{
@@ -106,7 +108,7 @@ export default function HomePage() {
             const Icon = stat.icon;
             return (
               <div
-                key={stat.label}
+                key={stat.key}
                 className="text-center group card-hover p-6 rounded-xl bg-card/50 border border-transparent hover:border-primary/20"
               >
                 <div className="flex items-center justify-center gap-3 mb-2">
@@ -115,10 +117,10 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="text-4xl font-bold text-display text-primary">{stat.value}</div>
-                <div className="mt-2 text-sm text-muted-foreground">{stat.label}</div>
-                {'sublabel' in stat && (
+                <div className="mt-2 text-sm text-muted-foreground">{t(stat.key)}</div>
+                {'sublabelKey' in stat && (
                   <div className="mt-1 font-mono text-xs text-muted-foreground/70">
-                    {stat.sublabel}
+                    {t(stat.sublabelKey)}
                   </div>
                 )}
               </div>
@@ -134,10 +136,8 @@ export default function HomePage() {
       <Section id="content" className="content-auto">
         <RevealOnScroll>
           <SectionHeader centered>
-            <SectionTitle>Sobre Mí</SectionTitle>
-            <SectionDescription className="mx-auto">
-              Desarrollador apasionado por crear soluciones tecnológicas robustas y escalables
-            </SectionDescription>
+            <SectionTitle>{t('aboutHeading')}</SectionTitle>
+            <SectionDescription className="mx-auto">{t('aboutSubtitle')}</SectionDescription>
           </SectionHeader>
         </RevealOnScroll>
 
@@ -147,31 +147,20 @@ export default function HomePage() {
             <RevealOnScroll className="lg:col-span-2">
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-xl font-bold mb-3">Mi Trayectoria</h3>
+                  <h3 className="text-xl font-bold mb-3">{t('journeyHeading')}</h3>
                   <div className="space-y-3 text-muted-foreground">
-                    <p>
-                      Con más de 20 años en el mundo tecnológico, mi camino comenzó en soporte
-                      técnico y mantenimiento de equipos, lo que me dio una base sólida para
-                      entender los sistemas desde su núcleo. Después pasé varios años como productor
-                      agropecuario — un rubro donde los errores no se arreglan con un rollback.
-                    </p>
-                    <p>
-                      Esa doble experiencia práctica me trajo de vuelta al software: hoy construyo
-                      sistemas end-to-end con Java, Go y Rust — es decir, me hago cargo de todas las
-                      capas de un sistema, desde los datos y el backend hasta el frontend y el
-                      deploy — y sigo aprendiendo nuevas tecnologías para seguir creciendo
-                      profesionalmente.
-                    </p>
+                    <p>{t('journeyP1')}</p>
+                    <p>{t('journeyP2')}</p>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold mb-3">Mi Enfoque</h3>
+                  <h3 className="text-xl font-bold mb-3">{t('approachHeading')}</h3>
                   <ul className="list-disc list-inside space-y-2 text-muted-foreground ml-2">
-                    <li>Arquitecturas escalables y modulares</li>
-                    <li>Código limpio, mantenible y bien documentado</li>
-                    <li>Testing exhaustivo para garantizar calidad</li>
-                    <li>Optimización continua de rendimiento</li>
+                    <li>{t('approach1')}</li>
+                    <li>{t('approach2')}</li>
+                    <li>{t('approach3')}</li>
+                    <li>{t('approach4')}</li>
                   </ul>
                 </div>
               </div>
@@ -182,7 +171,7 @@ export default function HomePage() {
               <div className="space-y-6">
                 {/* Skills Card */}
                 <div className="glass-card p-6 rounded-xl card-hover">
-                  <h3 className="text-lg font-bold mb-4 heading-accent">Habilidades Técnicas</h3>
+                  <h3 className="text-lg font-bold mb-4 heading-accent">{t('skillsHeading')}</h3>
                   <div className="space-y-4">
                     <SkillsList title="Backend" skills={SKILLS_DATA_HOME.backend} />
                     <SkillsList title="Frontend" skills={SKILLS_DATA_HOME.frontend} />
@@ -192,15 +181,17 @@ export default function HomePage() {
 
                 {/* Experience Card */}
                 <div className="glass-card p-6 rounded-xl card-hover">
-                  <h3 className="text-lg font-bold mb-4 heading-accent">Experiencia</h3>
+                  <h3 className="text-lg font-bold mb-4 heading-accent">
+                    {t('experienceHeading')}
+                  </h3>
                   <div className="space-y-3">
                     <div>
-                      <h4 className="font-semibold text-sm">Backend Developer</h4>
-                      <p className="text-xs text-muted-foreground">20+ años en tecnología</p>
+                      <h4 className="font-semibold text-sm">{t('roleTitle')}</h4>
+                      <p className="text-xs text-muted-foreground">{t('roleYears')}</p>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-sm">Certificaciones</h4>
-                      <p className="text-xs text-muted-foreground">4+ certificaciones técnicas</p>
+                      <h4 className="font-semibold text-sm">{t('certsTitle')}</h4>
+                      <p className="text-xs text-muted-foreground">{t('certsDetail')}</p>
                     </div>
                   </div>
                 </div>
