@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.10.3](https://github.com/JNZader/portfolio-2025/compare/v2.10.2...v2.10.3) (2026-07-03)
+
+
+### Bug Fixes
+
+* **sobre-mi:** consistent cv split-button and sharper hero tagline ([f2a94e8](https://github.com/JNZader/portfolio-2025/commits/f2a94e8e90f43109000706e352c0072fdb35fe7b))
+
 ## [2.10.2](https://github.com/JNZader/portfolio-2025/compare/v2.10.1...v2.10.2) (2026-07-03)
 
 
