@@ -70,7 +70,19 @@
   },
   "Common": {
     "cvDownload": "Descargar CV",
-    "cvView": "Ver"
+    "cvView": "Ver",
+    "backHome": "Volver al inicio"
+  },
+  "Error": {
+    "title": "¡Algo salió mal!",
+    "description": "Ha ocurrido un error inesperado. Por favor, intenta de nuevo.",
+    "retry": "Intentar de nuevo",
+    "help": "Si el problema persiste, por favor <link>contáctanos</link>."
+  },
+  "NotFound": {
+    "metaTitle": "Página no encontrada",
+    "title": "Página no encontrada",
+    "description": "La página que buscas no existe o fue movida."
   },
   "About": {
     "metaTitle": "Sobre mí",

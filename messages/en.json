@@ -70,7 +70,19 @@
   },
   "Common": {
     "cvDownload": "Download CV",
-    "cvView": "View"
+    "cvView": "View",
+    "backHome": "Back to home"
+  },
+  "Error": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again.",
+    "retry": "Try again",
+    "help": "If the problem persists, please <link>get in touch</link>."
+  },
+  "NotFound": {
+    "metaTitle": "Page not found",
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist or was moved."
   },
   "About": {
     "metaTitle": "About",
