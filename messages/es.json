@@ -323,5 +323,9 @@
     "modalDescription": "Esta acción es IRREVERSIBLE. Se eliminarán permanentemente: tu suscripción a la newsletter, todas tus preferencias e historial de consentimientos.",
     "modalConfirm": "Sí, eliminar mis datos",
     "modalCancel": "Cancelar"
+  },
+  "Privacy": {
+    "metaTitle": "Política de Privacidad",
+    "metaDescription": "Política de privacidad y tratamiento de datos personales"
   }
 }

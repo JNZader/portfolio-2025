@@ -323,5 +323,9 @@
     "modalDescription": "This action is IRREVERSIBLE. The following will be permanently deleted: your newsletter subscription, all your preferences and your consent history.",
     "modalConfirm": "Yes, delete my data",
     "modalCancel": "Cancel"
+  },
+  "Privacy": {
+    "metaTitle": "Privacy Policy",
+    "metaDescription": "Privacy policy and personal data processing"
   }
 }
