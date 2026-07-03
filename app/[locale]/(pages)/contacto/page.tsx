@@ -1,5 +1,6 @@
 import { Clock, Mail, MapPin } from 'lucide-react';
 import type { Metadata } from 'next';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { RevealOnScroll } from '@/components/animations';
 import { ContactForm } from '@/components/forms/ContactForm';
@@ -10,14 +11,20 @@ import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/comp
 import { localeAlternates } from '@/lib/seo/alternates';
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('Contact');
   return {
-    title: 'Contacto',
+    title: t('metaTitle'),
     alternates: await localeAlternates('/contacto'),
-    description: 'Ponte en contacto conmigo para proyectos, colaboraciones o consultas.',
+    description: t('metaDescription'),
   };
 }
 
-export default function ContactoPage() {
+export default async function ContactoPage({
+  params,
+}: Readonly<{ params: Promise<{ locale: string }> }>) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations('Contact');
   return (
     <>
       {/* Hero */}
@@ -50,10 +57,10 @@ export default function ContactoPage() {
           <RevealOnScroll>
             <SectionHeader centered>
               <SectionTitle size="xl" as="h1">
-                Contacto
+                {t('heroTitle')}
               </SectionTitle>
               <SectionDescription size="lg" className="mx-auto">
-                ¿Tienes un proyecto en mente o quieres colaborar? Me encantaría escucharte.
+                {t('heroSubtitle')}
               </SectionDescription>
             </SectionHeader>
           </RevealOnScroll>
@@ -68,10 +75,8 @@ export default function ContactoPage() {
             <RevealOnScroll>
               <Card>
                 <CardHeader>
-                  <CardTitle>Envíame un mensaje</CardTitle>
-                  <CardDescription>
-                    Completa el formulario y te responderé lo antes posible
-                  </CardDescription>
+                  <CardTitle>{t('formCardTitle')}</CardTitle>
+                  <CardDescription>{t('formCardDescription')}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ContactForm />
@@ -84,7 +89,7 @@ export default function ContactoPage() {
               {/* Contact info */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Información de Contacto</CardTitle>
+                  <CardTitle>{t('infoTitle')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-start gap-3">
@@ -93,7 +98,7 @@ export default function ContactoPage() {
                       aria-hidden="true"
                     />
                     <div>
-                      <p className="font-medium">Email</p>
+                      <p className="font-medium">{t('emailLabel')}</p>
                       <ObfuscatedEmail
                         user="jnzader"
                         domain="gmail.com"
@@ -108,9 +113,9 @@ export default function ContactoPage() {
                       aria-hidden="true"
                     />
                     <div>
-                      <p className="font-medium">Ubicación</p>
+                      <p className="font-medium">{t('locationLabel')}</p>
                       <p className="text-sm text-[var(--color-muted-foreground)]">
-                        Córdoba, Argentina
+                        {t('location')}
                       </p>
                     </div>
                   </div>
@@ -121,9 +126,9 @@ export default function ContactoPage() {
                       aria-hidden="true"
                     />
                     <div>
-                      <p className="font-medium">Horario de respuesta</p>
+                      <p className="font-medium">{t('responseLabel')}</p>
                       <p className="text-sm text-[var(--color-muted-foreground)]">
-                        24-48 horas hábiles
+                        {t('responseTime')}
                       </p>
                     </div>
                   </div>
@@ -133,7 +138,7 @@ export default function ContactoPage() {
               {/* Social links */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Redes Sociales</CardTitle>
+                  <CardTitle>{t('socialTitle')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <a
@@ -141,7 +146,7 @@ export default function ContactoPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 text-sm hover:text-[var(--color-primary)] transition-colors"
-                    aria-label="Visitar perfil de GitHub"
+                    aria-label={t('githubAria')}
                   >
                     <FaGithub className="h-5 w-5" aria-hidden="true" />
                     GitHub
@@ -152,7 +157,7 @@ export default function ContactoPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 text-sm hover:text-[var(--color-primary)] transition-colors"
-                    aria-label="Visitar perfil de LinkedIn"
+                    aria-label={t('linkedinAria')}
                   >
                     <FaLinkedin className="h-5 w-5" aria-hidden="true" />
                     LinkedIn

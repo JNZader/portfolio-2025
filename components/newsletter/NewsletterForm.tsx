@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAnnouncer } from '@/components/a11y/ScreenReaderAnnouncer';
@@ -13,6 +14,7 @@ import { type NewsletterFormData, newsletterSchema } from '@/lib/validations/new
 export function NewsletterForm() {
   const [statusMessage, setStatusMessage] = useState('');
   const { announce } = useAnnouncer();
+  const t = useTranslations('Newsletter');
 
   // Use shared hook for subscription logic
   const { status, subscribe } = useNewsletterSubscription({
@@ -48,16 +50,16 @@ export function NewsletterForm() {
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-4"
-      aria-label="Newsletter subscription"
+      aria-label={t('ariaLabel')}
       noValidate
     >
       <fieldset className="border-0 p-0 m-0">
-        <legend className="sr-only">Suscripción al newsletter</legend>
+        <legend className="sr-only">{t('legend')}</legend>
 
         <InputField
-          label="Email"
+          label={t('emailLabel')}
           type="email"
-          placeholder="tu@email.com"
+          placeholder={t('emailPlaceholder')}
           error={errors.email?.message}
           required
           autoComplete="email"
@@ -68,20 +70,18 @@ export function NewsletterForm() {
           {isSubmitting ? (
             <>
               <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />
-              Suscribiendo...
+              {t('subscribing')}
             </>
           ) : (
             <>
               <MailIcon className="mr-2 h-4 w-4" />
-              Suscribirme
+              {t('subscribe')}
             </>
           )}
         </Button>
       </fieldset>
 
-      <p className="text-xs text-center text-muted-foreground">
-        Te enviaremos un email de confirmación. No spam, prometido.
-      </p>
+      <p className="text-xs text-center text-muted-foreground">{t('disclaimer')}</p>
 
       {/* Mensaje de estado para tests - siempre renderizado */}
       <output
