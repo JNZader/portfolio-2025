@@ -26,7 +26,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v6
@@ -36,7 +36,7 @@ jobs:
           cache-dependency-path: package-lock.json
 
       - name: Cache Next.js build
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             .next/cache
@@ -46,7 +46,7 @@ jobs:
             ${{ runner.os }}-nextjs-
 
       - name: Cache Prisma Client
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             node_modules/.prisma
