@@ -250,5 +250,33 @@
     "labelSubmit": "Send",
     "success": "Thanks for your feedback!",
     "report": "Report a problem"
+  },
+  "NewsletterPage": {
+    "metaTitle": "Newsletter",
+    "metaDescription": "Subscribe to the newsletter for exclusive content.",
+    "heroTitle": "Newsletter",
+    "heroSubtitle": "Get exclusive content, coding tips and updates straight to your inbox.",
+    "subscribeNow": "Subscribe now",
+    "confirmationNote": "We'll send you a confirmation email",
+    "benefitsHeading": "What you'll get",
+    "b1t": "Exclusive Articles",
+    "b1d": "Content you won't find on the public blog",
+    "b2t": "Tips & Tricks",
+    "b2d": "Best practices and solutions to common problems",
+    "b3t": "Updates",
+    "b3d": "Be the first to hear about new projects and launches",
+    "b4t": "Free Resources",
+    "b4d": "Templates, snippets and useful tools",
+    "statsTitle": "Stats",
+    "statFrequency": "Frequency",
+    "statFrequencyValue": "Weekly",
+    "statSubscribers": "Subscribers",
+    "statOpenRate": "Open rate",
+    "privacyTitle": "Your Privacy",
+    "p1": "Double opt-in (confirmation required)",
+    "p2": "No spam, only quality content",
+    "p3": "Unsubscribe anytime",
+    "p4": "Your email is never shared",
+    "p5": "GDPR compliant"
   }
 }
