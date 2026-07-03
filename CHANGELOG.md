@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.14.0](https://github.com/JNZader/portfolio-2025/compare/v2.13.2...v2.14.0) (2026-07-03)
+
+
+### Features
+
+* **i18n:** Phase 1 — bilingual site (ES/EN) ([#166](https://github.com/JNZader/portfolio-2025/issues/166)) ([0ea6a73](https://github.com/JNZader/portfolio-2025/commits/0ea6a7376154e6663ba529c0b3391e3f7ebb481b))
+
 ## [2.13.2](https://github.com/JNZader/portfolio-2025/compare/v2.13.1...v2.13.2) (2026-07-03)
 
 
