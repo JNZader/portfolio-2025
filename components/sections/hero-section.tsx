@@ -57,6 +57,7 @@ export async function HeroSection({
   showScrollIndicator = true,
 }: Readonly<HeroSectionProps>) {
   const t = await getTranslations('Home');
+  const tc = await getTranslations('Common');
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <HeroBackground />
@@ -141,7 +142,7 @@ export async function HeroSection({
                       href={socialLinks.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label="Visitar perfil de GitHub"
+                      aria-label={tc('aGithub')}
                     >
                       <FaGithub className="h-5 w-5" aria-hidden="true" />
                     </a>
@@ -158,7 +159,7 @@ export async function HeroSection({
                       href={socialLinks.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label="Visitar perfil de LinkedIn"
+                      aria-label={tc('aLinkedin')}
                     >
                       <FaLinkedin className="h-5 w-5" aria-hidden="true" />
                     </a>
@@ -171,7 +172,7 @@ export async function HeroSection({
                     className="hover:bg-primary/10 hover:text-primary transition-colors"
                     asChild
                   >
-                    <a href={`mailto:${socialLinks.email}`} aria-label="Enviar correo electrónico">
+                    <a href={`mailto:${socialLinks.email}`} aria-label={tc('aEmail')}>
                       <Mail className="h-5 w-5" aria-hidden="true" />
                     </a>
                   </Button>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { logger } from '@/lib/monitoring/logger';
 
@@ -20,6 +21,7 @@ export function ObfuscatedEmail({
   className = '',
   showIcon = false,
 }: Readonly<ObfuscatedEmailProps>) {
+  const t = useTranslations('Email');
   const [showMenu, setShowMenu] = useState(false);
   const [copied, setCopied] = useState(false);
   const menuRef = useRef<HTMLSpanElement>(null);
@@ -75,12 +77,12 @@ export function ObfuscatedEmail({
         type="button"
         onClick={() => setShowMenu(!showMenu)}
         className={`inline-flex items-center gap-1 select-none ${className}`}
-        aria-label="Opciones de contacto por email"
+        aria-label={t('options')}
         aria-haspopup="menu"
         aria-expanded={showMenu}
       >
         {showIcon && <EmailIcon className="h-4 w-4" />}
-        <span className="hover:underline">Contactar por email</span>
+        <span className="hover:underline">{t('contact')}</span>
         <ChevronIcon className={`h-3 w-3 transition-transform ${showMenu ? 'rotate-180' : ''}`} />
       </button>
 
@@ -94,7 +96,7 @@ export function ObfuscatedEmail({
               className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-[var(--color-muted)] transition-colors text-left"
             >
               <SendIcon className="h-4 w-4 text-[var(--color-primary)]" />
-              <span>Enviar email</span>
+              <span>{t('send')}</span>
             </button>
 
             <button
@@ -105,12 +107,12 @@ export function ObfuscatedEmail({
               {copied ? (
                 <>
                   <CheckIcon className="h-4 w-4 text-green-500" />
-                  <span className="text-green-600 dark:text-green-400">¡Copiado!</span>
+                  <span className="text-green-600 dark:text-green-400">{t('copied')}</span>
                 </>
               ) : (
                 <>
                   <CopyIcon className="h-4 w-4 text-[var(--color-primary)]" />
-                  <span>Copiar dirección</span>
+                  <span>{t('copy')}</span>
                 </>
               )}
             </button>
@@ -134,6 +136,7 @@ export function ObfuscatedEmailButton({
   domain,
   className = '',
 }: Readonly<ObfuscatedEmailProps>) {
+  const t = useTranslations('Email');
   const [showEmail, setShowEmail] = useState(false);
   const [email, setEmail] = useState('');
 
@@ -154,10 +157,10 @@ export function ObfuscatedEmailButton({
       onMouseEnter={() => setShowEmail(true)}
       onMouseLeave={() => setShowEmail(false)}
       className={`inline-flex items-center gap-2 hover:underline ${className}`}
-      aria-label="Enviar email"
+      aria-label={t('sendAria')}
     >
       <EmailIcon className="h-4 w-4" />
-      {showEmail ? email : 'Enviar email'}
+      {showEmail ? email : t('send')}
     </button>
   );
 }

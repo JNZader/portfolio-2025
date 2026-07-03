@@ -73,7 +73,10 @@
     "cvView": "Ver",
     "backHome": "Volver al inicio",
     "explore": "Explorar",
-    "exploreAria": "Explorar contenido"
+    "exploreAria": "Explorar contenido",
+    "aGithub": "Visitar perfil de GitHub",
+    "aLinkedin": "Visitar perfil de LinkedIn",
+    "aEmail": "Enviar correo electrónico"
   },
   "Error": {
     "title": "¡Algo salió mal!",
@@ -227,5 +230,25 @@
     "viewDetails": "Ver detalles",
     "noImage": "Sin imagen",
     "viewRepoAria": "Ver repositorio de {title} en GitHub"
+  },
+  "Email": {
+    "options": "Opciones de contacto por email",
+    "contact": "Contactar por email",
+    "send": "Enviar email",
+    "copied": "¡Copiado!",
+    "copy": "Copiar dirección",
+    "sendAria": "Enviar email"
+  },
+  "ErrorFeedback": {
+    "title": "¡Ups! Algo salió mal",
+    "subtitle": "Nuestro equipo ha sido notificado.",
+    "subtitle2": "¿Quieres contarnos qué pasó?",
+    "labelName": "Nombre",
+    "labelEmail": "Email",
+    "labelComments": "¿Qué estabas haciendo?",
+    "labelClose": "Cerrar",
+    "labelSubmit": "Enviar",
+    "success": "¡Gracias por tu feedback!",
+    "report": "Reportar problema"
   }
 }

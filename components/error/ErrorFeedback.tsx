@@ -1,10 +1,12 @@
 'use client';
 
 import * as Sentry from '@sentry/nextjs';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
 export function ErrorFeedback({ eventId }: Readonly<{ eventId?: string }>) {
+  const t = useTranslations('ErrorFeedback');
   const [submitted, setSubmitted] = useState(false);
 
   const handleFeedback = () => {
@@ -12,27 +14,27 @@ export function ErrorFeedback({ eventId }: Readonly<{ eventId?: string }>) {
 
     Sentry.showReportDialog({
       eventId,
-      title: '¡Ups! Algo salió mal',
-      subtitle: 'Nuestro equipo ha sido notificado.',
-      subtitle2: '¿Quieres contarnos qué pasó?',
-      labelName: 'Nombre',
-      labelEmail: 'Email',
-      labelComments: '¿Qué estabas haciendo?',
-      labelClose: 'Cerrar',
-      labelSubmit: 'Enviar',
-      successMessage: '¡Gracias por tu feedback!',
+      title: t('title'),
+      subtitle: t('subtitle'),
+      subtitle2: t('subtitle2'),
+      labelName: t('labelName'),
+      labelEmail: t('labelEmail'),
+      labelComments: t('labelComments'),
+      labelClose: t('labelClose'),
+      labelSubmit: t('labelSubmit'),
+      successMessage: t('success'),
     });
 
     setSubmitted(true);
   };
 
   if (submitted) {
-    return <p className="text-sm text-green-600">¡Gracias por tu feedback!</p>;
+    return <p className="text-sm text-green-600">{t('success')}</p>;
   }
 
   return (
     <Button variant="outline" onClick={handleFeedback}>
-      Reportar problema
+      {t('report')}
     </Button>
   );
 }

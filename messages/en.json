@@ -73,7 +73,10 @@
     "cvView": "View",
     "backHome": "Back to home",
     "explore": "Explore",
-    "exploreAria": "Explore content"
+    "exploreAria": "Explore content",
+    "aGithub": "Visit GitHub profile",
+    "aLinkedin": "Visit LinkedIn profile",
+    "aEmail": "Send email"
   },
   "Error": {
     "title": "Something went wrong",
@@ -227,5 +230,25 @@
     "viewDetails": "View details",
     "noImage": "No image",
     "viewRepoAria": "View {title} repository on GitHub"
+  },
+  "Email": {
+    "options": "Email contact options",
+    "contact": "Contact by email",
+    "send": "Send email",
+    "copied": "Copied!",
+    "copy": "Copy address",
+    "sendAria": "Send email"
+  },
+  "ErrorFeedback": {
+    "title": "Oops! Something went wrong",
+    "subtitle": "Our team has been notified.",
+    "subtitle2": "Want to tell us what happened?",
+    "labelName": "Name",
+    "labelEmail": "Email",
+    "labelComments": "What were you doing?",
+    "labelClose": "Close",
+    "labelSubmit": "Send",
+    "success": "Thanks for your feedback!",
+    "report": "Report a problem"
   }
 }
