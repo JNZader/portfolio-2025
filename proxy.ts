@@ -1,8 +1,13 @@
+import createMiddleware from 'next-intl/middleware';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
+import { routing } from '@/i18n/routing';
 import { logger } from '@/lib/monitoring/logger';
+
+// next-intl locale routing, composed into this middleware below.
+const handleI18nRouting = createMiddleware(routing);
 
 // Check if Redis is configured
 const isRedisConfigured =
@@ -89,10 +94,14 @@ export async function proxy(request: NextRequest) {
   // ADMIN ROUTE PROTECTION
   // =========================================
 
+  // Non-default locales carry an `/en` prefix (es is prefix-less); strip it
+  // before matching internal routes that live under the `[locale]` segment.
+  const pathForMatch = pathname.replace(/^\/en(?=\/|$)/, '') || '/';
+
   // Verificar si es una ruta de admin (excepto login y unauthorized)
-  const isAdminRoute = pathname.startsWith('/admin');
-  const isAdminLogin = pathname === '/admin/login';
-  const isAdminUnauthorized = pathname === '/admin/unauthorized';
+  const isAdminRoute = pathForMatch.startsWith('/admin');
+  const isAdminLogin = pathForMatch === '/admin/login';
+  const isAdminUnauthorized = pathForMatch === '/admin/unauthorized';
 
   if (isAdminRoute && !isAdminLogin && !isAdminUnauthorized) {
     // Verificar si hay cookie de sesión de NextAuth
@@ -161,8 +170,11 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // Clona la respuesta para poder modificar headers
-  const response = NextResponse.next();
+  // Base response: run next-intl locale routing for localizable pages. API
+  // routes and Sanity Studio live outside the `[locale]` segment, so they pass
+  // through untouched. Security headers below apply on top of either response.
+  const skipI18n = pathname.startsWith('/api/') || pathname.startsWith('/studio');
+  const response = skipI18n ? NextResponse.next() : handleI18nRouting(request);
 
   // =========================================
   // SECURITY HEADERS - Refuerzo adicional
