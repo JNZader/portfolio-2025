@@ -77,8 +77,8 @@ export default function SobreMiPage() {
                     Hola, soy Javier. Software developer en Córdoba. Soy Técnico en Desarrollo de
                     Software (Universidad Gastón Dachary, 2025). Mi camino en tecnología empezó hace
                     más de 20 años en soporte técnico y mantenimiento de equipos; después pasé
-                    varios años como productor agropecuario, lo que me dio una idea bastante directa
-                    de cómo es operar algo con tiempos y consecuencias reales.
+                    varios años como productor agropecuario — un rubro donde los errores no se
+                    arreglan con un rollback.
                   </p>
                   <p>
                     En el último año me enfoqué en construir proyectos completos end-to-end:

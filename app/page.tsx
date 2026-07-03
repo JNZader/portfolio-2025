@@ -41,10 +41,17 @@ const NewsletterHero = dynamic(
   }
 );
 
+// `sublabel` (opcional) se renderiza chico bajo el label — define el término
+// para lectores no técnicos sin depender de tooltips (inútiles en mobile).
 const STATS = [
   { value: '20+', label: 'Años en Tecnología', icon: TrendingUp },
   // Defensible from resume.json: the CV lists exactly 6 end-to-end projects.
-  { value: '6', label: 'Sistemas End-to-End', icon: Briefcase },
+  {
+    value: '6',
+    label: 'Sistemas End-to-End',
+    sublabel: 'datos → backend → frontend → deploy',
+    icon: Briefcase,
+  },
   { value: '4+', label: 'Certificaciones', icon: Award },
   // Defensible from SKILLS_DATA (backend 6 + frontend 6 + databases 4 + devops 5
   // = 21 technologies listed across the site); rounded down to 20+.
@@ -106,6 +113,11 @@ export default function HomePage() {
                 </div>
                 <div className="text-4xl font-bold text-display text-primary">{stat.value}</div>
                 <div className="mt-2 text-sm text-muted-foreground">{stat.label}</div>
+                {'sublabel' in stat && (
+                  <div className="mt-1 font-mono text-xs text-muted-foreground/70">
+                    {stat.sublabel}
+                  </div>
+                )}
               </div>
             );
           })}
@@ -138,12 +150,14 @@ export default function HomePage() {
                       Con más de 20 años en el mundo tecnológico, mi camino comenzó en soporte
                       técnico y mantenimiento de equipos, lo que me dio una base sólida para
                       entender los sistemas desde su núcleo. Después pasé varios años como productor
-                      agropecuario, operando algo con tiempos y consecuencias reales.
+                      agropecuario — un rubro donde los errores no se arreglan con un rollback.
                     </p>
                     <p>
                       Esa doble experiencia práctica me trajo de vuelta al software: hoy construyo
-                      sistemas end-to-end con Java, Go y Rust, y sigo aprendiendo nuevas tecnologías
-                      para seguir creciendo profesionalmente.
+                      sistemas end-to-end con Java, Go y Rust — es decir, me hago cargo de todas las
+                      capas de un sistema, desde los datos y el backend hasta el frontend y el
+                      deploy — y sigo aprendiendo nuevas tecnologías para seguir creciendo
+                      profesionalmente.
                     </p>
                   </div>
                 </div>
