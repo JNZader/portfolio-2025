@@ -8,6 +8,11 @@ updates:
       day: 'monday'
       time: '09:00'
     open-pull-requests-limit: 5
+    # Supply-chain cooldown: don't propose a version until it's been public a
+    # few days, so a just-published compromised release (chalk/debug-style)
+    # isn't pulled in immediately.
+    cooldown:
+      default-days: 5
     reviewers:
       - 'JNZader'
     assignees:

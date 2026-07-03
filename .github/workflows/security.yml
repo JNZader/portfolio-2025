@@ -79,4 +79,4 @@ jobs:
       - name: Run npm audit
         # Only fail on critical vulnerabilities. High and moderate vulns are
         # transitive dependencies from Prisma/hono/lodash that require upstream fixes.
-        run: npm audit --audit-level=critical
+        run: npm audit --audit-level=high
