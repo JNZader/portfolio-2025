@@ -51,6 +51,10 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+# ci-local (generated dockerfiles + local env file; ci.env.example is committed)
+ci-local/docker/
+ci-local/ci.env
+
 # vercel
 .vercel
 
