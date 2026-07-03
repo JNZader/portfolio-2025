@@ -22,7 +22,7 @@ interface UseNewsletterSubscriptionReturn {
 
 /**
  * Shared hook for newsletter subscription logic
- * Eliminates duplication between NewsletterForm, NewsletterCard, and NewsletterInline
+ * Eliminates duplication between NewsletterForm and NewsletterHero
  */
 export function useNewsletterSubscription(
   options: UseNewsletterSubscriptionOptions = {}
