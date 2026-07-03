@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.13.1](https://github.com/JNZader/portfolio-2025/compare/v2.13.0...v2.13.1) (2026-07-03)
+
+
+### Bug Fixes
+
+* **content:** apigen accuracy, ghagga channels, AI->IA in spanish copy ([15affb2](https://github.com/JNZader/portfolio-2025/commits/15affb2a44cbfcced4fa9dda928734c2b7594949))
+
 ## [2.13.0](https://github.com/JNZader/portfolio-2025/compare/v2.12.4...v2.13.0) (2026-07-03)
 
 
