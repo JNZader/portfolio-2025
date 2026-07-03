@@ -6,6 +6,7 @@ import MobileMenu from './MobileMenu';
 
 interface MobileMenuButtonProps {
   navigation: Array<{ name: string; href: string }>;
+  openLabel: string;
 }
 
 /**
@@ -13,7 +14,7 @@ interface MobileMenuButtonProps {
  * Extracted from Header for Server Component optimization
  * Manages mobile menu open/close state
  */
-export function MobileMenuButton({ navigation }: Readonly<MobileMenuButtonProps>) {
+export function MobileMenuButton({ navigation, openLabel }: Readonly<MobileMenuButtonProps>) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -25,7 +26,7 @@ export function MobileMenuButton({ navigation }: Readonly<MobileMenuButtonProps>
           e.stopPropagation();
           setMobileMenuOpen(true);
         }}
-        aria-label="Abrir menú de navegación"
+        aria-label={openLabel}
         aria-expanded={mobileMenuOpen}
         aria-controls="mobile-menu"
       >

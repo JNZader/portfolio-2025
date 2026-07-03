@@ -1,9 +1,8 @@
 'use client';
 
 import { X } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
+import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 
 interface MobileMenuProps {

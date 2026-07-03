@@ -1,15 +1,20 @@
 /**
- * Main navigation links shared across Header and Footer components
+ * Main navigation shared across Header and Footer. `key` maps to a label in the
+ * `Nav` message namespace (messages/{locale}.json); `href` is locale-agnostic
+ * (the locale prefix is applied by the i18n-aware Link).
  */
 export const MAIN_NAVIGATION = [
-  { name: 'Inicio', href: '/' },
-  { name: 'Sobre mí', href: '/sobre-mi' },
-  { name: 'Proyectos', href: '/proyectos' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'Contacto', href: '/contacto' },
+  { key: 'home', href: '/' },
+  { key: 'about', href: '/sobre-mi' },
+  { key: 'projects', href: '/proyectos' },
+  { key: 'blog', href: '/blog' },
+  { key: 'contact', href: '/contacto' },
 ] as const;
 
 /**
  * Type for a single navigation item
  */
 export type NavigationItem = (typeof MAIN_NAVIGATION)[number];
+
+/** Nav message key. */
+export type NavKey = NavigationItem['key'];

@@ -1,1 +1,38 @@
-{}
+{
+  "Nav": {
+    "home": "Inicio",
+    "about": "Sobre mí",
+    "projects": "Proyectos",
+    "blog": "Blog",
+    "contact": "Contacto"
+  },
+  "Header": {
+    "logoAria": "Ir a página de inicio",
+    "navAria": "Principal",
+    "contactCta": "Contacto",
+    "openMenu": "Abrir menú de navegación"
+  },
+  "Footer": {
+    "brand": "Backend Developer especializado en sistemas end-to-end con Java, Go y Rust — soluciones robustas, escalables y mantenibles.",
+    "githubAria": "Visitar perfil de GitHub",
+    "linkedinAria": "Visitar perfil de LinkedIn",
+    "contactLink": "Contactar →",
+    "navHeading": "Navegación",
+    "navAria": "Enlaces del pie de página",
+    "servicesHeading": "Servicios",
+    "serviceBackend": "Desarrollo Backend",
+    "serviceApis": "APIs REST",
+    "serviceFullstack": "Aplicaciones Full Stack",
+    "serviceConsulting": "Consultoría Técnica",
+    "madeWith": "Hecho con",
+    "andMate": "y mucho mate 🧉",
+    "privacy": "Privacidad",
+    "gdpr": "Datos GDPR",
+    "builtWith": "Construido con Next.js"
+  },
+  "LanguageSwitcher": {
+    "label": "Cambiar idioma",
+    "toEs": "Ver en español",
+    "toEn": "Ver en inglés"
+  }
+}
