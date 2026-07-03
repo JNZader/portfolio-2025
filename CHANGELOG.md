@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.13.0](https://github.com/JNZader/portfolio-2025/compare/v2.12.4...v2.13.0) (2026-07-03)
+
+
+### Features
+
+* **proyectos:** explicit displayOrder so Biogas leads, not newest-first ([1d98b46](https://github.com/JNZader/portfolio-2025/commits/1d98b4667da9d43ae0af74905f8eccc296f2f72c))
+
+
+### Bug Fixes
+
+* **cv:** strengthen Biogas description and remove repeated concepts ([9915afd](https://github.com/JNZader/portfolio-2025/commits/9915afd1eab7ba53f382b65bde669c32a6862dd9))
+
 ## [2.12.4](https://github.com/JNZader/portfolio-2025/compare/v2.12.3...v2.12.4) (2026-07-03)
 
 
