@@ -82,6 +82,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
     githubUrl: 'https://github.com/JNZader-Vault/apigen',
     repoIsOrigin: true,
     publishedAt: '2026-05-01T09:00:00.000Z',
+    displayOrder: 2,
     body: [
       block('The Problem', 'h2'),
       block(
@@ -300,6 +301,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
     featured: true,
     demoUrl: 'https://apigen-web.vercel.app',
     publishedAt: '2026-04-29T09:00:00.000Z',
+    displayOrder: 3,
     body: [
       block('The Problem', 'h2'),
       block(
@@ -468,6 +470,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
     ],
     featured: true,
     publishedAt: '2026-04-25T09:00:00.000Z',
+    displayOrder: 1,
     body: [
       block('The Problem', 'h2'),
       block(
@@ -695,6 +698,15 @@ function getProjectTimestamp(project: SanityProject): number {
   return new Date(project.publishedAt).getTime();
 }
 
+// Curated projects with an explicit displayOrder lead (ascending); everything
+// else (GitHub/Sanity-only) follows, sorted by publishedAt descending.
+function compareProjects(left: SanityProject, right: SanityProject): number {
+  const lo = left.displayOrder ?? Number.POSITIVE_INFINITY;
+  const ro = right.displayOrder ?? Number.POSITIVE_INFINITY;
+  if (lo !== ro) return lo - ro;
+  return getProjectTimestamp(right) - getProjectTimestamp(left);
+}
+
 /**
  * Hybrid merge: Sanity stays the source of truth for CMS-managed fields
  * (image, URLs, technologies, featured, dates, excerpt) so nothing authored in
@@ -711,10 +723,12 @@ export function mergeLocalAndSanityProjects(remoteProjects: SanityProject[]): Sa
     const local = localBySlug.get(remote.slug.current);
     if (local) {
       // Field-level merge: keep all Sanity fields, but let the curated local
-      // body (with diagrams) win when present.
+      // body (with diagrams) win when present, and fall back to the local
+      // displayOrder when Sanity didn't author one.
       projectMap.set(remote.slug.current, {
         ...remote,
         body: local.body && local.body.length > 0 ? local.body : remote.body,
+        displayOrder: remote.displayOrder ?? local.displayOrder,
       });
     } else {
       projectMap.set(remote.slug.current, remote);
@@ -728,7 +742,5 @@ export function mergeLocalAndSanityProjects(remoteProjects: SanityProject[]): Sa
     }
   }
 
-  return Array.from(projectMap.values()).sort(
-    (left, right) => getProjectTimestamp(right) - getProjectTimestamp(left)
-  );
+  return Array.from(projectMap.values()).sort(compareProjects);
 }

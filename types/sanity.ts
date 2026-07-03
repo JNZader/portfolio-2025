@@ -44,6 +44,9 @@ export interface Project {
 	privateCaseStudy?: boolean;
 	repoIsOrigin?: boolean;
 	publishedAt: string;
+	/** Explicit ordering for curated projects (lower = first). Falls back to
+	 *  publishedAt when unset, so GitHub/Sanity-only projects still sort by date. */
+	displayOrder?: number;
 	body?: PortableTextBlock[];
 }
 
