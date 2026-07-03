@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.11.0](https://github.com/JNZader/portfolio-2025/compare/v2.10.4...v2.11.0) (2026-07-03)
+
+
+### Features
+
+* **deps:** migrate to sanity studio v6 ([8f650a1](https://github.com/JNZader/portfolio-2025/commits/8f650a19fc2a4528178aea2dd180f600d435b4fe)), closes [#158](https://github.com/JNZader/portfolio-2025/issues/158) [#161](https://github.com/JNZader/portfolio-2025/issues/161)
+
 ## [2.10.4](https://github.com/JNZader/portfolio-2025/compare/v2.10.3...v2.10.4) (2026-07-03)
 
 ## [2.10.3](https://github.com/JNZader/portfolio-2025/compare/v2.10.2...v2.10.3) (2026-07-03)
