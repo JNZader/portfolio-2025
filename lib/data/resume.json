@@ -18,17 +18,17 @@
       "startDate": "2024",
       "endDate": "Presente",
       "highlights": [
-        "Diseñé y construí 6 sistemas end-to-end: APiGen (plataforma de generación de código), APiGen Studio (editor visual de microservicios), Biogas Platform (monitoreo industrial con sensores en tiempo real y modelos predictivos), ghagga (code review con AI multi-agente), Consorcio Canalero (gestión hídrica, freelance para un cliente real) y mcp-llm-bridge (gateway de LLMs).",
-        "Además, herramientas para mi propio flujo de trabajo: plantillas para empezar proyectos nuevos, instalación y configuración automática de máquinas de desarrollo, y configuraciones de AI CLIs.",
+        "Diseñé y construí 6 sistemas end-to-end: APiGen (plataforma de generación de código), APiGen Studio (editor visual de microservicios), Biogas Platform (monitoreo industrial con sensores en tiempo real y modelos predictivos), ghagga (code review con IA multi-agente), Consorcio Canalero (gestión hídrica, freelance para un cliente real) y mcp-llm-bridge (gateway de LLMs).",
+        "Además, herramientas para mi propio flujo de trabajo: plantillas para empezar proyectos nuevos, instalación y configuración automática de máquinas de desarrollo, y configuraciones de CLIs de IA.",
         "Trabajo con tests automatizados, conventional commits y especificaciones escritas antes del código (OpenSpec) en los proyectos donde corresponde.",
-        "Uso AI assistants (Claude Code, Codex, opencode) como parte central del workflow, no como ayuda esporádica."
+        "Uso asistentes de IA (Claude Code, Codex, opencode) como parte central del workflow, no como ayuda esporádica."
       ]
     }
   ],
   "projects": [
     {
       "name": "Biogas Platform — Plataforma industrial de monitoreo",
-      "description": "Las plantas de biogás dependen de planillas Excel, sin visibilidad en tiempo real del estado de los equipos. Un gateway en el borde (edge) lee los sensores con inferencia de ML local que funciona offline, y en la nube el sistema detecta anomalías y predice fallos horas antes de que ocurran — pasando de un mantenimiento reactivo a uno predictivo.",
+      "description": "Las plantas de biogás dependen de planillas Excel, sin visibilidad en tiempo real del estado de los equipos. Un gateway en el edge lee los sensores con inferencia de ML local que funciona offline, y en la nube el sistema detecta anomalías y predice fallos horas antes de que ocurran — pasando de un mantenimiento reactivo a uno predictivo.",
       "highlights": [
         "Estado: side project propio con dominio validado por un ingeniero ambiental que conoce el día a día de las plantas de biogás.",
         "Edge gateway en Rust como nodo industrial autónomo: lee PLCs por Modbus TCP/RTU, almacena local en SQLite, hace inferencia ONNX (<50ms), funciona offline.",
@@ -41,7 +41,7 @@
     },
     {
       "name": "Consorcio Canalero — Sistema de gestión",
-      "description": "El Consorcio Canalero 10 de Mayo (Bell Ville) gestionaba la red hídrica, los reportes ciudadanos y la administración en herramientas separadas. La plataforma los unifica en una sola aplicación, sumando monitoreo satelital de los canales sobre datos geoespaciales.",
+      "description": "El Consorcio Canalero 10 de Mayo (Bell Ville) gestionaba la red hídrica, los reportes ciudadanos y la administración en herramientas separadas. La plataforma los unifica en una sola aplicación, sumando monitoreo satelital de los canales.",
       "highlights": [
         "Estado: trabajo freelance para un cliente real (Consorcio Canalero 10 de Mayo, Bell Ville).",
         "Integración con Google Earth Engine para monitoreo satelital + MapLibre con Mapbox GL Draw para visualización y edición geoespacial en el frontend.",
@@ -52,10 +52,10 @@
       ]
     },
     {
-      "name": "ghagga — Code review con AI multi-agente",
-      "description": "Los code reviews manuales no escalan: dependen del tiempo, foco y experiencia del reviewer. ghagga combina agentes especializados de AI con herramientas de análisis estático para producir un informe único por pull request, disponible como SaaS, GitHub Action y CLI.",
+      "name": "ghagga — Code review con IA multi-agente",
+      "description": "Los code reviews manuales no escalan: dependen del tiempo, foco y experiencia del reviewer. ghagga combina agentes especializados de IA con herramientas de análisis estático para producir un informe único por pull request, disponible como SaaS, GitHub App, GitHub Action y CLI.",
       "highlights": [
-        "Estado: producto en desarrollo. SaaS, GitHub App y CLI distribuidos desde el mismo monorepo.",
+        "Estado: producto en desarrollo. SaaS, GitHub App, GitHub Action y CLI distribuidos desde el mismo monorepo.",
         "Distintos agentes especializados (security, quality, performance) revisan en paralelo y se sintetizan en un informe único.",
         "12+ herramientas de análisis estático integradas (Semgrep, Trivy, Gitleaks, PMD, Biome, Ruff, etc.) con export SARIF para integrar con pipelines SecOps/SAST existentes.",
         "Health score por PR como métrica unificada que combina los hallazgos de los agentes y de los analizadores estáticos.",
@@ -65,7 +65,7 @@
     },
     {
       "name": "APiGen — Plataforma de generación de código",
-      "description": "Cada nuevo backend repite las mismas estructuras (entidad, repo, service, controller, DTOs, security, observability) con variaciones inconsistentes entre equipos. APiGen toma un schema SQL o un contrato OpenAPI y genera un servicio listo para producción con features enterprise por default, expuesto vía CLI, HTTP, IDE plugin o MCP.",
+      "description": "Cada nuevo backend repite las mismas estructuras (entidad, repo, service, controller, DTOs, security, observability) con variaciones inconsistentes entre equipos. APiGen — que se maneja desde CLI, HTTP, plugin de IDE o MCP — toma un schema SQL o un contrato OpenAPI y genera un servicio listo para producción con features enterprise por default.",
       "highlights": [
         "Estado: side project propio. Repo público con la idea original (Dec 2024); la versión actual es una plataforma privada multi-lenguaje.",
         "Pipeline desacoplado: el parser y los templates no se conocen entre sí, lo que permite agregar lenguajes nuevos sin romper lo que ya funciona.",
@@ -77,7 +77,7 @@
     },
     {
       "name": "APiGen Studio — Editor visual de microservicios",
-      "description": "Las arquitecturas de microservicios típicamente se diseñan en diagramas sueltos que después no se traducen directamente en código. Studio permite modelar visualmente entidades, conexiones entre servicios, gateway routes y flujos de eventos en el browser, y exportar el proyecto multi-servicio para alimentar APiGen.",
+      "description": "Las arquitecturas de microservicios suelen diseñarse en diagramas sueltos que después no se traducen directamente en código. Studio permite modelar visualmente entidades, conexiones entre servicios, gateway routes y flujos de eventos en el browser, y exportar el proyecto multi-servicio para alimentar APiGen.",
       "highlights": [
         "Estado: side project propio. Demo pública en apigen-web.vercel.app.",
         "No es solo modelado de entidades: diseña arquitecturas de microservicios completas (services, conexiones, gateway routes, flujos de eventos).",
@@ -89,7 +89,7 @@
     },
     {
       "name": "mcp-llm-bridge — LLM gateway y servidor MCP",
-      "description": "Cada herramienta de AI requiere configurar sus credenciales por separado, sin control centralizado de costos ni routing inteligente. mcp-llm-bridge cumple dos roles: gateway HTTP compatible con la API de OpenAI para herramientas externas, y servidor MCP para clientes como Claude Code o Cursor. Centraliza 11 proveedores de LLM (API keys y suscripciones CLI) detrás de un vault cifrado.",
+      "description": "Cada herramienta de IA requiere configurar sus credenciales por separado, sin control centralizado de costos ni routing inteligente. mcp-llm-bridge cumple dos roles: gateway HTTP compatible con la API de OpenAI para herramientas externas, y servidor MCP para clientes como Claude Code o Cursor. Centraliza 11 proveedores de LLM (API keys y suscripciones CLI) detrás de un vault cifrado.",
       "highlights": [
         "Estado: side project propio. Gateway live en gateway.javierzader.com.",
         "11 provider adapters: 5 API directos (Anthropic, OpenAI, Google, etc.) y 6 CLI-backed (Claude Code, Gemini CLI, Codex, Copilot, Qwen, OpenCode).",
@@ -167,7 +167,7 @@
       "Ionic + Capacitor"
     ],
     "Bases de Datos": ["PostgreSQL", "MySQL", "Redis", "SQLite", "IndexedDB"],
-    "ML / AI": [
+    "ML / IA": [
       "scikit-learn",
       "ONNX Runtime",
       "llama.cpp",

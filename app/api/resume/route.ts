@@ -259,7 +259,7 @@ function renderSkillsTable(ctx: PDFContext, skills: ResumeData['skills']): void 
     for (let i = 0; i < lines.length; i++) {
       if (i > 0) checkNewPage(ctx, 3.5);
       ctx.doc.text(lines[i], itemsX, ctx.yPos + 3);
-      // Always advance yPos so that wrapped categories (Frontend, ML/AI,
+      // Always advance yPos so that wrapped categories (Frontend, ML/IA,
       // Industrial/IoT) do not overlap with the next row.
       ctx.yPos += 3.5;
     }

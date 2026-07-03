@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   title: 'Sobre mí',
   alternates: { canonical: '/sobre-mi' },
   description:
-    'Conoce más sobre mi experiencia, habilidades y los proyectos que construyo: backend, frontend, edge ML y AI tooling.',
+    'Conoce más sobre mi experiencia, habilidades y los proyectos que construyo: backend, frontend, edge ML y herramientas de IA.',
 };
 
 export default function SobreMiPage() {
@@ -87,7 +87,7 @@ export default function SobreMiPage() {
                   <p>
                     En el último año me enfoqué en construir proyectos completos end-to-end:
                     backends en Java/Spring, Go y Rust; frontends en React; pipelines de ML con
-                    inferencia en el edge; y herramientas para developers: code review con AI
+                    inferencia en el edge; y herramientas para developers: code review con IA
                     multi-agente, plantillas para empezar proyectos nuevos, e instalación y
                     configuración automática de herramientas de developer en máquinas nuevas. Cada
                     proyecto me empuja a stacks nuevos.
@@ -134,7 +134,7 @@ export default function SobreMiPage() {
                       parity tests, SHAP para explicabilidad
                     </li>
                     <li>
-                      <strong>AI tooling:</strong> servidores MCP, sistemas multi-agente,
+                      <strong>Herramientas de IA:</strong> servidores MCP, sistemas multi-agente,
                       integración con SAST/SCA (Semgrep, Trivy, Gitleaks)
                     </li>
                     <li>
