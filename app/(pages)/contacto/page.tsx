@@ -10,6 +10,7 @@ import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/comp
 
 export const metadata: Metadata = {
   title: 'Contacto',
+  alternates: { canonical: '/contacto' },
   description: 'Ponte en contacto conmigo para proyectos, colaboraciones o consultas.',
 };
 

@@ -85,8 +85,8 @@ export const SECURITY_HEADERS = {
   // Politica de referrer
   'Referrer-Policy': 'strict-origin-when-cross-origin',
 
-  // XSS Protection (legacy browsers)
-  'X-XSS-Protection': '1; mode=block',
+  // XSS auditor legacy deshabilitado (mode=block tenía vulns propias); CSP es la protección real
+  'X-XSS-Protection': '0',
 
   // HSTS (solo produccion)
   ...(process.env.NODE_ENV === 'production' && {

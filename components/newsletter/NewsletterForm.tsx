@@ -60,6 +60,7 @@ export function NewsletterForm() {
           placeholder="tu@email.com"
           error={errors.email?.message}
           required
+          autoComplete="email"
           {...register('email')}
         />
 

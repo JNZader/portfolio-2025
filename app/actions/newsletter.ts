@@ -10,6 +10,11 @@ import { trackDatabaseQuery, trackEmailSend } from '@/lib/monitoring/performance
 import { getClientIdentifier, newsletterRateLimiter } from '@/lib/rate-limit/redis';
 import { newsletterSchema } from '@/lib/validations/newsletter';
 
+// Mensaje único para todo intento de suscripción (nuevo, activo, pendiente o
+// desuscripto): evita que las respuestas revelen si un email está suscrito.
+const GENERIC_SUBSCRIBE_MESSAGE =
+  'Si tu email no estaba suscrito, te enviamos un link de confirmación. ¡Revisa tu inbox!';
+
 export type NewsletterActionResponse =
   | { success: true; message: string }
   | { success: false; error: string };
@@ -68,10 +73,14 @@ async function handleExistingSubscriber(
   ipAddress: string | null,
   userAgent: string | null
 ): Promise<NewsletterActionResponse | null> {
-  // Already active
+  // Anti-enumeración: TODAS las ramas (activo/pendiente/desuscripto/nuevo)
+  // devuelven el mismo mensaje genérico — una respuesta distinta por estado
+  // le confirma a un atacante qué emails están suscritos.
+
+  // Already active — no-op, pero respuesta indistinguible del alta nueva
   if (existing.status === 'ACTIVE') {
     logger.info('Newsletter subscription attempt for active subscriber', { email });
-    return { success: false, error: 'Este email ya está suscrito.' };
+    return { success: true, message: GENERIC_SUBSCRIBE_MESSAGE };
   }
 
   // Pending - resend confirmation
@@ -85,7 +94,7 @@ async function handleExistingSubscriber(
     });
 
     await sendConfirmationEmail(email, buildConfirmUrl(token));
-    return { success: true, message: 'Email de confirmación reenviado. Revisa tu inbox.' };
+    return { success: true, message: GENERIC_SUBSCRIBE_MESSAGE };
   }
 
   // Unsubscribed - allow re-subscription
@@ -106,10 +115,7 @@ async function handleExistingSubscriber(
     });
 
     await sendConfirmationEmail(email, buildConfirmUrl(token));
-    return {
-      success: true,
-      message: '¡Revisa tu email! Te hemos enviado un link de confirmación.',
-    };
+    return { success: true, message: GENERIC_SUBSCRIBE_MESSAGE };
   }
 
   return null; // Unknown status, continue with normal flow
@@ -176,10 +182,7 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
       // 6. Send confirmation email
       const emailSent = await sendConfirmationEmail(email, buildConfirmUrl(confirmToken));
       if (emailSent) {
-        return {
-          success: true,
-          message: '¡Revisa tu email! Te hemos enviado un link de confirmación.',
-        };
+        return { success: true, message: GENERIC_SUBSCRIBE_MESSAGE };
       }
       return { success: false, error: 'Error al enviar el email. Por favor, intenta más tarde.' };
     }

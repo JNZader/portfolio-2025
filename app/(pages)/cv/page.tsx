@@ -53,7 +53,8 @@ export default async function CvPage() {
     <>
       <JsonLd data={schema} />
 
-      <main className="mx-auto max-w-3xl px-4 py-16 sm:px-6 print:max-w-none print:px-0 print:py-0 print:text-black">
+      {/* div, not <main>: the root layout already wraps children in <main id="main-content"> */}
+      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 print:max-w-none print:px-0 print:py-0 print:text-black">
         {/* Header */}
         <header className="mb-10 text-center">
           <h1 className="text-4xl font-black tracking-tight">{data.personalInfo.name}</h1>
@@ -238,7 +239,7 @@ export default async function CvPage() {
             </li>
           </ul>
         </section>
-      </main>
+      </div>
     </>
   );
 }

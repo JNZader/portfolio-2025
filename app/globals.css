@@ -687,14 +687,17 @@
   }
 }
 
-/* Reduced motion support */
+/* Reduced motion support. !important so inline styles (e.g. react-hot-toast)
+   can't override it; animation-delay reset so delayed reveals (opacity: 0 +
+   delay) don't leave content invisible under reduce. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms;
-    animation-iteration-count: 1;
-    transition-duration: 0.01ms;
-    scroll-behavior: auto;
+    animation-duration: 0.01ms !important;
+    animation-delay: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

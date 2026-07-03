@@ -13,9 +13,7 @@ export function ResourceHints() {
       <link rel="preconnect" href="https://cdn.sanity.io" />
       <link rel="dns-prefetch" href="https://cdn.sanity.io" />
 
-      {/* Preconnect to Giscus for comments */}
-      <link rel="preconnect" href="https://giscus.app" crossOrigin="anonymous" />
-      <link rel="dns-prefetch" href="https://giscus.app" />
+      {/* Giscus preconnect lives in blog/[slug] — comments only load there */}
 
       {/* Prefetch important pages for better navigation */}
       <link rel="prefetch" href="/blog" />

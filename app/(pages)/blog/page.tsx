@@ -28,13 +28,14 @@ export async function generateMetadata({
   const isFiltered = Boolean(params.search || params.category || params.page);
 
   return {
-    title: 'Blog - Portfolio 2025',
+    title: 'Blog',
     description: 'Artículos sobre desarrollo web, programación y tecnología.',
+    alternates: { canonical: '/blog' },
     // Filtered views (search/category/page) are thin/duplicate of /blog.
-    // Keep them out of the index but follow links, and canonicalize to /blog.
+    // Keep them out of the index but follow links (canonical above already
+    // consolidates them to /blog).
     ...(isFiltered && {
       robots: { index: false, follow: true },
-      alternates: { canonical: '/blog' },
     }),
   };
 }
@@ -49,27 +50,28 @@ export default async function BlogPage({ searchParams }: Readonly<BlogPageProps>
   const normalizedSearch =
     searchTerm && isValidSearchTerm(searchTerm) ? normalizeSearchTerm(searchTerm) : null;
 
-  // Fetch categories
-  const categories = await sanityFetch<Category[]>({
-    query: categoriesQuery,
-    tags: ['category'],
-  });
-
-  // Fetch paginated posts con búsqueda
+  // Categories and posts are independent queries — fetch them in parallel
+  // instead of paying two sequential Sanity round-trips.
   const { start, end } = getPaginationRange(currentPage);
-  const { posts, total } = await sanityFetch<{
-    posts: Post[];
-    total: number;
-  }>({
-    query: paginatedPostsQuery,
-    params: {
-      start,
-      end,
-      category: categorySlug,
-      search: normalizedSearch,
-    },
-    tags: ['post'],
-  });
+  const [categories, { posts, total }] = await Promise.all([
+    sanityFetch<Category[]>({
+      query: categoriesQuery,
+      tags: ['category'],
+    }),
+    sanityFetch<{
+      posts: Post[];
+      total: number;
+    }>({
+      query: paginatedPostsQuery,
+      params: {
+        start,
+        end,
+        category: categorySlug,
+        search: normalizedSearch,
+      },
+      tags: ['post'],
+    }),
+  ]);
 
   const totalPages = getTotalPages(total);
 

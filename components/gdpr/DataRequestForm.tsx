@@ -52,7 +52,13 @@ export function DataRequestForm() {
         <label htmlFor="email" className="block text-sm font-medium mb-2">
           Email
         </label>
-        <Input id="email" type="email" placeholder="tu@email.com" {...register('email')} />
+        <Input
+          id="email"
+          type="email"
+          placeholder="tu@email.com"
+          autoComplete="email"
+          {...register('email')}
+        />
         {errors.email && <p className="mt-1 text-sm text-destructive">{errors.email.message}</p>}
       </div>
 

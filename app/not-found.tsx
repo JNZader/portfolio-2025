@@ -1,6 +1,11 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { HeroBackground } from '@/components/ui/HeroBackground';
+
+export const metadata: Metadata = {
+  title: 'Página no encontrada',
+};
 
 export default function NotFound() {
   return (

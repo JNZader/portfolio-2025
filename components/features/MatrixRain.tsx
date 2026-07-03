@@ -24,6 +24,12 @@ export function MatrixRain() {
       const typed = typedKeysRef.current.join('').toLowerCase();
 
       if (typed === 'matrix') {
+        // 15s de movimiento full-screen: nunca activarlo bajo reduced-motion
+        // (el media query CSS no puede frenar un loop JS de canvas).
+        if (globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          typedKeysRef.current = [];
+          return;
+        }
         setIsActive(true);
         unlockAchievement('matrix_fan');
         setTimeout(deactivateMatrix, 15000); // 15 segundos
@@ -34,6 +40,16 @@ export function MatrixRain() {
     globalThis.addEventListener('keydown', handleKeyPress);
     return () => globalThis.removeEventListener('keydown', handleKeyPress);
   }, [deactivateMatrix]);
+
+  // Escape corta el efecto sin esperar los 15 segundos
+  useEffect(() => {
+    if (!isActive) return;
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') deactivateMatrix();
+    };
+    globalThis.addEventListener('keydown', handleEscape);
+    return () => globalThis.removeEventListener('keydown', handleEscape);
+  }, [isActive, deactivateMatrix]);
 
   // Canvas Matrix effect
   useEffect(() => {
@@ -101,7 +117,7 @@ export function MatrixRain() {
             <div className="text-4xl font-bold mb-2 animate-pulse">MATRIX MODE</div>
             <div className="text-sm">Wake up, Neo...</div>
             <div className="text-xs mt-2 opacity-70">
-              (Se desactiva automáticamente en 15 segundos)
+              (Se desactiva en 15 segundos — o con Escape)
             </div>
           </div>
         </div>

@@ -166,10 +166,12 @@ const nextConfig: NextConfig = {
             ].join(', '),
           },
 
-          // X-XSS-Protection - Para navegadores antiguos (legacy)
+          // X-XSS-Protection deshabilitado explícitamente: el auditor XSS
+          // legacy introdujo vulnerabilidades propias en mode=block; la CSP
+          // de arriba es la protección real.
           {
             key: 'X-XSS-Protection',
-            value: '1; mode=block',
+            value: '0',
           },
 
           // Strict-Transport-Security - Forzar HTTPS (solo en producción)

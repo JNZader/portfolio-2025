@@ -19,6 +19,7 @@ import { generatePersonSchema, generateWebSiteSchema } from '@/lib/seo/schema';
 
 export const metadata: Metadata = {
   title: 'Inicio',
+  alternates: { canonical: '/' },
   description:
     'Desarrollador backend con más de 20 años en tecnología: de soporte técnico y producción agropecuaria al desarrollo de sistemas end-to-end con Java, Go y Rust.',
   openGraph: {

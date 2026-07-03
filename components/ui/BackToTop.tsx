@@ -17,9 +17,11 @@ export function BackToTop() {
   }, []);
 
   const scrollToTop = useCallback(() => {
+    // behavior:'smooth' explícito puentea el reset CSS de reduced-motion
+    const reduced = globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches;
     globalThis.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: reduced ? 'auto' : 'smooth',
     });
   }, []);
 

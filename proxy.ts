@@ -177,8 +177,8 @@ export async function proxy(request: NextRequest) {
   // Politica de referrer
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
-  // XSS Protection para navegadores legacy
-  response.headers.set('X-XSS-Protection', '1; mode=block');
+  // XSS auditor legacy deshabilitado (mode=block tenía vulns propias); CSP es la protección real
+  response.headers.set('X-XSS-Protection', '0');
 
   // =========================================
   // BOT DETECTION - Logging (suspicious but not blocked)

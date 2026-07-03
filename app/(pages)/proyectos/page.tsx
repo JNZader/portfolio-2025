@@ -15,6 +15,7 @@ import type { Project as SanityProject } from '@/types/sanity';
 
 export const metadata: Metadata = {
   title: 'Proyectos',
+  alternates: { canonical: '/proyectos' },
   description: 'Explora mis proyectos y trabajos recientes con búsqueda interactiva',
 };
 
@@ -24,28 +25,32 @@ export const revalidate = 3600;
 const SKELETON_PROJECTS = ['a', 'b', 'c', 'd', 'e', 'f'];
 
 export default async function ProyectosPage() {
-  // Obtener proyectos de Sanity
-  let sanityProjects: Project[] = [];
-  try {
-    const projects = await sanityFetch<SanityProject[]>({
+  // Sanity y GitHub son fetches independientes — en paralelo, cada uno con su
+  // propio fallback (allSettled preserva el manejo de error por fuente).
+  const [sanityResult, githubResult] = await Promise.allSettled([
+    sanityFetch<SanityProject[]>({
       query: projectsQuery,
       tags: ['project'],
-    });
-    sanityProjects = mergeLocalAndSanityProjects(projects).map(convertSanityProject);
-  } catch (error) {
-    logger.error('Failed to fetch Sanity projects', error as Error, {
+    }),
+    getCachedFeaturedProjects(),
+  ]);
+
+  let sanityProjects: Project[] = [];
+  if (sanityResult.status === 'fulfilled') {
+    sanityProjects = mergeLocalAndSanityProjects(sanityResult.value).map(convertSanityProject);
+  } else {
+    logger.error('Failed to fetch Sanity projects', sanityResult.reason as Error, {
       service: 'projects',
       path: '/proyectos',
     });
     sanityProjects = mergeLocalAndSanityProjects([]).map(convertSanityProject);
   }
 
-  // Obtener proyectos de GitHub (con fallback)
   let githubProjects: Project[] = [];
-  try {
-    githubProjects = await getCachedFeaturedProjects();
-  } catch (error) {
-    logger.error('Failed to fetch GitHub projects', error as Error, {
+  if (githubResult.status === 'fulfilled') {
+    githubProjects = githubResult.value;
+  } else {
+    logger.error('Failed to fetch GitHub projects', githubResult.reason as Error, {
       service: 'projects',
       path: '/proyectos',
     });

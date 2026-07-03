@@ -24,7 +24,7 @@ export function ObfuscatedEmail({
   const [copied, setCopied] = useState(false);
   const menuRef = useRef<HTMLSpanElement>(null);
 
-  // Cerrar menú al hacer clic fuera
+  // Cerrar menú al hacer clic fuera o con Escape
   useEffect(() => {
     if (!showMenu) return;
 
@@ -33,9 +33,16 @@ export function ObfuscatedEmail({
         setShowMenu(false);
       }
     };
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setShowMenu(false);
+    };
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
   }, [showMenu]);
 
   // Construir email dinámicamente (solo cuando se necesita)
@@ -69,6 +76,8 @@ export function ObfuscatedEmail({
         onClick={() => setShowMenu(!showMenu)}
         className={`inline-flex items-center gap-1 select-none ${className}`}
         aria-label="Opciones de contacto por email"
+        aria-haspopup="menu"
+        aria-expanded={showMenu}
       >
         {showIcon && <EmailIcon className="h-4 w-4" />}
         <span className="hover:underline">Contactar por email</span>
@@ -108,6 +117,11 @@ export function ObfuscatedEmail({
           </span>
         </span>
       )}
+
+      {/* Live region: anuncia el copiado a lectores de pantalla */}
+      <span aria-live="polite" className="sr-only">
+        {copied ? 'Email copiado al portapapeles' : ''}
+      </span>
     </span>
   );
 }

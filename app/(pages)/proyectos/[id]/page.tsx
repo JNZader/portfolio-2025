@@ -122,9 +122,11 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   return {
     title: project.title,
     description: project.description,
+    alternates: { canonical: `/proyectos/${resolvedParams.id}` },
     openGraph: {
       title: project.title,
       description: project.description,
+      url: `/proyectos/${resolvedParams.id}`,
       type: 'article',
       images: project.image
         ? [

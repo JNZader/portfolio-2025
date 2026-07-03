@@ -11,6 +11,7 @@ import { TableOfContents } from '@/components/blog/TableOfContents';
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
 import { JsonLd } from '@/components/seo/JsonLd';
 import Container from '@/components/ui/Container';
+import { SITE_URL } from '@/lib/config/site-config';
 import { logger } from '@/lib/monitoring/logger';
 import { generateBlogPostingSchema, generateBreadcrumbSchema } from '@/lib/seo/schema';
 import { generateTableOfContents, generateTableOfContentsFromMarkdown } from '@/lib/utils/toc';
@@ -64,9 +65,11 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     description: post.seo?.metaDescription ?? post.excerpt,
     keywords: post.seo?.keywords,
     authors: post.author ? [{ name: post.author.name }] : undefined,
+    alternates: { canonical: `/blog/${slug}` },
     openGraph: {
       title: post.seo?.metaTitle ?? post.title,
       description: post.seo?.metaDescription ?? post.excerpt,
+      url: `/blog/${slug}`,
       type: 'article',
       publishedTime: post.publishedAt,
       authors: post.author ? [post.author.name] : undefined,
@@ -146,8 +149,9 @@ export default async function PostPage({ params }: Readonly<PostPageProps>) {
     tags: ['post'],
   });
 
-  // Full URL for share buttons
-  const fullUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://example.com'}/blog/${slug}`;
+  // Full URL for share buttons — SITE_URL falls back to the real domain,
+  // never example.com.
+  const fullUrl = `${SITE_URL}/blog/${slug}`;
 
   // Generate schemas
   const blogPostingSchema = generateBlogPostingSchema({
@@ -168,6 +172,10 @@ export default async function PostPage({ params }: Readonly<PostPageProps>) {
 
   return (
     <>
+      {/* Giscus solo carga en posts — el preconnect vive acá, no en el layout
+          global (React hoistea el <link> al <head>) */}
+      <link rel="preconnect" href="https://giscus.app" crossOrigin="anonymous" />
+
       {/* Track blog post view */}
       <BlogPostTracker slug={post.slug.current} title={post.title} />
 

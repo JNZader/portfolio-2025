@@ -83,6 +83,7 @@ function NewsletterCard({ className, size = 'lg' }: Readonly<NewsletterCardProps
           id="newsletter-email"
           type="email"
           placeholder="tu@email.com"
+          autoComplete="email"
           disabled={status === 'loading' || status === 'success'}
           className={cn(currentSize.input, 'flex-1', errors.email && 'border-destructive')}
           {...register('email')}

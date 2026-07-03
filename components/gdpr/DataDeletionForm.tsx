@@ -84,6 +84,7 @@ export function DataDeletionForm() {
             id="deletion-email"
             type="email"
             placeholder="tu@email.com"
+            autoComplete="email"
             aria-describedby={errors.email ? 'deletion-email-error' : undefined}
             {...register('email')}
           />

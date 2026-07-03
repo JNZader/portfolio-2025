@@ -15,7 +15,8 @@ export function ScrollIndicator({
   const handleScroll = () => {
     const element = document.getElementById(targetId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const reduced = globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      element.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
     }
   };
 

@@ -189,6 +189,7 @@ export function ContactForm() {
         type="text"
         error={errors.name?.message}
         required
+        autoComplete="name"
         {...register('name')}
       />
 
@@ -198,13 +199,14 @@ export function ContactForm() {
         type="email"
         error={errors.email?.message}
         required
+        autoComplete="email"
         {...register('email')}
       />
 
       {/* Reason (reemplaza al antiguo "Asunto") */}
       <SelectField
         label="Motivo de contacto"
-        placeholder="Elegí un motivo"
+        placeholder="Elige un motivo"
         options={REASON_OPTIONS}
         error={errors.reason?.message}
         required
@@ -216,12 +218,13 @@ export function ContactForm() {
         label="Empresa u organización (opcional)"
         type="text"
         error={errors.company?.message}
+        autoComplete="organization"
         {...register('company')}
       />
 
       {/* Timeline (opcional) */}
       <SelectField
-        label="¿Para cuándo lo necesitás? (opcional)"
+        label="¿Para cuándo lo necesitas? (opcional)"
         placeholder="Sin definir"
         options={TIMELINE_OPTIONS}
         error={errors.timeline?.message}

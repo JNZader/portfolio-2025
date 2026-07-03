@@ -113,10 +113,11 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
-            type="text"
+            type="search"
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Buscar proyectos por nombre, tecnología, descripción..."
+            aria-label="Buscar proyectos"
             className="w-full pl-10 pr-4 py-2 border border-input bg-background rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground"
           />
           {searchQuery && (
@@ -136,6 +137,8 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
             variant="outline"
             size="sm"
             onClick={() => setShowFilters(!showFilters)}
+            aria-expanded={showFilters}
+            aria-controls="project-filters"
             className="gap-2"
           >
             <Filter className="h-4 w-4" />
@@ -158,8 +161,12 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
 
       {/* Panel de filtros */}
       {showFilters && (
-        <div className="p-4 border border-border rounded-lg bg-muted/30 space-y-4">
-          {/* Filtro por fuente */}
+        <div
+          id="project-filters"
+          className="p-4 border border-border rounded-lg bg-muted/30 space-y-4"
+        >
+          {/* Filtro por fuente — aria-pressed: la selección no puede comunicarse
+              solo por la variante de color (filled vs outline) */}
           <div>
             <h4 className="text-sm font-medium mb-2">Fuente</h4>
             <div className="flex flex-wrap gap-2">
@@ -167,6 +174,7 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
                 variant={selectedSource === 'all' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => handleSourceChange('all')}
+                aria-pressed={selectedSource === 'all'}
               >
                 Todos
               </Button>
@@ -174,6 +182,7 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
                 variant={selectedSource === 'sanity' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => handleSourceChange('sanity')}
+                aria-pressed={selectedSource === 'sanity'}
               >
                 Curados
               </Button>
@@ -181,6 +190,7 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
                 variant={selectedSource === 'github' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => handleSourceChange('github')}
+                aria-pressed={selectedSource === 'github'}
               >
                 GitHub
               </Button>
@@ -197,6 +207,7 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
                   variant={selectedTechs.includes(tech) ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => toggleTech(tech)}
+                  aria-pressed={selectedTechs.includes(tech)}
                   className="text-xs"
                 >
                   {tech}
@@ -213,9 +224,9 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
         </div>
       )}
 
-      {/* Resultados */}
+      {/* Resultados — live region: anuncia a SR el conteo al filtrar */}
       <div className="flex items-center justify-between text-sm text-muted-foreground">
-        <p>
+        <p aria-live="polite">
           {filteredProjects.length} de {projects.length} proyectos
           {hasActiveFilters && ' (filtrados)'}
         </p>
