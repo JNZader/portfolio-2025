@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.10.1](https://github.com/JNZader/portfolio-2025/compare/v2.10.0...v2.10.1) (2026-07-03)
+
+
+### Bug Fixes
+
+* **content:** define end-to-end in place and sharpen the agro line ([dcffaad](https://github.com/JNZader/portfolio-2025/commits/dcffaad357d0681933016dc83eed8d8e2aa8a9ec))
+
 ## [2.10.0](https://github.com/JNZader/portfolio-2025/compare/v2.9.3...v2.10.0) (2026-07-03)
 
 
