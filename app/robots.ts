@@ -7,7 +7,17 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/admin/', '/private/', '/studio/', '/secret-achievements/'],
+        // admin/secret-achievements live under [locale] → also block the /en
+        // prefixed variants. api/studio sit outside [locale] (no prefix).
+        disallow: [
+          '/api/',
+          '/admin/',
+          '/en/admin/',
+          '/private/',
+          '/studio/',
+          '/secret-achievements/',
+          '/en/secret-achievements/',
+        ],
       },
       {
         userAgent: 'GPTBot', // OpenAI crawler

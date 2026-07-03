@@ -10,6 +10,7 @@ import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
 import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
 import { SkillsList } from '@/components/ui/SkillsList';
 import { SKILLS_DATA } from '@/lib/constants';
+import { localeAlternates } from '@/lib/seo/alternates';
 
 // Lazy load ScrollIndicator - non-critical
 const ScrollIndicator = dynamic(
@@ -17,12 +18,14 @@ const ScrollIndicator = dynamic(
   { ssr: true }
 );
 
-export const metadata: Metadata = {
-  title: 'Sobre mí',
-  alternates: { canonical: '/sobre-mi' },
-  description:
-    'Conoce más sobre mi experiencia, habilidades y los proyectos que construyo: backend, frontend, edge ML y herramientas de IA.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Sobre mí',
+    alternates: await localeAlternates('/sobre-mi'),
+    description:
+      'Conoce más sobre mi experiencia, habilidades y los proyectos que construyo: backend, frontend, edge ML y herramientas de IA.',
+  };
+}
 
 export default function SobreMiPage() {
   return (

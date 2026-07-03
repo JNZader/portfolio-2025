@@ -15,19 +15,22 @@ import Section, {
 import { SectionDivider } from '@/components/ui/SectionDivider';
 import { SkillsList } from '@/components/ui/SkillsList';
 import { SKILLS_DATA_HOME } from '@/lib/constants';
+import { localeAlternates } from '@/lib/seo/alternates';
 import { generatePersonSchema, generateWebSiteSchema } from '@/lib/seo/schema';
 
-export const metadata: Metadata = {
-  title: 'Inicio',
-  alternates: { canonical: '/' },
-  description:
-    'Desarrollador backend con más de 20 años en tecnología: de soporte técnico y producción agropecuaria al desarrollo de sistemas end-to-end con Java, Go y Rust.',
-  openGraph: {
-    title: 'Javier Zader - Backend Developer',
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Inicio',
+    alternates: await localeAlternates('/'),
     description:
-      'Desarrollador backend con más de 20 años en tecnología. Sistemas end-to-end con Java, Go y Rust.',
-  },
-};
+      'Desarrollador backend con más de 20 años en tecnología: de soporte técnico y producción agropecuaria al desarrollo de sistemas end-to-end con Java, Go y Rust.',
+    openGraph: {
+      title: 'Javier Zader - Backend Developer',
+      description:
+        'Desarrollador backend con más de 20 años en tecnología. Sistemas end-to-end con Java, Go y Rust.',
+    },
+  };
+}
 
 // Lazy load newsletter component (below the fold)
 const NewsletterHero = dynamic(

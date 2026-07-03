@@ -7,12 +7,15 @@ import Container from '@/components/ui/Container';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
 import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
+import { localeAlternates } from '@/lib/seo/alternates';
 
-export const metadata: Metadata = {
-  title: 'Contacto',
-  alternates: { canonical: '/contacto' },
-  description: 'Ponte en contacto conmigo para proyectos, colaboraciones o consultas.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'Contacto',
+    alternates: await localeAlternates('/contacto'),
+    description: 'Ponte en contacto conmigo para proyectos, colaboraciones o consultas.',
+  };
+}
 
 export default function ContactoPage() {
   return (
