@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.13.2](https://github.com/JNZader/portfolio-2025/compare/v2.13.1...v2.13.2) (2026-07-03)
+
+
+### Bug Fixes
+
+* **cv:** de-anglicize highlights (moderate) and refocus Biogas bullet ([17ccb40](https://github.com/JNZader/portfolio-2025/commits/17ccb40c9bf421ddf0dacbd3c56c35c7d605482e))
+
 ## [2.13.1](https://github.com/JNZader/portfolio-2025/compare/v2.13.0...v2.13.1) (2026-07-03)
 
 
