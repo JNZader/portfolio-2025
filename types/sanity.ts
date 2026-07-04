@@ -34,6 +34,7 @@ export interface Project {
 		current: string;
 	};
 	excerpt: string;
+	excerptEn?: string;
 	mainImage?: Image & {
 		alt: string;
 	};
@@ -48,6 +49,7 @@ export interface Project {
 	 *  publishedAt when unset, so GitHub/Sanity-only projects still sort by date. */
 	displayOrder?: number;
 	body?: PortableTextBlock[];
+	bodyEn?: PortableTextBlock[];
 }
 
 /**
@@ -76,4 +78,5 @@ export interface Post {
 	};
 	markdownBody?: string;
 	body?: PortableTextBlock[];
+	bodyEn?: PortableTextBlock[];
 }

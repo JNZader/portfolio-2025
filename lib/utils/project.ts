@@ -9,11 +9,12 @@ import type { Project as SanityProject } from '@/types/sanity';
 /**
  * Convert Sanity project to unified Project format
  */
-export function convertSanityProject(sanityProject: SanityProject): Project {
+export function convertSanityProject(sanityProject: SanityProject, locale = 'es'): Project {
   return {
     id: sanityProject._id,
     title: sanityProject.title,
-    description: sanityProject.excerpt,
+    description:
+      locale === 'en' ? (sanityProject.excerptEn ?? sanityProject.excerpt) : sanityProject.excerpt,
     tech: sanityProject.technologies || [],
     // Resolve the real Sanity CDN URL from the image asset. Previously this
     // pointed at a static /projects/{slug}.jpg that doesn't exist in /public,
@@ -31,5 +32,6 @@ export function convertSanityProject(sanityProject: SanityProject): Project {
     repoIsOrigin: sanityProject.repoIsOrigin,
     publishedAt: sanityProject.publishedAt,
     body: sanityProject.body,
+    bodyEn: sanityProject.bodyEn,
   };
 }

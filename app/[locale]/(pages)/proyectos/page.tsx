@@ -47,13 +47,15 @@ export default async function ProyectosPage({
 
   let sanityProjects: Project[] = [];
   if (sanityResult.status === 'fulfilled') {
-    sanityProjects = mergeLocalAndSanityProjects(sanityResult.value).map(convertSanityProject);
+    sanityProjects = mergeLocalAndSanityProjects(sanityResult.value).map((p) =>
+      convertSanityProject(p, locale)
+    );
   } else {
     logger.error('Failed to fetch Sanity projects', sanityResult.reason as Error, {
       service: 'projects',
       path: '/proyectos',
     });
-    sanityProjects = mergeLocalAndSanityProjects([]).map(convertSanityProject);
+    sanityProjects = mergeLocalAndSanityProjects([]).map((p) => convertSanityProject(p, locale));
   }
 
   let githubProjects: Project[] = [];

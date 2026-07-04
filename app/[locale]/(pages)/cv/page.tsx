@@ -1,22 +1,29 @@
 import { Mail } from 'lucide-react';
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { DownloadCVButton } from '@/components/ui/DownloadCVButton';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
+import { Link } from '@/i18n/navigation';
+import { localeAlternates } from '@/lib/seo/alternates';
 import { generateResumePersonSchema } from '@/lib/seo/schema';
 import type { ResumeDataRaw } from '@/lib/types/resume';
 
 /**
- * Obtiene la data del CV de forma resiliente.
+ * Obtiene la data del CV según el locale.
  *
- * El import de Sanity se hace dinámico DENTRO del try porque `sanity/env.ts`
- * hace un assert a nivel de módulo: sin `NEXT_PUBLIC_SANITY_DATASET` (caso dev
- * local) el solo importarlo tira en module-evaluation, antes de que corra el
- * try/catch interno de fetchResumeData. Importándolo así, ese throw cae acá y
- * bajamos al JSON estático — la página funciona en local y en prod.
+ * Inglés: JSON versionado por locale (`resume.en.json`), sin pasar por Sanity.
+ * Español: Sanity con fallback al JSON estático. El import de Sanity se hace
+ * dinámico DENTRO del try porque `sanity/env.ts` hace un assert a nivel de
+ * módulo: sin `NEXT_PUBLIC_SANITY_DATASET` (dev local) el solo importarlo tira
+ * en module-evaluation, antes del try/catch de fetchResumeData. Importándolo
+ * así, ese throw cae acá y bajamos al JSON — funciona en local y en prod.
  */
-async function getResumeData(): Promise<ResumeDataRaw> {
+async function getResumeData(locale: string): Promise<ResumeDataRaw> {
+  if (locale === 'en') {
+    const { default: en } = await import('@/lib/data/resume.en.json');
+    return en as ResumeDataRaw;
+  }
   try {
     const { fetchResumeData } = await import('@/sanity/lib/queries');
     return await fetchResumeData();
@@ -26,12 +33,14 @@ async function getResumeData(): Promise<ResumeDataRaw> {
   }
 }
 
-export const metadata: Metadata = {
-  title: 'CV',
-  description:
-    'Currículum de Javier Zader — desarrollador backend (Java, Go, Rust) con experiencia en plataformas industriales, ML en el edge y herramientas de desarrollo con IA. Experiencia, proyectos, stack y formación.',
-  alternates: { canonical: '/cv' },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('Cv');
+  return {
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    alternates: await localeAlternates('/cv'),
+  };
+}
 
 // ISR: mismo patrón que /proyectos. La data viene de Sanity con fallback a JSON.
 export const revalidate = 3600;
@@ -45,9 +54,15 @@ function SectionTitle({ children }: Readonly<{ children: string }>) {
   );
 }
 
-export default async function CvPage() {
-  const data = await getResumeData();
-  const schema = generateResumePersonSchema(data);
+export default async function CvPage({
+  params,
+}: Readonly<{ params: Promise<{ locale: string }> }>) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations('Cv');
+  const data = await getResumeData(locale);
+  const schema = generateResumePersonSchema(data, locale);
+  const pdfHref = locale === 'en' ? '/api/resume?locale=en' : '/api/resume';
 
   return (
     <>
@@ -69,29 +84,31 @@ export default async function CvPage() {
               className="inline-flex items-center gap-2 rounded-lg border-2 border-primary px-6 py-3 font-medium text-primary transition-all duration-200 hover:scale-105 hover:bg-primary/10"
             >
               <Mail className="h-4 w-4" aria-hidden="true" />
-              Contactar
+              {t('contact')}
             </Link>
           </div>
 
           <p className="mt-4 text-sm text-muted-foreground print:hidden">
-            Versión web de mi CV — también disponible en{' '}
-            <a href="/api/resume" className="text-primary underline" download>
-              PDF
-            </a>
-            .
+            {t.rich('webVersion', {
+              pdf: (chunks) => (
+                <a href={pdfHref} className="text-primary underline" download>
+                  {chunks}
+                </a>
+              ),
+            })}
           </p>
         </header>
 
         {/* Resumen */}
         <section className="mb-10">
-          <SectionTitle>Resumen</SectionTitle>
+          <SectionTitle>{t('sectionSummary')}</SectionTitle>
           <p className="leading-relaxed text-muted-foreground print:text-black">{data.summary}</p>
         </section>
 
         {/* Experiencia */}
         {data.experience.length > 0 && (
           <section className="mb-10">
-            <SectionTitle>Experiencia</SectionTitle>
+            <SectionTitle>{t('sectionExperience')}</SectionTitle>
             <div className="space-y-6">
               {data.experience.map((job) => (
                 <article key={`${job.company}-${job.position}`}>
@@ -120,7 +137,7 @@ export default async function CvPage() {
         {/* Proyectos */}
         {data.projects && data.projects.length > 0 && (
           <section className="mb-10">
-            <SectionTitle>Proyectos</SectionTitle>
+            <SectionTitle>{t('sectionProjects')}</SectionTitle>
             <div className="space-y-6">
               {data.projects.map((project) => (
                 <article key={project.name}>
@@ -144,7 +161,7 @@ export default async function CvPage() {
         {/* Educación */}
         {data.education.length > 0 && (
           <section className="mb-10">
-            <SectionTitle>Educación y certificaciones</SectionTitle>
+            <SectionTitle>{t('sectionEducation')}</SectionTitle>
             <div className="space-y-4">
               {data.education.map((edu) => (
                 <article key={`${edu.institution}-${edu.degree}`}>
@@ -173,7 +190,7 @@ export default async function CvPage() {
 
         {/* Habilidades */}
         <section className="mb-10">
-          <SectionTitle>Habilidades técnicas</SectionTitle>
+          <SectionTitle>{t('sectionSkills')}</SectionTitle>
           <dl className="space-y-3">
             {Object.entries(data.skills).map(([category, items]) =>
               items.length > 0 ? (
@@ -191,7 +208,7 @@ export default async function CvPage() {
         {/* Idiomas */}
         {data.languages.length > 0 && (
           <section className="mb-10">
-            <SectionTitle>Idiomas</SectionTitle>
+            <SectionTitle>{t('sectionLanguages')}</SectionTitle>
             <ul className="space-y-1 text-sm">
               {data.languages.map((lang) => (
                 <li key={lang.name}>
@@ -205,10 +222,12 @@ export default async function CvPage() {
 
         {/* Contacto */}
         <section>
-          <SectionTitle>Contacto</SectionTitle>
+          <SectionTitle>{t('sectionContact')}</SectionTitle>
           <ul className="space-y-1 text-sm text-muted-foreground print:text-black">
             <li>
-              <span className="font-semibold text-foreground print:text-black">Email:</span>{' '}
+              <span className="font-semibold text-foreground print:text-black">
+                {t('emailLabel')}
+              </span>{' '}
               <ObfuscatedEmail
                 user="jnzader"
                 domain="gmail.com"
@@ -216,7 +235,9 @@ export default async function CvPage() {
               />
             </li>
             <li>
-              <span className="font-semibold text-foreground print:text-black">LinkedIn:</span>{' '}
+              <span className="font-semibold text-foreground print:text-black">
+                {t('linkedinLabel')}
+              </span>{' '}
               <a
                 href={data.personalInfo.linkedin}
                 className="hover:text-primary transition-colors"
@@ -227,7 +248,9 @@ export default async function CvPage() {
               </a>
             </li>
             <li>
-              <span className="font-semibold text-foreground print:text-black">GitHub:</span>{' '}
+              <span className="font-semibold text-foreground print:text-black">
+                {t('githubLabel')}
+              </span>{' '}
               <a
                 href={data.personalInfo.github}
                 className="hover:text-primary transition-colors"

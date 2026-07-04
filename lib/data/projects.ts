@@ -65,6 +65,8 @@ const LOCAL_PROJECTS: SanityProject[] = [
       current: 'apigen',
     },
     excerpt:
+      'Una plataforma de generación de código que convierte un schema SQL o un contrato OpenAPI en un servicio backend funcionando — 12 lenguajes de destino, 15+ bases de datos, tres stacks de nube.',
+    excerptEn:
       'A code generation platform that turns a SQL schema or OpenAPI contract into a working backend service — 12 target languages, 15+ databases, three cloud stacks.',
     technologies: [
       'Java 25',
@@ -84,6 +86,206 @@ const LOCAL_PROJECTS: SanityProject[] = [
     publishedAt: '2026-05-01T09:00:00.000Z',
     displayOrder: 2,
     body: [
+      block('El problema', 'h2'),
+      block(
+        'Todo proyecto Spring Boot empieza en el mismo lugar. Escribís la entidad, después el repositorio, después el service, después el controller, después los DTOs, después el mismo setup de seguridad, después el mismo cableado de observabilidad. Seis meses más tarde comparás dos servicios del mismo equipo y cada uno eligió convenciones apenas distintas. Multiplicá eso entre varios equipos.'
+      ),
+      block(
+        'Quería algo que convirtiera un schema SQL o un contrato OpenAPI en un servicio funcionando con un solo comando — y que siguiera siendo útil después de que lo personalizara.'
+      ),
+      block('Qué hace APiGen', 'h2'),
+      block(
+        'Apuntalo a un schema SQL o a una spec OpenAPI. Te devuelve un servicio con forma de producción: endpoints REST, capa de persistencia, seguridad cableada, observabilidad instrumentada, Dockerfile, manifiestos de Kubernetes, pipeline de CI. Podés previsualizar antes de generar, sobrescribir templates localmente sin forkear, y manejar el mismo engine desde CLI, servidor HTTP, plugin de IDE o MCP.'
+      ),
+      mermaid(
+        `erDiagram
+  CATEGORY ||--o{ CATEGORY : "parent of"
+  CUSTOMER ||--o{ ORDER : places
+  CUSTOMER ||--o{ ADDRESS : has
+  CUSTOMER ||--o{ REVIEW : writes
+  CUSTOMER ||--o{ WISHLIST : owns
+  ADDRESS ||--o{ ORDER : "ships / bills"
+  ORDER ||--|{ ORDERITEM : contains
+  PRODUCT ||--o{ ORDERITEM : "appears in"
+  PRODUCTVARIANT ||--o{ ORDERITEM : specifies
+  PRODUCT ||--o{ PRODUCTVARIANT : has
+  PRODUCT ||--o{ PRODUCTIMAGE : has
+  PRODUCT ||--o{ REVIEW : receives
+  PRODUCT ||--o{ WISHLIST : "saved in"
+  PRODUCT }o--|| CATEGORY : "in"
+  PRODUCT }o--|| BRAND : by
+  PRODUCT ||--o{ PRODUCTTAG : has
+  TAG ||--o{ PRODUCTTAG : in`,
+        'El schema de ejemplo (14 tablas) que apigen consume en el demo del hero — relaciones tomadas del examples/ecommerce-schema.sql real del repo. coupons no aparece: no tiene FKs (el cupón se resuelve por código).'
+      ),
+      block('Las restricciones que me puse', 'h2'),
+      bullet(
+        'Contract-first y nada más. La fuente de verdad es el archivo SQL o el OpenAPI. Sin un DSL de configuración montado encima.'
+      ),
+      bullet(
+        'El código generado tiene que compilar y pasar los tests al primer intento. Nada de scaffolding que haya que arreglar a mano.'
+      ),
+      bullet(
+        'Las personalizaciones viven al lado del proyecto, en .apigen/templates. No en un fork.'
+      ),
+      bullet(
+        'Un solo engine, todas las interfaces. CLI, servidor, plugin de IDE y MCP consumen el mismo núcleo de generación. Sin duplicación.'
+      ),
+      block('Mi rol', 'h2'),
+      block(
+        'Desarrollador único. Arrancó en diciembre de 2024 como una librería REST genérica de Spring Boot. Diseñé cada módulo, escribí cada línea que no se autogeneraba. Mi background en Java/Spring me dio la opinión para codificar; APiGen es la plataforma alrededor de esa opinión.'
+      ),
+      block('Cómo empezó APiGen, y por qué creció', 'h2'),
+      block(
+        'APiGen empezó en diciembre de 2024 como una librería REST genérica de Spring Boot — el repositorio linkeado arriba. El código original es un patrón de base-controller / base-service / base-repository con generics, auditoría con Hibernate Envers, conversión con ModelMapper, manejo centralizado de excepciones y paginación, sobre Spring Boot 3 y Java 21.'
+      ),
+      block(
+        'El objetivo era modesto: codificar mis convenciones preferidas para dejar de reescribir los mismos controllers, el mismo setup de seguridad, los mismos manejadores de excepciones en cada servicio.'
+      ),
+      block(
+        'A medida que la librería maduró durante 2025, la pregunta cambió. Si las convenciones ya están codificadas, ¿por qué el usuario tiene que escribir las entidades siquiera? ¿Por qué no generarlas desde el schema? Y después: si el engine puede generar Java/Spring, ¿por qué no Kotlin? ¿Python? ¿Go?'
+      ),
+      block(
+        'Para enero de 2026 el proyecto se convirtió en una plataforma completa de generación de código — la versión que describe el resto de esta página. El link de arriba apunta a la librería genérica original para que el punto de partida sea verificable; la plataforma que creció a partir de ahí no es pública.'
+      ),
+      block('Decisiones clave', 'h2'),
+      block('1. Pipeline desacoplado: parsing → IR → renderizado de templates', 'h3'),
+      block(
+        'La decisión temprana más determinante. Los parsers (SQL, OpenAPI) producen una representación intermedia normalizada. Los templates consumen ese IR. Ninguno de los dos lados sabe que el otro existe.'
+      ),
+      block(
+        'Esa separación es lo que hizo pensables los 12 lenguajes de destino. Sumar Kotlin no toca el parser de SQL. Sumar GraphQL no toca el pipeline de codegen.'
+      ),
+      block(
+        'Tradeoff: el IR es rígido por diseño. No hay atajo desde "esta rareza de OpenAPI" directo a "esta anotación de Java". Cada atajo tiene que pasar por el IR, o la abstracción deja de rendir.'
+      ),
+      mermaid(
+        `flowchart LR
+  SQL["SQL schema"] --> P["Parsers"]
+  OAS["OpenAPI contract"] --> P
+  P --> IR["Normalized IR"]
+  IR --> GEN["Language generators"]
+  GEN --> OUT["12 target languages"]
+  PACKS["Feature packs (opt-in)"] -. compose .-> GEN`,
+        'Parsers y templates no se conocen entre sí: todo pasa por el IR. Por eso sumar un lenguaje no toca el parser SQL, y sumar un protocolo no toca el pipeline de codegen.'
+      ),
+      mermaid(
+        `sequenceDiagram
+  actor Dev
+  Dev->>CLI: apigen generate --from sql
+  CLI->>Parser: parse SQL / OpenAPI
+  Parser->>IR: build normalized IR
+  IR->>Generators: render per target language
+  Generators-->>CLI: 199 files (5 layers/table + scaffold)
+  CLI-->>Dev: ./shop-api ready to run`,
+        'El mismo pipeline visto en runtime: un `apigen generate` de punta a punta, del schema a 199 archivos que arrancan. Es el run real del terminal del hero.'
+      ),
+      block('2. Features como módulos Gradle opt-in', 'h3'),
+      block(
+        'APiGen trae 22 módulos: 4 librerías, 4 generadores, 13 feature packs (gateway, GraphQL, gRPC, chaos engineering, recomendación, analytics, BFF, notificaciones, búsqueda, observabilidad, y más), y una capa MCP.'
+      ),
+      block(
+        'Las features no son flags siempre-encendidas. Son módulos separados a los que un proyecto se suscribe. Un equipo que necesita gRPC incluye el pack de gRPC; uno que no lo necesita no arrastra nada extra en su build. Cada pack se versiona de forma independiente — el pack de chaos puede avanzar sin tocar el de gateway.'
+      ),
+      block(
+        'Tradeoff: disciplina en los límites de los módulos. Cada feature pack paga un pequeño costo de setup y de mantenimiento de contrato. Dejar que las features se filtraran al core habría hecho la experiencia temprana más rápida — y la limpieza posterior mucho peor.'
+      ),
+      block('3. Un engine, cuatro superficies de entrega', 'h3'),
+      block(
+        'El mismo engine de codegen corre detrás de una CLI (generación local, preview, validación), un servidor HTTP (endpoints de preview, flujos compartidos por el equipo), un plugin de IDE (autoría dentro del editor) y un servidor MCP (los asistentes de IA manejan la generación como una herramienta).'
+      ),
+      block(
+        'Elegir esto el día uno obligó a que el engine tuviera forma de librería desde el principio, no una CLI con una API atornillada después. Eso hizo que la integración con MCP saliera casi gratis cuando llegó.'
+      ),
+      mermaid(
+        `flowchart TD
+  CLI["CLI"] --> ENG["Generation engine (core + IR)"]
+  HTTP["HTTP server"] --> ENG
+  IDE["IDE plugin"] --> ENG
+  MCP["MCP server"] --> ENG`,
+        'El mismo engine detrás de las cuatro superficies. Por ser library-shaped desde el día uno, integrar MCP fue casi gratis.'
+      ),
+      block('Qué puede hacer APiGen hoy', 'h2'),
+      bullet(
+        '12 lenguajes de destino — Java/Spring, Kotlin, Python, Node/TypeScript, Go, Rust, C#, PHP, Ruby, Scala, Elixir, Clojure.'
+      ),
+      bullet(
+        '15+ bases de datos soportadas — PostgreSQL, MySQL, MariaDB, Oracle, SQL Server, SQLite, MongoDB, Cassandra, Redis, y más.'
+      ),
+      bullet('REST, GraphQL y gRPC desde el mismo modelo — sin duplicar lógica entre protocolos.'),
+      bullet(
+        'Features enterprise incluidas por default: soft delete, multi-tenancy, auditoría con Hibernate Envers, optimistic locking, reportes de compliance GDPR/SOC2/PCI — 100+ entre todos los módulos.'
+      ),
+      bullet(
+        'Caché multinivel out of the box: Caffeine (en proceso) + Redis (distribuido), con políticas cache-aside generadas por entidad.'
+      ),
+      bullet('3 stacks de nube de destino — AWS, GCP, Azure, con salida en Terraform.'),
+      bullet('Cobertura mínima de 60% de líneas / 50% de ramas, exigida en CI.'),
+      bullet(
+        'Tests de contrato (Spring Cloud Contract) sobre la librería core + microbenchmarks JMH sobre el engine de generación.'
+      ),
+      mermaid(
+        `flowchart LR
+  MODEL["Domain model (from IR)"] --> REST["REST controllers"]
+  MODEL --> GQL["GraphQL resolvers"]
+  MODEL --> GRPC["gRPC services"]`,
+        'Un solo modelo, derivado del IR, expone los tres protocolos — sin reescribir lógica de negocio.'
+      ),
+      block('Qué reconsideraría', 'h2'),
+      block(
+        'Crecer a lo ancho primero. APiGen escaló hacia afuera rápido — 12 lenguajes, 15 bases de datos, 13 feature packs — mientras que Java/Spring es el único destino en el que tengo plena confianza operativa. La plataforma parece completa en el papel, pero un usuario que cae en Elixir o Clojure recibe un camino menos maduro que uno que cae en Java.'
+      ),
+      block(
+        'Si empezara de nuevo, comprimiría la matriz. Dos lenguajes (Java + Python, o Java + Kotlin) y tres bases de datos (Postgres, MySQL, Mongo) a fondo antes de crecer a lo ancho. "Soporta 12 lenguajes" vende mejor que "soporta 2" — pero la reputación de ingeniería importa más que el marketing.'
+      ),
+      block('Foto de la arquitectura', 'h2'),
+      block('22 módulos Gradle organizados en 4 capas:'),
+      bullet(
+        'libs/ — core (engine + IR), security, exceptions, bom (catálogo de dependencias compartido).'
+      ),
+      bullet('generator/ — cli, codegen, server, ide-plugins.'),
+      bullet(
+        'features/ — 13 packs opt-in (graphql, grpc, gateway, chaos, recommendation, analytics, bff, notifications, search, observability, y más).'
+      ),
+      bullet(
+        'mcp/ — servidores MCP en Java + Python que exponen el engine a los asistentes de IA.'
+      ),
+      bullet(
+        'Variantes de contenedor: Dockerfile estándar + Dockerfile.native para compilación native-image con GraalVM cuando importan el tiempo de arranque y la huella de memoria.'
+      ),
+      block(
+        'El grafo de build se mantiene limpio porque el contrato lo hace cumplir el BOM compartido más la separación entre módulos de API e implementación. Sin ciclos, sin estado mutable compartido entre módulos.'
+      ),
+      mermaid(
+        `flowchart TD
+  subgraph LIBS["libs/ — foundation"]
+    CORE["core: engine + IR"]
+    SEC["security"]
+    EXC["exceptions"]
+    BOM["bom: shared deps"]
+  end
+  subgraph GEN["generator/"]
+    CODEGEN["codegen"]
+    CLI["cli"]
+    SERVER["server"]
+    IDE["ide-plugins"]
+  end
+  subgraph FEAT["features/: 13 opt-in packs"]
+    PACKS["graphql, grpc, gateway, analytics, +9"]
+  end
+  subgraph MCPL["mcp/"]
+    MCPS["Java + Python servers"]
+  end
+  CLI --> CODEGEN
+  SERVER --> CODEGEN
+  IDE --> CODEGEN
+  CODEGEN --> CORE
+  FEAT -. opt-in .-> CODEGEN
+  MCPL --> CORE`,
+        '22 módulos en 4 capas. generator/ depende del core+IR; los feature packs se enchufan en codegen sin tocar el core; el BOM gobierna versiones. Sin ciclos.'
+      ),
+    ],
+    bodyEn: [
       block('The Problem', 'h2'),
       block(
         'Every Spring Boot project starts in the same place. You write the entity, then the repository, then the service, then the controller, then DTOs, then the same security setup, then the same observability wiring. Six months later you compare two services from the same team and they all picked slightly different conventions. Multiply that across teams.'
@@ -114,7 +316,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
   PRODUCT }o--|| BRAND : by
   PRODUCT ||--o{ PRODUCTTAG : has
   TAG ||--o{ PRODUCTTAG : in`,
-        'El schema de ejemplo (14 tablas) que apigen consume en el demo del hero — relaciones tomadas del examples/ecommerce-schema.sql real del repo. coupons no aparece: no tiene FKs (el cupón se resuelve por código).'
+        "The example schema (14 tables) apigen consumes in the hero demo — relationships taken from the repo's real examples/ecommerce-schema.sql. coupons doesn't show up: it has no FKs (the coupon is resolved by code)."
       ),
       block('Constraints I Set', 'h2'),
       bullet(
@@ -163,7 +365,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
   IR --> GEN["Language generators"]
   GEN --> OUT["12 target languages"]
   PACKS["Feature packs (opt-in)"] -. compose .-> GEN`,
-        'Parsers y templates no se conocen entre sí: todo pasa por el IR. Por eso sumar un lenguaje no toca el parser SQL, y sumar un protocolo no toca el pipeline de codegen.'
+        "Parsers and templates don't know about each other: everything goes through the IR. That's why adding a language doesn't touch the SQL parser, and adding a protocol doesn't touch the codegen pipeline."
       ),
       mermaid(
         `sequenceDiagram
@@ -174,7 +376,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
   IR->>Generators: render per target language
   Generators-->>CLI: 199 files (5 layers/table + scaffold)
   CLI-->>Dev: ./shop-api ready to run`,
-        'El mismo pipeline visto en runtime: un `apigen generate` de punta a punta, del schema a 199 archivos que arrancan. Es el run real del terminal del hero.'
+        'The same pipeline at runtime: an end-to-end `apigen generate`, from schema to 199 files that boot. This is the real run from the hero terminal.'
       ),
       block('2. Features as opt-in Gradle modules', 'h3'),
       block(
@@ -199,7 +401,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
   HTTP["HTTP server"] --> ENG
   IDE["IDE plugin"] --> ENG
   MCP["MCP server"] --> ENG`,
-        'El mismo engine detrás de las cuatro superficies. Por ser library-shaped desde el día uno, integrar MCP fue casi gratis.'
+        'The same engine behind all four surfaces. Because it was library-shaped from day one, wiring up MCP was almost free.'
       ),
       block('What APiGen Can Do Today', 'h2'),
       bullet(
@@ -225,7 +427,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
   MODEL["Domain model (from IR)"] --> REST["REST controllers"]
   MODEL --> GQL["GraphQL resolvers"]
   MODEL --> GRPC["gRPC services"]`,
-        'Un solo modelo, derivado del IR, expone los tres protocolos — sin reescribir lógica de negocio.'
+        'A single model, derived from the IR, exposes all three protocols — without rewriting business logic.'
       ),
       block("What I'd Reconsider", 'h2'),
       block(
@@ -274,7 +476,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
   CODEGEN --> CORE
   FEAT -. opt-in .-> CODEGEN
   MCPL --> CORE`,
-        '22 módulos en 4 capas. generator/ depende del core+IR; los feature packs se enchufan en codegen sin tocar el core; el BOM gobierna versiones. Sin ciclos.'
+        '22 modules in 4 layers. generator/ depends on core+IR; the feature packs plug into codegen without touching the core; the BOM governs versions. No cycles.'
       ),
     ],
   },
@@ -285,6 +487,8 @@ const LOCAL_PROJECTS: SanityProject[] = [
       current: 'apigen-studio',
     },
     excerpt:
+      'Un diseñador visual para APIs Spring Boot y microservicios — modelá entidades, rutas de gateway y flujos de eventos, y exportá un proyecto multi-servicio.',
+    excerptEn:
       'A visual designer for Spring Boot APIs and microservices — model entities, gateway routes, and event flows, then export a multi-service project.',
     technologies: [
       'React 19',
@@ -303,6 +507,149 @@ const LOCAL_PROJECTS: SanityProject[] = [
     publishedAt: '2026-04-29T09:00:00.000Z',
     displayOrder: 3,
     body: [
+      block('El problema', 'h2'),
+      block(
+        'Herramientas como bootify.io te dejan diseñar visualmente una sola app Spring Boot — entidades, relaciones, CRUD básico, auth. Eso resuelve una parte del trabajo. No resuelve modelar una arquitectura de microservicios: varios servicios, las rutas entre ellos, los eventos que fluyen entre ellos, y la exportación de todo eso como un sistema coherente.'
+      ),
+      block(
+        'Quería un diseñador visual que manejara el sistema, no solo la app. Un canvas donde modelo servicios, dibujo conexiones, configuro un gateway, armo flujos de eventos/mensajes, y exporto todo como un proyecto multi-servicio listo para alimentar a APiGen.'
+      ),
+      block('Qué hace Studio', 'h2'),
+      block(
+        'Studio es un diseñador visual en el navegador para APIs Spring Boot y microservicios. Modelás entidades y relaciones como en bootify.io, y después vas más allá: sumás varios servicios, cableás rutas de gateway, diseñás flujos de eventos/mensajes, validás la compatibilidad entre servicios, y exportás toda la arquitectura como un proyecto que APiGen puede generar. Importás schemas SQL o contratos OpenAPI, los editás visualmente con merge consciente de conflictos, y nunca perdés trabajo — el autosave en IndexedDB y el historial de snapshots vienen incluidos.'
+      ),
+      block('Las restricciones que me puse', 'h2'),
+      bullet(
+        'Más allá del modelado de una sola app. Studio tiene que manejar arquitectura servicio-a-servicio, no solo las entidades de un servicio.'
+      ),
+      bullet(
+        'La validación ocurre mientras editás, no después de generar. El usuario ve los conflictos e incompatibilidades en vivo, antes de exportar.'
+      ),
+      bullet(
+        'La importación tiene que ser segura. Traer un schema SQL o un contrato OpenAPI dispara un snapshot previo, así las operaciones destructivas son recuperables.'
+      ),
+      bullet(
+        'El demo es público desde el día uno. Cualquiera puede abrir https://apigen-web.vercel.app y probar el editor sin cuenta.'
+      ),
+      block('Mi rol', 'h2'),
+      block(
+        'Desarrollador único. Arrancó el 20 de enero de 2026 — dos días después de que APiGen pivoteara a una plataforma completa de generación de código. Diseñé cada pantalla, escribí cada línea. 440 commits en 18 días activos; el proyecto salió en un sprint corto e intenso.'
+      ),
+      block('Cómo empezó Studio', 'h2'),
+      block(
+        'Tomé bootify.io como referencia. El flujo de generación de una sola app que ofrece es limpio y útil, pero en el momento en que la pregunta pasa a ser "¿cómo se hablan estos tres servicios entre sí?" la herramienta no tiene respuesta. Ese hueco es exactamente donde pasa el trabajo que importa.'
+      ),
+      block(
+        'Studio se construyó para llenar ese hueco. El modelado de entidades es lo mínimo esperable; el diseñador de microservicios es el punto.'
+      ),
+      block('Decisiones clave', 'h2'),
+      block('1. Diseñador de microservicios — más allá del modelado de entidades', 'h3'),
+      block(
+        'La decisión de producto más determinante. Studio no es un "clon de bootify.io". Suma un diseñador servicio-a-servicio: varios servicios en un canvas, conexiones entre ellos, un diseñador de rutas de gateway para el ruteo HTTP, un diseñador de eventos/mensajes para los flujos asíncronos, y una exportación multi-servicio que emite una arquitectura, no un solo proyecto.'
+      ),
+      block(
+        'Ese es el diferenciador. El editor de entidades es la puerta de entrada que se siente familiar; el diseñador de microservicios es lo que hace que valga la pena usar Studio una vez que un equipo crece más allá de una sola app.'
+      ),
+      block(
+        'Tradeoff: alcance. Un generador de una sola app es un producto acotado; un diseñador multi-servicio es una superficie mucho más grande. Más features significa más lugares donde romperse, más interacciones que validar, y más decisiones que diseñar. La apuesta es que la profundidad se paga sola en arquitecturas de tres o más servicios.'
+      ),
+      mermaid(
+        `flowchart LR
+  subgraph CANVAS["Canvas (React Flow)"]
+    ENT["Entities + relations"]
+    SVC["Services"]
+    GW["Gateway routes"]
+    EV["Event / message flows"]
+  end
+  CANVAS --> MODEL["Studio model (Zod-validated)"]
+  MODEL --> EXPORT["Multi-format export"]
+  EXPORT --> ZIP["Spring Boot ZIP"]
+  EXPORT --> JSON["JSON model"]
+  EXPORT --> DDL["SQL DDL"]
+  EXPORT --> IMG["PNG / SVG"]
+  ZIP -->|feeds| APIGEN["APiGen"]`,
+        'Lo que diseñás en el canvas se exporta como una arquitectura multi-servicio (no una sola app) y alimenta a APiGen. Ese es el diferenciador.'
+      ),
+      block('2. El layout como lógica, no como decoración', 'h3'),
+      block(
+        'Cuando hay relaciones entre nodos, Studio usa ELK para un layout de grafo por capas. Cuando no las hay, cae en una ubicación por grilla. El mismo enfoque aplica a los mapas servicio-a-servicio. El layout es parte de la lógica del producto — predecible, determinista, repetible entre importaciones — no una pasada cosmética al final.'
+      ),
+      block(
+        'Tradeoff: acoplamiento del layout. Cambiar el algoritmo de layout se vuelve un cambio a nivel producto, no un retoque de CSS. La contrapartida es que dos usuarios importando el mismo archivo OpenAPI ven el mismo layout, lo que hace posible la revisión y la colaboración.'
+      ),
+      block('3. Client-heavy con persistencia segura', 'h3'),
+      block(
+        'Toda la edición, validación y preview corre en el cliente — sin ida y vuelta al backend mientras modelás. Los stores de Zustand manejan las preocupaciones del editor por separado; Zod valida las importaciones y la estructura del proyecto; React Flow maneja el canvas.'
+      ),
+      block(
+        'La persistencia es la red de seguridad. Autosave a IndexedDB en cada cambio significativo. Historial de snapshots retenido por proyecto para que los usuarios puedan volver atrás. Snapshots de seguridad previos a la importación, así una importación destructiva se puede recuperar si el merge sale mal. El principio: client-heavy está bien mientras no se pueda perder trabajo.'
+      ),
+      mermaid(
+        `flowchart TD
+  subgraph CLIENT["Browser - no backend round-trip"]
+    RF["React Flow canvas"]
+    ZS["Zustand stores (per concern)"]
+    ZOD["Zod validation"]
+    ELK["ELK layout / grid fallback"]
+  end
+  CLIENT --> IDB["IndexedDB"]
+  IDB --> AS["Autosave on every change"]
+  IDB --> SNAP["Snapshot history"]
+  IDB --> PRE["Pre-import safety snapshot"]`,
+        'Todo el modelado corre en el cliente; IndexedDB es la red de seguridad (autosave + historial + snapshot pre-import). Client-heavy sin perder trabajo.'
+      ),
+      block('Qué puede hacer Studio hoy', 'h2'),
+      bullet(
+        'Modelado visual de entidades con relaciones, generación de CRUD, y mapeo de tipos a Java/Spring.'
+      ),
+      bullet(
+        'Diseñador de microservicios — varios servicios, conexiones, diseñador de rutas de gateway, diseñador de eventos/mensajes, exportación multi-servicio.'
+      ),
+      bullet(
+        'Importación de schemas SQL y contratos OpenAPI con merge consciente de conflictos y snapshots de seguridad previos a la importación.'
+      ),
+      bullet(
+        'Auto-layout con ELK (por capas cuando hay relaciones) y fallback a grilla. La misma lógica aplicada a los mapas servicio-a-servicio.'
+      ),
+      bullet(
+        'Autosave a IndexedDB, historial de snapshots retenido, flujos de recuperación de versiones.'
+      ),
+      bullet(
+        'Exportación multiformato — ZIP de un proyecto Spring Boot listo para correr, modelo en JSON, SQL DDL, y diagramas del canvas en PNG/SVG. La exportación multi-servicio empaqueta los servicios por separado o en un único archivo combinado.'
+      ),
+      bullet(
+        'Edición keyboard-first con cobertura total de atajos. Accesibilidad WCAG 2.1 AA en las superficies que no son el canvas.'
+      ),
+      bullet(
+        'Playwright Component Testing para las interacciones del canvas más tests end-to-end para los flujos completos del editor.'
+      ),
+      block('Qué reconsideraría', 'h2'),
+      block(
+        'Mantine 8 como framework de UI. Está bien construido y sacó el producto rápido, pero ata el editor a sus convenciones de diseño y sus componentes. Un enfoque más headless (Radix + un design system propio, o MUI con un theming más profundo) me habría dado más libertad para construir patrones específicos de editor — toolbars más densas, manejo del foco más controlado, contenedores de layout que encajen mejor con la edición de grafos.'
+      ),
+      block(
+        'El README tiene una justificación para Mantine; en retrospectiva el tradeoff fue real. El producto avanzó más rápido al principio y paga un pequeño impuesto ahora cada vez que el editor necesita patrones de UI que pelean con los defaults de Mantine.'
+      ),
+      block('Foto de la arquitectura', 'h2'),
+      block('Aplicación solo-navegador, sin backend propio:'),
+      bullet(
+        'React 19 + TypeScript 5.9 + Vite 7 — toolchain moderno, HMR rápido, builds optimizados.'
+      ),
+      bullet(
+        'Mantine 8 para las primitivas de UI; React Flow para el canvas; ELK para el layout de grafo por capas con fallback a grilla.'
+      ),
+      bullet(
+        'Zustand para el estado del editor, segmentado por preocupación; Zod para la validación de importaciones y el schema del proyecto.'
+      ),
+      bullet(
+        'IndexedDB para el autosave + el historial de snapshots; snapshots de seguridad previos a los merges destructivos.'
+      ),
+      bullet(
+        'Playwright (end-to-end + Component Testing) más Vitest para los tests unitarios. SonarQube integrado.'
+      ),
+      bullet('Desplegado en Vercel; imágenes Docker disponibles para despliegues self-hosted.'),
+    ],
+    bodyEn: [
       block('The Problem', 'h2'),
       block(
         'Tools like bootify.io let you design a single Spring Boot app visually — entities, relations, basic CRUD, auth. That solves one piece of the work. It does not solve modeling a microservices architecture: multiple services, the routes between them, the events that flow between them, and the export of all of that as a coherent system.'
@@ -364,7 +711,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
   EXPORT --> DDL["SQL DDL"]
   EXPORT --> IMG["PNG / SVG"]
   ZIP -->|feeds| APIGEN["APiGen"]`,
-        'Lo que diseñás en el canvas se exporta como una arquitectura multi-servicio (no una sola app) y alimenta a APiGen. Ese es el diferenciador.'
+        'What you design on the canvas is exported as a multi-service architecture (not a single app) and feeds APiGen. That is the differentiator.'
       ),
       block('2. Layout as logic, not decoration', 'h3'),
       block(
@@ -392,7 +739,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
   IDB --> AS["Autosave on every change"]
   IDB --> SNAP["Snapshot history"]
   IDB --> PRE["Pre-import safety snapshot"]`,
-        'Todo el modelado corre en el cliente; IndexedDB es la red de seguridad (autosave + historial + snapshot pre-import). Client-heavy sin perder trabajo.'
+        'All the modeling runs in the client; IndexedDB is the safety net (autosave + history + pre-import snapshot). Client-heavy without losing work.'
       ),
       block('What Studio Can Do Today', 'h2'),
       bullet(
@@ -449,6 +796,8 @@ const LOCAL_PROJECTS: SanityProject[] = [
       current: 'biogas-platform',
     },
     excerpt:
+      'Una plataforma industrial para plantas de biogás — monitoreo en tiempo real, inferencia de ML en el edge en menos de 50ms, y una arquitectura de IA de tres capas para detección de anomalías y mantenimiento predictivo.',
+    excerptEn:
       'An industrial platform for biogas plants — real-time monitoring, edge ML inference under 50ms, and a three-layer AI architecture for anomaly detection and predictive maintenance.',
     technologies: [
       'Go',
@@ -472,6 +821,228 @@ const LOCAL_PROJECTS: SanityProject[] = [
     publishedAt: '2026-04-25T09:00:00.000Z',
     displayOrder: 1,
     body: [
+      block('El problema', 'h2'),
+      block(
+        'Mi sobrino es ingeniero ambiental. Me contó cómo se gestionan las plantas de biogás en el día a día: planillas de Excel. Lecturas de sensores copiadas a mano, registros diarios que nadie analizaba después, decisiones tomadas por intuición porque el dato era inerte. Sin vista en tiempo real, sin detección de anomalías, sin mantenimiento predictivo, sin business intelligence — solo archivos que crecían cada semana y nunca se consultaban.'
+      ),
+      block(
+        'La oportunidad era obvia. Reemplazar las planillas por una plataforma de verdad que ingiera el dato de los sensores, deje a los operarios trabajar desde ahí, y convierta el registro histórico en algo sobre lo que el negocio pueda actuar.'
+      ),
+      block('Qué hace Biogas Platform', 'h2'),
+      block(
+        'Una plataforma de operaciones completa para plantas de biogás. Los sensores transmiten datos por MQTT a un backend en Go; el dato aterriza en PostgreSQL con schemas pensados para series temporales; los operarios usan un dashboard web y una app mobile para los flujos diarios; un pipeline de ML en Python entrena modelos que se despliegan a un servicio edge en Rust para inferencia sub-50ms en la planta; un asistente de IA ayuda a los operarios a consultar el sistema en lenguaje natural. El flujo original de Excel desaparece.'
+      ),
+      mermaid(
+        `flowchart LR
+  PLC["PLCs / sensors"] -->|Modbus TCP/RTU| EDGE["Rust edge gateway"]
+  EDGE -->|"HTTP batch sync (offline-first)"| BACK["Go backend (Gin)"]
+  BROKER["Mosquitto MQTT"] --> BACK
+  BACK --> DB["PostgreSQL + Redis"]
+  BACK --> APPS["Web + mobile (role-aware)"]`,
+        'Topología edge→cloud: el gateway Rust opera local (offline-first) y sincroniza con el backend cuando hay link; los sensores también entran por MQTT.'
+      ),
+      block('Las restricciones que me puse', 'h2'),
+      bullet(
+        'El edge tiene que funcionar sin internet. Las plantas pueden perder conectividad por horas; las operaciones y la detección de anomalías tienen que seguir corriendo localmente.'
+      ),
+      bullet(
+        'Los modelos son activos de producción versionados. Nada de drops de modelos ad-hoc — cada modelo se entrena, se valida, se empaqueta como ONNX, se versiona en almacenamiento compatible con S3, y se despliega por un rollout controlado.'
+      ),
+      bullet(
+        'Specs-driven desde el día uno. OpenSpec es la fuente de verdad para los contratos entre apps; ninguna API "se shippea nomás" sin una spec primero.'
+      ),
+      bullet(
+        'Consciente de roles desde el arranque. Operarios de planta, personal técnico, supervisores y dueños ven vistas distintas y tienen capacidades distintas — el modelo de roles es parte de la capa de datos, no un agregado de la UI.'
+      ),
+      block('Mi rol', 'h2'),
+      block(
+        'Desarrollador único. Arrancó el 9 de febrero de 2026. Mi sobrino, ingeniero ambiental, es el experto de dominio que valida que el producto coincida con cómo operan las plantas de verdad. Yo me hice cargo de cada decisión técnica del stack:'
+      ),
+      bullet(
+        'La estructura del monorepo — qué es una app, qué es un paquete compartido, qué es un servicio, y dónde caen los límites.'
+      ),
+      bullet(
+        'La capa de contratos — OpenSpec como fuente de verdad entre apps antes de que se escriba una línea de código.'
+      ),
+      bullet(
+        'El diseño del edge gateway en Rust — integración del protocolo Modbus, store SQLite offline-first con cola de sync, la disposición del subsistema de IA (agentes, clasificador, registro de modelos, LLM local), actualizaciones de modelos por OTA con artefactos firmados.'
+      ),
+      bullet(
+        'La arquitectura de ML de tres capas — qué corre en el edge, qué corre en la nube, qué se entrena en batch, qué infiere en tiempo real, y cómo se mueven los modelos entre ellas.'
+      ),
+      bullet(
+        'El modelo de roles — operarios, personal técnico, supervisores, dueños — como un concepto de la capa de datos, no un toggle de la UI.'
+      ),
+      bullet(
+        'El plugin de Biome propio (eslint-plugin-biogas-ssot) que hace cumplir las convenciones de fuente-única-de-verdad entre apps en tiempo de lint.'
+      ),
+      bullet(
+        'El pipeline de CI/CD en GitLab — versionado de modelos a almacenamiento compatible con S3, tests de paridad como gate de despliegue, rollouts controlados.'
+      ),
+      block('Cómo empezó Biogas Platform, y por qué creció', 'h2'),
+      block(
+        'Empezó como una conversación: mi sobrino describió la realidad del Excel, yo describí la plataforma que debería reemplazarlo. La primera versión era modesta — un backend en Go, una base Postgres, un dashboard básico. Ingerir el dato de los sensores, mostrarlo en un gráfico, reemplazar el registro diario.'
+      ),
+      block(
+        'Una vez que el loop básico funcionó, las preguntas se apilaron. Si el dato está en una base de datos de verdad, ¿por qué no detectar anomalías automáticamente? Si detectamos anomalías, ¿por qué no predecir fallos? Si predecimos fallos, ¿por qué no correr la inferencia en la planta para que funcione offline? Si la corremos en la planta, ¿cómo actualizamos los modelos de forma segura? Cada respuesta sumó una capa, y la plataforma creció hasta lo que es hoy.'
+      ),
+      block('Decisiones clave', 'h2'),
+      block('1. Edge gateway en Rust como nodo industrial autosuficiente', 'h3'),
+      block(
+        'El edge gateway es el corazón del sistema, no un wrapper delgado de inferencia. Es el componente que la planta corre localmente, y tiene que seguir funcionando cuando todo lo demás no está disponible — el enlace WAN, el backend en la nube, el registro de modelos. Por eso es la aplicación individual más grande de la plataforma: 74 archivos fuente en Rust, 18 subsistemas, versión 2.1.0, diseñado como un nodo industrial autónomo que, cuando puede, sincroniza con la nube.'
+      ),
+      block('Lo que el gateway hace realmente en la planta:'),
+      bullet(
+        'Habla con los PLCs por Modbus TCP/RTU — el protocolo industrial que los sensores y controladores realmente hablan. Registros holding, input, coils y discrete-input, con escala, offset y tipos de dato configurables (u16/i16/f32).'
+      ),
+      bullet(
+        'Persiste cada lectura en un store SQLite local con una cola de sync, así una caída del enlace de salida solo demora la sincronización — nunca pierde dato. El sync es HTTP por lotes con reintento exponencial, circuit breaker y tamaños de lote configurables.'
+      ),
+      bullet(
+        'Corre inferencia de ML localmente vía onnxruntime 2.0 (el crate ort) — detección de anomalías en cada lectura sin una ida y vuelta a la nube.'
+      ),
+      bullet(
+        'Aloja un subsistema de IA local con modelos de lenguaje on-device (llama_cpp), clasificador, correlador, y un registro de modelos con selección consciente del hardware — elige el tamaño de modelo correcto para el gateway en el que está corriendo.'
+      ),
+      bullet(
+        'Tiene un framework de agentes de IA: agente de ayuda, agente de consultas SQLite, agente de estado — agentes chicos y especializados con los que un operario puede hablar desde el dashboard de la planta sin ninguna conexión a la nube.'
+      ),
+      bullet(
+        'Soporta actualizaciones OTA (over-the-air) con artefactos de modelo firmados con ed25519 — los modelos se descargan, se verifica su firma, y se despliegan sin reiniciar el gateway.'
+      ),
+      bullet(
+        'Expone métricas Prometheus en :9090/metrics y health checks en :8888/health para el monitoreo; trae su propia PWA de dashboard embebida para que un operario pueda inspeccionar el estado sin una herramienta externa.'
+      ),
+      block(
+        'Por qué Rust: un proceso que corre desatendido en el hardware de la planta durante semanas seguidas, haciendo IO en tiempo real con protocolos industriales e inferencia de ML, no puede permitirse memory leaks, pausas de GC, ni panics no manejados que tumben el gateway. Rust da rendimiento predecible, sin GC, y garantías en tiempo de compilación que encajan con el perfil operativo. El runtime async de Tokio hace realista coordinar el polling de Modbus, las escrituras a SQLite, el sync HTTP, y el subsistema de IA en un solo proceso.'
+      ),
+      block(
+        'Por qué ONNX como formato de intercambio de modelos: el pipeline de entrenamiento en Python (scikit-learn para los modelos de anomalías, el stack de transformers para NLP) exporta a ONNX, y el runtime en Rust consume exactamente el mismo archivo. Los tests de paridad verifican que las salidas de Rust coincidan bit a bit con las de Python antes de que un modelo se promueva siquiera.'
+      ),
+      block(
+        'Tradeoff: alcance y peso de mantenimiento. El edge gateway es prácticamente su propio producto dentro de la plataforma — trae su propia versión (2.1.0), su propio modelo de configuración (edge.toml), su propio dashboard, su propio tooling de CLI para la puesta en marcha (validar config, hacer un dry-run de una lectura de registro, convertir un CSV de tags en un borrador de edge.toml). Esa amplitud es la respuesta correcta para un nodo industrial, pero es una cantidad de código nada trivial para mantener sana junto con el resto de la plataforma.'
+      ),
+      mermaid(
+        `flowchart LR
+  TRAIN["Python training (scikit-learn)"] --> EXP["Export to ONNX"]
+  EXP --> PARITY{"Parity: Rust == Python?"}
+  PARITY -->|pass| S3["Versioned in S3 storage"]
+  PARITY -->|fail| TRAIN
+  S3 --> OTA["OTA deploy (ed25519-signed)"]
+  OTA --> RT["Rust edge runtime"]`,
+        'Ciclo de vida del modelo: entrenado en Python, exportado a ONNX, y un test de paridad (Rust == Python, bit-identical) es el gate antes de versionar y desplegar por OTA firmado.'
+      ),
+      block('2. Arquitectura de IA de tres capas', 'h3'),
+      block(
+        'En lugar de tratar el ML como una feature pegada a una pantalla, la plataforma tiene tres capas de IA explícitas, cada una con su propio propósito, presupuesto de latencia y ciclo de vida:'
+      ),
+      bullet(
+        'Capa de inferencia en el edge — Isolation Forest + Autoencoder corriendo localmente sobre ONNX, puntuando anomalías en cada lectura de sensor en menos de 50ms.'
+      ),
+      bullet(
+        'Capa de detección de anomalías — 32 features de ingeniería (temporales, de cambio, z-score, co-variación, calidad de dato, dominio-biogás) alimentadas a una votación por ensemble con umbrales dinámicos por sensor. Las atribuciones SHAP explican por qué se marcó una lectura.'
+      ),
+      bullet(
+        'Capa de IA predictiva — LSTM + Prophet para el forecasting de biogás/energía, Random Forest + XGBoost para la predicción de fallos de equipo con 4-24 horas de anticipación, más recomendaciones de optimización de parámetros de operación. Aprendizaje continuo con reentrenamiento automatizado; la detección de drift basada en PSI monitorea la degradación de los modelos en producción.'
+      ),
+      block(
+        'Cada capa es independiente: el edge sigue funcionando si la nube está caída; la detección de anomalías funciona sin la capa predictiva; la capa predictiva se puede reentrenar sin tocar el runtime del edge. La separación es lo que hace el sistema operable, no solo impresionante.'
+      ),
+      block(
+        'Tradeoff: peso del ciclo de vida de los modelos. Tres capas significa tres pipelines de entrenamiento, tres registros de modelos, tres caminos de despliegue, tres conjuntos de monitoreo de drift. Es mucha infraestructura para que un solo dev la mantenga — solo vale la pena porque cada capa se paga sola en lo operativo.'
+      ),
+      mermaid(
+        `flowchart TD
+  R["Every sensor reading"] --> L1["Edge inference: Isolation Forest + Autoencoder (ONNX, <50ms)"]
+  L1 --> L2["Anomaly detection: 32 features, ensemble voting, SHAP"]
+  L2 --> L3["Predictive: LSTM + Prophet forecast, RF + XGBoost failure 4-24h"]
+  L3 --> DRIFT["Continuous learning + PSI drift monitoring"]
+  DRIFT -. retrain .-> L3`,
+        'Tres capas de IA independientes: el edge sigue detectando anomalías aunque el cloud esté caído; la capa predictiva se reentrena sin tocar el runtime del edge.'
+      ),
+      block('3. Desarrollo spec-driven con OpenSpec desde el día uno', 'h3'),
+      block(
+        'El primer commit fue literalmente "init: project structure with openspec specs and tooling". Cada contrato entre apps — backend a frontend, edge a backend, servicio de ML a backend — tiene una spec antes de que se escriba una línea de código. OpenSpec es la fuente de verdad; la implementación tiene que coincidir con ella.'
+      ),
+      block(
+        'Tradeoff: overhead de proceso al principio. Cada endpoint nuevo tarda más porque la spec va primero. El pago es que cuando un contrato cambia, todos los consumidores ven el diff explícito, y los asistentes de IA que generan el código cliente pueden usar la spec en vez de adivinar a partir de la implementación.'
+      ),
+      block('Qué puede hacer Biogas Platform hoy', 'h2'),
+      bullet(
+        '5 aplicaciones en un monorepo — backend en Go, edge gateway en Rust, servicio de ML en Python, frontend web en React/Vite, app mobile.'
+      ),
+      bullet(
+        'Ingesta en tiempo real por MQTT (broker Mosquitto), persistencia en PostgreSQL con Redis para el dato caliente, schemas conscientes de series temporales.'
+      ),
+      bullet(
+        'Edge gateway autónomo en Rust (v2.1.0) — Modbus TCP/RTU a los PLCs, SQLite offline-first con cola de sync, inferencia de anomalías sub-50ms sobre ONNX, LLM on-device con agentes de IA, actualizaciones de modelos por OTA con verificación de firma ed25519, PWA de dashboard embebida.'
+      ),
+      bullet(
+        'IA de tres capas: detección de anomalías en el edge (Isolation Forest + Autoencoder), análisis de anomalías en la nube con explicabilidad SHAP, capa predictiva con forecasts LSTM + Prophet y predicciones de fallo Random Forest + XGBoost con 4-24h de anticipación.'
+      ),
+      bullet(
+        'Mantenimiento predictivo basado en la condición real de cada equipo reemplaza el mantenimiento reactivo o por calendario, reduciendo las paradas no planificadas.'
+      ),
+      bullet(
+        'UI consciente de roles para operarios, personal técnico, supervisores y dueños — vistas y permisos distintos, no toggles sobre un único dashboard.'
+      ),
+      bullet(
+        'Contratos OpenSpec para cada API entre apps; el plugin de Biome propio (eslint-plugin-biogas-ssot) hace cumplir las convenciones de fuente-única-de-verdad en tiempo de lint.'
+      ),
+      bullet(
+        'CI/CD en GitLab con almacenamiento de modelos versionado en object storage compatible con S3, rollouts de modelos controlados, y monitoreo de drift que alimenta las decisiones de reentrenamiento.'
+      ),
+      block('Qué reconsideraría', 'h2'),
+      block(
+        'Esperé demasiado para shippear algo. El instinto fue entregar un producto maduro — las tres capas de IA, la app mobile, el modelo de roles, la inferencia en el edge, todo bien hecho antes de mostrarlo. No es así como debería haber ido.'
+      ),
+      block(
+        'Una entrega más chica y más temprana habría sido la decisión correcta. Un backend que ingiere el dato de los sensores y un dashboard que lo muestra, shippeados en la semana tres, le habrían dado a mi sobrino algo real para usar de inmediato. El feedback de la operación real de una planta habría moldeado las prioridades de lo que viene después. En cambio construí hacia afuera — sumando capas, apps y capacidades — antes de que nada de eso corriera contra el uso diario real.'
+      ),
+      block(
+        'El costo es invisible desde afuera: la plataforma parece completa y la arquitectura es limpia. El costo está en lo que nunca aprendí porque nada estuvo frente a usuarios lo suficientemente temprano. El próximo producto que construya, voy a shippear la cosa más chica que resuelva el problema original en el primer mes, y ganarme el derecho a sumar capas desde ahí.'
+      ),
+      block('Foto de la arquitectura', 'h2'),
+      block('Monorepo con cinco aplicaciones y paquetes de soporte:'),
+      mermaid(
+        `flowchart TD
+  SPEC["OpenSpec contracts (single source of truth)"]
+  subgraph MONO["Monorepo"]
+    BACK["apps/backend - Go + Gin"]
+    EDGE["apps/edge - Rust gateway"]
+    ML["apps/ml - Python service"]
+    WEB["apps/web - React + Vite"]
+    MOBILE["apps/mobile"]
+  end
+  SPEC -. governs .-> MONO`,
+        '5 apps en un monorepo, con OpenSpec como contrato único entre ellas (validado en lint con un plugin Biome propio).'
+      ),
+      bullet(
+        'apps/backend — Go + GORM + Gin, API REST, suscriptor MQTT, OpenSpec como fuente de verdad.'
+      ),
+      bullet(
+        'apps/edge-gateway — Rust (runtime async Tokio), cliente Modbus TCP/RTU a los PLCs, store local SQLite con cola de sync, inferencia con onnxruntime 2.0, LLM local vía llama_cpp, framework de agentes de IA, actualizaciones de modelos por OTA con firma ed25519, PWA de dashboard embebida, métricas Prometheus, endpoints de health.'
+      ),
+      bullet(
+        'apps/ml-service — Python + scikit-learn, pipelines de entrenamiento, explicabilidad SHAP, exportación a ONNX con tests de paridad.'
+      ),
+      bullet(
+        'apps/frontend-vite — React 19 + Vite + Mantine + Recharts, dashboards de operario y de analista.'
+      ),
+      bullet(
+        'apps/mobile — app complementaria en Ionic + Capacitor + Vite para los flujos de campo del operario.'
+      ),
+      bullet(
+        'packages/eslint-plugin-biogas-ssot — reglas de lint propias que hacen cumplir la fuente-única-de-verdad entre apps.'
+      ),
+      bullet(
+        'services/ai-assistant — interfaz de consulta en lenguaje natural sobre el dato operativo.'
+      ),
+      block(
+        'La persistencia es PostgreSQL para el estado canónico, Redis para el dato caliente y el caché, object storage compatible con S3 para los artefactos de modelo y los blobs grandes. La mensajería es Mosquitto MQTT. El despliegue es CI/CD en GitLab con imágenes Docker por app y ruteo en el edge basado en Caddyfile.'
+      ),
+    ],
+    bodyEn: [
       block('The Problem', 'h2'),
       block(
         'My nephew is an environmental engineer. He told me how biogas plants are managed day-to-day: Excel spreadsheets. Sensor readings copied by hand, daily logs that nobody analyzed afterwards, decisions made on intuition because the data was inert. No real-time view, no anomaly detection, no predictive maintenance, no business intelligence — just files that grew bigger every week and were never queried.'
@@ -490,7 +1061,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
   BROKER["Mosquitto MQTT"] --> BACK
   BACK --> DB["PostgreSQL + Redis"]
   BACK --> APPS["Web + mobile (role-aware)"]`,
-        'Topología edge→cloud: el gateway Rust opera local (offline-first) y sincroniza con el backend cuando hay link; los sensores también entran por MQTT.'
+        "Edge→cloud topology: the Rust gateway operates locally (offline-first) and syncs with the backend when there's a link; sensors also come in over MQTT."
       ),
       block('Constraints I Set', 'h2'),
       bullet(
@@ -581,7 +1152,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
   PARITY -->|fail| TRAIN
   S3 --> OTA["OTA deploy (ed25519-signed)"]
   OTA --> RT["Rust edge runtime"]`,
-        'Ciclo de vida del modelo: entrenado en Python, exportado a ONNX, y un test de paridad (Rust == Python, bit-identical) es el gate antes de versionar y desplegar por OTA firmado.'
+        'Model lifecycle: trained in Python, exported to ONNX, and a parity test (Rust == Python, bit-identical) is the gate before versioning and deploying over signed OTA.'
       ),
       block('2. Three-layer AI architecture', 'h3'),
       block(
@@ -609,7 +1180,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
   L2 --> L3["Predictive: LSTM + Prophet forecast, RF + XGBoost failure 4-24h"]
   L3 --> DRIFT["Continuous learning + PSI drift monitoring"]
   DRIFT -. retrain .-> L3`,
-        'Tres capas de IA independientes: el edge sigue detectando anomalías aunque el cloud esté caído; la capa predictiva se reentrena sin tocar el runtime del edge.'
+        'Three independent AI layers: the edge keeps detecting anomalies even if the cloud is down; the predictive layer retrains without touching the edge runtime.'
       ),
       block('3. Spec-driven development with OpenSpec from day one', 'h3'),
       block(
@@ -666,7 +1237,7 @@ const LOCAL_PROJECTS: SanityProject[] = [
     MOBILE["apps/mobile"]
   end
   SPEC -. governs .-> MONO`,
-        '5 apps en un monorepo, con OpenSpec como contrato único entre ellas (validado en lint con un plugin Biome propio).'
+        '5 apps in one monorepo, with OpenSpec as the single contract between them (enforced at lint time by a custom Biome plugin).'
       ),
       bullet(
         'apps/backend — Go + GORM + Gin, REST API, MQTT subscriber, OpenSpec source of truth.'
@@ -728,6 +1299,8 @@ export function mergeLocalAndSanityProjects(remoteProjects: SanityProject[]): Sa
       projectMap.set(remote.slug.current, {
         ...remote,
         body: local.body && local.body.length > 0 ? local.body : remote.body,
+        bodyEn: local.bodyEn && local.bodyEn.length > 0 ? local.bodyEn : remote.bodyEn,
+        excerptEn: local.excerptEn ?? remote.excerptEn,
         displayOrder: remote.displayOrder ?? local.displayOrder,
       });
     } else {

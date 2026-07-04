@@ -35,7 +35,7 @@ export default async function Image({ params }: Props) {
       tags: ['project'],
     });
     const project = mergeLocalAndSanityProjects(sanityProjects)
-      .map(convertSanityProject)
+      .map((p) => convertSanityProject(p))
       .find((p) => p.id === id);
     if (project) {
       title = project.title;

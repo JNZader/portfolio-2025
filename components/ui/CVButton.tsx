@@ -1,11 +1,11 @@
 import { Download, Eye } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 
 interface CVButtonProps {
   className?: string;
-  /** Href del PDF descargable (acción primaria). */
+  /** Href del PDF descargable (acción primaria). Si no se pasa, se resuelve por locale. */
   pdfHref?: string;
   /** Href de la versión HTML indexable. */
   viewHref?: string;
@@ -26,12 +26,10 @@ const HALF_BASE =
  * <a href="/cv"> crawleable en el DOM. Full-width en mobile, content-width en
  * desktop, para alinear con los demás CTA del hero.
  */
-export async function CVButton({
-  className,
-  pdfHref = '/api/resume',
-  viewHref = '/cv',
-}: Readonly<CVButtonProps>) {
+export async function CVButton({ className, pdfHref, viewHref = '/cv' }: Readonly<CVButtonProps>) {
   const t = await getTranslations('Common');
+  const locale = await getLocale();
+  const resolvedPdfHref = pdfHref ?? (locale === 'en' ? '/api/resume?locale=en' : '/api/resume');
   return (
     <div
       className={cn(
@@ -41,7 +39,7 @@ export async function CVButton({
     >
       {/* Descargar CV — acción primaria, filled. */}
       <a
-        href={pdfHref}
+        href={resolvedPdfHref}
         download
         className={cn(
           HALF_BASE,
