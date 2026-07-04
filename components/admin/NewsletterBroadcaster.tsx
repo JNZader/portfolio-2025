@@ -13,6 +13,7 @@ export function NewsletterBroadcaster() {
   const [content, setContent] = useState('');
   const [isPreview, setIsPreview] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [confirming, setConfirming] = useState(false);
 
   const handleSendTest = async () => {
     if (!subject || !content) {
@@ -35,16 +36,18 @@ export function NewsletterBroadcaster() {
     }
   };
 
-  const handleBroadcast = async () => {
-    if (!confirm('¿Seguro que quieres enviar esto A TODOS los suscriptores?')) {
-      return;
-    }
-
+  // Two-step confirm (replaces window.confirm): the button asks first, an
+  // inline panel confirms — no browser dialog, and testable.
+  const requestBroadcast = () => {
     if (!subject || !content) {
       toast.error('Completa asunto y contenido');
       return;
     }
+    setConfirming(true);
+  };
 
+  const doBroadcast = async () => {
+    setConfirming(false);
     setIsLoading(true);
     const formData = new FormData();
     formData.append('subject', subject);
@@ -117,6 +120,31 @@ Hola a todos,
             />
           )}
 
+          {confirming && (
+            <div
+              role="alertdialog"
+              aria-label="Confirmar envío del broadcast"
+              className="rounded-md border border-red-300 dark:border-red-900 bg-red-50 dark:bg-red-950/30 p-4"
+            >
+              <p className="font-medium text-red-800 dark:text-red-300 mb-3">
+                ⚠️ ¿Enviar esto a <strong>TODOS</strong> los suscriptores? Esta acción no se puede
+                deshacer.
+              </p>
+              <div className="flex gap-2 justify-end">
+                <Button variant="outline" size="sm" onClick={() => setConfirming(false)}>
+                  Cancelar
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={doBroadcast}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
+                  Sí, enviar a todos
+                </Button>
+              </div>
+            </div>
+          )}
+
           <div className="pt-4 flex gap-4 border-t mt-6">
             <Button
               variant="outline"
@@ -130,8 +158,8 @@ Hola a todos,
 
             <Button
               variant="default"
-              onClick={handleBroadcast}
-              disabled={isLoading}
+              onClick={requestBroadcast}
+              disabled={isLoading || confirming}
               className="flex-[2] bg-red-600 hover:bg-red-700 text-white"
             >
               {isLoading ? (
