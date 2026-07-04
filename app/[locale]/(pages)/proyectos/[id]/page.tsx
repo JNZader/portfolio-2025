@@ -22,6 +22,7 @@ import { getCachedFeaturedProjects } from '@/lib/github/queries';
 import type { Project } from '@/lib/github/types';
 import { logger } from '@/lib/monitoring/logger';
 import { localeAlternates } from '@/lib/seo/alternates';
+import { ogLocaleFields } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema } from '@/lib/seo/schema';
 import { convertSanityProject } from '@/lib/utils/project';
 import { getTechIcon } from '@/lib/utils/tech-icons';
@@ -139,6 +140,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
       description: project.description,
       url: `/proyectos/${id}`,
       type: 'article',
+      ...ogLocaleFields(locale),
       images: project.image
         ? [
             {
@@ -157,6 +159,7 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
   const { locale, id } = await params;
   setRequestLocale(locale);
   const t = await getTranslations('ProjectDetail');
+  const tMarkdown = await getTranslations('MarkdownContent');
   const projects = await getAllProjects(locale);
   const project = projects.find((p) => p.id === id);
 
@@ -217,11 +220,14 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
         image: project.image,
       };
 
-  const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: t('breadcrumbHome'), url: '/' },
-    { name: t('breadcrumbProjects'), url: '/proyectos' },
-    { name: project.title, url: `/proyectos/${project.id}` },
-  ]);
+  const breadcrumbSchema = generateBreadcrumbSchema(
+    [
+      { name: t('breadcrumbHome'), url: '/' },
+      { name: t('breadcrumbProjects'), url: '/proyectos' },
+      { name: project.title, url: `/proyectos/${project.id}` },
+    ],
+    locale
+  );
 
   return (
     <>
@@ -331,7 +337,11 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
                 {body && body.length > 0 ? (
                   <PortableTextRenderer value={body} />
                 ) : readme ? (
-                  <MarkdownContent content={readme} repoInfo={repoInfo} />
+                  <MarkdownContent
+                    content={readme}
+                    repoInfo={repoInfo}
+                    labels={{ list: tMarkdown('list'), table: tMarkdown('table') }}
+                  />
                 ) : (
                   <div className="prose prose-gray dark:prose-invert max-w-none">
                     <p className="text-muted-foreground leading-relaxed">{project.description}</p>

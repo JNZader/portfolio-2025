@@ -1,6 +1,7 @@
 'use client';
 
 import { X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
 import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
@@ -12,6 +13,7 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ open, onClose, navigation }: Readonly<MobileMenuProps>) {
+  const t = useTranslations('MobileMenu');
   const pathname = usePathname();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -52,7 +54,7 @@ export default function MobileMenu({ open, onClose, navigation }: Readonly<Mobil
         type="button"
         className="absolute inset-0 w-full h-full cursor-default bg-transparent"
         onClick={onClose}
-        aria-label="Cerrar menú"
+        aria-label={t('closeAria')}
         tabIndex={-1}
       />
       {/* Panel */}
@@ -61,29 +63,24 @@ export default function MobileMenu({ open, onClose, navigation }: Readonly<Mobil
         className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-background px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-border"
       >
         <div className="flex items-center justify-between">
-          <Link
-            href="/"
-            className="-m-1.5 p-1.5"
-            onClick={onClose}
-            aria-label="Ir a página de inicio"
-          >
+          <Link href="/" className="-m-1.5 p-1.5" onClick={onClose} aria-label={t('homeAria')}>
             <span className="text-xl font-bold text-primary" aria-hidden="true">
               JZ
             </span>
           </Link>
           <h2 id="mobile-menu-title" className="sr-only">
-            Menú de navegación
+            {t('title')}
           </h2>
           <button
             type="button"
             className="-m-2.5 rounded-md p-2.5 text-foreground"
             onClick={onClose}
-            aria-label="Cerrar menú"
+            aria-label={t('closeAria')}
           >
             <X className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-        <nav id="mobile-menu-nav" className="mt-6 flow-root" aria-label="Navegación móvil">
+        <nav id="mobile-menu-nav" className="mt-6 flow-root" aria-label={t('navAria')}>
           <div className="-my-6 divide-y divide-border">
             <div className="space-y-2 py-6">
               {navigation.map((item) => {

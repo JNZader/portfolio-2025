@@ -6,6 +6,18 @@ const SITE_DESCRIPTION =
   'Backend Developer: sistemas end-to-end en Java, Go y Rust, plataformas industriales con ML en el edge y herramientas de desarrollo con IA. 20+ años en tecnología.';
 
 /**
+ * OG locale fields (`og:locale` / `og:locale:alternate`) for a given app
+ * locale. When a route sets its own `openGraph` object inside
+ * `generateMetadata`, it REPLACES the parent layout's `openGraph` — losing
+ * `og:locale` — so any route with a per-page `openGraph` must spread this in.
+ */
+export function ogLocaleFields(locale: string): { locale: string; alternateLocale: string } {
+  return locale === 'en'
+    ? { locale: 'en_US', alternateLocale: 'es_AR' }
+    : { locale: 'es_AR', alternateLocale: 'en_US' };
+}
+
+/**
  * Generate metadata for a page
  */
 export function generateMetadata({

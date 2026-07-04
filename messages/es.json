@@ -12,6 +12,12 @@
     "contactCta": "Contacto",
     "openMenu": "Abrir menú de navegación"
   },
+  "MobileMenu": {
+    "closeAria": "Cerrar menú",
+    "homeAria": "Ir a página de inicio",
+    "navAria": "Navegación móvil",
+    "title": "Menú de navegación"
+  },
   "Footer": {
     "brand": "Backend Developer especializado en sistemas end-to-end con Java, Go y Rust — soluciones robustas, escalables y mantenibles.",
     "githubAria": "Visitar perfil de GitHub",
@@ -68,6 +74,10 @@
     "certsDetail": "4+ certificaciones técnicas",
     "apigenCaption": "<b>apigen</b> — una herramienta que construí: de un schema SQL a una API Spring Boot completa y corriendo."
   },
+  "HeroTerminal": {
+    "tooltipBold": "Ejemplo real generado con apigen.",
+    "tooltipRest": "De un schema SQL a una API Spring Boot completa y corriendo — cada línea (archivos, arranque y respuestas) fue capturada de la app en vivo, no es una maqueta."
+  },
   "Common": {
     "cvDownload": "Descargar CV",
     "cvView": "Ver",
@@ -76,7 +86,18 @@
     "exploreAria": "Explorar contenido",
     "aGithub": "Visitar perfil de GitHub",
     "aLinkedin": "Visitar perfil de LinkedIn",
-    "aEmail": "Enviar correo electrónico"
+    "aEmail": "Enviar correo electrónico",
+    "backToTopAria": "Volver arriba"
+  },
+  "Icons": {
+    "loading": "Cargando",
+    "send": "Enviar",
+    "completed": "Completado",
+    "copy": "Copiar"
+  },
+  "MarkdownContent": {
+    "list": "Lista",
+    "table": "Tabla"
   },
   "Cv": {
     "metaTitle": "CV",
@@ -263,12 +284,14 @@
     "count": "{filtered} de {total} proyectos",
     "filteredSuffix": " (filtrados)",
     "emptyTitle": "No se encontraron proyectos",
+    "emptyHint": "Intenta ajustar tus filtros o búsqueda",
     "clearAll": "Limpiar todos los filtros",
     "badgeFeatured": "Destacado",
     "badgeCurated": "Curado",
     "viewDetails": "Ver detalles",
     "noImage": "Sin imagen",
-    "viewRepoAria": "Ver repositorio de {title} en GitHub"
+    "viewRepoAria": "Ver repositorio de {title} en GitHub",
+    "searchBadge": "Búsqueda: “{query}”"
   },
   "ProjectDetail": {
     "backToProjects": "Volver a proyectos",

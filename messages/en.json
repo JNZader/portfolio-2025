@@ -12,6 +12,12 @@
     "contactCta": "Contact",
     "openMenu": "Open navigation menu"
   },
+  "MobileMenu": {
+    "closeAria": "Close menu",
+    "homeAria": "Go to homepage",
+    "navAria": "Mobile navigation",
+    "title": "Navigation menu"
+  },
   "Footer": {
     "brand": "Backend Developer specialized in end-to-end systems with Java, Go and Rust — robust, scalable and maintainable solutions.",
     "githubAria": "Visit GitHub profile",
@@ -68,6 +74,10 @@
     "certsDetail": "4+ technical certifications",
     "apigenCaption": "<b>apigen</b> — a tool I built that turns a SQL schema into a complete, running Spring Boot API."
   },
+  "HeroTerminal": {
+    "tooltipBold": "Real example generated with apigen.",
+    "tooltipRest": "From a SQL schema to a complete, running Spring Boot API — every line (files, boot-up, and responses) was captured from the live app, not mocked up."
+  },
   "Common": {
     "cvDownload": "Download CV",
     "cvView": "View",
@@ -76,7 +86,18 @@
     "exploreAria": "Explore content",
     "aGithub": "Visit GitHub profile",
     "aLinkedin": "Visit LinkedIn profile",
-    "aEmail": "Send email"
+    "aEmail": "Send email",
+    "backToTopAria": "Back to top"
+  },
+  "Icons": {
+    "loading": "Loading",
+    "send": "Send",
+    "completed": "Completed",
+    "copy": "Copy"
+  },
+  "MarkdownContent": {
+    "list": "List",
+    "table": "Table"
   },
   "Cv": {
     "metaTitle": "CV",
@@ -263,12 +284,14 @@
     "count": "{filtered} of {total} projects",
     "filteredSuffix": " (filtered)",
     "emptyTitle": "No projects found",
+    "emptyHint": "Try adjusting your filters or search",
     "clearAll": "Clear all filters",
     "badgeFeatured": "Featured",
     "badgeCurated": "Curated",
     "viewDetails": "View details",
     "noImage": "No image",
-    "viewRepoAria": "View {title} repository on GitHub"
+    "viewRepoAria": "View {title} repository on GitHub",
+    "searchBadge": "Search: “{query}”"
   },
   "ProjectDetail": {
     "backToProjects": "Back to projects",

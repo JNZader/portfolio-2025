@@ -18,16 +18,26 @@ export const size = {
 export const contentType = 'image/png';
 
 interface Props {
-  params: Promise<{ id: string }>;
+  params: Promise<{ locale: string; id: string }>;
 }
 
+// This is an ImageResponse generator, not a normal React tree — next-intl's
+// provider doesn't wrap it, so useTranslations isn't available here. A tiny
+// inline es/en lookup keyed off the `locale` route param is the appropriate
+// substitute for the couple of fallback strings this file needs.
+const LABELS = {
+  es: { projectLabel: 'Proyecto', fallbackTitle: 'Proyecto' },
+  en: { projectLabel: 'Project', fallbackTitle: 'Project' },
+} as const;
+
 export default async function Image({ params }: Props) {
-  const { id } = await params;
+  const { locale, id } = await params;
+  const labels = locale === 'en' ? LABELS.en : LABELS.es;
 
   // Resolve the project title + stack from the curated/Sanity set.
   // GitHub-only projects fall back to a generic title — they're rarely the
   // ones shared on social, and fetching GitHub at image-gen time is wasteful.
-  let title = 'Proyecto';
+  let title: string = labels.fallbackTitle;
   let tech: string[] = [];
   try {
     const sanityProjects = await sanityFetch<SanityProject[]>({
@@ -74,7 +84,7 @@ export default async function Image({ params }: Props) {
           fontWeight: 600,
         }}
       >
-        Proyecto
+        {labels.projectLabel}
       </div>
 
       {/* Title */}
