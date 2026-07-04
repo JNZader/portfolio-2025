@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.17.3](https://github.com/JNZader/portfolio-2025/compare/v2.17.2...v2.17.3) (2026-07-04)
+
+
+### Bug Fixes
+
+* data-export delete-on-GET class + surface resend send errors ([#184](https://github.com/JNZader/portfolio-2025/issues/184)) ([856a84b](https://github.com/JNZader/portfolio-2025/commits/856a84b92fe8913e5e4914e8ee545d40807c931f)), closes [#183](https://github.com/JNZader/portfolio-2025/issues/183)
+
 ## [2.17.2](https://github.com/JNZader/portfolio-2025/compare/v2.17.1...v2.17.2) (2026-07-04)
 
 
