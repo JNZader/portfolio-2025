@@ -233,7 +233,7 @@ export async function proxy(request: NextRequest) {
       const isAllowed = allowedOrigins.some((allowed) => {
         if (!allowed) return false;
         const allowedHost = new URL(allowed).host;
-        return originHost === allowedHost || originHost === host;
+        return originHost === allowedHost;
       });
 
       if (!isAllowed) {

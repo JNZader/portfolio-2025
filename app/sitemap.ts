@@ -15,9 +15,9 @@ const bilingualAlternates = (path: string) => ({
 });
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Static pages. Only the fully-translated marketing pages (home, sobre-mi,
-  // contacto) declare es+en hreflang; cv/proyectos/blog stay Spanish-canonical
-  // until their content is translated (see i18n phasing).
+  // Static pages. The fully-translated pages (home, sobre-mi, contacto, cv,
+  // proyectos) declare es+en hreflang. The blog stays Spanish-canonical by
+  // design (opt-in per post; see i18n phasing).
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: SITE_URL,
@@ -35,6 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${SITE_URL}/proyectos`,
       changeFrequency: 'weekly',
       priority: 0.9,
+      alternates: bilingualAlternates('/proyectos'),
     },
     {
       url: `${SITE_URL}/blog`,
@@ -51,6 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${SITE_URL}/cv`,
       changeFrequency: 'monthly',
       priority: 0.8,
+      alternates: bilingualAlternates('/cv'),
     },
   ];
 
@@ -83,12 +85,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       query: projectsQuery,
       tags: ['project'],
     });
-    projectPages = mergeLocalAndSanityProjects(projects).map((project) => ({
-      url: `${SITE_URL}/proyectos/${convertSanityProject(project).id}`,
-      lastModified: new Date(project._updatedAt ?? project.publishedAt),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    }));
+    projectPages = mergeLocalAndSanityProjects(projects).map((project) => {
+      const id = convertSanityProject(project).id;
+      return {
+        url: `${SITE_URL}/proyectos/${id}`,
+        lastModified: new Date(project._updatedAt ?? project.publishedAt),
+        changeFrequency: 'monthly',
+        priority: 0.6,
+        alternates: bilingualAlternates(`/proyectos/${id}`),
+      };
+    });
   } catch (error) {
     logger.warn('Failed to fetch projects for sitemap', {
       service: 'sitemap',
