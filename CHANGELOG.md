@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.16.7](https://github.com/JNZader/portfolio-2025/compare/v2.16.6...v2.16.7) (2026-07-04)
+
+
+### Code Refactoring
+
+* **data:** split projects god-file into case-study modules ([#175](https://github.com/JNZader/portfolio-2025/issues/175)) ([50ecca1](https://github.com/JNZader/portfolio-2025/commits/50ecca15aa0995b56e3a95c4f40ba7542b4a8ac9))
+
 ## [2.16.6](https://github.com/JNZader/portfolio-2025/compare/v2.16.5...v2.16.6) (2026-07-04)
 
 
