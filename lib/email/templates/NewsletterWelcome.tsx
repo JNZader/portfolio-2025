@@ -9,6 +9,7 @@ import {
   Section,
   Text,
 } from '@react-email/components';
+import { getSiteUrl } from '@/lib/config/site-url';
 import {
   button,
   buttonContainer,
@@ -63,7 +64,7 @@ export default function NewsletterWelcome({ unsubscribeUrl }: Readonly<Newslette
           </ul>
 
           <Section style={buttonContainer}>
-            <Button style={button} href={process.env.NEXT_PUBLIC_SITE_URL ?? '#'}>
+            <Button style={button} href={getSiteUrl()}>
               Visitar el Blog
             </Button>
           </Section>

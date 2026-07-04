@@ -2,6 +2,7 @@
 
 import { z } from 'zod';
 import { auth } from '@/lib/auth';
+import { getSiteUrl } from '@/lib/config/site-url';
 import { prisma } from '@/lib/db/prisma';
 import { emailConfig, resend } from '@/lib/email/resend';
 import NewsletterTemplate from '@/lib/email/templates/NewsletterTemplate';
@@ -71,7 +72,7 @@ export async function sendTestNewsletter(formData: FormData): Promise<BroadcastR
       react: NewsletterTemplate({
         subject,
         content,
-        unsubscribeUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/api/newsletter/unsubscribe?token=test-token`,
+        unsubscribeUrl: `${getSiteUrl()}/api/newsletter/unsubscribe?token=test-token`,
       }),
     });
 
@@ -140,7 +141,7 @@ export async function sendNewsletterBroadcast(formData: FormData): Promise<Broad
             react: NewsletterTemplate({
               subject,
               content,
-              unsubscribeUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/api/newsletter/unsubscribe?token=${sub.unsubToken}`,
+              unsubscribeUrl: `${getSiteUrl()}/api/newsletter/unsubscribe?token=${sub.unsubToken}`,
             }),
           })
         )

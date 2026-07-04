@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { getSiteUrl } from '@/lib/config/site-url';
 import { prisma } from '@/lib/db/prisma';
 import { emailConfig, resend } from '@/lib/email/resend';
 import NewsletterWelcome from '@/lib/email/templates/NewsletterWelcome';
@@ -171,7 +172,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Enviar email de bienvenida
-    const unsubscribeUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/newsletter/unsubscribe?token=${subscriber.unsubToken}`;
+    const unsubscribeUrl = `${getSiteUrl()}/api/newsletter/unsubscribe?token=${subscriber.unsubToken}`;
 
     try {
       await resend.emails.send({

@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { MESSAGES, verifyAndConsumeToken } from '@/lib/api/gdpr-utils';
+import { getSiteUrl } from '@/lib/config/site-url';
 import { resend } from '@/lib/email/resend';
 import { logger } from '@/lib/monitoring/logger';
 import { confirmRateLimiter, getClientIdentifier } from '@/lib/rate-limit/redis';
@@ -179,8 +180,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Redirect to confirmation page
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-    return NextResponse.redirect(`${siteUrl}/data-request?deleted=true`);
+    return NextResponse.redirect(`${getSiteUrl()}/data-request?deleted=true`);
   } catch (error) {
     logger.error('Data deletion confirm failed', error as Error, {
       path: '/api/data-deletion/confirm',
