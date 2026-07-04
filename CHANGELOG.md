@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.17.2](https://github.com/JNZader/portfolio-2025/compare/v2.17.1...v2.17.2) (2026-07-04)
+
+
+### Bug Fixes
+
+* gdpr delete must not run on GET, extract ProjectDetail, dedup prose ([#183](https://github.com/JNZader/portfolio-2025/issues/183)) ([a0b46e4](https://github.com/JNZader/portfolio-2025/commits/a0b46e4fe9d15134589fc012cfc19f21d2661ad7))
+
 ## [2.17.1](https://github.com/JNZader/portfolio-2025/compare/v2.17.0...v2.17.1) (2026-07-04)
 
 
