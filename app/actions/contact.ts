@@ -20,8 +20,8 @@ import { validateEmail } from '@/lib/validations/email-validator';
  * Response type para la acción
  */
 export type ContactActionResponse =
-  | { success: true; message: string }
-  | { success: false; error: string };
+  | { success: true; messageKey: string }
+  | { success: false; errorKey: string };
 
 /**
  * Server Action para enviar email de contacto
@@ -51,7 +51,7 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
       });
       return {
         success: false,
-        error: validationResult.error.issues[0].message,
+        errorKey: validationResult.error.issues[0].message,
       };
     }
 
@@ -90,9 +90,7 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
       });
       return {
         success: false,
-        error: emailValidation.suggestion
-          ? `${emailValidation.reason}`
-          : `Email inválido: ${emailValidation.reason}`,
+        errorKey: 'toastEmailInvalid',
       };
     }
 
@@ -118,7 +116,7 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
       });
       return {
         success: false,
-        error: 'Has alcanzado el límite de envíos. Por favor, intenta más tarde.',
+        errorKey: 'toastRateLimit',
       };
     }
 
@@ -157,7 +155,7 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
       });
       return {
         success: false,
-        error: 'Error al enviar el mensaje. Por favor, intenta más tarde.',
+        errorKey: 'toastSendError',
       };
     }
 
@@ -196,7 +194,7 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
 
     return {
       success: true,
-      message: '¡Mensaje enviado con éxito! ✅ Te responderé en 24-48 horas hábiles.',
+      messageKey: 'toastSuccess',
     };
   } catch (error) {
     logger.error('Unexpected error in contact form', error as Error, {
@@ -204,7 +202,7 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
     });
     return {
       success: false,
-      error: 'Error inesperado. Por favor, intenta más tarde.',
+      errorKey: 'toastUnexpected',
     };
   }
 }

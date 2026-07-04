@@ -60,7 +60,7 @@ export function NewsletterForm() {
           label={t('emailLabel')}
           type="email"
           placeholder={t('emailPlaceholder')}
-          error={errors.email?.message}
+          error={errors.email?.message ? t(errors.email.message) : undefined}
           required
           autoComplete="email"
           {...register('email')}

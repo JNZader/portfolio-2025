@@ -12,12 +12,11 @@ import { newsletterSchema } from '@/lib/validations/newsletter';
 
 // Mensaje único para todo intento de suscripción (nuevo, activo, pendiente o
 // desuscripto): evita que las respuestas revelen si un email está suscrito.
-const GENERIC_SUBSCRIBE_MESSAGE =
-  'Si tu email no estaba suscrito, te enviamos un link de confirmación. ¡Revisa tu inbox!';
+const GENERIC_SUBSCRIBE_MESSAGE_KEY = 'toastSubscribe';
 
 export type NewsletterActionResponse =
-  | { success: true; message: string }
-  | { success: false; error: string };
+  | { success: true; messageKey: string }
+  | { success: false; errorKey: string };
 
 // Type for subscriber from database query
 type SubscriberRecord = NonNullable<Awaited<ReturnType<typeof prisma.subscriber.findUnique>>>;
@@ -80,7 +79,7 @@ async function handleExistingSubscriber(
   // Already active — no-op, pero respuesta indistinguible del alta nueva
   if (existing.status === 'ACTIVE') {
     logger.info('Newsletter subscription attempt for active subscriber', { email });
-    return { success: true, message: GENERIC_SUBSCRIBE_MESSAGE };
+    return { success: true, messageKey: GENERIC_SUBSCRIBE_MESSAGE_KEY };
   }
 
   // Pending - resend confirmation
@@ -94,7 +93,7 @@ async function handleExistingSubscriber(
     });
 
     await sendConfirmationEmail(email, buildConfirmUrl(token));
-    return { success: true, message: GENERIC_SUBSCRIBE_MESSAGE };
+    return { success: true, messageKey: GENERIC_SUBSCRIBE_MESSAGE_KEY };
   }
 
   // Unsubscribed - allow re-subscription
@@ -115,7 +114,7 @@ async function handleExistingSubscriber(
     });
 
     await sendConfirmationEmail(email, buildConfirmUrl(token));
-    return { success: true, message: GENERIC_SUBSCRIBE_MESSAGE };
+    return { success: true, messageKey: GENERIC_SUBSCRIBE_MESSAGE_KEY };
   }
 
   return null; // Unknown status, continue with normal flow
@@ -134,7 +133,7 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
       logger.warn('Newsletter validation failed', {
         error: validationResult.error.issues[0].message,
       });
-      return { success: false, error: validationResult.error.issues[0].message };
+      return { success: false, errorKey: validationResult.error.issues[0].message };
     }
 
     const { email } = validationResult.data;
@@ -182,16 +181,16 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
       // 6. Send confirmation email
       const emailSent = await sendConfirmationEmail(email, buildConfirmUrl(confirmToken));
       if (emailSent) {
-        return { success: true, message: GENERIC_SUBSCRIBE_MESSAGE };
+        return { success: true, messageKey: GENERIC_SUBSCRIBE_MESSAGE_KEY };
       }
-      return { success: false, error: 'Error al enviar el email. Por favor, intenta más tarde.' };
+      return { success: false, errorKey: 'toastSendError' };
     }
     logger.warn('Newsletter rate limit exceeded', { identifier, email });
-    return { success: false, error: 'Demasiados intentos. Por favor, intenta más tarde.' };
+    return { success: false, errorKey: 'toastRateLimit' };
   } catch (error) {
     logger.error('Unexpected error in newsletter subscription', error as Error, {
       email: rawData?.email,
     });
-    return { success: false, error: 'Error inesperado. Por favor, intenta más tarde.' };
+    return { success: false, errorKey: 'toastUnexpected' };
   }
 }

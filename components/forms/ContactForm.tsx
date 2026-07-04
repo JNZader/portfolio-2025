@@ -32,6 +32,10 @@ export function ContactForm() {
   const t = useTranslations('Contact');
   const suggestionRef = useRef<HTMLDivElement>(null);
 
+  // Los mensajes de error de zod ahora son KEYS semánticas: las traducimos acá,
+  // donde el cliente conoce el locale (el schema/servidor no).
+  const fe = (k?: string) => (k ? t(k) : undefined);
+
   // Option labels come from the Contact namespace; the keys (values) stay stable.
   const reasonOptions: SelectOption[] = Object.keys(CONTACT_REASONS).map((value) => ({
     value,
@@ -79,7 +83,7 @@ export function ContactForm() {
 
       // Si hay error (desechable), rechazar
       if (!emailCheck.isValid && !emailCheck.suggestion) {
-        showError(emailCheck.reason ?? t('errorEmailInvalid'));
+        showError(t('errorEmailInvalid'));
         setIsSubmitting(false);
         return;
       }
@@ -99,13 +103,13 @@ export function ContactForm() {
         // Track contact form submission
         trackContactSubmit();
 
-        showSuccess(result.message);
+        showSuccess(t(result.messageKey));
         announce(t('announceSuccess'), 'polite');
         reset(); // Limpiar formulario
         setEmailSuggestion(null);
         setPendingData(null);
       } else {
-        showError(result.error);
+        showError(t(result.errorKey));
         announce(t('announceError'), 'assertive');
       }
     } catch (error) {
@@ -191,7 +195,7 @@ export function ContactForm() {
       <InputField
         label={t('nameLabel')}
         type="text"
-        error={errors.name?.message}
+        error={fe(errors.name?.message)}
         required
         autoComplete="name"
         {...register('name')}
@@ -201,7 +205,7 @@ export function ContactForm() {
       <InputField
         label={t('emailLabel')}
         type="email"
-        error={errors.email?.message}
+        error={fe(errors.email?.message)}
         required
         autoComplete="email"
         {...register('email')}
@@ -212,7 +216,7 @@ export function ContactForm() {
         label={t('reasonLabel')}
         placeholder={t('reasonPlaceholder')}
         options={reasonOptions}
-        error={errors.reason?.message}
+        error={fe(errors.reason?.message)}
         required
         {...register('reason')}
       />
@@ -221,7 +225,7 @@ export function ContactForm() {
       <InputField
         label={t('companyLabel')}
         type="text"
-        error={errors.company?.message}
+        error={fe(errors.company?.message)}
         autoComplete="organization"
         {...register('company')}
       />
@@ -231,7 +235,7 @@ export function ContactForm() {
         label={t('timelineLabel')}
         placeholder={t('timelinePlaceholder')}
         options={timelineOptions}
-        error={errors.timeline?.message}
+        error={fe(errors.timeline?.message)}
         {...register('timeline')}
       />
 
@@ -239,7 +243,7 @@ export function ContactForm() {
       <TextareaField
         label={t('messageLabel')}
         rows={6}
-        error={errors.message?.message}
+        error={fe(errors.message?.message)}
         required
         {...register('message')}
       />
