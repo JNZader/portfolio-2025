@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.17.7](https://github.com/JNZader/portfolio-2025/compare/v2.17.6...v2.17.7) (2026-07-04)
+
+
+### Documentation
+
+* reframe README to sell the developer (+ accuracy fixes) ([#190](https://github.com/JNZader/portfolio-2025/issues/190)) ([aa9f17f](https://github.com/JNZader/portfolio-2025/commits/aa9f17f3bc2211ce697fa4e8b13d5afe49270839))
+
 ## [2.17.6](https://github.com/JNZader/portfolio-2025/compare/v2.17.5...v2.17.6) (2026-07-04)
 
 
