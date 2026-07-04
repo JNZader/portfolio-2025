@@ -152,7 +152,7 @@ export const biogasPlatform: SanityProject = {
       'En lugar de tratar el ML como una feature pegada a una pantalla, la plataforma tiene tres capas de IA explícitas, cada una con su propio propósito, presupuesto de latencia y ciclo de vida:'
     ),
     bullet(
-      'Capa de inferencia en el edge — Isolation Forest + Autoencoder corriendo localmente sobre ONNX, diseñada para baja latencia en el edge (objetivo interno: menos de 50ms, sin benchmark publicado).'
+      'Capa de inferencia en el edge — un Z-score y un Isolation Forest exportado a ONNX corriendo localmente, diseñada para baja latencia en el edge (objetivo interno: menos de 50ms, sin benchmark publicado).'
     ),
     bullet(
       'Capa de detección de anomalías — 32 features de ingeniería (temporales, de cambio, z-score, co-variación, calidad de dato, dominio-biogás) alimentadas a una votación por ensemble con umbrales dinámicos por sensor. Las atribuciones SHAP explican por qué se marcó una lectura.'
@@ -168,7 +168,7 @@ export const biogasPlatform: SanityProject = {
     ),
     mermaid(
       `flowchart TD
-  R["Every sensor reading"] --> L1["Edge inference: Isolation Forest + Autoencoder (ONNX, low-latency target)"]
+  R["Every sensor reading"] --> L1["Edge inference: Z-score + Isolation Forest (ONNX, low-latency target)"]
   L1 --> L2["Anomaly detection: 32 features, ensemble voting, SHAP"]
   L2 --> L3["Predictive (demo): LSTM + Prophet forecast, RF + XGBoost failure 4-24h"]
   L3 --> DRIFT["Continuous learning + PSI drift monitoring"]
@@ -193,7 +193,7 @@ export const biogasPlatform: SanityProject = {
       'Edge gateway autónomo en Rust (v2.1.0) — Modbus TCP/RTU a los PLCs, SQLite offline-first con cola de sync, inferencia de anomalías de baja latencia sobre ONNX (diseñada para <50ms), LLM on-device con agentes de IA, actualizaciones de modelos por OTA con verificación de firma ed25519, PWA de dashboard embebida.'
     ),
     bullet(
-      'IA de tres capas: detección de anomalías en el edge (Isolation Forest + Autoencoder) y en la nube con explicabilidad SHAP —ambas en producción—, más una capa predictiva (forecasts LSTM + Prophet, predicciones de fallo Random Forest + XGBoost con 4-24h de anticipación) marcada como demo en el código, no productivizada.'
+      'IA de tres capas: detección de anomalías en el edge (Z-score + Isolation Forest en ONNX) y en la nube (ensemble Isolation Forest + LSTM Autoencoder) con explicabilidad SHAP —ambas en producción—, más una capa predictiva (forecasts LSTM + Prophet, predicciones de fallo Random Forest + XGBoost con 4-24h de anticipación) marcada como demo en el código, no productivizada.'
     ),
     bullet(
       'Mantenimiento predictivo por condición real de equipo es el objetivo de roadmap para reemplazar el mantenimiento reactivo o por calendario — hoy la capa predictiva que lo alimentaría está marcada como demo en el código, no productivizada.'
@@ -377,7 +377,7 @@ export const biogasPlatform: SanityProject = {
       'Instead of treating ML as a feature stuck onto a screen, the platform has three explicit AI layers, each with its own purpose, latency budget, and lifecycle:'
     ),
     bullet(
-      'Edge inference layer — Isolation Forest + Autoencoder running locally on ONNX, designed for low edge latency (internal target: under 50ms, no published benchmark).'
+      'Edge inference layer — a Z-score and an Isolation Forest exported to ONNX running locally, designed for low edge latency (internal target: under 50ms, no published benchmark).'
     ),
     bullet(
       'Anomaly detection layer — 32 engineered features (temporal, change, z-score, co-variation, data quality, biogas-domain) fed into ensemble voting with dynamic per-sensor thresholds. SHAP attributions explain why a reading was flagged.'
@@ -393,7 +393,7 @@ export const biogasPlatform: SanityProject = {
     ),
     mermaid(
       `flowchart TD
-  R["Every sensor reading"] --> L1["Edge inference: Isolation Forest + Autoencoder (ONNX, low-latency target)"]
+  R["Every sensor reading"] --> L1["Edge inference: Z-score + Isolation Forest (ONNX, low-latency target)"]
   L1 --> L2["Anomaly detection: 32 features, ensemble voting, SHAP"]
   L2 --> L3["Predictive (demo): LSTM + Prophet forecast, RF + XGBoost failure 4-24h"]
   L3 --> DRIFT["Continuous learning + PSI drift monitoring"]
@@ -418,7 +418,7 @@ export const biogasPlatform: SanityProject = {
       'Autonomous edge gateway in Rust (v2.1.0) — Modbus TCP/RTU to PLCs, offline-first SQLite with sync queue, low-latency ONNX anomaly inference (designed for under 50ms), on-device LLM with AI agents, OTA model updates with ed25519 signature verification, embedded dashboard PWA.'
     ),
     bullet(
-      'Three-layer AI: edge and cloud anomaly detection (Isolation Forest + Autoencoder, SHAP explainability) —both in production—, plus a predictive layer (LSTM + Prophet forecasts, Random Forest + XGBoost failure predictions 4-24h ahead) that is demo-labeled in the code, not yet in production.'
+      'Three-layer AI: edge anomaly detection (Z-score + Isolation Forest on ONNX) and cloud detection (Isolation Forest + LSTM Autoencoder ensemble, SHAP explainability) —both in production—, plus a predictive layer (LSTM + Prophet forecasts, Random Forest + XGBoost failure predictions 4-24h ahead) that is demo-labeled in the code, not yet in production.'
     ),
     bullet(
       'Predictive maintenance based on real equipment condition is the roadmap goal to replace reactive or calendar-based maintenance — today the predictive layer that would feed it is demo-labeled in the code, not yet in production.'
