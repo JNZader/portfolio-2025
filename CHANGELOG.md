@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.17.0](https://github.com/JNZader/portfolio-2025/compare/v2.16.12...v2.17.0) (2026-07-04)
+
+
+### Features
+
+* preserve og:locale, locale-aware schema/og-image, chrome i18n ([#181](https://github.com/JNZader/portfolio-2025/issues/181)) ([4ec2cd7](https://github.com/JNZader/portfolio-2025/commits/4ec2cd78237cfd109e9845d3223cc6173b53987d))
+
 ## [2.16.12](https://github.com/JNZader/portfolio-2025/compare/v2.16.11...v2.16.12) (2026-07-04)
 
 
