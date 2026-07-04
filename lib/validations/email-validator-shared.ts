@@ -62,6 +62,21 @@ export function calculateSimilarity(str1: string, str2: string): number {
 }
 
 /**
+ * Dominios reales conocidos que el pase difuso (Levenshtein) marcaría por error
+ * como typos de un COMMON_DOMAIN (p.ej. ymail.com / mail.com → gmail.com). Se
+ * cortocircuitan ANTES del pase difuso para no sugerir "correcciones" inválidas.
+ */
+const KNOWN_REAL_DOMAINS = new Set([
+  'ymail.com',
+  'mail.com',
+  'gmx.com',
+  'zoho.com',
+  'fastmail.com',
+  'proton.me',
+  'pm.me',
+]);
+
+/**
  * Encuentra typos comunes en dominios
  */
 export function findTypoSuggestion(domain: string): string | undefined {
@@ -70,6 +85,12 @@ export function findTypoSuggestion(domain: string): string | undefined {
   // Verificar en el mapa de typos comunes
   if (TYPO_MAP[lowerDomain]) {
     return TYPO_MAP[lowerDomain];
+  }
+
+  // Dominio real conocido → válido, sin sugerencia (evita falsos positivos del
+  // pase difuso contra COMMON_DOMAINS).
+  if (KNOWN_REAL_DOMAINS.has(lowerDomain)) {
+    return undefined;
   }
 
   // Buscar dominios similares usando distancia de Levenshtein

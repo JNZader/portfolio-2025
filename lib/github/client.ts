@@ -214,8 +214,17 @@ export function normalizeGitHubRepo(repo: GitHubRepo, readme?: string): Project 
   // Extract preview image from README if available
   let image: string | undefined;
   if (readme) {
-    image = extractFirstImageFromReadme(readme, repo.owner.login, repo.name);
+    // Thread the repo's real default branch so relative README image paths
+    // resolve on repos whose default branch isn't "main" (master, develop, …).
+    image = extractFirstImageFromReadme(
+      readme,
+      repo.owner.login,
+      repo.name,
+      repo.default_branch ?? 'main'
+    );
   }
+
+  const topics = repo.topics ?? [];
 
   return {
     id: `github-${repo.id}`,
@@ -225,7 +234,7 @@ export function normalizeGitHubRepo(repo: GitHubRepo, readme?: string): Project 
     url: repo.html_url,
     github: repo.html_url,
     demo: repo.homepage ?? undefined,
-    tech: repo.language ? [repo.language, ...repo.topics.slice(0, 4)] : repo.topics.slice(0, 5),
+    tech: repo.language ? [repo.language, ...topics.slice(0, 4)] : topics.slice(0, 5),
     stars: repo.stargazers_count,
     source: 'github',
   };

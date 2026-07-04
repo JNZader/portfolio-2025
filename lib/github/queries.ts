@@ -16,8 +16,10 @@ export async function getCachedFeaturedProjects(): Promise<Project[]> {
   const repos = await getFeaturedRepos();
 
   // Fetch READMEs in parallel for preview images
+  // Locale 'en' → use README.md directly and skip the README.es.md 404 probe;
+  // the preview-image path doesn't need a localized README.
   const readmes = await Promise.all(
-    repos.map((repo) => getRepoReadme(repo.owner.login, repo.name).catch(() => null))
+    repos.map((repo) => getRepoReadme(repo.owner.login, repo.name, 'en').catch(() => null))
   );
 
   return repos.map((repo, index) => normalizeGitHubRepo(repo, readmes[index] ?? undefined));
@@ -29,9 +31,10 @@ export async function getCachedFeaturedProjects(): Promise<Project[]> {
 export async function getCachedProjectsByTopic(topic: string): Promise<Project[]> {
   const repos = await getReposByTopic(topic);
 
-  // Fetch READMEs in parallel for preview images
+  // Fetch READMEs in parallel for preview images.
+  // Locale 'en' → use README.md directly and skip the README.es.md 404 probe.
   const readmes = await Promise.all(
-    repos.map((repo) => getRepoReadme(repo.owner.login, repo.name).catch(() => null))
+    repos.map((repo) => getRepoReadme(repo.owner.login, repo.name, 'en').catch(() => null))
   );
 
   return repos.map((repo, index) => normalizeGitHubRepo(repo, readmes[index] ?? undefined));

@@ -40,6 +40,16 @@ function formatRelativeTime(date: Date): string {
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
+  // Future date: a "hace X" (ago) label would be wrong. Show the absolute date
+  // instead — least surprising than pretending it just happened.
+  if (diffInSeconds < 0) {
+    return date.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  }
+
   // Time intervals with English keys (avoids non-ASCII linting issues)
   const intervals = {
     year: 31536000,
@@ -114,13 +124,17 @@ export function formatNumber(num: number, locale: string = 'en-US'): string {
  * // => '1.46 MB'
  */
 export function formatBytes(bytes: number, decimals: number = 2): string {
-  if (bytes === 0) return '0 Bytes';
+  // Guard non-finite (NaN/Infinity) and non-positive values: Math.log of these
+  // yields NaN/-Infinity → "NaN undefined". Anything ≤ 0 renders as '0 Bytes'.
+  if (!Number.isFinite(bytes) || bytes <= 0) return '0 Bytes';
 
   const k = 1024;
   const dm = Math.max(0, decimals);
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
 
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  // Clamp the unit index: 0 < bytes < 1 gives a negative index (sizes[-1] →
+  // undefined) and huge values overflow past the last unit — clamp to [0, last].
+  const i = Math.min(Math.max(0, Math.floor(Math.log(bytes) / Math.log(k))), sizes.length - 1);
 
   // Use template literal instead of string concatenation (linting best practice)
   return `${Number.parseFloat((bytes / k ** i).toFixed(dm))} ${sizes[i]}`;

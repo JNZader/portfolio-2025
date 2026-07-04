@@ -7,11 +7,11 @@ import { REGEX_PATTERNS } from '@/lib/constants';
 export const newsletterSchema = z.object({
   email: z
     .string()
+    .trim()
+    .toLowerCase()
     .min(1, 'errEmailRequired')
     .regex(REGEX_PATTERNS.email, 'errEmailInvalid')
-    .max(255, 'errEmailTooLong')
-    .toLowerCase()
-    .trim(),
+    .max(255, 'errEmailTooLong'),
 });
 
 export type NewsletterFormData = z.infer<typeof newsletterSchema>;

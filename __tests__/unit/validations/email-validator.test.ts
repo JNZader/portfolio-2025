@@ -34,6 +34,14 @@ describe('findTypoSuggestion', () => {
   it('does not suggest for unrelated domains', () => {
     expect(findTypoSuggestion('javierzader.com')).toBeUndefined();
   });
+
+  it('does not suggest for known-real domains close to a common provider', () => {
+    // ymail.com and mail.com are real providers within Levenshtein range of
+    // gmail.com — the allowlist must short-circuit before the fuzzy pass.
+    expect(findTypoSuggestion('ymail.com')).toBeUndefined();
+    expect(findTypoSuggestion('mail.com')).toBeUndefined();
+    expect(findTypoSuggestion('proton.me')).toBeUndefined();
+  });
 });
 
 describe('parseEmail', () => {

@@ -80,7 +80,9 @@ export async function POST(request: NextRequest) {
       `,
     });
 
-    return NextResponse.json({ success: true, message: MESSAGES.emailSent });
+    // Generic message identical to the not-found path (see verifyGdprRequest)
+    // so an attacker cannot distinguish whether the email exists.
+    return NextResponse.json({ success: true, message: MESSAGES.emailNotFound });
   } catch (error) {
     logger.error('Data deletion request failed', error as Error, {
       path: '/api/data-deletion',

@@ -67,8 +67,9 @@ const BLOCKED_USER_AGENTS = [
 function getClientIP(request: NextRequest): string {
   const forwarded = request.headers.get('x-forwarded-for');
   const realIp = request.headers.get('x-real-ip');
-  const cfConnectingIp = request.headers.get('cf-connecting-ip');
-  return cfConnectingIp ?? forwarded?.split(',')[0]?.trim() ?? realIp ?? 'unknown';
+  // Deploy is Vercel (not Cloudflare); cf-connecting-ip would be 100%
+  // attacker-controlled → rate-limit bypass. Trust only x-forwarded-for/x-real-ip.
+  return forwarded?.split(',')[0]?.trim() ?? realIp ?? 'unknown';
 }
 
 /**
