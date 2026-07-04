@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.17.6](https://github.com/JNZader/portfolio-2025/compare/v2.17.5...v2.17.6) (2026-07-04)
+
+
+### Bug Fixes
+
+* make whole project card clickable via stretched link ([#188](https://github.com/JNZader/portfolio-2025/issues/188)) ([3245afd](https://github.com/JNZader/portfolio-2025/commits/3245afd1b6e962d9457331a3d655f37ad5deccb9))
+
+
+### Documentation
+
+* rewrite the 3 case-study openings in an engineer register ([#189](https://github.com/JNZader/portfolio-2025/issues/189)) ([0f1444f](https://github.com/JNZader/portfolio-2025/commits/0f1444f6149271a4735c60a689ba3f258e2aabe7))
+
 ## [2.17.5](https://github.com/JNZader/portfolio-2025/compare/v2.17.4...v2.17.5) (2026-07-04)
 
 
