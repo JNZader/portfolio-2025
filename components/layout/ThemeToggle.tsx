@@ -1,6 +1,7 @@
 'use client';
 
 import { Moon, Sun } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,7 @@ interface ThemeToggleProps {
  * Extracted from Header for Server Component optimization
  */
 export function ThemeToggle({ compact = false }: Readonly<ThemeToggleProps>) {
+  const t = useTranslations('ThemeToggle');
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
 
@@ -39,11 +41,11 @@ export function ThemeToggle({ compact = false }: Readonly<ThemeToggleProps>) {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+      aria-label={isDark ? t('toLight') : t('toDark')}
       aria-pressed={isDark}
     >
       {isDark ? <Sun className={iconClasses} /> : <Moon className={iconClasses} />}
-      <span className="sr-only">Tema actual: {isDark ? 'oscuro' : 'claro'}</span>
+      <span className="sr-only">{t('current', { theme: t(isDark ? 'dark' : 'light') })}</span>
     </Button>
   );
 }

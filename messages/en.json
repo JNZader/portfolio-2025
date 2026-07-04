@@ -325,7 +325,8 @@
     "send": "Send email",
     "copied": "Copied!",
     "copy": "Copy address",
-    "sendAria": "Send email"
+    "sendAria": "Send email",
+    "copiedAnnouncement": "Email copied to clipboard"
   },
   "ErrorFeedback": {
     "title": "Oops! Something went wrong",
@@ -410,7 +411,11 @@
     "modalTitle": "Confirm data deletion",
     "modalDescription": "This action is IRREVERSIBLE. The following will be permanently deleted: your newsletter subscription, all your preferences and your consent history.",
     "modalConfirm": "Yes, delete my data",
-    "modalCancel": "Cancel"
+    "modalCancel": "Cancel",
+    "deleteErrorFallback": "Error deleting data",
+    "deleteSuccessFallback": "Check your email to confirm the deletion",
+    "exportErrorFallback": "Error requesting data",
+    "exportSuccessFallback": "Check your email to download your data"
   },
   "Privacy": {
     "metaTitle": "Privacy Policy",
@@ -423,9 +428,25 @@
     "refreshAria": "Refresh status"
   },
   "EasterEggs": {
-    "konamiAria": "Konami Code easter egg activated"
+    "konamiAria": "Konami Code easter egg activated",
+    "konamiTitle": "🎉 Konami Code!",
+    "konamiBody1": "You found the easter egg! You're a true 90s gamer.",
+    "konamiBody2": "This secret code has been in video games since Contra (1988).",
+    "konamiClose": "Close"
   },
   "TableOfContents": {
     "navAria": "Table of contents"
+  },
+  "ThemeToggle": {
+    "toLight": "Switch to light mode",
+    "toDark": "Switch to dark mode",
+    "current": "Current theme: {theme}",
+    "dark": "dark",
+    "light": "light"
+  },
+  "Modal": {
+    "closeOutsideAria": "Close by clicking outside",
+    "closeAria": "Close modal",
+    "closeIconTitle": "Close"
   }
 }

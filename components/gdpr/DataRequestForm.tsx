@@ -12,8 +12,8 @@ export function DataRequestForm() {
   const t = useTranslations('Gdpr');
   const { isLoading, submit } = useGdprRequest(
     '/api/data-export',
-    'Error al solicitar datos',
-    'Revisa tu email para descargar tus datos'
+    t('exportErrorFallback'),
+    t('exportSuccessFallback')
   );
 
   const {
