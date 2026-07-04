@@ -10,22 +10,6 @@ export {
   formatPercent,
   truncate,
 } from './format';
-// Type guards
-export {
-  isArray,
-  isBoolean,
-  isClient,
-  isDefined,
-  isEmail,
-  isFunction,
-  isNullish,
-  isNumber,
-  isObject,
-  isPromise,
-  isServer,
-  isString,
-  isUrl,
-} from './guards';
 // String utilities
 export {
   capitalize,
