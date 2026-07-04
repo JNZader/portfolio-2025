@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.16.9](https://github.com/JNZader/portfolio-2025/compare/v2.16.8...v2.16.9) (2026-07-04)
+
+
+### Code Refactoring
+
+* **privacy:** split inline PrivacyEs/PrivacyEn into modules ([#177](https://github.com/JNZader/portfolio-2025/issues/177)) ([16a8f72](https://github.com/JNZader/portfolio-2025/commits/16a8f72dd0c00322f310d5380ee6ce94468e3fd7))
+
 ## [2.16.8](https://github.com/JNZader/portfolio-2025/compare/v2.16.7...v2.16.8) (2026-07-04)
 
 
