@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.16.8](https://github.com/JNZader/portfolio-2025/compare/v2.16.7...v2.16.8) (2026-07-04)
+
+
+### Code Refactoring
+
+* decompose resume PDF route and hero terminal ([#176](https://github.com/JNZader/portfolio-2025/issues/176)) ([5e79b32](https://github.com/JNZader/portfolio-2025/commits/5e79b3228c5faa42001ebefd40658882b5d585a7))
+
 ## [2.16.7](https://github.com/JNZader/portfolio-2025/compare/v2.16.6...v2.16.7) (2026-07-04)
 
 
