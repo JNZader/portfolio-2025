@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.16.12](https://github.com/JNZader/portfolio-2025/compare/v2.16.11...v2.16.12) (2026-07-04)
+
+
+### Performance Improvements
+
+* absorb repeat rate-limit hits, lazy sentry replay, parallelize sanity fetches ([#180](https://github.com/JNZader/portfolio-2025/issues/180)) ([0fc4190](https://github.com/JNZader/portfolio-2025/commits/0fc4190361c44d654e9c64609eb342eab3727479))
+
 ## [2.16.11](https://github.com/JNZader/portfolio-2025/compare/v2.16.10...v2.16.11) (2026-07-04)
 
 
