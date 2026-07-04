@@ -130,7 +130,7 @@
     "metaTitle": "About",
     "metaDescription": "More about my experience, skills and the projects I build: backend, frontend, edge ML and AI tooling.",
     "heroTitle": "About me",
-    "heroSubtitle": "I build systems end to end — from data to deploy: backend, frontend and ML on the edge",
+    "heroSubtitle": "I build systems end to end — from analysis to deploy: backend, frontend and ML on the edge",
     "storyHeading": "My Story",
     "storyP1": "Hi, I'm Javier — a Software Development Technician (Universidad Gastón Dachary, 2025) working out of Córdoba, Argentina. My path into tech started 20+ years ago in IT support and hardware maintenance; later I spent several years running a farm, where a bad call costs you a season, not a rollback.",
     "storyP2": "Over the past year I've focused on building complete, end-to-end projects: backends in Java/Spring, Go and Rust; React frontends; ML pipelines with inference at the edge; and developer tooling — multi-agent AI code review, starter templates for new projects, and automated setup for fresh dev machines. Every project pushes me into a new stack.",

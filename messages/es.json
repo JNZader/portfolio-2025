@@ -130,7 +130,7 @@
     "metaTitle": "Sobre mí",
     "metaDescription": "Conoce más sobre mi experiencia, habilidades y los proyectos que construyo: backend, frontend, edge ML y herramientas de IA.",
     "heroTitle": "Sobre mí",
-    "heroSubtitle": "Construyo sistemas end-to-end — del dato al deploy: backend, frontend y ML en el edge",
+    "heroSubtitle": "Construyo sistemas end-to-end — del análisis al deploy: backend, frontend y ML en el edge",
     "storyHeading": "Mi Historia",
     "storyP1": "Hola, soy Javier. Técnico en Desarrollo de Software (Universidad Gastón Dachary, 2025), trabajando desde Córdoba. Mi camino en tecnología empezó hace más de 20 años en soporte técnico y mantenimiento de equipos; después pasé varios años como productor agropecuario — un rubro donde los errores no se arreglan con un rollback.",
     "storyP2": "En el último año me enfoqué en construir proyectos completos end-to-end: backends en Java/Spring, Go y Rust; frontends en React; pipelines de ML con inferencia en el edge; y herramientas para developers: code review con IA multi-agente, plantillas para empezar proyectos nuevos, e instalación y configuración automática de herramientas de developer en máquinas nuevas. Cada proyecto me empuja a stacks nuevos.",
