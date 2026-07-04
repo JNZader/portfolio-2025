@@ -16,8 +16,8 @@ export function DataDeletionForm() {
   const [pendingData, setPendingData] = useState<DataDeletionInput | null>(null);
   const { isLoading, submit } = useGdprRequest(
     '/api/data-deletion',
-    'Error al eliminar datos',
-    'Revisa tu email para confirmar la eliminación'
+    t('deleteErrorFallback'),
+    t('deleteSuccessFallback')
   );
 
   const {

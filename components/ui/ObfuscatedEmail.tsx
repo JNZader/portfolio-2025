@@ -122,7 +122,7 @@ export function ObfuscatedEmail({
 
       {/* Live region: anuncia el copiado a lectores de pantalla */}
       <span aria-live="polite" className="sr-only">
-        {copied ? 'Email copiado al portapapeles' : ''}
+        {copied ? t('copiedAnnouncement') : ''}
       </span>
     </span>
   );

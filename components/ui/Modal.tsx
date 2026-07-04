@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import {
   createContext,
   type ReactNode,
@@ -77,6 +78,7 @@ export function Modal({
   children,
   size = 'md',
 }: Readonly<ModalProps>) {
+  const t = useTranslations('Modal');
   const modalId = useId();
   const titleId = `modal-title-${modalId}`;
   const descriptionId = `modal-description-${modalId}`;
@@ -150,7 +152,7 @@ export function Modal({
         type="button"
         className="absolute inset-0 w-full h-full cursor-default bg-transparent"
         onClick={onClose}
-        aria-label="Cerrar al hacer clic fuera"
+        aria-label={t('closeOutsideAria')}
         tabIndex={-1}
       />
       {/* Modal content */}
@@ -173,7 +175,7 @@ export function Modal({
             'hover:bg-muted',
             'focus:outline-none focus:ring-2 focus:ring-primary'
           )}
-          aria-label="Cerrar modal"
+          aria-label={t('closeAria')}
         >
           <svg
             className="w-5 h-5"
@@ -182,7 +184,7 @@ export function Modal({
             stroke="currentColor"
             aria-hidden="true"
           >
-            <title>Cerrar</title>
+            <title>{t('closeIconTitle')}</title>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

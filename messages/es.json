@@ -325,7 +325,8 @@
     "send": "Enviar email",
     "copied": "¡Copiado!",
     "copy": "Copiar dirección",
-    "sendAria": "Enviar email"
+    "sendAria": "Enviar email",
+    "copiedAnnouncement": "Email copiado al portapapeles"
   },
   "ErrorFeedback": {
     "title": "¡Ups! Algo salió mal",
@@ -410,7 +411,11 @@
     "modalTitle": "Confirmar eliminación de datos",
     "modalDescription": "Esta acción es IRREVERSIBLE. Se eliminarán permanentemente: tu suscripción a la newsletter, todas tus preferencias e historial de consentimientos.",
     "modalConfirm": "Sí, eliminar mis datos",
-    "modalCancel": "Cancelar"
+    "modalCancel": "Cancelar",
+    "deleteErrorFallback": "Error al eliminar datos",
+    "deleteSuccessFallback": "Revisa tu email para confirmar la eliminación",
+    "exportErrorFallback": "Error al solicitar datos",
+    "exportSuccessFallback": "Revisa tu email para descargar tus datos"
   },
   "Privacy": {
     "metaTitle": "Política de Privacidad",
@@ -423,9 +428,25 @@
     "refreshAria": "Actualizar estado"
   },
   "EasterEggs": {
-    "konamiAria": "Easter egg del Código Konami activado"
+    "konamiAria": "Easter egg del Código Konami activado",
+    "konamiTitle": "🎉 ¡Konami Code!",
+    "konamiBody1": "¡Encontraste el easter egg! Eres un verdadero gamer de los 90s.",
+    "konamiBody2": "Este código secreto ha estado en videojuegos desde Contra (1988).",
+    "konamiClose": "Cerrar"
   },
   "TableOfContents": {
     "navAria": "Tabla de contenidos"
+  },
+  "ThemeToggle": {
+    "toLight": "Cambiar a modo claro",
+    "toDark": "Cambiar a modo oscuro",
+    "current": "Tema actual: {theme}",
+    "dark": "oscuro",
+    "light": "claro"
+  },
+  "Modal": {
+    "closeOutsideAria": "Cerrar al hacer clic fuera",
+    "closeAria": "Cerrar modal",
+    "closeIconTitle": "Cerrar"
   }
 }

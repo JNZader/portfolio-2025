@@ -104,19 +104,15 @@ export function EasterEggs() {
         className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
       >
         <div className="bg-card rounded-lg p-8 max-w-md text-center border shadow-xl">
-          <h2 className="text-3xl font-bold mb-4">🎉 ¡Konami Code!</h2>
-          <p className="mb-4 text-muted-foreground">
-            ¡Encontraste el easter egg! Eres un verdadero gamer de los 90s.
-          </p>
-          <p className="mb-6 text-sm text-muted-foreground">
-            Este código secreto ha estado en videojuegos desde Contra (1988).
-          </p>
+          <h2 className="text-3xl font-bold mb-4">{t('konamiTitle')}</h2>
+          <p className="mb-4 text-muted-foreground">{t('konamiBody1')}</p>
+          <p className="mb-6 text-sm text-muted-foreground">{t('konamiBody2')}</p>
           <button
             type="button"
             onClick={() => setKonamiActivated(false)}
             className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
           >
-            Cerrar
+            {t('konamiClose')}
           </button>
         </div>
       </div>
