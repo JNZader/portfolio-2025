@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.17.5](https://github.com/JNZader/portfolio-2025/compare/v2.17.4...v2.17.5) (2026-07-04)
+
+
+### Bug Fixes
+
+* silent-failure hardening — sentry catch, dead getRequestId, guarded site url ([#186](https://github.com/JNZader/portfolio-2025/issues/186)) ([4a51cc9](https://github.com/JNZader/portfolio-2025/commits/4a51cc97d95fe8715018cdb2d9b538e7d9ed4dc0))
+
 ## [2.17.4](https://github.com/JNZader/portfolio-2025/compare/v2.17.3...v2.17.4) (2026-07-04)
 
 
