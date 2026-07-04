@@ -20,7 +20,7 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
   return (
     <Card
       variant="interactive"
-      className="overflow-hidden h-full flex flex-col hover:shadow-primary/10"
+      className="relative overflow-hidden h-full flex flex-col hover:shadow-primary/10"
     >
       {/* Project Image */}
       <div className="relative h-48 overflow-hidden bg-muted">
@@ -78,7 +78,13 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
       <CardContent className="flex-1 flex flex-col p-6">
         {/* Title */}
         <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors duration-300 line-clamp-2">
-          <Link href={`/proyectos/${project.id}`} className="hover:underline underline-offset-4">
+          {/* Stretched link: the ::after overlay makes the WHOLE card navigate to
+              the detail page. Secondary controls below are raised with z-10 to stay
+              independently clickable. One link semantic, no nested interactives. */}
+          <Link
+            href={`/proyectos/${project.id}`}
+            className="hover:underline underline-offset-4 after:absolute after:inset-0 after:content-['']"
+          >
             {project.title}
           </Link>
         </h3>
@@ -126,14 +132,14 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
 
         {/* Actions */}
         <div className="flex items-center justify-between mt-auto pt-4 border-t border-border/50">
-          <Button variant="ghost" size="sm" asChild className="group/btn">
+          <Button variant="ghost" size="sm" asChild className="group/btn relative z-10">
             <Link href={`/proyectos/${project.id}`}>
               {t('viewDetails')}
               <ArrowRight className="ml-1 h-4 w-4 group-hover/btn:translate-x-1 transition-transform duration-200" />
             </Link>
           </Button>
 
-          <div className="flex space-x-1">
+          <div className="flex space-x-1 relative z-10">
             {project.github && (
               <Button
                 size="icon"
