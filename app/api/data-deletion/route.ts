@@ -6,6 +6,7 @@ import {
   storeToken,
   verifyGdprRequest,
 } from '@/lib/api/gdpr-utils';
+import { getSiteUrl } from '@/lib/config/site-url';
 import { resend } from '@/lib/email/resend';
 import { logger } from '@/lib/monitoring/logger';
 import { escapeHtml } from '@/lib/utils/string';
@@ -35,8 +36,7 @@ export async function POST(request: NextRequest) {
     await storeToken('data-deletion', token, JSON.stringify({ email, reason }));
 
     // Send verification email
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-    const confirmUrl = `${siteUrl}/api/data-deletion/confirm?token=${token}`;
+    const confirmUrl = `${getSiteUrl()}/api/data-deletion/confirm?token=${token}`;
 
     const sendResult = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL ?? 'noreply@javierzader.com',

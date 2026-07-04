@@ -13,23 +13,6 @@ interface LogContext {
   [key: string]: unknown;
 }
 
-/**
- * Helper to extract request ID from headers in API routes
- * Usage: const requestId = await getRequestId();
- */
-export async function getRequestId(): Promise<string | null> {
-  try {
-    if (typeof globalThis === 'undefined') {
-      const { headers } = await import('next/headers');
-      const headersList = await headers();
-      return headersList.get('x-request-id') ?? headersList.get('x-vercel-id') ?? null;
-    }
-  } catch {
-    // headers() falla en contextos donde no hay request
-  }
-  return null;
-}
-
 class Logger {
   private log(level: LogLevel, message: string, context?: LogContext) {
     const timestamp = new Date().toISOString();

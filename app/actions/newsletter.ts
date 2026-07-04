@@ -2,6 +2,7 @@
 
 import { nanoid } from 'nanoid';
 import { headers } from 'next/headers';
+import { getSiteUrl } from '@/lib/config/site-url';
 import { prisma } from '@/lib/db/prisma';
 import { emailConfig, resend } from '@/lib/email/resend';
 import NewsletterConfirm from '@/lib/email/templates/NewsletterConfirm';
@@ -31,7 +32,7 @@ function generateConfirmToken() {
 
 // Helper: Build confirmation URL
 function buildConfirmUrl(token: string): string {
-  return `${process.env.NEXT_PUBLIC_SITE_URL}/api/newsletter/confirm?token=${token}`;
+  return `${getSiteUrl()}/api/newsletter/confirm?token=${token}`;
 }
 
 // Helper: Send confirmation email (returns true if sent or skipped in dev)

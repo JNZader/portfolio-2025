@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
+import { logger } from '@/lib/monitoring/logger';
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
@@ -44,12 +45,19 @@ Sentry.init({
 // Lazily load Session Replay so it doesn't inflate the initial client bundle;
 // it's fetched from the Sentry CDN only after the app has hydrated.
 if (typeof window !== 'undefined') {
-  Sentry.lazyLoadIntegration('replayIntegration').then((replayIntegration) => {
-    Sentry.addIntegration(
-      replayIntegration({
-        maskAllText: true,
-        blockAllMedia: true,
-      })
-    );
-  });
+  Sentry.lazyLoadIntegration('replayIntegration')
+    .then((replayIntegration) => {
+      Sentry.addIntegration(
+        replayIntegration({
+          maskAllText: true,
+          blockAllMedia: true,
+        })
+      );
+    })
+    .catch((error) => {
+      // The CDN chunk fetch can fail silently (ad-blocker, flaky network,
+      // offline). Without this .catch the promise rejection was unhandled —
+      // Session Replay would just quietly never start, with no signal.
+      logger.error('Sentry Replay lazy-load failed', error as Error);
+    });
 }
