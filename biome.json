@@ -33,7 +33,7 @@
     "rules": {
       "recommended": true,
       "suspicious": {
-        "noExplicitAny": "warn",
+        "noExplicitAny": "error",
         "noDebugger": "warn",
         "noArrayIndexKey": "warn"
       }
