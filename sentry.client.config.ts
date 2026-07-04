@@ -4,7 +4,7 @@ Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 
   // Adjust this value in production, or use tracesSampler for finer control
-  tracesSampleRate: 1.0,
+  tracesSampleRate: 0.1,
 
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
   debug: false,
@@ -12,13 +12,7 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0,
   replaysSessionSampleRate: 0.1,
 
-  integrations: [
-    Sentry.replayIntegration({
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
-    Sentry.browserTracingIntegration(),
-  ],
+  integrations: [Sentry.browserTracingIntegration()],
 
   // Environment
   environment: process.env.NEXT_PUBLIC_VERCEL_ENV ?? 'development',
@@ -46,3 +40,16 @@ Sentry.init({
     return event;
   },
 });
+
+// Lazily load Session Replay so it doesn't inflate the initial client bundle;
+// it's fetched from the Sentry CDN only after the app has hydrated.
+if (typeof window !== 'undefined') {
+  Sentry.lazyLoadIntegration('replayIntegration').then((replayIntegration) => {
+    Sentry.addIntegration(
+      replayIntegration({
+        maskAllText: true,
+        blockAllMedia: true,
+      })
+    );
+  });
+}
