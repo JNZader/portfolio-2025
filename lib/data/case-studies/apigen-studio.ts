@@ -8,9 +8,9 @@ export const apigenStudio: SanityProject = {
     current: 'apigen-studio',
   },
   excerpt:
-    'Un diseñador visual para APIs Spring Boot y microservicios — modelá entidades, rutas de gateway y flujos de eventos, y exportá un proyecto multi-servicio.',
+    'Diseñador visual para APIs Spring Boot: modelás entidades y servicios en un canvas y exportás un proyecto que compila —un servicio único (monolito) o varios que se comunican (microservicios).',
   excerptEn:
-    'A visual designer for Spring Boot APIs and microservices — model entities, gateway routes, and event flows, then export a multi-service project.',
+    'A visual designer for Spring Boot APIs: model entities and services on a canvas and export a project that compiles —a single service (monolith) or several that talk to each other (microservices).',
   technologies: [
     'React 19',
     'TypeScript 5.9',
@@ -28,17 +28,17 @@ export const apigenStudio: SanityProject = {
   publishedAt: '2026-04-29T09:00:00.000Z',
   displayOrder: 3,
   body: [
-    block('El problema', 'h2'),
     block(
-      'Herramientas como bootify.io te dejan diseñar visualmente una sola app Spring Boot — entidades, relaciones, CRUD básico, auth. Eso resuelve una parte del trabajo. No resuelve modelar una arquitectura de microservicios: varios servicios, las rutas entre ellos, los eventos que fluyen entre ellos, y la exportación de todo eso como un sistema coherente.'
+      'apigen genera a partir de un schema, pero decidir cómo se estructura el sistema —qué entidades hay, cómo se agrupan en servicios, qué habla con qué y por qué protocolo— es más fácil de razonar viéndolo que escribiéndolo. apigen Studio es esa capa visual, y funciona igual para un servicio único (monolito) que para varios servicios comunicados (microservicios).'
     ),
     block(
-      'Quería un diseñador visual que manejara el sistema, no solo la app. Un canvas donde modelo servicios, dibujo conexiones, configuro un gateway, armo flujos de eventos/mensajes, y exporto todo como un proyecto multi-servicio listo para alimentar a APiGen.'
+      'El modelo se arma en un canvas (React Flow con auto-layout de ELK): entidades y servicios como nodos, relaciones y conexiones entre servicios como aristas, con las conexiones síncronas (REST/gRPC) y asíncronas (Kafka/RabbitMQ) dibujadas distinto. Las rutas de gateway y la configuración de mensajería se editan en paneles aparte, no en el canvas. Al exportar, cada servicio se manda al backend de apigen y vuelve compilado; el resultado se empaqueta en un único proyecto multi-servicio.'
     ),
-    block('Qué hace Studio', 'h2'),
-    block(
-      'Studio es un diseñador visual en el navegador para APIs Spring Boot y microservicios. Modelás entidades y relaciones como en bootify.io, y después vas más allá: sumás varios servicios, cableás rutas de gateway, diseñás flujos de eventos/mensajes, validás la compatibilidad entre servicios, y exportás toda la arquitectura como un proyecto que APiGen puede generar. Importás schemas SQL o contratos OpenAPI, los editás visualmente con merge consciente de conflictos, y nunca perdés trabajo — el autosave en IndexedDB y el historial de snapshots vienen incluidos.'
-    ),
+    block('De un vistazo', 'h3'),
+    bullet('~152.000 líneas de TypeScript/TSX productivo en 342 componentes'),
+    bullet('10 stores de Zustand, 39 schemas de Zod validando el modelo'),
+    bullet('Canvas React Flow con auto-layout de ELK, undo/redo y atajos de teclado'),
+    bullet('Más de 1.100 tests automatizados (Vitest) y 63 escenarios e2e (Playwright)'),
     block('Las restricciones que me puse', 'h2'),
     bullet(
       'Más allá del modelado de una sola app. Studio tiene que manejar arquitectura servicio-a-servicio, no solo las entidades de un servicio.'
@@ -66,7 +66,7 @@ export const apigenStudio: SanityProject = {
     block('Decisiones clave', 'h2'),
     block('1. Diseñador de microservicios — más allá del modelado de entidades', 'h3'),
     block(
-      'La decisión de producto más determinante. Studio no es un "clon de bootify.io". Suma un diseñador servicio-a-servicio: varios servicios en un canvas, conexiones entre ellos, un diseñador de rutas de gateway para el ruteo HTTP, un diseñador de eventos/mensajes para los flujos asíncronos, y una exportación multi-servicio que emite una arquitectura, no un solo proyecto.'
+      'La decisión de producto más determinante. Studio no es un "clon de bootify.io". Suma un diseñador servicio-a-servicio: varios servicios en un canvas, conexiones entre ellos, un diseñador de rutas de gateway para el ruteo HTTP y un diseñador de eventos/mensajes para los flujos asíncronos —ambos en paneles dedicados, separados del canvas—, y una exportación multi-servicio que emite una arquitectura, no un solo proyecto.'
     ),
     block(
       'Ese es el diferenciador. El editor de entidades es la puerta de entrada que se siente familiar; el diseñador de microservicios es lo que hace que valga la pena usar Studio una vez que un equipo crece más allá de una sola app.'
@@ -78,11 +78,14 @@ export const apigenStudio: SanityProject = {
       `flowchart LR
   subgraph CANVAS["Canvas (React Flow)"]
     ENT["Entities + relations"]
-    SVC["Services"]
+    SVC["Services + connections"]
+  end
+  subgraph PANELS["Form panels (not canvas)"]
     GW["Gateway routes"]
     EV["Event / message flows"]
   end
   CANVAS --> MODEL["Studio model (Zod-validated)"]
+  PANELS --> MODEL
   MODEL --> EXPORT["Multi-format export"]
   EXPORT --> ZIP["Spring Boot ZIP"]
   EXPORT --> JSON["JSON model"]
@@ -171,17 +174,17 @@ export const apigenStudio: SanityProject = {
     bullet('Desplegado en Vercel; imágenes Docker disponibles para despliegues self-hosted.'),
   ],
   bodyEn: [
-    block('The Problem', 'h2'),
     block(
-      'Tools like bootify.io let you design a single Spring Boot app visually — entities, relations, basic CRUD, auth. That solves one piece of the work. It does not solve modeling a microservices architecture: multiple services, the routes between them, the events that flow between them, and the export of all of that as a coherent system.'
+      'apigen generates from a schema, but deciding how the system is structured —what entities exist, how they group into services, what talks to what and over which protocol— is easier to reason about by seeing it than by writing it. apigen Studio is that visual layer, and it works the same for a single service (monolith) as for several services talking to each other (microservices).'
     ),
     block(
-      'I wanted a visual designer that handled the system, not just the app. One canvas where I model services, draw connections, configure a gateway, lay out event/message flows, and export the whole thing as a multi-service project ready to feed APiGen.'
+      'The model is built on a canvas (React Flow with ELK auto-layout): entities and services as nodes, relations and service-to-service connections as edges, with synchronous (REST/gRPC) and asynchronous (Kafka/RabbitMQ) connections drawn differently. Gateway routes and messaging configuration are edited in separate panels, not on the canvas. On export, each service is sent to the apigen backend and comes back compiled; the result is packaged into a single multi-service project.'
     ),
-    block('What Studio Does', 'h2'),
-    block(
-      'Studio is a browser-based visual designer for Spring Boot APIs and microservices. Model entities and relations like in bootify.io, then go further: add multiple services, wire gateway routes, design event/message flows, validate cross-service compatibility, and export the full architecture as a project that APiGen can generate. Import SQL schemas or OpenAPI contracts, edit them visually with conflict-aware merge, and never lose work — IndexedDB autosave plus snapshot history are built in.'
-    ),
+    block('At a glance', 'h3'),
+    bullet('~152,000 lines of production TypeScript/TSX across 342 components'),
+    bullet('10 Zustand stores, 39 Zod schemas validating the model'),
+    bullet('React Flow canvas with ELK auto-layout, undo/redo and keyboard shortcuts'),
+    bullet('Over 1,100 automated tests (Vitest) and 63 e2e scenarios (Playwright)'),
     block('Constraints I Set', 'h2'),
     bullet(
       'Beyond single-app modeling. Studio has to handle service-to-service architecture, not just entities of one service.'
@@ -209,7 +212,7 @@ export const apigenStudio: SanityProject = {
     block('Key Decisions', 'h2'),
     block('1. Microservices Designer — beyond entity modeling', 'h3'),
     block(
-      'The most consequential product decision. Studio is not "bootify.io clone". It adds a service-to-service designer: multiple services on one canvas, connections between them, a gateway route designer for HTTP routing, an event/message designer for async flows, and a multi-service export that emits an architecture, not a single project.'
+      'The most consequential product decision. Studio is not "bootify.io clone". It adds a service-to-service designer: multiple services on one canvas, connections between them, a gateway route designer for HTTP routing and an event/message designer for async flows —both in dedicated panels, separate from the canvas—, and a multi-service export that emits an architecture, not a single project.'
     ),
     block(
       'That is the differentiator. The entity editor is the entry point that feels familiar; the microservices designer is what makes Studio worth using once a team grows past one app.'
@@ -221,11 +224,14 @@ export const apigenStudio: SanityProject = {
       `flowchart LR
   subgraph CANVAS["Canvas (React Flow)"]
     ENT["Entities + relations"]
-    SVC["Services"]
+    SVC["Services + connections"]
+  end
+  subgraph PANELS["Form panels (not canvas)"]
     GW["Gateway routes"]
     EV["Event / message flows"]
   end
   CANVAS --> MODEL["Studio model (Zod-validated)"]
+  PANELS --> MODEL
   MODEL --> EXPORT["Multi-format export"]
   EXPORT --> ZIP["Spring Boot ZIP"]
   EXPORT --> JSON["JSON model"]
