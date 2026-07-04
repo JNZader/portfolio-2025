@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.17.1](https://github.com/JNZader/portfolio-2025/compare/v2.17.0...v2.17.1) (2026-07-04)
+
+
+### Bug Fixes
+
+* a11y — dialog focus mgmt, hidden closed modal, accessible names, reduced-motion ([#182](https://github.com/JNZader/portfolio-2025/issues/182)) ([84a2386](https://github.com/JNZader/portfolio-2025/commits/84a2386a485eb74436e35f9bc9a298e6ccb14981))
+
 ## [2.17.0](https://github.com/JNZader/portfolio-2025/compare/v2.16.12...v2.17.0) (2026-07-04)
 
 
