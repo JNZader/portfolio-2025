@@ -192,7 +192,7 @@ Portfolio profesional construido con el stack más moderno de 2025. Incluye sist
 - **Focus Trap:** gestión de foco propia en `components/a11y` y `Modal.tsx`
 
 ### Database y Backend
-- **Database:** PostgreSQL (Supabase)
+- **Database:** PostgreSQL (vía Prisma; proveedor de hosting agnóstico)
 - **ORM:** Prisma v7.8 con cliente tipado (`prisma-client` generator)
 - **Rate Limiting:** Upstash Redis v1.38 + @upstash/ratelimit v2.0
 - **Email Service:** Resend v6.16
@@ -247,7 +247,7 @@ Portfolio profesional construido con el stack más moderno de 2025. Incluye sist
 - npm >= 10.0.0
 - Cuenta de Sanity (gratis en [sanity.io](https://sanity.io))
 - Repositorio de GitHub con Discussions habilitadas
-- Base de datos PostgreSQL (Supabase recomendado)
+- Base de datos PostgreSQL (cualquier proveedor: Neon, Supabase, Vercel Postgres, Railway…)
 - Cuenta de Resend para emails (opcional)
 - Cuenta de Upstash para Redis (opcional para rate limiting)
 - GitHub Personal Access Token (opcional, para rate limits mejorados)
@@ -283,7 +283,7 @@ NEXT_PUBLIC_SANITY_API_VERSION="2024-01-01"
 SANITY_API_READ_TOKEN=""  # Opcional para datos privados
 SANITY_API_WRITE_TOKEN=""  # Solo para seed script
 
-# Database (PostgreSQL/Supabase)
+# Database (PostgreSQL — cualquier proveedor)
 DATABASE_URL="postgresql://user:password@host:5432/database"
 
 # Email Service (Resend)
@@ -836,7 +836,7 @@ Este proyecto está bajo la Licencia **MIT**. Ver el archivo [LICENSE](LICENSE) 
 - [Vercel](https://vercel.com/) - Hosting y Analytics
 - [Upstash](https://upstash.com/) - Redis para rate limiting
 - [Resend](https://resend.com/) - Email transaccional
-- [Supabase](https://supabase.com/) - PostgreSQL database
+- [Prisma](https://www.prisma.io/) - ORM para PostgreSQL
 - [Sentry](https://sentry.io/) - Error tracking
 - [NextAuth.js](https://authjs.dev/) - Autenticación del panel admin
 - [next-intl](https://next-intl.dev/) - Internacionalización (ES/EN)
