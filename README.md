@@ -6,10 +6,10 @@
 [![Lighthouse CI](https://github.com/JNZader/portfolio-2025/actions/workflows/lighthouse.yml/badge.svg)](https://github.com/JNZader/portfolio-2025/actions/workflows/lighthouse.yml)
 [![Security](https://github.com/JNZader/portfolio-2025/actions/workflows/security.yml/badge.svg)](https://github.com/JNZader/portfolio-2025/actions/workflows/security.yml)
 
-![Next.js](https://img.shields.io/badge/Next.js-16.0.10-black)
+![Next.js](https://img.shields.io/badge/Next.js-16.2.10-black)
 ![React](https://img.shields.io/badge/React-19.2-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
-![Version](https://img.shields.io/badge/version-1.5.0-green)
+![TypeScript](https://img.shields.io/badge/TypeScript-6.0-blue)
+![Version](https://img.shields.io/badge/version-2.15.0-green)
 
 ![Portfolio Preview](public/images/portfolio-preview.png)
 
@@ -147,9 +147,9 @@ Portfolio profesional construido con el stack más moderno de 2025. Incluye sist
 ## 🚀 Stack Tecnológico
 
 ### Core
-- **Framework:** Next.js 16.0.10 (App Router)
+- **Framework:** Next.js 16.2.10 (App Router)
 - **UI Library:** React 19.2.0 con React Compiler
-- **Language:** TypeScript 5.9.3 (strict mode)
+- **Language:** TypeScript 6.0.3 (strict mode)
 - **Styling:** Tailwind CSS 4.1.17 con OKLCH color space
 - **Node:** >= 22.12.0 LTS (compatible con Prisma, Vitest y jsdom)
 
