@@ -1,7 +1,8 @@
 'use client';
 
 import { Edit, Eye, Loader2, Send } from 'lucide-react';
-import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import ReactMarkdown from 'react-markdown';
 import { sendNewsletterBroadcast, sendTestNewsletter } from '@/app/actions/admin-newsletter';
@@ -9,11 +10,25 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 export function NewsletterBroadcaster() {
+  const t = useTranslations('NewsletterBroadcaster');
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
   const [isPreview, setIsPreview] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const broadcastTriggerRef = useRef<HTMLButtonElement>(null);
+  const confirmActionRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (confirming) {
+      confirmActionRef.current?.focus();
+    }
+  }, [confirming]);
+
+  const cancelConfirm = () => {
+    setConfirming(false);
+    broadcastTriggerRef.current?.focus();
+  };
 
   const handleSendTest = async () => {
     if (!subject || !content) {
@@ -107,34 +122,50 @@ export function NewsletterBroadcaster() {
               <ReactMarkdown>{content.trim() || '*Nada para mostrar aún...*'}</ReactMarkdown>
             </div>
           ) : (
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="w-full min-h-[300px] p-4 rounded-md border bg-background font-mono text-sm focus:ring-2 focus:ring-primary outline-none"
-              placeholder="Escribe tu contenido en Markdown...
+            <div>
+              <label htmlFor="content" className="text-sm font-medium mb-1 block">
+                {t('contentLabel')}
+              </label>
+              <textarea
+                id="content"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="w-full min-h-[300px] p-4 rounded-md border bg-background font-mono text-sm focus:ring-2 focus:ring-primary outline-none"
+                placeholder="Escribe tu contenido en Markdown...
 # Título
 Hola a todos,
 
 - Item 1
 - Item 2"
-            />
+              />
+            </div>
           )}
 
           {confirming && (
             <div
               role="alertdialog"
               aria-label="Confirmar envío del broadcast"
+              aria-describedby="broadcast-confirm-warning"
               className="rounded-md border border-red-300 dark:border-red-900 bg-red-50 dark:bg-red-950/30 p-4"
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') {
+                  cancelConfirm();
+                }
+              }}
             >
-              <p className="font-medium text-red-800 dark:text-red-300 mb-3">
+              <p
+                id="broadcast-confirm-warning"
+                className="font-medium text-red-800 dark:text-red-300 mb-3"
+              >
                 ⚠️ ¿Enviar esto a <strong>TODOS</strong> los suscriptores? Esta acción no se puede
                 deshacer.
               </p>
               <div className="flex gap-2 justify-end">
-                <Button variant="outline" size="sm" onClick={() => setConfirming(false)}>
+                <Button variant="outline" size="sm" onClick={cancelConfirm}>
                   Cancelar
                 </Button>
                 <Button
+                  ref={confirmActionRef}
                   size="sm"
                   onClick={doBroadcast}
                   className="bg-red-600 hover:bg-red-700 text-white"
@@ -157,6 +188,7 @@ Hola a todos,
             </Button>
 
             <Button
+              ref={broadcastTriggerRef}
               variant="default"
               onClick={requestBroadcast}
               disabled={isLoading || confirming}

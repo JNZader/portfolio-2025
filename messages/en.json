@@ -415,5 +415,17 @@
   "Privacy": {
     "metaTitle": "Privacy Policy",
     "metaDescription": "Privacy policy and personal data processing"
+  },
+  "NewsletterBroadcaster": {
+    "contentLabel": "Content"
+  },
+  "UptimeStatus": {
+    "refreshAria": "Refresh status"
+  },
+  "EasterEggs": {
+    "konamiAria": "Konami Code easter egg activated"
+  },
+  "TableOfContents": {
+    "navAria": "Table of contents"
   }
 }

@@ -125,6 +125,8 @@ export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProp
             size="sm"
             onClick={() => setShowFilters(!showFilters)}
             className="gap-2"
+            aria-expanded={showFilters}
+            aria-controls={filtersPanelId}
           >
             <Filter className="h-4 w-4" />
             Filtros
@@ -164,22 +166,27 @@ export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProp
                 variant={currentCategory ? 'outline' : 'default'}
                 size="sm"
                 onClick={() => handleCategoryClick(null)}
+                aria-pressed={!currentCategory}
               >
                 Todas
               </Button>
-              {categories.map((category) => (
-                <Button
-                  key={category._id}
-                  variant={currentCategory === category.slug.current ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => handleCategoryClick(category.slug.current)}
-                >
-                  {category.title}
-                  {category.postCount !== undefined && (
-                    <span className="ml-1 text-xs opacity-70">({category.postCount})</span>
-                  )}
-                </Button>
-              ))}
+              {categories.map((category) => {
+                const isSelected = currentCategory === category.slug.current;
+                return (
+                  <Button
+                    key={category._id}
+                    variant={isSelected ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => handleCategoryClick(category.slug.current)}
+                    aria-pressed={isSelected}
+                  >
+                    {category.title}
+                    {category.postCount !== undefined && (
+                      <span className="ml-1 text-xs opacity-70">({category.postCount})</span>
+                    )}
+                  </Button>
+                );
+              })}
             </div>
           </fieldset>
         </section>

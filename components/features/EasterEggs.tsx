@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { unlockAchievement } from '@/lib/achievements';
 
@@ -18,11 +19,21 @@ const konamiCode = [
 ] as const;
 
 export function EasterEggs() {
+  const t = useTranslations('EasterEggs');
   const [konamiActivated, setKonamiActivated] = useState(false);
   const keysRef = useRef<string[]>([]);
 
   // Confetti animation
   const confetti = useCallback(() => {
+    // Client-side-only check: never evaluate matchMedia during SSR render.
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      return;
+    }
+
     const colors = ['#1e40af', '#7c3aed', '#ec4899', '#f59e0b'];
     const confettiCount = 100;
 
@@ -64,6 +75,13 @@ export function EasterEggs() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (konamiActivated) {
+        if (e.key === 'Escape') {
+          setKonamiActivated(false);
+        }
+        return;
+      }
+
       keysRef.current = [...keysRef.current, e.key].slice(-10);
 
       if (keysRef.current.join(',') === konamiCode.join(',')) {
@@ -75,11 +93,16 @@ export function EasterEggs() {
 
     globalThis.addEventListener('keydown', handleKeyDown);
     return () => globalThis.removeEventListener('keydown', handleKeyDown);
-  }, [confetti]);
+  }, [confetti, konamiActivated]);
 
   if (konamiActivated) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={t('konamiAria')}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+      >
         <div className="bg-card rounded-lg p-8 max-w-md text-center border shadow-xl">
           <h2 className="text-3xl font-bold mb-4">🎉 ¡Konami Code!</h2>
           <p className="mb-4 text-muted-foreground">
