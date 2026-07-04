@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.17.4](https://github.com/JNZader/portfolio-2025/compare/v2.17.3...v2.17.4) (2026-07-04)
+
+
+### Bug Fixes
+
+* i18n leaks in EN UI — aria-labels, konami modal, gdpr toasts ([#185](https://github.com/JNZader/portfolio-2025/issues/185)) ([071c66d](https://github.com/JNZader/portfolio-2025/commits/071c66db6c07563a08d733f85158822408bb1014))
+
 ## [2.17.3](https://github.com/JNZader/portfolio-2025/compare/v2.17.2...v2.17.3) (2026-07-04)
 
 
