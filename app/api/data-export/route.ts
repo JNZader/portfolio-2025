@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
     const confirmUrl = `${siteUrl}/api/data-export/confirm?token=${token}`;
 
-    await resend.emails.send({
+    const sendResult = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL ?? 'noreply@javierzader.com',
       to: email,
       subject: 'Confirma tu solicitud de exportación de datos',
@@ -67,6 +67,22 @@ export async function POST(request: NextRequest) {
         </html>
       `,
     });
+
+    // The Resend SDK resolves with { data, error } instead of throwing on a
+    // failed send, so we must inspect `error` explicitly or the failure is
+    // silent. Anti-enumeration: this send only runs when the email WAS found
+    // (verifyGdprRequest short-circuits the not-found path above with the SAME
+    // generic { success: true, message: emailNotFound } response). Returning a
+    // distinct status/shape here would leak "email exists AND send failed",
+    // creating an oracle to probe existence. So we log server-side for
+    // observability but return the identical generic response either way, and
+    // never leak the raw Resend error to the client.
+    if (sendResult.error) {
+      logger.error('Failed to send export verification email', sendResult.error as Error, {
+        path: '/api/data-export',
+        email,
+      });
+    }
 
     // Generic message identical to the not-found path (see verifyGdprRequest)
     // so an attacker cannot distinguish whether the email exists.
