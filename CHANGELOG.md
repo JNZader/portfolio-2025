@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.16.6](https://github.com/JNZader/portfolio-2025/compare/v2.16.5...v2.16.6) (2026-07-04)
+
+
+### Code Refactoring
+
+* **admin:** inline confirm for newsletter broadcast + add docs ([#174](https://github.com/JNZader/portfolio-2025/issues/174)) ([5e0a641](https://github.com/JNZader/portfolio-2025/commits/5e0a6419e6a749ef648c0c5e7b59f76cad9b2ee1))
+
 ## [2.16.5](https://github.com/JNZader/portfolio-2025/compare/v2.16.4...v2.16.5) (2026-07-04)
 
 ## [2.16.4](https://github.com/JNZader/portfolio-2025/compare/v2.16.3...v2.16.4) (2026-07-04)
