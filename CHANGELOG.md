@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.16.11](https://github.com/JNZader/portfolio-2025/compare/v2.16.10...v2.16.11) (2026-07-04)
+
+
+### Code Refactoring
+
+* **audit-r3:** resolve dead code — delete guards/image, adopt ExternalLink ([#179](https://github.com/JNZader/portfolio-2025/issues/179)) ([c053c19](https://github.com/JNZader/portfolio-2025/commits/c053c1996f6e3c2d6e71a43b75992ec8f080f9e1))
+
 ## [2.16.10](https://github.com/JNZader/portfolio-2025/compare/v2.16.9...v2.16.10) (2026-07-04)
 
 
