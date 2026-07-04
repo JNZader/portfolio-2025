@@ -8,9 +8,9 @@ export const apigen: SanityProject = {
     current: 'apigen',
   },
   excerpt:
-    'Una plataforma de generación de código que convierte un schema SQL o un contrato OpenAPI en un servicio backend funcionando — 12 lenguajes de destino, 15+ bases de datos, tres stacks de nube.',
+    'Una plataforma de generación de código: de un schema SQL o un contrato OpenAPI a un servicio backend que compila —no un scaffold, un servicio con forma de producción que seguís manejando después.',
   excerptEn:
-    'A code generation platform that turns a SQL schema or OpenAPI contract into a working backend service — 12 target languages, 15+ databases, three cloud stacks.',
+    'A code-generation platform: from a SQL schema or an OpenAPI contract to a backend service that compiles —not a scaffold, a production-shaped service you keep owning afterward.',
   technologies: [
     'Java 25',
     'Spring Boot 4',
@@ -29,17 +29,22 @@ export const apigen: SanityProject = {
   publishedAt: '2026-05-01T09:00:00.000Z',
   displayOrder: 2,
   body: [
-    block('El problema', 'h2'),
     block(
-      'Todo proyecto Spring Boot empieza en el mismo lugar. Escribís la entidad, después el repositorio, después el service, después el controller, después los DTOs, después el mismo setup de seguridad, después el mismo cableado de observabilidad. Seis meses más tarde comparás dos servicios del mismo equipo y cada uno eligió convenciones apenas distintas. Multiplicá eso entre varios equipos.'
+      'Crear un servicio CRUD en Spring Boot es siempre el mismo camino: la entidad, el repository, el service, el controller, los DTOs, el setup de seguridad, el cableado de observabilidad. Es trabajo mecánico, y cuando se repite entre varios equipos, cada servicio termina con convenciones apenas distintas. Esa divergencia es cara de revertir después.'
     ),
     block(
-      'Quería algo que convirtiera un schema SQL o un contrato OpenAPI en un servicio funcionando con un solo comando — y que siguiera siendo útil después de que lo personalizara.'
+      'apigen toma un schema SQL o un contrato OpenAPI y genera ese servicio completo: persistencia, seguridad, observabilidad, Dockerfile, manifiestos de Kubernetes, CI. La diferencia con un scaffolder es que el output sigue siendo editable —podés sobrescribir templates sin forkear, y previsualizar antes de generar.'
     ),
-    block('Qué hace APiGen', 'h2'),
     block(
-      'Apuntalo a un schema SQL o a una spec OpenAPI. Te devuelve un servicio con forma de producción: endpoints REST, capa de persistencia, seguridad cableada, observabilidad instrumentada, Dockerfile, manifiestos de Kubernetes, pipeline de CI. Podés previsualizar antes de generar, sobrescribir templates localmente sin forkear, y manejar el mismo engine desde CLI, servidor HTTP, plugin de IDE o MCP.'
+      'Genera para 12 combinaciones de lenguaje y framework. Nueve de ellas pasan por un job de CI que compila el proyecto generado con el toolchain nativo de cada lenguaje (go build, cargo check, dotnet build, tsc) en lugar de comparar contra strings esperados. Esa distinción importa: un golden test en verde no garantiza que el código compile.'
     ),
+    block('De un vistazo', 'h3'),
+    bullet('~510.000 líneas de Java en 24 módulos Gradle, 8.406 tests'),
+    bullet('12 combinaciones de lenguaje/framework; 9 con gate de compilación nativo en CI'),
+    bullet(
+      '9 dialectos de base de datos; deploy a 4 nubes (AWS, Azure, GCP, DigitalOcean) con Terraform'
+    ),
+    bullet('458 pull requests mergeados en ~5,5 meses'),
     mermaid(
       `erDiagram
   CATEGORY ||--o{ CATEGORY : "parent of"
@@ -150,10 +155,10 @@ export const apigen: SanityProject = {
     ),
     block('Qué puede hacer APiGen hoy', 'h2'),
     bullet(
-      '12 lenguajes de destino — Java/Spring, Kotlin, Python, Node/TypeScript, Go, Rust, C#, PHP, Ruby, Scala, Elixir, Clojure.'
+      '12 combinaciones de lenguaje/framework de destino — Java/Spring, Kotlin, Python, Node/TypeScript, Go, Rust, C#, PHP, Ruby, Scala, Elixir, Clojure.'
     ),
     bullet(
-      '15+ bases de datos soportadas — PostgreSQL, MySQL, MariaDB, Oracle, SQL Server, SQLite, MongoDB, Cassandra, Redis, y más.'
+      '9 dialectos de base de datos soportados — PostgreSQL, MySQL, MariaDB, Oracle, SQL Server, SQLite, MongoDB, Cassandra, Redis.'
     ),
     bullet('REST, GraphQL y gRPC desde el mismo modelo — sin duplicar lógica entre protocolos.'),
     bullet(
@@ -162,7 +167,7 @@ export const apigen: SanityProject = {
     bullet(
       'Caché multinivel out of the box: Caffeine (en proceso) + Redis (distribuido), con políticas cache-aside generadas por entidad.'
     ),
-    bullet('3 stacks de nube de destino — AWS, GCP, Azure, con salida en Terraform.'),
+    bullet('4 nubes de destino — AWS, Azure, GCP, DigitalOcean, con salida en Terraform.'),
     bullet('Cobertura mínima de 60% de líneas / 50% de ramas, exigida en CI.'),
     bullet(
       'Tests de contrato (Spring Cloud Contract) sobre la librería core + microbenchmarks JMH sobre el engine de generación.'
@@ -176,7 +181,7 @@ export const apigen: SanityProject = {
     ),
     block('Qué reconsideraría', 'h2'),
     block(
-      'Crecer a lo ancho primero. APiGen escaló hacia afuera rápido — 12 lenguajes, 15 bases de datos, 13 feature packs — mientras que Java/Spring es el único destino en el que tengo plena confianza operativa. La plataforma parece completa en el papel, pero un usuario que cae en Elixir o Clojure recibe un camino menos maduro que uno que cae en Java.'
+      'Crecer a lo ancho primero. APiGen escaló hacia afuera rápido — 12 combinaciones de lenguaje/framework, 9 dialectos de base de datos, 13 feature packs — mientras que Java/Spring es el único destino en el que tengo plena confianza operativa. La plataforma parece completa en el papel, pero un usuario que cae en Elixir o Clojure recibe un camino menos maduro que uno que cae en Java.'
     ),
     block(
       'Si empezara de nuevo, comprimiría la matriz. Dos lenguajes (Java + Python, o Java + Kotlin) y tres bases de datos (Postgres, MySQL, Mongo) a fondo antes de crecer a lo ancho. "Soporta 12 lenguajes" vende mejor que "soporta 2" — pero la reputación de ingeniería importa más que el marketing.'
@@ -227,17 +232,22 @@ export const apigen: SanityProject = {
     ),
   ],
   bodyEn: [
-    block('The Problem', 'h2'),
     block(
-      'Every Spring Boot project starts in the same place. You write the entity, then the repository, then the service, then the controller, then DTOs, then the same security setup, then the same observability wiring. Six months later you compare two services from the same team and they all picked slightly different conventions. Multiply that across teams.'
+      'Creating a CRUD service in Spring Boot is always the same path: the entity, the repository, the service, the controller, the DTOs, the security setup, the observability wiring. It is mechanical work, and when it repeats across teams, each service ends up with slightly different conventions. That divergence is expensive to reverse later.'
     ),
     block(
-      'I wanted something that turns a SQL schema or OpenAPI contract into a working service in one command — and stays useful after I customize it.'
+      'apigen takes a SQL schema or an OpenAPI contract and generates that whole service: persistence, security, observability, Dockerfile, Kubernetes manifests, CI. The difference from a scaffolder is that the output stays editable —you can override templates without forking, and preview before generating.'
     ),
-    block('What APiGen Does', 'h2'),
     block(
-      'Point it at a SQL schema or OpenAPI spec. Get back a production-shaped service: REST endpoints, persistence layer, security wired, observability instrumented, Dockerfile, Kubernetes manifests, CI pipeline. You can preview before generating, override templates locally without forking, and drive the same engine from CLI, HTTP server, IDE plugin, or MCP.'
+      "It generates for 12 language/framework combinations. Nine of them go through a CI job that compiles the generated project with each language's native toolchain (go build, cargo check, dotnet build, tsc) instead of comparing against expected strings. That distinction matters: a green golden test does not guarantee the code compiles."
     ),
+    block('At a glance', 'h3'),
+    bullet('~510,000 lines of Java across 24 Gradle modules, 8,406 tests'),
+    bullet('12 language/framework targets; 9 with a native compile gate in CI'),
+    bullet(
+      '9 database dialects; deploys to 4 clouds (AWS, Azure, GCP, DigitalOcean) via Terraform'
+    ),
+    bullet('458 merged pull requests over ~5.5 months'),
     mermaid(
       `erDiagram
   CATEGORY ||--o{ CATEGORY : "parent of"
@@ -346,10 +356,10 @@ export const apigen: SanityProject = {
     ),
     block('What APiGen Can Do Today', 'h2'),
     bullet(
-      '12 target languages — Java/Spring, Kotlin, Python, Node/TypeScript, Go, Rust, C#, PHP, Ruby, Scala, Elixir, Clojure.'
+      '12 language/framework targets — Java/Spring, Kotlin, Python, Node/TypeScript, Go, Rust, C#, PHP, Ruby, Scala, Elixir, Clojure.'
     ),
     bullet(
-      '15+ databases supported — PostgreSQL, MySQL, MariaDB, Oracle, SQL Server, SQLite, MongoDB, Cassandra, Redis, and more.'
+      '9 database dialects supported — PostgreSQL, MySQL, MariaDB, Oracle, SQL Server, SQLite, MongoDB, Cassandra, Redis.'
     ),
     bullet('REST, GraphQL and gRPC from the same model — no logic duplication across protocols.'),
     bullet(
@@ -358,7 +368,7 @@ export const apigen: SanityProject = {
     bullet(
       'Multi-level cache out of the box: Caffeine (in-process) + Redis (distributed), with cache-aside policies generated per entity.'
     ),
-    bullet('3 cloud target stacks — AWS, GCP, Azure, with Terraform output.'),
+    bullet('4 cloud targets — AWS, Azure, GCP, DigitalOcean, with Terraform output.'),
     bullet('60% line / 50% branch coverage minimum, gated in CI.'),
     bullet(
       'Contract tests (Spring Cloud Contract) on the core library + JMH microbenchmarks on the generation engine.'
@@ -372,7 +382,7 @@ export const apigen: SanityProject = {
     ),
     block("What I'd Reconsider", 'h2'),
     block(
-      'Growing breadth-first. APiGen scaled outward fast — 12 languages, 15 databases, 13 feature packs — while Java/Spring is the only target where I have full operational confidence. The platform looks comprehensive on paper, but a user landing on Elixir or Clojure gets a less mature path than a user landing on Java.'
+      'Growing breadth-first. APiGen scaled outward fast — 12 language/framework targets, 9 database dialects, 13 feature packs — while Java/Spring is the only target where I have full operational confidence. The platform looks comprehensive on paper, but a user landing on Elixir or Clojure gets a less mature path than a user landing on Java.'
     ),
     block(
       'If I started over, I would compress the matrix. Two languages (Java + Python, or Java + Kotlin) and three databases (Postgres, MySQL, Mongo) deep before any breadth growth. "Supports 12 languages" sells better than "supports 2" — but engineering reputation matters more than marketing.'

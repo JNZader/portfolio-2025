@@ -8,9 +8,9 @@ export const biogasPlatform: SanityProject = {
     current: 'biogas-platform',
   },
   excerpt:
-    'Una plataforma industrial para plantas de biogás — monitoreo en tiempo real, inferencia de ML en el edge en menos de 50ms, y una arquitectura de IA de tres capas para detección de anomalías y mantenimiento predictivo.',
+    'Plataforma industrial para plantas de biogás en producción: ingesta de telemetría en tiempo real por MQTT, detección de anomalías en tres capas (edge en Rust + ONNX, ensemble en la nube) y multi-tenancy con row-level security real en Postgres.',
   excerptEn:
-    'An industrial platform for biogas plants — real-time monitoring, edge ML inference under 50ms, and a three-layer AI architecture for anomaly detection and predictive maintenance.',
+    'An industrial platform for biogas plants in production: real-time MQTT telemetry ingestion, three-layer anomaly detection (Rust + ONNX at the edge, a cloud ensemble), and multi-tenancy with real row-level security in Postgres.',
   technologies: [
     'Go',
     'GORM',
@@ -33,17 +33,20 @@ export const biogasPlatform: SanityProject = {
   publishedAt: '2026-04-25T09:00:00.000Z',
   displayOrder: 1,
   body: [
-    block('El problema', 'h2'),
     block(
-      'Mi sobrino es ingeniero ambiental. Me contó cómo se gestionan las plantas de biogás en el día a día: planillas de Excel. Lecturas de sensores copiadas a mano, registros diarios que nadie analizaba después, decisiones tomadas por intuición porque el dato era inerte. Sin vista en tiempo real, sin detección de anomalías, sin mantenimiento predictivo, sin business intelligence — solo archivos que crecían cada semana y nunca se consultaban.'
+      'Las alarmas por umbral fijo son fáciles de escribir y malas para detectar deterioro gradual: cuando un sensor cruza el límite, la condición que lo llevó ahí ya lleva rato. Esta plataforma monitorea plantas de biogás en producción, ingiere su telemetría en tiempo real por MQTT, y apunta a esa brecha —la deriva que un umbral no ve.'
     ),
     block(
-      'La oportunidad era obvia. Reemplazar las planillas por una plataforma de verdad que ingiera el dato de los sensores, deje a los operarios trabajar desde ahí, y convierta el registro histórico en algo sobre lo que el negocio pueda actuar.'
+      'La detección corre en dos lugares a propósito. En el edge, cerca del sensor, un Z-score y un IsolationForest exportado a ONNX marcan anomalías al instante, sin depender de la red. En la nube, un ensemble más pesado (IsolationForest + LSTM) cruza el histórico que el edge no tiene. Si un modelo del edge no está cargado, esa capa cae a la anterior en vez de cortar la ingesta.'
     ),
-    block('Qué hace Biogas Platform', 'h2'),
     block(
-      'Una plataforma de operaciones completa para plantas de biogás. Los sensores transmiten datos por MQTT a un backend en Go; el dato aterriza en PostgreSQL con schemas pensados para series temporales; los operarios usan un dashboard web y una app mobile para los flujos diarios; un pipeline de ML en Python entrena modelos que se despliegan a un servicio edge en Rust para inferencia sub-50ms en la planta; un asistente de IA ayuda a los operarios a consultar el sistema en lenguaje natural. El flujo original de Excel desaparece.'
+      'La plataforma corre varias plantas, de distintos operadores, sobre la misma base de datos, así que el aislamiento no podía depender de acordarse de filtrar. Es row-level security real en Postgres, con el rol de la aplicación creado bajo NOBYPASSRLS: no puede saltear el aislamiento aunque una query se olvide del WHERE. El tenant se fija por sesión, no por convención.'
     ),
+    block('De un vistazo', 'h3'),
+    bullet('~580.000 líneas entre Go, Rust, Python y TypeScript'),
+    bullet('124 tablas bajo RLS: 239 políticas, rol de aplicación bajo NOBYPASSRLS'),
+    bullet('6.528 tests, con suite de integración contra Postgres real'),
+    bullet('2.656 commits, 67 merge requests en ~5 meses; en producción'),
     mermaid(
       `flowchart LR
   PLC["PLCs / sensors"] -->|Modbus TCP/RTU| EDGE["Rust edge gateway"]
@@ -149,13 +152,13 @@ export const biogasPlatform: SanityProject = {
       'En lugar de tratar el ML como una feature pegada a una pantalla, la plataforma tiene tres capas de IA explícitas, cada una con su propio propósito, presupuesto de latencia y ciclo de vida:'
     ),
     bullet(
-      'Capa de inferencia en el edge — Isolation Forest + Autoencoder corriendo localmente sobre ONNX, puntuando anomalías en cada lectura de sensor en menos de 50ms.'
+      'Capa de inferencia en el edge — Isolation Forest + Autoencoder corriendo localmente sobre ONNX, diseñada para baja latencia en el edge (objetivo interno: menos de 50ms, sin benchmark publicado).'
     ),
     bullet(
       'Capa de detección de anomalías — 32 features de ingeniería (temporales, de cambio, z-score, co-variación, calidad de dato, dominio-biogás) alimentadas a una votación por ensemble con umbrales dinámicos por sensor. Las atribuciones SHAP explican por qué se marcó una lectura.'
     ),
     bullet(
-      'Capa de IA predictiva — LSTM + Prophet para el forecasting de biogás/energía, Random Forest + XGBoost para la predicción de fallos de equipo con 4-24 horas de anticipación, más recomendaciones de optimización de parámetros de operación. Aprendizaje continuo con reentrenamiento automatizado; la detección de drift basada en PSI monitorea la degradación de los modelos en producción.'
+      'Capa de IA predictiva — LSTM + Prophet para el forecasting de biogás/energía, Random Forest + XGBoost para la predicción de fallos de equipo con 4-24 horas de anticipación, más recomendaciones de optimización de parámetros de operación. Aprendizaje continuo con reentrenamiento automatizado; la detección de drift basada en PSI monitorea la degradación de los modelos. Esta capa está marcada como demo en el código: el forecasting y la predicción de fallos no están productivizados todavía.'
     ),
     block(
       'Cada capa es independiente: el edge sigue funcionando si la nube está caída; la detección de anomalías funciona sin la capa predictiva; la capa predictiva se puede reentrenar sin tocar el runtime del edge. La separación es lo que hace el sistema operable, no solo impresionante.'
@@ -165,12 +168,12 @@ export const biogasPlatform: SanityProject = {
     ),
     mermaid(
       `flowchart TD
-  R["Every sensor reading"] --> L1["Edge inference: Isolation Forest + Autoencoder (ONNX, <50ms)"]
+  R["Every sensor reading"] --> L1["Edge inference: Isolation Forest + Autoencoder (ONNX, low-latency target)"]
   L1 --> L2["Anomaly detection: 32 features, ensemble voting, SHAP"]
-  L2 --> L3["Predictive: LSTM + Prophet forecast, RF + XGBoost failure 4-24h"]
+  L2 --> L3["Predictive (demo): LSTM + Prophet forecast, RF + XGBoost failure 4-24h"]
   L3 --> DRIFT["Continuous learning + PSI drift monitoring"]
   DRIFT -. retrain .-> L3`,
-      'Tres capas de IA independientes: el edge sigue detectando anomalías aunque el cloud esté caído; la capa predictiva se reentrena sin tocar el runtime del edge.'
+      'Tres capas de IA independientes: el edge sigue detectando anomalías aunque el cloud esté caído; la capa predictiva se reentrena sin tocar el runtime del edge. La capa predictiva está marcada como demo en el código.'
     ),
     block('3. Desarrollo spec-driven con OpenSpec desde el día uno', 'h3'),
     block(
@@ -187,13 +190,13 @@ export const biogasPlatform: SanityProject = {
       'Ingesta en tiempo real por MQTT (broker Mosquitto), persistencia en PostgreSQL con Redis para el dato caliente, schemas conscientes de series temporales.'
     ),
     bullet(
-      'Edge gateway autónomo en Rust (v2.1.0) — Modbus TCP/RTU a los PLCs, SQLite offline-first con cola de sync, inferencia de anomalías sub-50ms sobre ONNX, LLM on-device con agentes de IA, actualizaciones de modelos por OTA con verificación de firma ed25519, PWA de dashboard embebida.'
+      'Edge gateway autónomo en Rust (v2.1.0) — Modbus TCP/RTU a los PLCs, SQLite offline-first con cola de sync, inferencia de anomalías de baja latencia sobre ONNX (diseñada para <50ms), LLM on-device con agentes de IA, actualizaciones de modelos por OTA con verificación de firma ed25519, PWA de dashboard embebida.'
     ),
     bullet(
-      'IA de tres capas: detección de anomalías en el edge (Isolation Forest + Autoencoder), análisis de anomalías en la nube con explicabilidad SHAP, capa predictiva con forecasts LSTM + Prophet y predicciones de fallo Random Forest + XGBoost con 4-24h de anticipación.'
+      'IA de tres capas: detección de anomalías en el edge (Isolation Forest + Autoencoder) y en la nube con explicabilidad SHAP —ambas en producción—, más una capa predictiva (forecasts LSTM + Prophet, predicciones de fallo Random Forest + XGBoost con 4-24h de anticipación) marcada como demo en el código, no productivizada.'
     ),
     bullet(
-      'Mantenimiento predictivo basado en la condición real de cada equipo reemplaza el mantenimiento reactivo o por calendario, reduciendo las paradas no planificadas.'
+      'Mantenimiento predictivo por condición real de equipo es el objetivo de roadmap para reemplazar el mantenimiento reactivo o por calendario — hoy la capa predictiva que lo alimentaría está marcada como demo en el código, no productivizada.'
     ),
     bullet(
       'UI consciente de roles para operarios, personal técnico, supervisores y dueños — vistas y permisos distintos, no toggles sobre un único dashboard.'
@@ -255,17 +258,20 @@ export const biogasPlatform: SanityProject = {
     ),
   ],
   bodyEn: [
-    block('The Problem', 'h2'),
     block(
-      'My nephew is an environmental engineer. He told me how biogas plants are managed day-to-day: Excel spreadsheets. Sensor readings copied by hand, daily logs that nobody analyzed afterwards, decisions made on intuition because the data was inert. No real-time view, no anomaly detection, no predictive maintenance, no business intelligence — just files that grew bigger every week and were never queried.'
+      'Fixed-threshold alarms are easy to write and bad at catching gradual deterioration: by the time a sensor crosses the limit, whatever drove it there has been going on for a while. This platform monitors biogas plants in production, ingests their telemetry in real time over MQTT, and targets that gap —the drift a threshold does not see.'
     ),
     block(
-      'The opportunity was obvious. Replace the spreadsheets with a real platform that ingests sensor data, lets operators work from it, and turns the historical record into something the business can actually act on.'
+      'Detection runs in two places on purpose. At the edge, close to the sensor, a Z-score and an IsolationForest exported to ONNX flag anomalies instantly, with no dependency on the network. In the cloud, a heavier ensemble (IsolationForest + LSTM) cross-references history the edge does not have. If an edge model is not loaded, that layer falls back to the previous one instead of cutting off ingestion.'
     ),
-    block('What Biogas Platform Does', 'h2'),
     block(
-      'A full operations platform for biogas plants. Sensors stream data over MQTT to a Go backend; the data lands in PostgreSQL with time-series-friendly schemas; operators use a web dashboard and a mobile app for daily workflows; a Python ML pipeline trains models that get deployed to a Rust edge service for sub-50ms inference at the plant; an AI assistant helps operators query the system in plain language. The original Excel workflow disappears.'
+      'The platform runs several plants, from different operators, on the same database, so isolation could not depend on remembering to filter. It is real row-level security in Postgres, with the application role created under NOBYPASSRLS: it cannot bypass isolation even if a query forgets the WHERE clause. The tenant is fixed per session, not by convention.'
     ),
+    block('At a glance', 'h3'),
+    bullet('~580,000 lines across Go, Rust, Python and TypeScript'),
+    bullet('124 tables under RLS: 239 policies, application role running as NOBYPASSRLS'),
+    bullet('6,528 tests, including an integration suite against real Postgres'),
+    bullet('2,656 commits, 67 merge requests over ~5 months; in production'),
     mermaid(
       `flowchart LR
   PLC["PLCs / sensors"] -->|Modbus TCP/RTU| EDGE["Rust edge gateway"]
@@ -371,13 +377,13 @@ export const biogasPlatform: SanityProject = {
       'Instead of treating ML as a feature stuck onto a screen, the platform has three explicit AI layers, each with its own purpose, latency budget, and lifecycle:'
     ),
     bullet(
-      'Edge inference layer — Isolation Forest + Autoencoder running locally on ONNX, scoring anomalies on every sensor reading in under 50ms.'
+      'Edge inference layer — Isolation Forest + Autoencoder running locally on ONNX, designed for low edge latency (internal target: under 50ms, no published benchmark).'
     ),
     bullet(
       'Anomaly detection layer — 32 engineered features (temporal, change, z-score, co-variation, data quality, biogas-domain) fed into ensemble voting with dynamic per-sensor thresholds. SHAP attributions explain why a reading was flagged.'
     ),
     bullet(
-      'Predictive AI layer — LSTM + Prophet for biogas/energy forecasting, Random Forest + XGBoost for equipment failure prediction 4-24 hours in advance, plus optimization recommendations for operating parameters. Continuous learning with automated retraining; PSI-based drift detection monitors model degradation in production.'
+      'Predictive AI layer — LSTM + Prophet for biogas/energy forecasting, Random Forest + XGBoost for equipment failure prediction 4-24 hours in advance, plus optimization recommendations for operating parameters. Continuous learning with automated retraining; PSI-based drift detection monitors model degradation. This layer is demo-labeled in the code: forecasting and failure prediction are not yet in production.'
     ),
     block(
       'Each layer is independent: edge keeps working if the cloud is offline; anomaly detection works without the predictive layer; the predictive layer can be retrained without touching the edge runtime. The separation is what makes the system operable, not just impressive.'
@@ -387,12 +393,12 @@ export const biogasPlatform: SanityProject = {
     ),
     mermaid(
       `flowchart TD
-  R["Every sensor reading"] --> L1["Edge inference: Isolation Forest + Autoencoder (ONNX, <50ms)"]
+  R["Every sensor reading"] --> L1["Edge inference: Isolation Forest + Autoencoder (ONNX, low-latency target)"]
   L1 --> L2["Anomaly detection: 32 features, ensemble voting, SHAP"]
-  L2 --> L3["Predictive: LSTM + Prophet forecast, RF + XGBoost failure 4-24h"]
+  L2 --> L3["Predictive (demo): LSTM + Prophet forecast, RF + XGBoost failure 4-24h"]
   L3 --> DRIFT["Continuous learning + PSI drift monitoring"]
   DRIFT -. retrain .-> L3`,
-      'Three independent AI layers: the edge keeps detecting anomalies even if the cloud is down; the predictive layer retrains without touching the edge runtime.'
+      'Three independent AI layers: the edge keeps detecting anomalies even if the cloud is down; the predictive layer retrains without touching the edge runtime. The predictive layer is demo-labeled in the code.'
     ),
     block('3. Spec-driven development with OpenSpec from day one', 'h3'),
     block(
@@ -409,13 +415,13 @@ export const biogasPlatform: SanityProject = {
       'Real-time ingestion over MQTT (Mosquitto broker), persistence in PostgreSQL with Redis for hot data, time-series-aware schemas.'
     ),
     bullet(
-      'Autonomous edge gateway in Rust (v2.1.0) — Modbus TCP/RTU to PLCs, offline-first SQLite with sync queue, sub-50ms ONNX anomaly inference, on-device LLM with AI agents, OTA model updates with ed25519 signature verification, embedded dashboard PWA.'
+      'Autonomous edge gateway in Rust (v2.1.0) — Modbus TCP/RTU to PLCs, offline-first SQLite with sync queue, low-latency ONNX anomaly inference (designed for under 50ms), on-device LLM with AI agents, OTA model updates with ed25519 signature verification, embedded dashboard PWA.'
     ),
     bullet(
-      'Three-layer AI: edge anomaly detection (Isolation Forest + Autoencoder), cloud anomaly analysis with SHAP explainability, predictive layer with LSTM + Prophet forecasts and Random Forest + XGBoost failure predictions 4-24h ahead.'
+      'Three-layer AI: edge and cloud anomaly detection (Isolation Forest + Autoencoder, SHAP explainability) —both in production—, plus a predictive layer (LSTM + Prophet forecasts, Random Forest + XGBoost failure predictions 4-24h ahead) that is demo-labeled in the code, not yet in production.'
     ),
     bullet(
-      'Predictive maintenance based on real equipment condition replaces reactive or calendar-based maintenance, reducing unplanned downtime.'
+      'Predictive maintenance based on real equipment condition is the roadmap goal to replace reactive or calendar-based maintenance — today the predictive layer that would feed it is demo-labeled in the code, not yet in production.'
     ),
     bullet(
       'Role-aware UI for operators, technical staff, supervisors, and owners — distinct views and permissions, not toggles on a single dashboard.'
