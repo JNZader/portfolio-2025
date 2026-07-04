@@ -118,16 +118,9 @@ export async function verifyGdprRequest(
 
   const { email } = validationResult.data;
 
-  // 4. Verify subscriber exists (without revealing)
-  const subscriber = await prisma.subscriber.findUnique({ where: { email } });
-  if (!subscriber) {
-    return {
-      success: false,
-      response: NextResponse.json({ success: true, message: MESSAGES.emailNotFound }),
-    };
-  }
-
-  // 5. Email rate limiting
+  // 4. Email rate limiting — runs REGARDLESS of subscriber existence.
+  // A 429 that only fires when the subscriber exists is itself an enumeration
+  // oracle, so we rate-limit before the existence branch.
   const { success: emailSuccess } = await rateLimiters.email.limit(email);
   if (!emailSuccess) {
     return {
@@ -136,6 +129,17 @@ export async function verifyGdprRequest(
         { message: MESSAGES.emailRateLimit(rateLimitPeriod) },
         { status: 429 }
       ),
+    };
+  }
+
+  // 5. Verify subscriber exists (without revealing). The RESPONSE is identical
+  // to the success path (same generic message) so existence cannot be inferred;
+  // only the actual email send is gated on existence (handled by the caller).
+  const subscriber = await prisma.subscriber.findUnique({ where: { email } });
+  if (!subscriber) {
+    return {
+      success: false,
+      response: NextResponse.json({ success: true, message: MESSAGES.emailNotFound }),
     };
   }
 

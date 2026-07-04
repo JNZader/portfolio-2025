@@ -79,6 +79,16 @@ export function getRelativeTime(date: string): string {
   const publishedDate = new Date(date);
   const diffInSeconds = Math.floor((now.getTime() - publishedDate.getTime()) / 1000);
 
+  // Future date: a "hace X" (ago) label would be wrong. Show the absolute date
+  // instead — least surprising than reporting "hace un momento".
+  if (diffInSeconds < 0) {
+    return publishedDate.toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  }
+
   if (diffInSeconds < 60) {
     return 'hace un momento';
   }

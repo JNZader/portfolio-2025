@@ -38,6 +38,8 @@ export const contactSchema = z.object({
 
   email: z
     .string()
+    .trim()
+    .toLowerCase()
     .min(1, 'errEmailRequired')
     .regex(REGEX_PATTERNS.email, 'errEmailInvalid')
     .max(255, 'errEmailTooLong'),

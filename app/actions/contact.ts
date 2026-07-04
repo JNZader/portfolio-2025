@@ -74,7 +74,29 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
       sanitizedData.company ? ` · ${sanitizedData.company}` : ''
     }${timelineLabel ? ` · ${timelineLabel}` : ''}`;
 
-    // 6. Validación avanzada de email (DNS/MX records, dominios desechables)
+    // 6. Rate limiting — se ejecuta ANTES del lookup DNS/MX para que la
+    // resolución (validateEmail, salida de red costosa) quede protegida por el
+    // limitador y no pueda ser abusada para amplificar consultas DNS.
+    const headersList = await headers();
+    const request = new Request('http://localhost', {
+      headers: headersList,
+    });
+    const identifier = getClientIdentifier(request);
+
+    const { success: rateLimitSuccess } = await contactRateLimiter.limit(identifier);
+
+    if (!rateLimitSuccess) {
+      logger.warn('Contact form rate limit exceeded', {
+        identifier,
+        email: sanitizedData.email,
+      });
+      return {
+        success: false,
+        errorKey: 'toastRateLimit',
+      };
+    }
+
+    // 7. Validación avanzada de email (DNS/MX records, dominios desechables)
     // Nota: Los typos se validan solo en el cliente, el servidor no los rechaza
     const emailValidation = await measureAsync(
       'email_validation',
@@ -99,26 +121,6 @@ export async function sendContactEmail(formData: FormData): Promise<ContactActio
       domain: emailValidation.domain,
       hasMxRecords: emailValidation.hasMxRecords,
     });
-
-    // 7. Rate limiting
-    const headersList = await headers();
-    const request = new Request('http://localhost', {
-      headers: headersList,
-    });
-    const identifier = getClientIdentifier(request);
-
-    const { success: rateLimitSuccess } = await contactRateLimiter.limit(identifier);
-
-    if (!rateLimitSuccess) {
-      logger.warn('Contact form rate limit exceeded', {
-        identifier,
-        email: sanitizedData.email,
-      });
-      return {
-        success: false,
-        errorKey: 'toastRateLimit',
-      };
-    }
 
     // 8. Enviar email al propietario (el email ya fue validado con DNS)
     const ownerEmailResult = await trackEmailSend('contact', () =>

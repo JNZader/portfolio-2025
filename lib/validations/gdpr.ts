@@ -7,10 +7,10 @@ import { REGEX_PATTERNS } from '@/lib/constants';
 export const dataExportSchema = z.object({
   email: z
     .string()
-    .min(1, 'El email es requerido')
-    .regex(REGEX_PATTERNS.email, 'Email inválido')
+    .trim()
     .toLowerCase()
-    .trim(),
+    .min(1, 'El email es requerido')
+    .regex(REGEX_PATTERNS.email, 'Email inválido'),
 });
 
 export type DataExportInput = z.infer<typeof dataExportSchema>;
@@ -21,10 +21,10 @@ export type DataExportInput = z.infer<typeof dataExportSchema>;
 export const dataDeletionSchema = z.object({
   email: z
     .string()
-    .min(1, 'El email es requerido')
-    .regex(REGEX_PATTERNS.email, 'Email inválido')
+    .trim()
     .toLowerCase()
-    .trim(),
+    .min(1, 'El email es requerido')
+    .regex(REGEX_PATTERNS.email, 'Email inválido'),
   confirmation: z.literal(true, {
     error: 'Debes confirmar que entiendes que esta acción es irreversible',
   }),

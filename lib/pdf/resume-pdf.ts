@@ -324,11 +324,10 @@ function renderEducation(
     setText(ctx, SIZES.body, COLORS.primary, 'bold');
     ctx.doc.text(edu.degree, MARGIN, ctx.yPos + 3.2);
 
-    // Right-aligned date with institution prefix when no separate institution line follows
-    const hasDetailsOrInstitution = !!edu.institution;
-    const dateText = hasDetailsOrInstitution
-      ? `${edu.startDate} – ${edu.endDate}`
-      : `${edu.institution}, ${edu.endDate}`;
+    // Right-aligned date range. The institution renders as its own gray line
+    // below (when present), so it is never interpolated into the date text —
+    // this avoids rendering a stray "undefined, <date>" when institution is empty.
+    const dateText = `${edu.startDate} – ${edu.endDate}`;
     setText(ctx, SIZES.small, COLORS.lightGray, 'normal', 'italic');
     ctx.doc.text(dateText, PAGE_WIDTH - MARGIN, ctx.yPos + 3.2, { align: 'right' });
 

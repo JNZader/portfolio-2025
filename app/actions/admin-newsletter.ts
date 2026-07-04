@@ -146,11 +146,20 @@ export async function sendNewsletterBroadcast(formData: FormData): Promise<Broad
         )
       );
 
-      // Contar éxitos y loguear fallos
+      // Contar éxitos y loguear fallos.
+      // El SDK de Resend RESUELVE con { data, error } (no rechaza en errores de
+      // API), así que un resultado "fulfilled" puede aún traer result.value.error.
       for (let j = 0; j < results.length; j++) {
         const result = results[j];
         if (result.status === 'fulfilled') {
-          sentCount++;
+          if (result.value.error) {
+            logger.error(
+              `Failed to send newsletter to ${chunk[j].email}`,
+              result.value.error as Error
+            );
+          } else {
+            sentCount++;
+          }
         } else {
           logger.error(`Failed to send newsletter to ${chunk[j].email}`, result.reason as Error);
         }
