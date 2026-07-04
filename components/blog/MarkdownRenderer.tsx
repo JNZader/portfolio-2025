@@ -6,6 +6,7 @@ import type { Components } from 'react-markdown';
 import ReactMarkdown from 'react-markdown';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
+import { PROSE_CLASSES } from '@/lib/blog/prose-classes';
 import { slugifyHeading } from '@/lib/utils/toc';
 import { CodeBlock } from './CodeBlock';
 
@@ -175,7 +176,7 @@ const markdownComponents: Components = {
 
 export function MarkdownRenderer({ content }: Readonly<MarkdownRendererProps>) {
   return (
-    <div className="prose prose-lg max-w-none">
+    <div className={PROSE_CLASSES}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeSlug]}

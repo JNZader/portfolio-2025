@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { PortableTextBlock } from 'sanity';
 import { MermaidDiagram } from '@/components/markdown/MermaidDiagram';
+import { PROSE_CLASSES } from '@/lib/blog/prose-classes';
 import { slugifyHeading } from '@/lib/utils/toc';
 import { getImageUrl } from '@/sanity/lib/image';
 import { CodeBlock } from './CodeBlock';
@@ -182,7 +183,7 @@ const components: PortableTextComponents = {
 
 export function PortableTextRenderer({ value }: Readonly<PortableTextRendererProps>) {
   return (
-    <div className="prose prose-lg max-w-none">
+    <div className={PROSE_CLASSES}>
       <PortableText value={value} components={components} />
     </div>
   );
