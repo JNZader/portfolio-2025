@@ -56,51 +56,66 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Dynamic blog posts
-  let blogPages: MetadataRoute.Sitemap = [];
-  try {
-    const posts = await sanityFetch<Post[]>({
-      query: postsQuery,
-      tags: ['post'],
-    });
-    blogPages = posts.map((post) => ({
-      url: `${SITE_URL}/blog/${post.slug.current}`,
-      lastModified: new Date(post._updatedAt ?? post.publishedAt),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    }));
-  } catch (error) {
-    logger.warn('Failed to fetch blog posts for sitemap', {
-      service: 'sitemap',
-      error: (error as Error).message,
-    });
-  }
+  // Dynamic blog posts and projects are fetched concurrently — each keeps its
+  // own try/catch so one source failing never blocks the other's fallback.
+  const fetchBlogPages = async (): Promise<MetadataRoute.Sitemap> => {
+    try {
+      const posts = await sanityFetch<Post[]>({
+        query: postsQuery,
+        tags: ['post'],
+      });
+      return posts.map((post) => ({
+        url: `${SITE_URL}/blog/${post.slug.current}`,
+        lastModified: new Date(post._updatedAt ?? post.publishedAt),
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      }));
+    } catch (error) {
+      logger.warn('Failed to fetch blog posts for sitemap', {
+        service: 'sitemap',
+        error: (error as Error).message,
+      });
+      return [];
+    }
+  };
 
   // Dynamic projects. IMPORTANT: /proyectos/[id] matches by the unified
   // Project.id (Sanity _id, or the handmade _id of local projects), NOT by
   // slug — mirror generateStaticParams so every sitemap URL actually resolves.
-  let projectPages: MetadataRoute.Sitemap = [];
-  try {
-    const projects = await sanityFetch<Project[]>({
-      query: projectsQuery,
-      tags: ['project'],
-    });
-    projectPages = mergeLocalAndSanityProjects(projects).map((project) => {
-      const id = convertSanityProject(project).id;
-      return {
-        url: `${SITE_URL}/proyectos/${id}`,
-        lastModified: new Date(project._updatedAt ?? project.publishedAt),
-        changeFrequency: 'monthly',
-        priority: 0.6,
-        alternates: bilingualAlternates(`/proyectos/${id}`),
-      };
-    });
-  } catch (error) {
-    logger.warn('Failed to fetch projects for sitemap', {
-      service: 'sitemap',
-      error: (error as Error).message,
-    });
-  }
+  const fetchProjectPages = async (): Promise<MetadataRoute.Sitemap> => {
+    try {
+      const projects = await sanityFetch<Project[]>({
+        query: projectsQuery,
+        tags: ['project'],
+      });
+      return mergeLocalAndSanityProjects(projects).map((project) => {
+        const id = convertSanityProject(project).id;
+        return {
+          url: `${SITE_URL}/proyectos/${id}`,
+          lastModified: new Date(project._updatedAt ?? project.publishedAt),
+          changeFrequency: 'monthly',
+          priority: 0.6,
+          alternates: bilingualAlternates(`/proyectos/${id}`),
+        };
+      });
+    } catch (error) {
+      logger.warn('Failed to fetch projects for sitemap', {
+        service: 'sitemap',
+        error: (error as Error).message,
+      });
+      return [];
+    }
+  };
+
+  const [blogResult, projectResult] = await Promise.allSettled([
+    fetchBlogPages(),
+    fetchProjectPages(),
+  ]);
+
+  const blogPages: MetadataRoute.Sitemap =
+    blogResult.status === 'fulfilled' ? blogResult.value : [];
+  const projectPages: MetadataRoute.Sitemap =
+    projectResult.status === 'fulfilled' ? projectResult.value : [];
 
   return [...staticPages, ...blogPages, ...projectPages];
 }

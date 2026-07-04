@@ -14,11 +14,6 @@ export function ResourceHints() {
       <link rel="dns-prefetch" href="https://cdn.sanity.io" />
 
       {/* Giscus preconnect lives in blog/[slug] — comments only load there */}
-
-      {/* Prefetch important pages for better navigation */}
-      <link rel="prefetch" href="/blog" />
-      <link rel="prefetch" href="/proyectos" />
-      <link rel="prefetch" href="/contacto" />
     </>
   );
 }

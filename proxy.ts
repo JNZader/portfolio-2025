@@ -30,6 +30,7 @@ const globalRateLimiter = redis
       limiter: Ratelimit.slidingWindow(100, '1 m'),
       analytics: true,
       prefix: 'ratelimit:global',
+      ephemeralCache: new Map(),
     })
   : null;
 
@@ -40,6 +41,7 @@ const apiRateLimiter = redis
       limiter: Ratelimit.slidingWindow(60, '1 m'),
       analytics: true,
       prefix: 'ratelimit:api',
+      ephemeralCache: new Map(),
     })
   : null;
 

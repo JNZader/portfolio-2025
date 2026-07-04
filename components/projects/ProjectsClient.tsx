@@ -3,7 +3,8 @@
 import { Filter, Search, X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { Project } from '@/lib/github/types';
@@ -30,6 +31,11 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
     (searchParams.get('source') as ProjectSource) ?? 'all'
   );
   const [showFilters, setShowFilters] = useState(false);
+
+  // Debounced URL sync: the input stays instantly responsive (local state +
+  // live filtering), but the router.replace side-effect is debounced so we
+  // don't push a history/URL update on every keystroke.
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
 
   // Extraer todas las tecnologías únicas
   const allTechs = useMemo(() => {
@@ -73,10 +79,15 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
     router.replace(newURL, { scroll: false });
   };
 
+  // Sincroniza la URL con la búsqueda debounceada (no en cada keystroke).
+  // biome-ignore lint/correctness/useExhaustiveDependencies: solo debe re-ejecutarse cuando cambia el valor debounceado, no en cada render por updateURL/selectedTechs/selectedSource
+  useEffect(() => {
+    updateURL(debouncedSearchQuery, selectedTechs, selectedSource);
+  }, [debouncedSearchQuery]);
+
   // Handlers
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
-    updateURL(value, selectedTechs, selectedSource);
   };
 
   const toggleTech = (tech: string) => {
@@ -255,8 +266,8 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
       {/* Grid de proyectos */}
       {filteredProjects.length > 0 ? (
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+          {filteredProjects.map((project, index) => (
+            <ProjectCard key={project.id} project={project} priority={index < 3} />
           ))}
         </div>
       ) : (

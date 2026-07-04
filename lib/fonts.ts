@@ -40,7 +40,7 @@ export const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   display: 'optional',
   variable: '--font-mono',
-  preload: true,
+  preload: false,
   fallback: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
   adjustFontFallback: true,
 });

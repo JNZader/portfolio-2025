@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { cache } from 'react';
 import { FaGithub } from 'react-icons/fa';
 import type { CreativeWork, SoftwareSourceCode, WithContext } from 'schema-dts';
 import { PortableTextRenderer } from '@/components/blog/PortableTextRenderer';
@@ -38,31 +39,35 @@ interface ProjectPageProps {
 // ISR: Revalidar cada 1 hora
 export const revalidate = 3600;
 
-async function getAllProjects(locale = 'es'): Promise<Project[]> {
-  // Obtener proyectos de Sanity
-  let sanityProjects: Project[] = [];
-  try {
-    const projects = await sanityFetch<SanityProject[]>({
+const getAllProjects = cache(async (locale = 'es'): Promise<Project[]> => {
+  // Sanity y GitHub son fetches independientes — en paralelo, cada uno con su
+  // propio fallback (allSettled preserva el manejo de error por fuente).
+  const [sanityResult, githubResult] = await Promise.allSettled([
+    sanityFetch<SanityProject[]>({
       query: projectsQuery,
       tags: ['project'],
-    });
-    sanityProjects = mergeLocalAndSanityProjects(projects).map((p) =>
+    }),
+    getCachedFeaturedProjects(),
+  ]);
+
+  let sanityProjects: Project[] = [];
+  if (sanityResult.status === 'fulfilled') {
+    sanityProjects = mergeLocalAndSanityProjects(sanityResult.value).map((p) =>
       convertSanityProject(p, locale)
     );
-  } catch (error) {
-    logger.error('Failed to fetch Sanity projects', error as Error, {
+  } else {
+    logger.error('Failed to fetch Sanity projects', sanityResult.reason as Error, {
       service: 'projects',
       path: '/proyectos/[id]',
     });
     sanityProjects = mergeLocalAndSanityProjects([]).map((p) => convertSanityProject(p, locale));
   }
 
-  // Obtener proyectos de GitHub
   let githubProjects: Project[] = [];
-  try {
-    githubProjects = await getCachedFeaturedProjects();
-  } catch (error) {
-    logger.error('Failed to fetch GitHub projects', error as Error, {
+  if (githubResult.status === 'fulfilled') {
+    githubProjects = githubResult.value;
+  } else {
+    logger.error('Failed to fetch GitHub projects', githubResult.reason as Error, {
       service: 'projects',
       path: '/proyectos/[id]',
     });
@@ -78,7 +83,7 @@ async function getAllProjects(locale = 'es'): Promise<Project[]> {
       (project) => !curatedKeys.has(project.title.trim().toLowerCase().replace(/\s+/g, '-'))
     ),
   ];
-}
+});
 
 /**
  * Pre-render the curated/Sanity project detail pages at build time (SSG),
