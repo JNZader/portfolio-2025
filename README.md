@@ -1,4 +1,24 @@
-# Portfolio 2025
+# Javier Zader — Backend Developer
+
+**Sistemas end-to-end en Java, Go y Rust — del análisis al deploy.**
+
+Más de 20 años en tecnología: empecé en soporte técnico y mantenimiento de equipos, pasé varios años como productor agropecuario —un rubro donde los errores no se arreglan con un rollback— y de ahí volví al software. Hoy me hago cargo de un sistema completo, del análisis al deploy: backend, frontend, ML en el edge e infraestructura.
+
+Técnico en Desarrollo de Software (Universidad Gastón Dachary, 2025). Córdoba, Argentina.
+
+## Lo que construí
+
+Tres sistemas que muestran cómo trabajo, no solo qué stack toco:
+
+- **[apigen](https://javierzader.com/proyectos/apigen)** — De un schema SQL o un contrato OpenAPI a un servicio backend que compila. 12 combinaciones lenguaje/framework, 9 con gate de compilación nativo en CI.
+- **[Biogas Platform](https://javierzader.com/proyectos/biogas-platform)** — Plataforma industrial en producción: telemetría en tiempo real por MQTT, detección de anomalías en tres capas (edge en Rust + ONNX, ensemble en la nube), multi-tenant con row-level security real en Postgres.
+- **[apigen Studio](https://javierzader.com/proyectos/apigen-studio)** — Diseñador visual para APIs Spring Boot: modelás entidades y servicios en un canvas y exportás un proyecto que compila.
+
+Cada uno tiene su case study completo en [javierzader.com/proyectos](https://javierzader.com/proyectos).
+
+## Sobre este repo
+
+Este repositorio es el código de este mismo portfolio: sirve tanto de sitio en producción como de muestra de trabajo. Next.js 16 (App Router), React 19 con React Compiler, TypeScript estricto, bilingüe ES/EN con next-intl, Sanity como CMS headless, tests con Vitest + Playwright, deploy en Vercel.
 
 [![CI](https://github.com/JNZader/portfolio-2025/actions/workflows/ci.yml/badge.svg)](https://github.com/JNZader/portfolio-2025/actions/workflows/ci.yml)
 [![Tests](https://github.com/JNZader/portfolio-2025/actions/workflows/test.yml/badge.svg)](https://github.com/JNZader/portfolio-2025/actions/workflows/test.yml)
@@ -14,144 +34,34 @@
 
 ![Portfolio Preview](public/images/portfolio-preview.png)
 
-
-Portfolio profesional construido con el stack más moderno de 2025. Incluye sistema de blog completo con búsqueda, comentarios, CMS headless, conexión con GitHub API, analytics avanzado, testing completo, y optimizaciones de rendimiento de nivel producción.
-
 ## 📑 Índice
 
-- [Características](#-características)
-- [Internacionalización](#-internacionalización)
+- [Qué incluye](#-qué-incluye)
 - [Stack Tecnológico](#-stack-tecnológico)
 - [Setup y Desarrollo](#-setup-y-desarrollo)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
-- [Sistema de Diseño](#-sistema-de-diseño)
-- [Funcionalidades del Blog](#-blog-features)
-- [Comentarios](#-comentarios)
-- [Convenciones de Código](#-convenciones-de-código)
-- [Flujo de Trabajo Git](#-flujo-de-trabajo-git)
-- [Integración con GitHub](#-integración-con-github)
 - [Testing](#-testing)
-- [Performance](#-performance)
-- [Seguridad](#-seguridad)
 - [Deployment](#-deployment)
 - [Licencia](#-licencia)
 - [Créditos](#-créditos)
 
-## ✨ Características
+## ✨ Qué incluye
 
-### 🎨 Sistema de Diseño
-- shadcn/ui con Tailwind CSS 4.3 y modo oscuro automático
-- OKLCH color space para mejor manipulación de colores
-- Tema personalizado sincronizado entre portfolio y comentarios
-- Componentes UI premium con micro-interacciones y efectos visuales
-- Sistema de diseño documentado y escalable
-
-### 🌐 Internacionalización
-- **ES/EN con next-intl**: Español como idioma por defecto (sin prefijo), inglés bajo `/en`
-- **Rutas localizadas**: `app/[locale]/` con `i18n/routing.ts` + `i18n/navigation.ts`
-- **Diccionarios**: `messages/es.json` y `messages/en.json`
-- **Selector de idioma**: `LanguageSwitcher` en el header
-
-### 📝 Blog Completo
-- **CMS Headless**: Sanity Studio v6 + `@sanity/client` v7 para gestión de contenido
-- **Dual Content Format**: Soporte para Markdown (copy/paste) y Portable Text (editor visual)
-- **Búsqueda Full-Text**: Búsqueda en tiempo real con debouncing y highlight de términos
-- **Comentarios**: Sistema de comentarios con Giscus (GitHub Discussions)
-- **Portable Text**: Renderizado de contenido rico con syntax highlighting
-- **Markdown Support**: GitHub Flavored Markdown con tablas, código y más
-- **Table of Contents**: Navegación automática en posts largos
-- **Posts Relacionados**: Sugerencias basadas en categorías
-- **Categorías**: Filtrado por categorías con colores personalizados
-- **Share Buttons**: Compartir en redes sociales
-- **SEO Avanzado**: Structured data, Open Graph, Twitter Cards
-
-### 🚀 Proyectos
-- **Integración dual**: Proyectos desde Sanity CMS + GitHub API
-- **Búsqueda y filtros**: Búsqueda interactiva con filtros por tecnología
-- **Caché inteligente**: Sin cache in-process; se apoya en ISR de Next.js (`revalidate = 3600`, 1 hora) para el output renderizado
-
-### 📧 Sistema de Newsletter
-- **Double Opt-in**: Confirmación por email para suscripciones
-- **Rate Limiting**: Protección con Upstash Redis
-- **Email Templates**: Plantillas profesionales con React Email
-- **GDPR Compliant**: Gestión de consentimientos y datos personales
-- **Desuscripción fácil**: Links de un solo click
-- **Panel Admin**: Envío de broadcasts protegido con NextAuth (GitHub OAuth + allowlist de `ADMIN_EMAILS`)
-
-### 📮 Formulario de Contacto
-- **Validación avanzada**: Validación en servidor y cliente con Zod
-- **Rate Limiting**: Protección anti-spam con Upstash Redis
-- **Email Transaccional**: Envío con Resend API
-
-### 🔒 GDPR y Privacidad
-- **Cookie Consent**: Banner de consentimiento con gestión granular
-- **Data Export**: Los usuarios pueden exportar sus datos
-- **Data Deletion**: Solicitud de eliminación de datos
-- **Privacy Policy**: Política de privacidad completa
-- **Consent Tracking**: Registro de consentimientos con Prisma
-
-### 📊 Analytics y Monitoreo
-- **Google Analytics 4**: Tracking de pageviews automático
-- **Vercel Analytics**: Analytics de producción
-- **Vercel Speed Insights**: Métricas de rendimiento en producción
-- **Web Vitals**: Tracking de Core Web Vitals (LCP, FID, CLS, INP, TTFB, FCP)
-- **Custom Events**: Sistema de eventos personalizados para tracking
-- **Sentry**: Error tracking en cliente, servidor y edge (`@sentry/nextjs`)
-- **Error Tracking**: Boundary global para captura de errores
-- **Debug Panel**: Panel de desarrollo para monitoreo en local
-- **Event Tracking**: Tracking de búsquedas, clicks, formularios, etc.
-
-### 🎯 SEO Avanzado
-- **Structured Data**: Schema.org markup para mejor indexación
-- **Open Graph**: Metadata para redes sociales
-- **Twitter Cards**: Cards optimizadas para Twitter
-- **Dynamic OG Images**: Imágenes Open Graph generadas dinámicamente
-- **Breadcrumbs**: Navegación estructurada
-- **FAQ Schema**: Schema para preguntas frecuentes
-- **Sitemap**: Generación automática de sitemap
-- **Robots.txt**: Configuración de crawlers
-
-### ♿ Accesibilidad (WCAG 2.1 AA)
-- **Skip Links**: Navegación por teclado
-- **Screen Reader Support**: Anuncios y landmarks ARIA
-- **Focus Management**: Gestión de foco con FocusTrap
-- **Keyboard Navigation**: Navegación completa por teclado
-- **Touch Targets**: Áreas táctiles de 44x44px mínimo
-- **Color Contrast**: Contraste de color optimizado
-- **Modal Accessibility**: Modales accesibles con aria-*
-- **Form Announcements**: Anuncios de validación en formularios
-
-### ⚡ Optimización de Rendimiento
-- **React Server Components**: Optimización automática con Next.js 16
-- **ISR**: Incremental Static Regeneration para contenido dinámico
-- **React Compiler**: Optimizaciones automáticas de rendimiento
-- **Code Splitting**: División automática de código por rutas
-- **Bundle Analysis**: Análisis de tamaño de bundles con @next/bundle-analyzer
-- **Image Optimization**: Next/Image con blur placeholders y lazy loading
-- **Font Optimization**: Carga optimizada de fuentes
-- **Resource Hints**: Prefetch, preload, preconnect
-- **Multi-Layer Cache**: Caché en memoria, CDN y browser
-- **Database Optimization**: Queries optimizadas con índices Prisma
-- **Third-Party Scripts**: Carga diferida de scripts externos
-- **Lazy Loading**: Carga diferida de componentes y recursos
-- **Web Vitals Tracking**: Monitoreo de métricas de rendimiento
-
-### 🧪 Testing Completo
-- **Unit Tests**: Vitest para testing de utilities y hooks
-- **Integration Tests**: Testing Library para componentes
-- **E2E Tests**: Playwright para flujos completos
-- **Visual Regression**: Screenshots comparativos en Playwright
-- **Accessibility Tests**: axe-core para testing de a11y
-- **Coverage Reports**: Reportes de cobertura con V8
-- **CI Integration**: Tests automáticos en GitHub Actions
-
-### 🔧 Quality Tools
-- **Biome**: Linting y formatting (reemplaza ESLint + Prettier)
-- **Husky**: Git hooks pre-commit, commit-msg y pre-push
-- **TypeScript Strict**: Type safety completo
-- **CI/CD**: 6 workflows de GitHub Actions (CI, Tests, E2E, Lighthouse, Security, Release)
-- **Commitlint**: Validación de Conventional Commits
-- **commit-and-tag-version**: Versionado automático con CHANGELOG (sucesor de standard-version)
+| Área | Detalle |
+|---|---|
+| **i18n** | ES (default, sin prefijo) / EN bajo `/en`, next-intl, diccionarios en `messages/` |
+| **Blog** | CMS headless en Sanity (Markdown o Portable Text), búsqueda full-text con debounce, comentarios vía Giscus (GitHub Discussions), TOC automático, posts relacionados |
+| **Proyectos** | Fuente dual Sanity + GitHub API (topics `portfolio`/`featured`), filtros por tecnología, ISR de 1 hora sobre el output renderizado |
+| **Newsletter** | Double opt-in, rate limiting (Upstash Redis), templates con React Email, panel admin protegido con NextAuth (GitHub OAuth + allowlist de `ADMIN_EMAILS`) |
+| **Contacto** | Validación Zod server + client, rate limiting, envío transaccional con Resend |
+| **GDPR** | Cookie consent, exportación y eliminación de datos, registro de consentimientos en Postgres vía Prisma |
+| **Analytics / Monitoring** | GA4, Vercel Analytics + Speed Insights, Web Vitals, Sentry (client/server/edge) |
+| **SEO** | Structured data (schema-dts), Open Graph dinámico, sitemap y robots.txt generados |
+| **Accesibilidad** | WCAG 2.1 AA: skip links, focus trap, navegación por teclado, contraste de color |
+| **Performance** | React Server Components + React Compiler, ISR, code splitting, bundle analysis |
+| **Seguridad** | Rate limiting en API routes, sanitización de inputs, CSRF con tokens, security headers |
+| **Testing** | Pirámide completa: Vitest (unit/integration), Playwright (E2E multi-browser + visual + a11y con axe-core) |
+| **Calidad / CI** | Biome, Husky, Commitlint, 6 workflows de GitHub Actions (CI, tests, E2E, Lighthouse, security, release) |
 
 ## 🚀 Stack Tecnológico
 
@@ -185,12 +95,6 @@ Portfolio profesional construido con el stack más moderno de 2025. Incluye sist
 - **Image Optimization:** Next.js Image con blur placeholders
 - **Animations:** hook custom `useScrollReveal` + CSS (no usa Framer Motion)
 
-### Search & UX
-- **Debouncing:** use-debounce (500ms) para search input
-- **URL State:** Search params para búsquedas compartibles
-- **Highlight:** Resaltado de términos en resultados
-- **Focus Trap:** gestión de foco propia en `components/a11y` y `Modal.tsx`
-
 ### Database y Backend
 - **Database:** PostgreSQL (vía Prisma; proveedor de hosting agnóstico)
 - **ORM:** Prisma v7.8 con cliente tipado (`prisma-client` generator)
@@ -204,7 +108,6 @@ Portfolio profesional construido con el stack más moderno de 2025. Incluye sist
 - **Google Analytics:** GA4 con @next/third-parties v16.2
 - **Error Tracking:** Sentry v10.63 (`@sentry/nextjs`, client/server/edge)
 - **Web Vitals:** web-vitals v5.3
-- **Custom Events:** Sistema de eventos personalizado
 
 ### SEO
 - **Structured Data:** schema-dts v2.0
@@ -355,20 +258,10 @@ Ver documentación completa en `scripts/README.md`
 
 ### 6. Configurar Giscus (Comentarios)
 
-1. Habilita **GitHub Discussions** en tu repositorio:
-   - Settings → General → Features → ✅ Discussions
-
-2. Instala la app de Giscus:
-   - https://github.com/apps/giscus → Install
-
-3. Configura en https://giscus.app/:
-   - Ingresa tu repositorio
-   - Selecciona "Announcements" como categoría
-   - Copia los valores generados
-
-4. Agrega las variables a `.env.local` (ver arriba)
-
-
+1. Habilita **GitHub Discussions** en tu repositorio (Settings → General → Features → ✅ Discussions)
+2. Instala la app de Giscus: https://github.com/apps/giscus → Install
+3. Configura en https://giscus.app/, seleccioná "Announcements" como categoría y copiá los valores generados
+4. Agregá las variables a `.env.local` (ver arriba)
 
 ### 7. Comandos de Desarrollo
 
@@ -543,150 +436,6 @@ portfolio/
 └── package.json                # Dependencies y scripts
 ```
 
-## 🎨 Sistema de Diseño
-
-### Temas
-- **Light/Dark Mode**: Toggle automático con `next-themes`
-- **Color System**: OKLCH para mejor manipulación de colores
-- **Variables CSS**: Compatible con shadcn/ui components
-- **Giscus Sync**: Tema de comentarios sincronizado con portfolio
-- **Premium Effects**: Gradientes, glassmorphism, micro-interacciones
-
-### Componentes UI
-Basado en shadcn/ui con customizaciones:
-- Button, Badge, Card, Input, Skeleton
-- Modal accesible con focus trap
-- Theme toggle con iconos animados
-- Responsive navigation con mobile menu
-- Skip links para accesibilidad
-- Loading states con skeletons
-- Microinteracciones y efectos premium (ripple, shine, hover)
-
-## 📝 Blog Features
-
-### Búsqueda Full-Text
-- Búsqueda server-side con GROQ en Sanity
-- Debouncing de 500ms en el input
-- Highlight de términos encontrados
-- Búsqueda en título, excerpt y contenido
-- Combinable con filtros de categoría
-- URL params para búsquedas compartibles
-- Event tracking de búsquedas
-
-### Sistema de Comentarios
-- Basado en GitHub Discussions (gratis, sin backend)
-- Autenticación con GitHub OAuth
-- Markdown support nativo
-- Reacciones y replies
-- Moderación desde GitHub
-- Tema sincronizado con portfolio
-- Lazy loading para mejor performance
-
-### Content Rendering
-- **Dual Format Support**: Markdown o Portable Text según preferencia
-- Portable Text con componentes custom
-- Markdown con GitHub Flavored Markdown (tablas, código, listas)
-- Syntax highlighting para código (Prism.js)
-- Imágenes optimizadas con blur placeholders
-- Table of Contents automático (ambos formatos)
-- Posts relacionados por categoría
-- Share buttons para redes sociales
-- Event tracking de interacciones
-
-## 💬 Comentarios
-
-Este proyecto usa [Giscus](https://giscus.app/) para comentarios basados en GitHub Discussions.
-
-### Configuración
-
-1. Habilita GitHub Discussions en tu repo
-2. Ve a https://giscus.app/ y genera tu configuración
-3. Agrega las variables de entorno en `.env.local`:
-
-```bash
-NEXT_PUBLIC_GISCUS_REPO="tu-usuario/tu-repo"
-NEXT_PUBLIC_GISCUS_REPO_ID="tu-repo-id"
-NEXT_PUBLIC_GISCUS_CATEGORY="Announcements"
-NEXT_PUBLIC_GISCUS_CATEGORY_ID="tu-category-id"
-```
-
-### Moderación
-
-Los comentarios se moderan desde la pestaña "Discussions" en GitHub:
-- Editar/eliminar comentarios
-- Marcar como spam
-- Bloquear usuarios
-- Lock discussions (cerrar comentarios)
-
-
-
-## 📝 Convenciones de Código
-
-### Conventional Commits
-
-```bash
-feat(scope): nueva funcionalidad
-fix(scope): corrección de bugs
-docs(scope): cambios en documentación
-chore(scope): cambios en herramientas
-style(scope): cambios de formato
-refactor(scope): refactorización
-test(scope): agregar/actualizar tests
-perf(scope): mejoras de rendimiento
-```
-
-### Code Style (Biome)
-- Single quotes para JavaScript
-- Double quotes para JSX
-- 2 espacios de indentación
-- 100 caracteres por línea
-- Semicolons siempre
-
-## 🔄 Flujo de Trabajo Git
-
-No se usa una rama `develop`: el flujo es trunk-based con feature branches que
-se mergean directo a `main` vía Pull Request.
-
-```bash
-# Feature development
-git checkout main
-git pull
-git checkout -b feature/nombre-feature
-# ... hacer cambios ...
-npm run verify   # type-check + Biome (mirror de CI)
-npm run test:run
-git add .
-git commit -m "feat(scope): descripción"  # Husky valida formato
-
-# Abrir PR a main
-git push -u origin feature/nombre-feature
-gh pr create --base main --head feature/nombre-feature
-
-# Release (tras mergear a main)
-npm run release -- --release-as 0.x.0  # Genera CHANGELOG y tag
-git push --follow-tags origin main
-```
-
-## 📊 Integración con GitHub
-
-### Proyectos desde GitHub API
-
-El portfolio muestra automáticamente proyectos desde GitHub que tengan los topics:
-- `portfolio`
-- `featured`
-
-Si no hay proyectos con estos topics, muestra los 3 repos más recientes.
-
-**Configuración**:
-1. Agregar topics a tus repos en GitHub
-2. Configurar `NEXT_PUBLIC_GITHUB_USERNAME` en `.env.local`
-3. (Opcional) Agregar `GITHUB_TOKEN` para mejor rate limit
-
-### Proyectos desde Sanity
-
-Puedes agregar proyectos manualmente en Sanity Studio o usar el seed script.
-Los proyectos de Sanity aparecen primero, seguidos de los de GitHub.
-
 ## 🧪 Testing
 
 ### Unit e Integration Tests
@@ -702,10 +451,7 @@ Tests ubicados en `__tests__/`:
 - **unit/**: Utilities, validaciones, helpers
 - **integration/**: Componentes, hooks
 
-Herramientas:
-- Vitest + Happy DOM
-- Testing Library
-- Coverage: 80% lines, 80% functions, 75% branches
+Herramientas: Vitest + Happy DOM, Testing Library. Coverage: 80% lines, 80% functions, 75% branches.
 
 ### E2E Tests
 
@@ -719,74 +465,15 @@ npm run e2e:report       # Ver reporte HTML
 npm run e2e:codegen      # Generar tests
 ```
 
-Tests ubicados en `e2e/tests/`:
-- accessibility.spec.ts - Tests de a11y con axe-core
-- blog.spec.ts - Flujos de blog
-- contact.spec.ts - Formulario de contacto
-- navigation.spec.ts - Navegación
-- newsletter.spec.ts - Newsletter
-- visual.spec.ts - Regresión visual
+Tests ubicados en `e2e/tests/`: accessibility (axe-core), blog, contact, navigation, newsletter, visual regression.
 
-Browsers soportados:
-- Chromium, Firefox, WebKit
-- Mobile Chrome, Mobile Safari
-- iPad
+Browsers soportados: Chromium, Firefox, WebKit, Mobile Chrome, Mobile Safari, iPad.
 
-### CI/CD Testing
+### CI/CD
 
-GitHub Actions ejecuta automáticamente:
-- **CI Workflow**: Quality checks (Biome + TypeScript) + Build
-- **Tests Workflow**: Unit tests con coverage (Codecov)
-- **E2E Workflow**: E2E tests multi-browser con Playwright
-- **Lighthouse Workflow**: Performance audits con budgets
-- **Security Workflow**: CodeQL, dependency review, npm audit
-- **Release Workflow**: Automatiza versionado y CHANGELOG
+GitHub Actions ejecuta 6 workflows: CI (Biome + TypeScript + build), Tests (unit con coverage vía Codecov), E2E (multi-browser con Playwright), Lighthouse (performance budgets), Security (CodeQL, dependency review, npm audit) y Release (versionado + CHANGELOG).
 
-**Características:**
-- 🚀 Cache multi-capa para ejecución rápida (~30-60% más rápido)
-- 🔒 Security scanning semanal automático
-- 📊 Coverage reports y performance budgets
-- 🤖 Dependabot para actualizaciones automáticas
-- ⚡ Ejecución paralela de workflows (~8-12 min total)
-
-**Documentación completa:**
-- 📖 [CI/CD Documentation](docs/CI_CD_DOCUMENTATION.md) - Guía completa
-- 🚀 [CI/CD Quick Reference](docs/CI_CD_QUICK_REFERENCE.md) - Guía rápida
-
-## ⚡ Performance
-
-### Optimizaciones Implementadas
-
-1. **Code Splitting**: División automática por rutas
-2. **Image Optimization**: Next/Image con lazy loading
-3. **Bundle Analysis**: Monitoreo de tamaño de bundles
-4. **Multi-Layer Cache**: Memoria + CDN + Browser
-5. **Database Indexes**: Queries optimizadas
-6. **Resource Hints**: Prefetch, preload, preconnect
-7. **Lazy Loading**: Componentes y recursos diferidos
-8. **Third-Party Scripts**: Carga diferida de scripts externos
-
-### Lighthouse CI
-
-```bash
-npm run lighthouse        # Ejecutar Lighthouse
-npm run lighthouse:collect  # Solo recolectar
-npm run lighthouse:assert   # Solo validar
-```
-
-Ver documentación en `docs/LIGHTHOUSE_CI.md`
-
-## 🔒 Seguridad
-
-- Variables sensibles en `.env.local` (git ignored)
-- Rate limiting en API routes con Upstash Redis
-- TypeScript strict mode para type safety
-- Validación de datos con Zod schemas
-- Sanitización de inputs en búsqueda y formularios
-- OAuth para autenticación de comentarios (Giscus) y del panel admin (NextAuth)
-- CSRF protection con tokens
-- Email validation avanzada
-- Security headers en Next.js config
+Documentación completa: [CI/CD Documentation](docs/CI_CD_DOCUMENTATION.md) · [CI/CD Quick Reference](docs/CI_CD_QUICK_REFERENCE.md) · [Lighthouse CI](docs/LIGHTHOUSE_CI.md)
 
 ## 🚀 Deployment
 
