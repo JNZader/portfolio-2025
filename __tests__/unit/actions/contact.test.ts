@@ -88,7 +88,8 @@ describe('sendContactEmail', () => {
     const result = await sendContactEmail(validFormData());
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error).toContain('límite');
+      // La acción ahora devuelve una KEY semántica; el cliente la traduce.
+      expect(result.errorKey).toBe('toastRateLimit');
     }
     expect(sendMock).not.toHaveBeenCalled();
   });

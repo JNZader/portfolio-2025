@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { subscribeToNewsletter } from '@/app/actions/newsletter';
@@ -28,6 +29,7 @@ export function useNewsletterSubscription(
   options: UseNewsletterSubscriptionOptions = {}
 ): UseNewsletterSubscriptionReturn {
   const { onSuccess, onError, resetDelay = 3000 } = options;
+  const t = useTranslations('Newsletter');
   const [status, setStatus] = useState<SubscriptionStatus>('idle');
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -61,12 +63,13 @@ export function useNewsletterSubscription(
           setStatus('success');
           trackNewsletterSignup(email);
 
-          toast.success(result.message, {
+          const successMessage = t(result.messageKey);
+          toast.success(successMessage, {
             duration: 5000,
             position: 'bottom-center',
           });
 
-          onSuccess?.(result.message);
+          onSuccess?.(successMessage);
 
           if (resetDelay > 0) {
             clearPendingTimeout();
@@ -77,11 +80,12 @@ export function useNewsletterSubscription(
         }
 
         setStatus('error');
-        toast.error(result.error, {
+        const errorMsg = t(result.errorKey);
+        toast.error(errorMsg, {
           duration: 4000,
           position: 'bottom-center',
         });
-        onError?.(result.error);
+        onError?.(errorMsg);
 
         // Reset error state after delay
         clearPendingTimeout();
@@ -89,7 +93,7 @@ export function useNewsletterSubscription(
         return false;
       } catch (error) {
         setStatus('error');
-        const errorMessage = 'Error inesperado. Por favor, intenta más tarde.';
+        const errorMessage = t('toastUnexpected');
 
         logger.error('Newsletter subscription error', error as Error, {
           service: 'newsletter-hook',
@@ -106,7 +110,7 @@ export function useNewsletterSubscription(
         return false;
       }
     },
-    [onSuccess, onError, resetDelay, clearPendingTimeout]
+    [onSuccess, onError, resetDelay, clearPendingTimeout, t]
   );
 
   const reset = useCallback(() => {

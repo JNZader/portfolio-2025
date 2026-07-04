@@ -32,35 +32,29 @@ export type ContactTimeline = keyof typeof CONTACT_TIMELINES;
 export const contactSchema = z.object({
   name: z
     .string()
-    .min(2, 'El nombre debe tener al menos 2 caracteres')
-    .max(100, 'El nombre debe tener máximo 100 caracteres')
-    .regex(
-      /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s'-]+$/,
-      'El nombre solo puede contener letras, espacios, guiones y apóstrofes'
-    ),
+    .min(2, 'errNameMin')
+    .max(100, 'errNameMax')
+    .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s'-]+$/, 'errNameFormat'),
 
   email: z
     .string()
-    .min(1, 'El email es requerido')
-    .regex(REGEX_PATTERNS.email, 'Email inválido')
-    .max(255, 'El email es demasiado largo'),
+    .min(1, 'errEmailRequired')
+    .regex(REGEX_PATTERNS.email, 'errEmailInvalid')
+    .max(255, 'errEmailTooLong'),
 
   // Motivo de contacto (reemplaza al antiguo "asunto" de texto libre).
   // El select arranca en '' → el enum lo rechaza y dispara el mensaje custom.
   reason: z.enum(['job', 'freelance', 'consulting', 'other'], {
-    error: 'Elige un motivo para que pueda priorizar tu mensaje',
+    error: 'errReasonRequired',
   }),
 
   // Empresa u organización (opcional).
-  company: z.string().max(100, 'El nombre de la empresa es demasiado largo').optional(),
+  company: z.string().max(100, 'errCompanyTooLong').optional(),
 
   // Timeline estimado (opcional). El select vacío manda '' → lo aceptamos.
   timeline: z.enum(['immediate', 'short', 'mid', 'exploring']).or(z.literal('')).optional(),
 
-  message: z
-    .string()
-    .min(10, 'El mensaje debe tener al menos 10 caracteres')
-    .max(1000, 'El mensaje debe tener máximo 1000 caracteres'),
+  message: z.string().min(10, 'errMessageMin').max(1000, 'errMessageMax'),
 });
 
 /**

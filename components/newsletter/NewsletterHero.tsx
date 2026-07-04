@@ -103,7 +103,11 @@ function NewsletterCard({ className, size = 'lg' }: Readonly<NewsletterCardProps
         </Button>
       </form>
 
-      {errors.email && <p className="mt-2 text-sm text-destructive">{errors.email.message}</p>}
+      {errors.email && (
+        <p className="mt-2 text-sm text-destructive">
+          {t(errors.email.message ?? 'errEmailInvalid')}
+        </p>
+      )}
 
       {size === 'lg' && (
         <div className="flex items-center gap-4 text-xs text-muted-foreground mt-4">

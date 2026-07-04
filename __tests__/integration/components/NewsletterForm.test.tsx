@@ -36,9 +36,11 @@ describe('NewsletterForm', () => {
   });
 
   it('should submit form successfully', async () => {
+    // La acción ahora devuelve una KEY semántica; el hook la traduce con next-intl
+    // (locale=es en el test env), así que el toast recibe el texto ES resuelto.
     mockSubscribe.mockResolvedValueOnce({
       success: true,
-      message: 'Te hemos enviado un email de confirmación',
+      messageKey: 'toastSubscribe',
     });
 
     render(<NewsletterForm />);
@@ -52,7 +54,7 @@ describe('NewsletterForm', () => {
     await waitFor(() => {
       expect(mockSubscribe).toHaveBeenCalled();
       expect(mockToast.success).toHaveBeenCalledWith(
-        'Te hemos enviado un email de confirmación',
+        'Si tu email no estaba suscrito, te enviamos un link de confirmación. ¡Revisa tu inbox!',
         expect.any(Object)
       );
     });
@@ -61,7 +63,7 @@ describe('NewsletterForm', () => {
   it('should show error toast on failure', async () => {
     mockSubscribe.mockResolvedValueOnce({
       success: false,
-      error: 'Email ya registrado',
+      errorKey: 'toastRateLimit',
     });
 
     render(<NewsletterForm />);
@@ -71,7 +73,10 @@ describe('NewsletterForm', () => {
     await userEvent.click(screen.getByRole('button'));
 
     await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalledWith('Email ya registrado', expect.any(Object));
+      expect(mockToast.error).toHaveBeenCalledWith(
+        'Demasiados intentos. Por favor, intenta más tarde.',
+        expect.any(Object)
+      );
     });
   });
 
@@ -111,7 +116,7 @@ describe('NewsletterForm', () => {
   it('should clear form after successful submission', async () => {
     mockSubscribe.mockResolvedValueOnce({
       success: true,
-      message: 'Suscripción exitosa',
+      messageKey: 'toastSubscribe',
     });
 
     render(<NewsletterForm />);
