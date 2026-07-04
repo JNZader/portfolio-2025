@@ -246,7 +246,7 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
           <div className="flex flex-wrap gap-1">
             {searchQuery && (
               <Badge variant="outline" className="text-xs">
-                Búsqueda: &ldquo;{searchQuery}&rdquo;
+                {t('searchBadge', { query: searchQuery })}
               </Badge>
             )}
             {selectedSource !== 'all' && (
@@ -277,7 +277,7 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
             <Search className="h-8 w-8 text-muted-foreground" />
           </div>
           <h3 className="text-lg font-semibold mb-2">{t('emptyTitle')}</h3>
-          <p className="text-muted-foreground mb-4">Intenta ajustar tus filtros o búsqueda</p>
+          <p className="text-muted-foreground mb-4">{t('emptyHint')}</p>
           {hasActiveFilters && (
             <Button variant="outline" onClick={clearFilters}>
               {t('clearAll')}

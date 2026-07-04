@@ -9,6 +9,9 @@ export const routing = defineRouting({
   locales: ['es', 'en'],
   defaultLocale: 'es',
   localePrefix: 'as-needed',
+  // The locale switcher is explicit UI-driven, not browser-negotiated — this
+  // app shouldn't auto-redirect based on Accept-Language / the locale cookie.
+  localeDetection: false,
 });
 
 export type Locale = (typeof routing.locales)[number];

@@ -17,9 +17,13 @@ import { SectionDivider } from '@/components/ui/SectionDivider';
 import { SkillsList } from '@/components/ui/SkillsList';
 import { SKILLS_DATA_HOME } from '@/lib/constants';
 import { localeAlternates } from '@/lib/seo/alternates';
+import { ogLocaleFields } from '@/lib/seo/metadata';
 import { generatePersonSchema, generateWebSiteSchema } from '@/lib/seo/schema';
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: Readonly<{ params: Promise<{ locale: string }> }>): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations('Home');
   return {
     title: t('metaTitle'),
@@ -28,6 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: t('ogTitle'),
       description: t('ogDescription'),
+      ...ogLocaleFields(locale),
     },
   };
 }
@@ -65,7 +70,7 @@ export default async function HomePage({
   setRequestLocale(locale);
   const t = await getTranslations('Home');
   // Generate structured data schemas
-  const personSchema = generatePersonSchema();
+  const personSchema = generatePersonSchema(locale);
   const websiteSchema = generateWebSiteSchema();
 
   return (

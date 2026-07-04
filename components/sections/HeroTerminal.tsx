@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { SCRIPT } from './hero-terminal-script';
 import { useTypingSequence } from './useTypingSequence';
@@ -58,6 +59,7 @@ function CommandLine({ text, cursor }: { text: string; cursor?: boolean }) {
 }
 
 export function HeroTerminal() {
+  const t = useTranslations('HeroTerminal');
   const reduced = usePrefersReducedMotion();
   const { done, typed, bodyRef } = useTypingSequence(SCRIPT, reduced);
 
@@ -86,9 +88,8 @@ export function HeroTerminal() {
           role="tooltip"
           className="pointer-events-none absolute right-3 top-full z-20 mt-2 w-72 max-w-[calc(100%-1.5rem)] rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-left text-[11px] leading-snug text-slate-300 opacity-0 shadow-xl transition-opacity duration-200 group-hover:opacity-100"
         >
-          <span className="font-semibold text-slate-100">Ejemplo real generado con apigen.</span> De
-          un schema SQL a una API Spring Boot completa y corriendo — cada línea (archivos, arranque
-          y respuestas) fue capturada de la app en vivo, no es una maqueta.
+          <span className="font-semibold text-slate-100">{t('tooltipBold')}</span>{' '}
+          {t('tooltipRest')}
         </div>
       </div>
 

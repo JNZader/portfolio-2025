@@ -54,6 +54,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
       alternates: bilingualAlternates('/cv'),
     },
+    {
+      url: `${SITE_URL}/privacy`,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+      alternates: bilingualAlternates('/privacy'),
+    },
+    {
+      url: `${SITE_URL}/data-request`,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+      alternates: bilingualAlternates('/data-request'),
+    },
+    {
+      url: `${SITE_URL}/newsletter`,
+      changeFrequency: 'monthly',
+      priority: 0.5,
+      alternates: bilingualAlternates('/newsletter'),
+    },
   ];
 
   // Dynamic blog posts and projects are fetched concurrently — each keeps its

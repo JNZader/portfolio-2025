@@ -2,19 +2,26 @@ import type { BlogPosting, BreadcrumbList, Person, WebSite, WithContext } from '
 import { SITE_URL } from '@/lib/config/site-config';
 import type { ResumeDataRaw } from '@/lib/types/resume';
 
+const PERSON_DESCRIPTION_ES =
+  'Backend Developer con más de 20 años en tecnología, especializado en sistemas end-to-end con Java, Go y Rust — de plataformas industriales con ML en el edge a herramientas de desarrollo con IA. Técnico en Desarrollo de Software.';
+const PERSON_DESCRIPTION_EN =
+  'Backend Developer with 20+ years in technology, specialized in end-to-end systems with Java, Go, and Rust — from industrial platforms with ML at the edge to AI-powered development tools. Software Development Technician.';
+
 /**
  * Generate Person schema (for homepage)
+ *
+ * @param locale - 'es' (default) or 'en'. Controls the canonical `url` (EN
+ * gets the `/en` prefix) and the human-readable `description`.
  */
-export function generatePersonSchema(): WithContext<Person> {
+export function generatePersonSchema(locale = 'es'): WithContext<Person> {
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: 'Javier Norberto Zader',
-    url: SITE_URL,
+    url: locale === 'en' ? `${SITE_URL}/en` : SITE_URL,
     image: `${SITE_URL}/images/profile.jpg`,
     jobTitle: 'Backend Developer',
-    description:
-      'Backend Developer con más de 20 años en tecnología, especializado en sistemas end-to-end con Java, Go y Rust — de plataformas industriales con ML en el edge a herramientas de desarrollo con IA. Técnico en Desarrollo de Software.',
+    description: locale === 'en' ? PERSON_DESCRIPTION_EN : PERSON_DESCRIPTION_ES,
     sameAs: ['https://github.com/JNZader', 'https://www.linkedin.com/in/jnzader/'],
     knowsAbout: [
       'Java',
@@ -152,18 +159,25 @@ export function generateBlogPostingSchema(post: {
 
 /**
  * Generate BreadcrumbList schema
+ *
+ * @param locale - 'es' (default) or 'en'. Controls whether each item's `item`
+ * URL gets the `/en` prefix (mirrors `localeAlternates`'s path handling).
  */
 export function generateBreadcrumbSchema(
-  items: Array<{ name: string; url: string }>
+  items: Array<{ name: string; url: string }>,
+  locale = 'es'
 ): WithContext<BreadcrumbList> {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: items.map((item, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: item.name,
-      item: `${SITE_URL}${item.url}`,
-    })),
+    itemListElement: items.map((item, index) => {
+      const path = locale === 'en' ? (item.url === '/' ? '/en' : `/en${item.url}`) : item.url;
+      return {
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        item: `${SITE_URL}${path}`,
+      };
+    }),
   };
 }

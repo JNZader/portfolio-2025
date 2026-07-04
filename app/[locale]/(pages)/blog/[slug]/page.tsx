@@ -14,6 +14,7 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import Container from '@/components/ui/Container';
 import { SITE_URL } from '@/lib/config/site-config';
 import { logger } from '@/lib/monitoring/logger';
+import { ogLocaleFields } from '@/lib/seo/metadata';
 import { generateBlogPostingSchema, generateBreadcrumbSchema } from '@/lib/seo/schema';
 import { generateTableOfContents, generateTableOfContentsFromMarkdown } from '@/lib/utils/toc';
 import { sanityFetch } from '@/sanity/lib/client';
@@ -37,6 +38,7 @@ function PostContent({ post }: Readonly<{ post: Post }>) {
 
 interface PostPageProps {
   params: Promise<{
+    locale: string;
     slug: string;
   }>;
 }
@@ -66,7 +68,7 @@ async function RelatedPostsSection({
  * Generate metadata for SEO
  */
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const { locale, slug } = await params;
 
   const post = await sanityFetch<Post>({
     query: postBySlugQuery,
@@ -93,6 +95,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
       description: post.seo?.metaDescription ?? post.excerpt,
       url: `/blog/${slug}`,
       type: 'article',
+      ...ogLocaleFields(locale),
       publishedTime: post.publishedAt,
       authors: post.author ? [post.author.name] : undefined,
       images: ogImage
@@ -142,7 +145,7 @@ export async function generateStaticParams() {
  * Post page
  */
 export default async function PostPage({ params }: Readonly<PostPageProps>) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
 
   // Fetch post
   const post = await sanityFetch<Post>({
@@ -175,11 +178,14 @@ export default async function PostPage({ params }: Readonly<PostPageProps>) {
     keywords: post.categories?.map((cat) => cat.title),
   });
 
-  const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Inicio', url: '/' },
-    { name: 'Blog', url: '/blog' },
-    { name: post.title, url: `/blog/${post.slug.current}` },
-  ]);
+  const breadcrumbSchema = generateBreadcrumbSchema(
+    [
+      { name: 'Inicio', url: '/' },
+      { name: 'Blog', url: '/blog' },
+      { name: post.title, url: `/blog/${post.slug.current}` },
+    ],
+    locale
+  );
 
   return (
     <>

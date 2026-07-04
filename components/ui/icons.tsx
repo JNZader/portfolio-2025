@@ -1,3 +1,7 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 /**
  * Shared icon components to avoid duplication
  */
@@ -7,9 +11,10 @@ interface IconProps {
 }
 
 export function SpinnerIcon({ className }: Readonly<IconProps>) {
+  const t = useTranslations('Icons');
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" aria-hidden="true">
-      <title>Cargando</title>
+      <title>{t('loading')}</title>
       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
       <path
         className="opacity-75"
@@ -21,6 +26,7 @@ export function SpinnerIcon({ className }: Readonly<IconProps>) {
 }
 
 export function SendIcon({ className }: Readonly<IconProps>) {
+  const t = useTranslations('Icons');
   return (
     <svg
       className={className}
@@ -30,7 +36,7 @@ export function SendIcon({ className }: Readonly<IconProps>) {
       stroke="currentColor"
       aria-hidden="true"
     >
-      <title>Enviar</title>
+      <title>{t('send')}</title>
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -41,6 +47,7 @@ export function SendIcon({ className }: Readonly<IconProps>) {
 }
 
 export function CheckIcon({ className }: Readonly<IconProps>) {
+  const t = useTranslations('Icons');
   return (
     <svg
       className={className}
@@ -50,13 +57,14 @@ export function CheckIcon({ className }: Readonly<IconProps>) {
       stroke="currentColor"
       aria-hidden="true"
     >
-      <title>Completado</title>
+      <title>{t('completed')}</title>
       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
     </svg>
   );
 }
 
 export function CopyIcon({ className }: Readonly<IconProps>) {
+  const t = useTranslations('Icons');
   return (
     <svg
       className={className}
@@ -66,7 +74,7 @@ export function CopyIcon({ className }: Readonly<IconProps>) {
       stroke="currentColor"
       aria-hidden="true"
     >
-      <title>Copiar</title>
+      <title>{t('copy')}</title>
       <path
         strokeLinecap="round"
         strokeLinejoin="round"

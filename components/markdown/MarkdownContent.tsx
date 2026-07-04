@@ -18,10 +18,26 @@ interface RepoInfo {
   branch?: string;
 }
 
+interface MarkdownLabels {
+  list: string;
+  table: string;
+}
+
+// Defaults keep this component's public API backward-compatible for callers
+// (and tests) that don't pass `labels` — same Spanish text as before.
+const DEFAULT_LABELS: MarkdownLabels = { list: 'Lista', table: 'Tabla' };
+
 interface MarkdownContentProps {
   content: string;
   className?: string;
   repoInfo?: RepoInfo;
+  /**
+   * Locale-aware labels for the small "Lista"/"Tabla" badges above rendered
+   * lists/tables. This is a Server Component with no next-intl provider
+   * context of its own, so the caller (which has `locale`/`getTranslations`)
+   * passes these in rather than this component calling useTranslations.
+   */
+  labels?: MarkdownLabels;
 }
 
 /**
@@ -74,7 +90,10 @@ function getTextContent(node: React.ReactNode): string {
 }
 
 // Factory function to create markdown components with repoInfo context
-function createMarkdownComponents(repoInfo?: RepoInfo): Components {
+function createMarkdownComponents(
+  repoInfo: RepoInfo | undefined,
+  labels: MarkdownLabels
+): Components {
   return {
     // Headings
     h1: ({ children }) => (
@@ -102,7 +121,7 @@ function createMarkdownComponents(repoInfo?: RepoInfo): Components {
       <ul className="mb-4 space-y-2 ml-6 list-none">
         <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
           <List className="w-3 h-3" />
-          <span>Lista</span>
+          <span>{labels.list}</span>
         </div>
         {children}
       </ul>
@@ -207,7 +226,7 @@ function createMarkdownComponents(repoInfo?: RepoInfo): Components {
       <div className="my-6 overflow-hidden rounded-lg border border-border shadow-sm">
         <div className="flex items-center gap-2 px-4 py-2 bg-muted/50 border-b border-border">
           <Table className="w-4 h-4 text-primary" />
-          <span className="text-xs font-medium text-muted-foreground">Tabla</span>
+          <span className="text-xs font-medium text-muted-foreground">{labels.table}</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">{children}</table>
@@ -317,9 +336,10 @@ export function MarkdownContent({
   content,
   className = '',
   repoInfo,
+  labels = DEFAULT_LABELS,
 }: Readonly<MarkdownContentProps>) {
   // Create components with repoInfo context for GitHub image URL transformation
-  const components = createMarkdownComponents(repoInfo);
+  const components = createMarkdownComponents(repoInfo, labels);
 
   return (
     <div className={`markdown-content ${className}`}>

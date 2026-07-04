@@ -43,15 +43,15 @@ ${posts
     const imageUrl = post.mainImage ? urlForImage(post.mainImage).width(1200).url() : '';
 
     return `    <item>
-      <title><![CDATA[${escapeXml(post.title)}]]></title>
+      <title><![CDATA[${escapeCdata(post.title)}]]></title>
       <link>${postUrl}</link>
       <guid isPermaLink="true">${postUrl}</guid>
-      <description><![CDATA[${escapeXml(post.excerpt)}]]></description>
+      <description><![CDATA[${escapeCdata(post.excerpt)}]]></description>
       <pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>
-      <dc:creator><![CDATA[${escapeXml(post.author?.name ?? AUTHOR_NAME)}]]></dc:creator>
+      <dc:creator><![CDATA[${escapeCdata(post.author?.name ?? AUTHOR_NAME)}]]></dc:creator>
 ${post.categories?.map((cat) => `      <category>${escapeXml(cat.title)}</category>`).join('\n') ?? ''}
 ${imageUrl ? `      <enclosure url="${imageUrl}" type="image/jpeg"/>` : ''}
-${post.readingTime ? `      <content:encoded><![CDATA[<p>Tiempo de lectura: ${post.readingTime} min</p><p>${escapeXml(post.excerpt)}</p>]]></content:encoded>` : ''}
+${post.readingTime ? `      <content:encoded><![CDATA[<p>Tiempo de lectura: ${post.readingTime} min</p><p>${escapeCdata(post.excerpt)}</p>]]></content:encoded>` : ''}
     </item>`;
   })
   .join('\n')}
@@ -60,7 +60,7 @@ ${post.readingTime ? `      <content:encoded><![CDATA[<p>Tiempo de lectura: ${po
 
     return new Response(rss, {
       headers: {
-        'Content-Type': 'application/xml; charset=utf-8',
+        'Content-Type': 'application/rss+xml; charset=utf-8',
         'Cache-Control': 'public, max-age=3600, s-maxage=7200, stale-while-revalidate=86400',
       },
     });
@@ -73,7 +73,8 @@ ${post.readingTime ? `      <content:encoded><![CDATA[<p>Tiempo de lectura: ${po
 }
 
 /**
- * Escapa caracteres especiales para XML
+ * Escapa caracteres especiales para XML (uso en contenido de texto plano,
+ * FUERA de bloques CDATA — p. ej. <category>).
  */
 function escapeXml(text: string): string {
   return text
@@ -82,4 +83,15 @@ function escapeXml(text: string): string {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&apos;');
+}
+
+/**
+ * Prepara texto para insertarlo DENTRO de un bloque `<![CDATA[...]]>`. El
+ * contenido de un CDATA es texto crudo — no se escapan entidades HTML (eso
+ * sería doble-encoding, ya que el parser XML no vuelve a interpretar
+ * entidades dentro de CDATA). Lo único que hay que neutralizar es una
+ * secuencia literal `]]>`, que cerraría el bloque antes de tiempo.
+ */
+function escapeCdata(text: string): string {
+  return text.replaceAll(']]>', ']]]]><![CDATA[>');
 }
