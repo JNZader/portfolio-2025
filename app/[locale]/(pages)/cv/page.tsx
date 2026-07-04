@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { DownloadCVButton } from '@/components/ui/DownloadCVButton';
+import { ExternalLink } from '@/components/ui/ExternalLink';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
 import { Link } from '@/i18n/navigation';
 import { localeAlternates } from '@/lib/seo/alternates';
@@ -238,27 +239,25 @@ export default async function CvPage({
               <span className="font-semibold text-foreground print:text-black">
                 {t('linkedinLabel')}
               </span>{' '}
-              <a
+              <ExternalLink
                 href={data.personalInfo.linkedin}
+                trackLabel="LinkedIn"
                 className="hover:text-primary transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
               >
                 {data.personalInfo.linkedin.replace(/^https?:\/\//, '')}
-              </a>
+              </ExternalLink>
             </li>
             <li>
               <span className="font-semibold text-foreground print:text-black">
                 {t('githubLabel')}
               </span>{' '}
-              <a
+              <ExternalLink
                 href={data.personalInfo.github}
+                trackLabel="GitHub"
                 className="hover:text-primary transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
               >
                 {data.personalInfo.github.replace(/^https?:\/\//, '')}
-              </a>
+              </ExternalLink>
             </li>
           </ul>
         </section>

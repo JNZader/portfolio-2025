@@ -2,6 +2,7 @@ import { Heart } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import Container from '@/components/ui/Container';
+import { ExternalLink } from '@/components/ui/ExternalLink';
 import { Link } from '@/i18n/navigation';
 import { MAIN_NAVIGATION } from '@/lib/constants/navigation';
 
@@ -32,24 +33,22 @@ export default async function Footer() {
               </Link>
               <p className="text-sm text-muted-foreground leading-relaxed">{t('brand')}</p>
               <div className="flex gap-4">
-                <a
+                <ExternalLink
                   href="https://github.com/JNZader"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  trackLabel="GitHub"
                   className="text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-110 hover:-translate-y-1 rounded-md p-1 -m-1 hover:ring-2 hover:ring-primary/20 focus-visible:ring-2 focus-visible:ring-primary"
                   aria-label={t('githubAria')}
                 >
                   <FaGithub className="h-5 w-5" />
-                </a>
-                <a
+                </ExternalLink>
+                <ExternalLink
                   href="https://www.linkedin.com/in/jnzader/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  trackLabel="LinkedIn"
                   className="text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-110 hover:-translate-y-1 rounded-md p-1 -m-1 hover:ring-2 hover:ring-primary/20 focus-visible:ring-2 focus-visible:ring-primary"
                   aria-label={t('linkedinAria')}
                 >
                   <FaLinkedin className="h-5 w-5" />
-                </a>
+                </ExternalLink>
               </div>
               <Link
                 href="/contacto"

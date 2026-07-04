@@ -6,6 +6,7 @@ import { RevealOnScroll } from '@/components/animations';
 import { ContactForm } from '@/components/forms/ContactForm';
 import Container from '@/components/ui/Container';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ExternalLink } from '@/components/ui/ExternalLink';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
 import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
 import { localeAlternates } from '@/lib/seo/alternates';
@@ -141,27 +142,25 @@ export default async function ContactoPage({
                   <CardTitle>{t('socialTitle')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <a
+                  <ExternalLink
                     href="https://github.com/JNZader"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    trackLabel="GitHub"
                     className="flex items-center gap-3 text-sm hover:text-[var(--color-primary)] transition-colors"
                     aria-label={t('githubAria')}
                   >
                     <FaGithub className="h-5 w-5" aria-hidden="true" />
                     GitHub
-                  </a>
+                  </ExternalLink>
 
-                  <a
+                  <ExternalLink
                     href="https://www.linkedin.com/in/jnzader/"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    trackLabel="LinkedIn"
                     className="flex items-center gap-3 text-sm hover:text-[var(--color-primary)] transition-colors"
                     aria-label={t('linkedinAria')}
                   >
                     <FaLinkedin className="h-5 w-5" aria-hidden="true" />
                     LinkedIn
-                  </a>
+                  </ExternalLink>
                 </CardContent>
               </Card>
             </RevealOnScroll>

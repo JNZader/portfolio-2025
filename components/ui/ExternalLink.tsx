@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import type { ComponentProps } from 'react';
 import { trackExternalLink } from '@/lib/analytics/events';

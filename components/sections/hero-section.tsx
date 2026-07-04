@@ -5,6 +5,7 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
 import { CVButton } from '@/components/ui/CVButton';
+import { ExternalLink } from '@/components/ui/ExternalLink';
 import { HeroBackground } from '@/components/ui/HeroBackground';
 import { Link } from '@/i18n/navigation';
 
@@ -138,14 +139,13 @@ export async function HeroSection({
                     className="hover:bg-primary/10 hover:text-primary transition-colors"
                     asChild
                   >
-                    <a
+                    <ExternalLink
                       href={socialLinks.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      trackLabel="GitHub"
                       aria-label={tc('aGithub')}
                     >
                       <FaGithub className="h-5 w-5" aria-hidden="true" />
-                    </a>
+                    </ExternalLink>
                   </Button>
                 )}
                 {socialLinks.linkedin && (
@@ -155,14 +155,13 @@ export async function HeroSection({
                     className="hover:bg-primary/10 hover:text-primary transition-colors"
                     asChild
                   >
-                    <a
+                    <ExternalLink
                       href={socialLinks.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      trackLabel="LinkedIn"
                       aria-label={tc('aLinkedin')}
                     >
                       <FaLinkedin className="h-5 w-5" aria-hidden="true" />
-                    </a>
+                    </ExternalLink>
                   </Button>
                 )}
                 {socialLinks.email && (
