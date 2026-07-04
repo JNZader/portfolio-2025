@@ -37,7 +37,7 @@ export const biogasPlatform: SanityProject = {
       'Las alarmas por umbral fijo son fáciles de escribir y malas para detectar deterioro gradual: cuando un sensor cruza el límite, la condición que lo llevó ahí ya lleva rato. Esta plataforma monitorea plantas de biogás en producción, ingiere su telemetría en tiempo real por MQTT, y apunta a esa brecha —la deriva que un umbral no ve.'
     ),
     block(
-      'La detección corre en dos lugares a propósito. En el edge, cerca del sensor, un Z-score y un IsolationForest exportado a ONNX marcan anomalías al instante, sin depender de la red. En la nube, un ensemble más pesado (IsolationForest + LSTM) cruza el histórico que el edge no tiene. Si un modelo del edge no está cargado, esa capa cae a la anterior en vez de cortar la ingesta.'
+      'La detección corre en dos lugares a propósito. En el edge, cerca del sensor, un Z-score y un IsolationForest exportado a ONNX marcan anomalías al instante, sin depender de la red. En la nube, un ensemble más pesado (IsolationForest + LSTM Autoencoder) cruza el histórico que el edge no tiene. Si un modelo del edge no está cargado, esa capa cae a la anterior en vez de cortar la ingesta.'
     ),
     block(
       'La plataforma corre varias plantas, de distintos operadores, sobre la misma base de datos, así que el aislamiento no podía depender de acordarse de filtrar. Es row-level security real en Postgres, con el rol de la aplicación creado bajo NOBYPASSRLS: no puede saltear el aislamiento aunque una query se olvide del WHERE. El tenant se fija por sesión, no por convención.'
@@ -262,7 +262,7 @@ export const biogasPlatform: SanityProject = {
       'Fixed-threshold alarms are easy to write and bad at catching gradual deterioration: by the time a sensor crosses the limit, whatever drove it there has been going on for a while. This platform monitors biogas plants in production, ingests their telemetry in real time over MQTT, and targets that gap —the drift a threshold does not see.'
     ),
     block(
-      'Detection runs in two places on purpose. At the edge, close to the sensor, a Z-score and an IsolationForest exported to ONNX flag anomalies instantly, with no dependency on the network. In the cloud, a heavier ensemble (IsolationForest + LSTM) cross-references history the edge does not have. If an edge model is not loaded, that layer falls back to the previous one instead of cutting off ingestion.'
+      'Detection runs in two places on purpose. At the edge, close to the sensor, a Z-score and an IsolationForest exported to ONNX flag anomalies instantly, with no dependency on the network. In the cloud, a heavier ensemble (IsolationForest + LSTM Autoencoder) cross-references history the edge does not have. If an edge model is not loaded, that layer falls back to the previous one instead of cutting off ingestion.'
     ),
     block(
       'The platform runs several plants, from different operators, on the same database, so isolation could not depend on remembering to filter. It is real row-level security in Postgres, with the application role created under NOBYPASSRLS: it cannot bypass isolation even if a query forgets the WHERE clause. The tenant is fixed per session, not by convention.'
