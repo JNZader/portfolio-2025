@@ -26,12 +26,12 @@ export function LanguageSwitcher({ className }: Readonly<{ className?: string }>
               href={pathname}
               locale={locale}
               aria-current={isActive ? 'true' : undefined}
+              aria-disabled={isActive ? 'true' : undefined}
+              tabIndex={isActive ? -1 : undefined}
               aria-label={locale === 'en' ? t('toEn') : t('toEs')}
               className={cn(
                 'text-xs font-semibold uppercase transition-colors',
-                isActive
-                  ? 'text-primary pointer-events-none'
-                  : 'text-muted-foreground hover:text-foreground'
+                isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
               )}
             >
               {locale}

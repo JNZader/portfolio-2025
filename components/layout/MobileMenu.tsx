@@ -47,7 +47,6 @@ export default function MobileMenu({ open, onClose, navigation }: Readonly<Mobil
       ref={dialogRef}
       className="md:hidden fixed inset-0 p-0 m-0 w-full h-full max-w-full max-h-full bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-sm"
       aria-labelledby="mobile-menu-title"
-      aria-describedby="mobile-menu-nav"
     >
       {/* Backdrop button for closing */}
       <button

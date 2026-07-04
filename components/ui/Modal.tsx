@@ -139,7 +139,7 @@ export function Modal({
       className={cn(
         'fixed inset-0 p-0 m-0 w-screen h-screen max-w-none max-h-none',
         'bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-sm',
-        'flex items-center justify-center'
+        'hidden open:flex items-center justify-center'
       )}
       aria-modal="true"
       aria-labelledby={titleId}

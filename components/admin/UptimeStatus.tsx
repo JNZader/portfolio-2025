@@ -12,6 +12,7 @@ import {
   WifiOff,
   XCircle,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -156,6 +157,7 @@ function LogIcon({ type }: Readonly<{ type: string }>) {
 }
 
 export function UptimeStatus() {
+  const t = useTranslations('UptimeStatus');
   const [data, setData] = useState<UptimeData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -310,7 +312,13 @@ export function UptimeStatus() {
           <Activity className="h-5 w-5" />
           Uptime Monitor
         </CardTitle>
-        <Button variant="ghost" size="sm" onClick={fetchUptime} disabled={loading}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={fetchUptime}
+          disabled={loading}
+          aria-label={t('refreshAria')}
+        >
           <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
         </Button>
       </CardHeader>

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import type { TocItem } from '@/lib/utils/toc';
@@ -10,6 +11,7 @@ interface TableOfContentsProps {
 }
 
 export function TableOfContents({ items }: Readonly<TableOfContentsProps>) {
+  const t = useTranslations('TableOfContents');
   const [activeId, setActiveId] = useState<string>('');
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export function TableOfContents({ items }: Readonly<TableOfContentsProps>) {
   }
 
   return (
-    <nav className="space-y-1">
+    <nav className="space-y-1" aria-label={t('navAria')}>
       <p className="mb-4 text-sm font-semibold uppercase tracking-wide text-[var(--color-muted-foreground)]">
         Contenido
       </p>

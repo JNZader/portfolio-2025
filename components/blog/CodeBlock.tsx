@@ -42,7 +42,7 @@ export function CodeBlock({ code, language, filename }: Readonly<CodeBlockProps>
             variant="ghost"
             size="sm"
             onClick={handleCopy}
-            className="h-7 text-xs opacity-0 transition-opacity group-hover:opacity-100"
+            className="h-7 text-xs opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100"
           >
             {copied ? (
               <>
