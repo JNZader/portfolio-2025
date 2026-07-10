@@ -82,7 +82,7 @@ export default async function CvPage({
             <DownloadCVButton />
             <Link
               href="/contacto"
-              className="inline-flex items-center gap-2 rounded-lg border-2 border-primary px-6 py-3 font-medium text-primary transition-all duration-200 hover:scale-105 hover:bg-primary/10"
+              className="btn-cv inline-flex h-14 items-center justify-center gap-2 rounded-lg border-2 border-primary px-6 font-medium text-primary no-underline transition-colors duration-200 hover:bg-primary/10"
             >
               <Mail className="h-4 w-4" aria-hidden="true" />
               {t('contact')}

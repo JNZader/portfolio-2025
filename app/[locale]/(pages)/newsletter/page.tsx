@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { NewsletterForm } from '@/components/newsletter/NewsletterForm';
 import Container from '@/components/ui/Container';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { InteriorHero } from '@/components/ui/InteriorHero';
 import Section from '@/components/ui/Section';
 import { localeAlternates } from '@/lib/seo/alternates';
 
@@ -23,17 +24,8 @@ export default async function NewsletterPage({
   const t = await getTranslations('NewsletterPage');
   return (
     <>
-      {/* Hero */}
-      <Section className="bg-[var(--color-muted)]">
-        <Container>
-          <div className="py-12 text-center">
-            <h1 className="text-4xl font-bold mb-4">{t('heroTitle')}</h1>
-            <p className="text-lg text-[var(--color-muted-foreground)] max-w-2xl mx-auto">
-              {t('heroSubtitle')}
-            </p>
-          </div>
-        </Container>
-      </Section>
+      {/* Hero — shared InteriorHero (same language as projects/contact/blog) */}
+      <InteriorHero variant="newsletter" title={t('heroTitle')} description={t('heroSubtitle')} />
 
       {/* Content */}
       <Section>

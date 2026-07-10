@@ -1,22 +1,15 @@
 import { Award, BookOpen, Code2, GraduationCap } from 'lucide-react';
 import type { Metadata } from 'next';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { RevealOnScroll } from '@/components/animations';
 import { CVButton } from '@/components/ui/CVButton';
-import { HeroBackground } from '@/components/ui/HeroBackground';
+import { InteriorHero } from '@/components/ui/InteriorHero';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
-import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
+import Section from '@/components/ui/Section';
 import { SkillsList } from '@/components/ui/SkillsList';
 import { SKILLS_DATA } from '@/lib/constants';
 import { localeAlternates } from '@/lib/seo/alternates';
-
-// Lazy load ScrollIndicator - non-critical
-const ScrollIndicator = dynamic(
-  () => import('@/components/ui/ScrollIndicator').then((mod) => ({ default: mod.ScrollIndicator })),
-  { ssr: true }
-);
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('About');
@@ -35,45 +28,24 @@ export default async function SobreMiPage({
   const t = await getTranslations('About');
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden">
-        <HeroBackground />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <RevealOnScroll>
-            <SectionHeader centered>
-              <div className="flex flex-col items-center gap-8 mb-6">
-                <Image
-                  src="/images/profile.jpg"
-                  alt="Javier Zader"
-                  width={160}
-                  height={160}
-                  priority
-                  className="rounded-full ring-4 ring-primary/20 hover:ring-primary/40 transition-all hover:scale-110 duration-500"
-                />
-              </div>
-              <SectionTitle size="xl" as="h1">
-                {t('heroTitle')}
-              </SectionTitle>
-              <SectionDescription size="lg" className="mx-auto">
-                {t('heroSubtitle')}
-              </SectionDescription>
-              {/* Prominent above-the-fold CV action (S5): mismo split-button que
-                  el hero de la landing (Descargar + Ver → /cv), por consistencia.
-                  The sidebar Contacto card keeps a second copy for visitors who
-                  scroll. */}
-              <div className="flex justify-center mt-8">
-                <CVButton className="w-auto" />
-              </div>
-            </SectionHeader>
-          </RevealOnScroll>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-          <ScrollIndicator targetId="content" />
-        </div>
-      </section>
+      {/* Hero — shared InteriorHero (same language as projects/contact/blog).
+          Profile photo goes in the media slot; the CV split-button in actions. */}
+      <InteriorHero
+        variant="about"
+        title={t('heroTitle')}
+        description={t('heroSubtitle')}
+        actions={<CVButton />}
+        media={
+          <Image
+            src="/images/profile.jpg"
+            alt="Javier Zader"
+            width={220}
+            height={220}
+            priority
+            className="rounded-full ring-4 ring-primary/20 shadow-lg"
+          />
+        }
+      />
 
       {/* Main Content */}
       <Section id="content">
