@@ -17,8 +17,9 @@ export async function DownloadCVButton({
   return (
     <a
       href={pdfHref}
+      // h-14 + no scale-on-hover to match the CVButton visual language.
       className={cn(
-        'inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105',
+        'btn-cv inline-flex h-14 items-center justify-center gap-2 rounded-lg px-6 font-medium no-underline transition-colors duration-200',
         variant === 'default'
           ? 'bg-primary text-primary-foreground hover:bg-primary/90'
           : 'border-2 border-primary text-primary hover:bg-primary/10',
