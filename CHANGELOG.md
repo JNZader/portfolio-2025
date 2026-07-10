@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.19.4](https://github.com/JNZader/portfolio-2025/compare/v2.19.3...v2.19.4) (2026-07-10)
+
+
+### Documentation
+
+* **readme:** reframe intro around the repo, drop version sprawl, fix coverage claim ([#201](https://github.com/JNZader/portfolio-2025/issues/201)) ([672d977](https://github.com/JNZader/portfolio-2025/commits/672d97771f51716c9d3ee2d8a2a294b6faae605c))
+
 ## [2.19.3](https://github.com/JNZader/portfolio-2025/compare/v2.19.2...v2.19.3) (2026-07-10)
 
 ## [2.19.2](https://github.com/JNZader/portfolio-2025/compare/v2.19.1...v2.19.2) (2026-07-10)
