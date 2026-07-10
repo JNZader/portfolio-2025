@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.18.0](https://github.com/JNZader/portfolio-2025/compare/v2.17.8...v2.18.0) (2026-07-10)
+
+
+### Features
+
+* **ui:** add shared interior page hero ([#195](https://github.com/JNZader/portfolio-2025/issues/195)) ([f893a0a](https://github.com/JNZader/portfolio-2025/commits/f893a0a3b743a5ac7d1b25762e0ee68e4ff9c444))
+
 ## [2.17.8](https://github.com/JNZader/portfolio-2025/compare/v2.17.7...v2.17.8) (2026-07-10)
 
 
