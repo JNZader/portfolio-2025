@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.19.6](https://github.com/JNZader/portfolio-2025/compare/v2.19.5...v2.19.6) (2026-07-10)
+
+
+### Bug Fixes
+
+* **ui:** unify interior pages on the shared InteriorHero ([#203](https://github.com/JNZader/portfolio-2025/issues/203)) ([a76fa3e](https://github.com/JNZader/portfolio-2025/commits/a76fa3e072bcae9cadd2dd9868dffc567c7b1e2a))
+
 ## [2.19.5](https://github.com/JNZader/portfolio-2025/compare/v2.19.4...v2.19.5) (2026-07-10)
 
 
