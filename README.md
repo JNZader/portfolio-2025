@@ -1,24 +1,8 @@
-# Javier Zader — Backend Developer
+# Portfolio — Javier Zader
 
-**Sistemas end-to-end en Java, Go y Rust — del análisis al deploy.**
+**El código de este portfolio: un sitio en producción que también es la muestra de trabajo.**
 
-Más de 20 años en tecnología: empecé en soporte técnico y mantenimiento de equipos, pasé varios años como productor agropecuario —un rubro donde los errores no se arreglan con un rollback— y de ahí volví al software. Hoy me hago cargo de un sistema completo, del análisis al deploy: backend, frontend, ML en el edge e infraestructura.
-
-Técnico en Desarrollo de Software (Universidad Gastón Dachary, 2025). Córdoba, Argentina.
-
-## Lo que construí
-
-Tres sistemas que muestran cómo trabajo, no solo qué stack toco:
-
-- **[apigen](https://javierzader.com/proyectos/apigen)** — De un schema SQL o un contrato OpenAPI a un servicio backend que compila. 12 combinaciones lenguaje/framework, 9 con gate de compilación nativo en CI.
-- **[Biogas Platform](https://javierzader.com/proyectos/biogas-platform)** — Plataforma industrial en producción: telemetría en tiempo real por MQTT, detección de anomalías en tres capas (edge en Rust + ONNX, ensemble en la nube), multi-tenant con row-level security real en Postgres.
-- **[apigen Studio](https://javierzader.com/proyectos/apigen-studio)** — Diseñador visual para APIs Spring Boot: modelás entidades y servicios en un canvas y exportás un proyecto que compila.
-
-Cada uno tiene su case study completo en [javierzader.com/proyectos](https://javierzader.com/proyectos).
-
-## Sobre este repo
-
-Este repositorio es el código de este mismo portfolio: sirve tanto de sitio en producción como de muestra de trabajo. Next.js 16 (App Router), React 19 con React Compiler, TypeScript estricto, bilingüe ES/EN con next-intl, Sanity como CMS headless, tests con Vitest + Playwright, deploy en Vercel.
+Next.js 16 (App Router), React 19 con React Compiler, TypeScript estricto, bilingüe ES/EN con next-intl, Sanity como CMS headless, PostgreSQL vía Prisma, tests con Vitest + Playwright, deploy en Vercel. No es una landing de una tarde: blog con CMS headless, newsletter con double opt-in, panel admin con NextAuth, flujos GDPR completos, 207 tests unit/integration y CI con 6 workflows.
 
 [![CI](https://github.com/JNZader/portfolio-2025/actions/workflows/ci.yml/badge.svg)](https://github.com/JNZader/portfolio-2025/actions/workflows/ci.yml)
 [![Tests](https://github.com/JNZader/portfolio-2025/actions/workflows/test.yml/badge.svg)](https://github.com/JNZader/portfolio-2025/actions/workflows/test.yml)
@@ -27,9 +11,6 @@ Este repositorio es el código de este mismo portfolio: sirve tanto de sitio en 
 [![Security](https://github.com/JNZader/portfolio-2025/actions/workflows/security.yml/badge.svg)](https://github.com/JNZader/portfolio-2025/actions/workflows/security.yml)
 [![Release](https://github.com/JNZader/portfolio-2025/actions/workflows/release.yml/badge.svg)](https://github.com/JNZader/portfolio-2025/actions/workflows/release.yml)
 
-![Next.js](https://img.shields.io/badge/Next.js-16.2.10-black)
-![React](https://img.shields.io/badge/React-19.2-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-6.0-blue)
 ![Version](https://img.shields.io/github/package-json/v/JNZader/portfolio-2025)
 
 ![Portfolio Preview](public/images/portfolio-preview.png)
@@ -66,79 +47,79 @@ Este repositorio es el código de este mismo portfolio: sirve tanto de sitio en 
 ## 🚀 Stack Tecnológico
 
 ### Core
-- **Framework:** Next.js 16.2.10 (App Router)
-- **UI Library:** React 19.2.7 con React Compiler
-- **Language:** TypeScript 6.0.3 (strict mode)
-- **Styling:** Tailwind CSS 4.3.2 con OKLCH color space (config CSS-first en `globals.css`, sin `tailwind.config.ts`)
-- **Node:** >= 22.12.0 LTS (compatible con Prisma, Vitest y jsdom)
+- **Framework:** Next.js (App Router)
+- **UI Library:** React con React Compiler
+- **Language:** TypeScript (strict mode)
+- **Styling:** Tailwind CSS con OKLCH color space (config CSS-first en `globals.css`, sin `tailwind.config.ts`)
+- **Node:** >= 22.12.0 LTS
 
 ### i18n
-- **next-intl** v4.13 para enrutamiento localizado (`app/[locale]/`), diccionarios y `LanguageSwitcher`
+- **next-intl** para enrutamiento localizado (`app/[locale]/`), diccionarios y `LanguageSwitcher`
 
 ### CMS y APIs
-- **Headless CMS:** Sanity Studio v6.3 + `@sanity/client` v7.23 + `next-sanity` v13.1
-- **GitHub API:** Octokit v5 (incluye lectura del rate limit propio de GitHub)
-- **Comments:** Giscus (GitHub Discussions) vía `@giscus/react` v3.1
-- **Auth (Admin):** NextAuth v5 (beta) con provider GitHub, gate por `ADMIN_EMAILS`
-- **Theme System:** next-themes v0.4 con SSR support
+- **Headless CMS:** Sanity Studio + `@sanity/client` + `next-sanity`
+- **GitHub API:** Octokit (incluye lectura del rate limit propio de GitHub)
+- **Comments:** Giscus (GitHub Discussions) vía `@giscus/react`
+- **Auth (Admin):** NextAuth con provider GitHub, gate por `ADMIN_EMAILS`
+- **Theme System:** next-themes con SSR support
 
 ### Content Rendering
-- **Portable Text:** @portabletext/react v6.2
+- **Portable Text:** @portabletext/react
 - **Syntax Highlighting:** react-syntax-highlighter + Prism.js
 - **Code Blocks:** @sanity/code-input
-- **Diagrams:** Mermaid v11.16 (`MermaidDiagram.tsx`)
-- **Markdown:** react-markdown v10 con remark-gfm y rehype plugins
+- **Diagrams:** Mermaid (`MermaidDiagram.tsx`)
+- **Markdown:** react-markdown con remark-gfm y rehype plugins
 
 ### UI Components
 - **Design System:** shadcn/ui
-- **Icons:** Lucide React v1.23 + React Icons v5.7
+- **Icons:** Lucide React + React Icons
 - **Image Optimization:** Next.js Image con blur placeholders
 - **Animations:** hook custom `useScrollReveal` + CSS (no usa Framer Motion)
 
 ### Database y Backend
 - **Database:** PostgreSQL (vía Prisma; proveedor de hosting agnóstico)
-- **ORM:** Prisma v7.8 con cliente tipado (`prisma-client` generator)
-- **Rate Limiting:** Upstash Redis v1.38 + @upstash/ratelimit v2.0
-- **Email Service:** Resend v6.16
-- **Email Templates:** @react-email/components v1.0
-- **PDF Generation:** jsPDF v4.2 (CV descargable en `/cv`)
+- **ORM:** Prisma con cliente tipado (`prisma-client` generator)
+- **Rate Limiting:** Upstash Redis + @upstash/ratelimit
+- **Email Service:** Resend
+- **Email Templates:** @react-email/components
+- **PDF Generation:** jsPDF (CV descargable en `/cv`)
 
 ### Analytics y Monitoring
-- **Production Analytics:** Vercel Analytics v2.0 + Speed Insights v2.0
-- **Google Analytics:** GA4 con @next/third-parties v16.2
-- **Error Tracking:** Sentry v10.63 (`@sentry/nextjs`, client/server/edge)
+- **Production Analytics:** Vercel Analytics + Speed Insights
+- **Google Analytics:** GA4 con @next/third-parties
+- **Error Tracking:** Sentry (`@sentry/nextjs`, client/server/edge)
 
 ### SEO
-- **Structured Data:** schema-dts v2.0
+- **Structured Data:** schema-dts
 - **Meta Tags:** Next.js metadata API
 - **Dynamic Images:** Open Graph image generation
 
 ### Security
-- **Validation:** Zod v4.4
+- **Validation:** Zod
 - **Rate Limiting:** Upstash Redis + @upstash/ratelimit
-- **Sanitization:** sanitize-html v2.17
-- **CSRF Protection:** Tokens con nanoid v5.1
-- **Cookie Management:** js-cookie v3.0
+- **Sanitization:** sanitize-html
+- **CSRF Protection:** Tokens con nanoid
+- **Cookie Management:** js-cookie
 
 ### Testing
-- **Unit/Integration:** Vitest v4.1 con happy-dom v20.10
-- **Testing Library:** @testing-library/react v16.3 + user-event v14.6
-- **E2E:** Playwright v1.61 con soporte multi-browser
-- **Accessibility:** axe-core v4.12 + @axe-core/playwright v4.12
-- **Coverage:** @vitest/coverage-v8 v4.1
-- **Mocking:** msw v2.14
+- **Unit/Integration:** Vitest con happy-dom
+- **Testing Library:** @testing-library/react + user-event
+- **E2E:** Playwright con soporte multi-browser
+- **Accessibility:** axe-core + @axe-core/playwright
+- **Coverage:** @vitest/coverage-v8
+- **Mocking:** msw
 
 ### Performance
-- **Bundle Analysis:** @next/bundle-analyzer v16.2
+- **Bundle Analysis:** @next/bundle-analyzer
 - **Lighthouse:** @lhci/cli para CI
-- **Critical CSS:** critters v0.0.25
-- **Image Optimization:** sharp v0.35
+- **Critical CSS:** critters
+- **Image Optimization:** sharp
 
 ### Herramientas de Desarrollo
-- **Code Quality:** Biome v2.5 (linting + formatting)
-- **Git Hooks:** Husky v9.1 + lint-staged v17.0
-- **Commits:** Commitlint v21.2 con Conventional Commits
-- **Versioning:** commit-and-tag-version v12.7 para CHANGELOG automático
+- **Code Quality:** Biome (linting + formatting)
+- **Git Hooks:** Husky + lint-staged
+- **Commits:** Commitlint con Conventional Commits
+- **Versioning:** commit-and-tag-version para CHANGELOG automático
 - **CI/CD:** GitHub Actions con 6 workflows (CI, Tests, E2E, Lighthouse, Security, Release)
 
 ## 🛠️ Setup y Desarrollo
@@ -449,7 +430,7 @@ Tests ubicados en `__tests__/`:
 - **unit/**: Utilities, validaciones, helpers
 - **integration/**: Componentes, hooks
 
-Herramientas: Vitest + Happy DOM, Testing Library. Coverage: 80% lines, 80% functions, 75% branches.
+Herramientas: Vitest + Happy DOM, Testing Library. **207 tests** en 29 archivos; coverage con v8 y umbral mínimo enforced en CI.
 
 ### E2E Tests
 
