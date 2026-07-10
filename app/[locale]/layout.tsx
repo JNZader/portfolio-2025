@@ -7,7 +7,6 @@ import { Toaster } from 'react-hot-toast';
 import { AnnouncerProvider } from '@/components/a11y/ScreenReaderAnnouncer';
 import { SkipLinks } from '@/components/a11y/SkipLinks';
 import { ThirdPartyScripts } from '@/components/analytics/ThirdPartyScripts';
-import { WebVitals } from '@/components/analytics/WebVitals';
 import { CookieConsent } from '@/components/gdpr/CookieConsent';
 import { ClientComponents } from '@/components/layout/ClientComponents';
 import Footer from '@/components/layout/Footer';
@@ -114,9 +113,6 @@ export default async function LocaleLayout({ children, params }: Readonly<Locale
                 <BackToTop />
               </Suspense>
               <RippleListener />
-              <Suspense fallback={null}>
-                <WebVitals />
-              </Suspense>
               <Suspense fallback={null}>
                 <ThirdPartyScripts />
               </Suspense>

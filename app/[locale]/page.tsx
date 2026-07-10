@@ -88,7 +88,7 @@ export default async function HomePage({
         // CTA hierarchy: Descargar CV (filled, lowest-friction recruiter action) >
         // Ver Proyectos (outline) > Contactar (ghost). CV renders as <a download>
         // so the /api/resume PDF attachment downloads instead of SPA-navigating.
-        cvHref="/api/resume"
+        cvHref={locale === 'en' ? '/api/resume?locale=en' : '/api/resume'}
         primaryCta={{
           text: t('heroCtaProjects'),
           href: '/proyectos',

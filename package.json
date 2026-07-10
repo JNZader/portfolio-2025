@@ -90,7 +90,6 @@
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.2",
     "use-debounce": "^10.1.1",
-    "web-vitals": "^5.3.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -144,6 +143,11 @@
     "serialize-javascript": "^7.0.4",
     "hono": "^4.12.5",
     "@hono/node-server": "^1.19.10",
-    "tar": "^7.5.10"
+    "tar": "^7.5.10",
+    "postcss": "^8.5.10",
+    "@vercel/frameworks": {
+      "js-yaml": "^3.15.0",
+      "smol-toml": "^1.6.1"
+    }
   }
 }

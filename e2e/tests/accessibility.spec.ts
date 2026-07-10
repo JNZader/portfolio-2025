@@ -2,10 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { dismissCookieConsent } from '../fixtures/test-data';
 
-// Common axe configuration - exclude color-contrast for dynamic/external content
-// The #61dafb color comes from external badges (Sanity CMS, GitHub shields)
-const createAxeBuilder = (page: Page) =>
-  new AxeBuilder({ page }).disableRules(['color-contrast']);
+const createAxeBuilder = (page: Page) => new AxeBuilder({ page });
 
 test.describe('Accessibility', () => {
   test('homepage should not have accessibility violations', async ({ page }) => {
@@ -33,6 +30,15 @@ test.describe('Accessibility', () => {
     const accessibilityScanResults = await createAxeBuilder(page).analyze();
 
     expect(accessibilityScanResults.violations).toEqual([]);
+  });
+
+  test('English home and privacy states should not have accessibility violations', async ({ page }) => {
+    for (const path of ['/en', '/en/privacy']) {
+      await page.goto(path);
+      await dismissCookieConsent(page);
+      const results = await createAxeBuilder(page).analyze();
+      expect(results.violations).toEqual([]);
+    }
   });
 
   test('should meet WCAG 2.2 AA standards', async ({ page }) => {

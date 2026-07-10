@@ -3,18 +3,6 @@ name: E2E Tests
 on:
   pull_request:
     branches: [main]
-    paths:
-      - 'app/**'
-      - 'components/**'
-      - 'lib/**'
-      - 'prisma/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'tsconfig.json'
-      - 'next.config.*'
-      - 'biome.json'
-      - 'tailwind.config.*'
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

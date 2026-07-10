@@ -14,10 +14,12 @@ vi.mock('@/lib/rate-limit/redis', () => ({
   getClientIdentifier: vi.fn().mockReturnValue('127.0.0.1'),
 }));
 
-const verifyAndConsumeToken = vi.fn();
+const claimToken = vi.fn();
+const restoreToken = vi.fn();
 vi.mock('@/lib/api/gdpr-utils', () => ({
   MESSAGES: { tokenMissing: 'token missing', tokenExpired: 'token expired' },
-  verifyAndConsumeToken: (...args: unknown[]) => verifyAndConsumeToken(...args),
+  claimToken: (...args: unknown[]) => claimToken(...args),
+  restoreToken: (...args: unknown[]) => restoreToken(...args),
 }));
 
 const exportUserData = vi.fn();
@@ -46,7 +48,8 @@ function postRequestWithToken(token: string) {
 }
 
 beforeEach(() => {
-  verifyAndConsumeToken.mockReset();
+  claimToken.mockReset();
+  restoreToken.mockReset();
   exportUserData.mockReset();
   vi.mocked(confirmRateLimiter.limit).mockResolvedValue({ success: true } as never);
 });
@@ -66,7 +69,7 @@ describe('GET /api/data-export/confirm', () => {
 
     // The critical invariant: GET must not consume the single-use token nor
     // export data. A prefetcher hitting this URL must have zero side effect.
-    expect(verifyAndConsumeToken).not.toHaveBeenCalled();
+    expect(claimToken).not.toHaveBeenCalled();
     expect(exportUserData).not.toHaveBeenCalled();
   });
 
@@ -84,19 +87,19 @@ describe('GET /api/data-export/confirm', () => {
 
     expect(response.status).toBe(400);
     expect(response.headers.get('content-type')).toContain('text/html');
-    expect(verifyAndConsumeToken).not.toHaveBeenCalled();
+    expect(claimToken).not.toHaveBeenCalled();
     expect(exportUserData).not.toHaveBeenCalled();
   });
 });
 
 describe('POST /api/data-export/confirm', () => {
   it('exports data and returns a JSON download on a valid token', async () => {
-    verifyAndConsumeToken.mockResolvedValue('victim@example.com');
+    claimToken.mockResolvedValue('victim@example.com');
     exportUserData.mockResolvedValue({ email: 'victim@example.com', subscription: null });
 
     const response = await POST(postRequestWithToken('valid-token'));
 
-    expect(verifyAndConsumeToken).toHaveBeenCalledWith('valid-token', 'data-export');
+    expect(claimToken).toHaveBeenCalledWith('valid-token', 'data-export');
     expect(exportUserData).toHaveBeenCalledWith('victim@example.com');
     expect(response.status).toBe(200);
     expect(response.headers.get('content-type')).toBe('application/json');
@@ -117,19 +120,19 @@ describe('POST /api/data-export/confirm', () => {
       new NextRequest('http://localhost/api/data-export/confirm', { method: 'POST' })
     );
     expect(response.status).toBe(400);
-    expect(verifyAndConsumeToken).not.toHaveBeenCalled();
+    expect(claimToken).not.toHaveBeenCalled();
     expect(exportUserData).not.toHaveBeenCalled();
   });
 
   it('returns 400 when the token is expired or invalid', async () => {
-    verifyAndConsumeToken.mockResolvedValue(null);
+    claimToken.mockResolvedValue(null);
     const response = await POST(postRequestWithToken('bad-token'));
     expect(response.status).toBe(400);
     expect(exportUserData).not.toHaveBeenCalled();
   });
 
   it('returns 404 when no data is found for the email', async () => {
-    verifyAndConsumeToken.mockResolvedValue('ghost@example.com');
+    claimToken.mockResolvedValue('ghost@example.com');
     exportUserData.mockResolvedValue(null);
 
     const response = await POST(postRequestWithToken('valid-token'));
@@ -142,12 +145,12 @@ describe('POST /api/data-export/confirm', () => {
     const response = await POST(postRequestWithToken('valid-token'));
     expect(response.status).toBe(429);
     expect(response.headers.get('retry-after')).toBe('3600');
-    expect(verifyAndConsumeToken).not.toHaveBeenCalled();
+    expect(claimToken).not.toHaveBeenCalled();
     expect(exportUserData).not.toHaveBeenCalled();
   });
 
   it('returns 500 when the export throws', async () => {
-    verifyAndConsumeToken.mockResolvedValue('victim@example.com');
+    claimToken.mockResolvedValue('victim@example.com');
     exportUserData.mockRejectedValue(new Error('boom'));
 
     const response = await POST(postRequestWithToken('valid-token'));

@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
+import { redactSensitiveData } from './redact';
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
@@ -17,11 +18,11 @@ class Logger {
   private log(level: LogLevel, message: string, context?: LogContext) {
     const timestamp = new Date().toISOString();
 
-    const enrichedContext: LogContext = {
+    const enrichedContext = redactSensitiveData<LogContext>({
       ...context,
       timestamp,
       environment: process.env.NODE_ENV,
-    };
+    });
 
     // Console log in development
     if (process.env.NODE_ENV === 'development') {
@@ -61,7 +62,7 @@ class Logger {
   error(message: string, error?: Error, context?: LogContext) {
     if (error) {
       Sentry.captureException(error, {
-        extra: context,
+        extra: redactSensitiveData(context),
       });
     }
 

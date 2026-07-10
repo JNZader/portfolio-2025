@@ -1,5 +1,6 @@
 import type { BlogPosting, BreadcrumbList, Person, WebSite, WithContext } from 'schema-dts';
 import { SITE_URL } from '@/lib/config/site-config';
+import { localizedUrl } from '@/lib/seo/locale-url';
 import type { ResumeDataRaw } from '@/lib/types/resume';
 
 const PERSON_DESCRIPTION_ES =
@@ -130,6 +131,7 @@ export function generateBlogPostingSchema(post: {
   updatedAt?: string;
   image?: string;
   keywords?: string[];
+  locale?: string;
 }): WithContext<BlogPosting> {
   return {
     '@context': 'https://schema.org',
@@ -137,7 +139,7 @@ export function generateBlogPostingSchema(post: {
     headline: post.title,
     description: post.description,
     image: post.image ?? `${SITE_URL}/images/portfolio-preview.png`,
-    url: `${SITE_URL}/blog/${post.slug}`,
+    url: localizedUrl(`/blog/${post.slug}`, post.locale ?? 'es'),
     datePublished: post.publishedAt,
     dateModified: post.updatedAt ?? post.publishedAt,
     author: {
@@ -152,7 +154,7 @@ export function generateBlogPostingSchema(post: {
     keywords: post.keywords?.join(', '),
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `${SITE_URL}/blog/${post.slug}`,
+      '@id': localizedUrl(`/blog/${post.slug}`, post.locale ?? 'es'),
     },
   };
 }

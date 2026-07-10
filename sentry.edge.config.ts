@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
+import { redactSensitiveData } from '@/lib/monitoring/redact';
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
@@ -10,4 +11,8 @@ Sentry.init({
   environment: process.env.NEXT_PUBLIC_VERCEL_ENV ?? 'development',
 
   release: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA,
+
+  beforeSend(event) {
+    return redactSensitiveData(event);
+  },
 });

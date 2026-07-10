@@ -1,9 +1,9 @@
 import { ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { NewsletterBroadcaster } from '@/components/admin/NewsletterBroadcaster';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
+import { Link } from '@/i18n/navigation';
 import { auth } from '@/lib/auth';
 
 export default async function AdminNewsletterPage() {

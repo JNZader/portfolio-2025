@@ -11,6 +11,7 @@ import { getCachedFeaturedProjects } from '@/lib/github/queries';
 import type { Project } from '@/lib/github/types';
 import { logger } from '@/lib/monitoring/logger';
 import { localeAlternates } from '@/lib/seo/alternates';
+import { localizedPath, localizedUrl } from '@/lib/seo/locale-url';
 import { ogLocaleFields } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema } from '@/lib/seo/schema';
 import { convertSanityProject } from '@/lib/utils/project';
@@ -126,7 +127,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     openGraph: {
       title: project.title,
       description: project.description,
-      url: `/proyectos/${id}`,
+      url: localizedPath(`/proyectos/${id}`, locale),
       type: 'article',
       ...ogLocaleFields(locale),
       images: project.image
@@ -174,7 +175,7 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
   const hasLinks = Boolean(project.demo || project.github);
 
   // Structured data: SoftwareSourceCode when a repo exists, CreativeWork otherwise.
-  const projectUrl = `${SITE_URL}/proyectos/${project.id}`;
+  const projectUrl = localizedUrl(`/proyectos/${project.id}`, locale);
   const author = {
     '@type': 'Person' as const,
     name: 'Javier Zader',

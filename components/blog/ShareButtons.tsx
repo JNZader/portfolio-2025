@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 
 interface ShareButtonsProps {
@@ -7,6 +8,7 @@ interface ShareButtonsProps {
 }
 
 export function ShareButtons({ url }: Readonly<ShareButtonsProps>) {
+  const t = useTranslations('Blog');
   const encodedUrl = encodeURIComponent(url);
 
   const shareLinks = {
@@ -22,7 +24,7 @@ export function ShareButtons({ url }: Readonly<ShareButtonsProps>) {
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2">
         <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
-        <span className="text-sm font-medium text-muted-foreground">Compartir este artículo</span>
+        <span className="text-sm font-medium text-muted-foreground">{t('shareArticle')}</span>
         <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
       </div>
 
@@ -31,7 +33,7 @@ export function ShareButtons({ url }: Readonly<ShareButtonsProps>) {
           variant="outline"
           size="sm"
           onClick={() => handleShare('linkedin')}
-          aria-label="Compartir en LinkedIn"
+          aria-label={t('shareOn', { platform: 'LinkedIn' })}
           className="hover:bg-[#0077B5]/10 hover:text-[#0077B5] hover:border-[#0077B5]/30 transition-all duration-200 hover:scale-110"
         >
           <LinkedInIcon className="h-4 w-4 mr-2" />
@@ -42,7 +44,7 @@ export function ShareButtons({ url }: Readonly<ShareButtonsProps>) {
           variant="outline"
           size="sm"
           onClick={() => handleShare('facebook')}
-          aria-label="Compartir en Facebook"
+          aria-label={t('shareOn', { platform: 'Facebook' })}
           className="hover:bg-[#1877F2]/10 hover:text-[#1877F2] hover:border-[#1877F2]/30 transition-all duration-200 hover:scale-110"
         >
           <FacebookIcon className="h-4 w-4 mr-2" />

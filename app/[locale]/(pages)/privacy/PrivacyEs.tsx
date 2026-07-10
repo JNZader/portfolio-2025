@@ -1,3 +1,4 @@
+import { Link } from '@/i18n/navigation';
 import { email } from './email';
 
 export function PrivacyEs() {
@@ -147,7 +148,7 @@ export function PrivacyEs() {
       </div>
       <div className="mb-4">
         Para ejercer estos derechos, visita la{' '}
-        <a href="/data-request">página de solicitud de datos</a> o contacta a {email}
+        <Link href="/data-request">página de solicitud de datos</Link> o contacta a {email}
       </div>
 
       <h2>8. Retención de Datos</h2>

@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { signOut } from 'next-auth/react';
+import { useLocale } from 'next-intl';
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -96,6 +97,7 @@ function formatUptime(seconds: number): string {
 }
 
 export function AdminDashboard({ user }: Readonly<AdminDashboardProps>) {
+  const locale = useLocale();
   const [health, setHealth] = useState<HealthData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -248,7 +250,10 @@ export function AdminDashboard({ user }: Readonly<AdminDashboardProps>) {
 
           {/* Quick Actions */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <a href="/admin/newsletter" className="block transition-transform hover:scale-[1.02]">
+            <a
+              href={locale === 'en' ? '/en/admin/newsletter' : '/admin/newsletter'}
+              className="block transition-transform hover:scale-[1.02]"
+            >
               <Card className="h-full bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800 hover:border-blue-400 dark:hover:border-blue-600 transition-colors cursor-pointer">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-blue-700 dark:text-blue-300">

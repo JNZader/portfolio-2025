@@ -1,7 +1,9 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
+import { useRouter } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { getPageNumbers } from '@/lib/utils/blog';
 
@@ -12,6 +14,7 @@ interface PaginationProps {
 
 export function Pagination({ currentPage, totalPages }: Readonly<PaginationProps>) {
   const router = useRouter();
+  const t = useTranslations('Blog');
   const searchParams = useSearchParams();
 
   const handlePageChange = (page: number) => {
@@ -27,17 +30,17 @@ export function Pagination({ currentPage, totalPages }: Readonly<PaginationProps
   }
 
   return (
-    <nav className="flex items-center justify-center gap-2" aria-label="Paginación del blog">
+    <nav className="flex items-center justify-center gap-2" aria-label={t('paginationLabel')}>
       {/* Previous */}
       <Button
         variant="outline"
         size="sm"
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        aria-label="Página anterior"
+        aria-label={t('previousPage')}
       >
         <ChevronLeftIcon className="h-4 w-4" />
-        <span className="sr-only sm:not-sr-only sm:ml-2">Anterior</span>
+        <span className="sr-only sm:not-sr-only sm:ml-2">{t('previous')}</span>
       </Button>
 
       {/* Page numbers */}
@@ -65,7 +68,7 @@ export function Pagination({ currentPage, totalPages }: Readonly<PaginationProps
               size="sm"
               onClick={() => handlePageChange(pageNum)}
               className={cn('h-9 w-9 p-0', isActive && 'pointer-events-none')}
-              aria-label={`Página ${pageNum}`}
+              aria-label={t('pageNumber', { page: pageNum })}
               aria-current={isActive ? 'page' : undefined}
             >
               {pageNum}
@@ -77,7 +80,7 @@ export function Pagination({ currentPage, totalPages }: Readonly<PaginationProps
       {/* Mobile: current page indicator */}
       <div className="flex items-center gap-2 sm:hidden">
         <span className="text-sm text-[var(--color-muted-foreground)]">
-          Página {currentPage} de {totalPages}
+          {t('pageOf', { current: currentPage, total: totalPages })}
         </span>
       </div>
 
@@ -87,9 +90,9 @@ export function Pagination({ currentPage, totalPages }: Readonly<PaginationProps
         size="sm"
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        aria-label="Página siguiente"
+        aria-label={t('nextPage')}
       >
-        <span className="sr-only sm:not-sr-only sm:mr-2">Siguiente</span>
+        <span className="sr-only sm:not-sr-only sm:mr-2">{t('next')}</span>
         <ChevronRightIcon className="h-4 w-4" />
       </Button>
     </nav>
@@ -106,7 +109,7 @@ function ChevronLeftIcon({ className }: Readonly<{ className?: string }>) {
       strokeWidth="1.5"
       stroke="currentColor"
     >
-      <title>Anterior</title>
+      <title>Previous</title>
       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
     </svg>
   );
@@ -121,7 +124,7 @@ function ChevronRightIcon({ className }: Readonly<{ className?: string }>) {
       strokeWidth="1.5"
       stroke="currentColor"
     >
-      <title>Siguiente</title>
+      <title>Next</title>
       <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
     </svg>
   );
