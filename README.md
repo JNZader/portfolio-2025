@@ -2,7 +2,7 @@
 
 **El código de este portfolio: un sitio en producción que también es la muestra de trabajo.**
 
-Next.js 16 (App Router), React 19 con React Compiler, TypeScript estricto, bilingüe ES/EN con next-intl, Sanity como CMS headless, PostgreSQL vía Prisma, tests con Vitest + Playwright, deploy en Vercel. No es una landing de una tarde: blog con CMS headless, newsletter con double opt-in, panel admin con NextAuth, flujos GDPR completos, 207 tests unit/integration y CI con 6 workflows.
+Next.js 16 (App Router), React 19 con React Compiler, TypeScript estricto, bilingüe ES/EN con next-intl, Sanity como CMS headless, PostgreSQL vía Prisma, tests con Vitest + Playwright, deploy en Vercel. No es una landing de una tarde: blog con CMS headless, newsletter con double opt-in, panel admin con NextAuth, flujos GDPR completos, 207 tests unit/integration + 47 E2E en 5 navegadores, y CI con 6 workflows.
 
 [![CI](https://github.com/JNZader/portfolio-2025/actions/workflows/ci.yml/badge.svg)](https://github.com/JNZader/portfolio-2025/actions/workflows/ci.yml)
 [![Tests](https://github.com/JNZader/portfolio-2025/actions/workflows/test.yml/badge.svg)](https://github.com/JNZader/portfolio-2025/actions/workflows/test.yml)
@@ -446,7 +446,7 @@ npm run e2e:codegen      # Generar tests
 
 Tests ubicados en `e2e/tests/`: accessibility (axe-core), blog, contact, navigation, newsletter, visual regression.
 
-Browsers soportados: Chromium, Firefox, WebKit, Mobile Chrome, Mobile Safari, iPad.
+47 tests E2E corren en 5 navegadores (Chromium, Firefox, WebKit, Mobile Chrome / Pixel 5, Mobile Safari / iPhone 13) = 235 ejecuciones por corrida.
 
 ### CI/CD
 
