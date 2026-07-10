@@ -21,7 +21,7 @@ const HALF_BASE =
  * Botón de CV con acción dividida (segmentado).
  *
  * Dos mitades SIEMPRE visibles: "Descargar CV" (filled, acción primaria) y
- * "Ver" → /cv (versión HTML indexable). No usa hover-expand, así que no
+ * "Ver CV" → /cv (versión HTML indexable). No usa hover-expand, así que no
  * mueve el layout, y funciona igual en mobile (no depende de hover). Deja un
  * <a href="/cv"> crawleable en el DOM. Full-width en mobile, content-width en
  * desktop, para alinear con los demás CTA del hero.
@@ -50,7 +50,7 @@ export async function CVButton({ className, pdfHref, viewHref = '/cv' }: Readonl
         {t('cvDownload')}
       </a>
 
-      {/* Ver — versión HTML, secundaria. Label corto para que no se corte. */}
+      {/* Ver CV — versión HTML, secundaria. */}
       <Link
         href={viewHref}
         className={cn(
