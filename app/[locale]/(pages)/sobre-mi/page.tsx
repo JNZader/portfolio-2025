@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { RevealOnScroll } from '@/components/animations';
 import { CVButton } from '@/components/ui/CVButton';
-import { DownloadCVButton } from '@/components/ui/DownloadCVButton';
 import { HeroBackground } from '@/components/ui/HeroBackground';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
 import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
@@ -206,7 +205,9 @@ export default async function SobreMiPage({
                   </p>
                 </div>
                 <div className="mt-6">
-                  <DownloadCVButton className="w-full justify-center" />
+                  {/* Eco callado del CV: mismo split (Descargar + Ver) que arriba,
+                      en outline para no competir con la acción above-fold. */}
+                  <CVButton variant="outline" fullWidth />
                 </div>
               </div>
             </RevealOnScroll>

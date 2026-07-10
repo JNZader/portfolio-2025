@@ -9,6 +9,10 @@ interface CVButtonProps {
   pdfHref?: string;
   /** Href de la versión HTML indexable. */
   viewHref?: string;
+  /** 'filled' (default, acción principal above-fold) o 'outline' (eco callado, p.ej. sidebar). */
+  variant?: 'filled' | 'outline';
+  /** Fuerza ancho completo en todos los breakpoints (útil dentro de cards angostas). */
+  fullWidth?: boolean;
 }
 
 // Marker "btn-*" para que el reset global de globals.css
@@ -18,48 +22,76 @@ const HALF_BASE =
   'btn-cv flex h-14 items-center justify-center gap-2 whitespace-nowrap px-6 font-medium no-underline transition-colors duration-200';
 
 /**
- * Botón de CV con acción dividida (segmentado).
+ * Botón de CV con acción dividida (segmentado): "CV" dicho UNA sola vez + dos
+ * acciones por ícono → [ CV ⬇ │ 👁 ].
  *
- * Dos mitades SIEMPRE visibles: "Descargar CV" (filled, acción primaria) y
- * "Ver CV" → /cv (versión HTML indexable). No usa hover-expand, así que no
- * mueve el layout, y funciona igual en mobile (no depende de hover). Deja un
- * <a href="/cv"> crawleable en el DOM. Full-width en mobile, content-width en
- * desktop, para alinear con los demás CTA del hero.
+ * - Mitad primaria "CV ⬇": descarga el PDF. El texto "CV" va PEGADO al ícono de
+ *   descarga (no es una celda muerta), así que todo el bloque es un target
+ *   clickeable y obvio como acción principal.
+ * - Mitad "👁": icon-only → /cv (versión HTML indexable), acompaña sin competir.
+ *
+ * Ambas acciones llevan aria-label (nombre accesible para lectores de pantalla)
+ * + title (tooltip en hover, solo desktop) y no dependen de hover para
+ * funcionar. El <a href="/cv"> queda crawleable vía el <span sr-only>.
+ * filled = acción principal above-fold; outline = eco callado (p.ej. sidebar).
  */
-export async function CVButton({ className, pdfHref, viewHref = '/cv' }: Readonly<CVButtonProps>) {
+export async function CVButton({
+  className,
+  pdfHref,
+  viewHref = '/cv',
+  variant = 'filled',
+  fullWidth = false,
+}: Readonly<CVButtonProps>) {
   const t = await getTranslations('Common');
   const locale = await getLocale();
   const resolvedPdfHref = pdfHref ?? (locale === 'en' ? '/api/resume?locale=en' : '/api/resume');
+  const downloadLabel = t('cvDownload');
+  const viewLabel = t('cvView');
+  const isOutline = variant === 'outline';
   return (
     <div
       className={cn(
-        'inline-flex w-full items-stretch overflow-hidden rounded-lg sm:w-auto',
+        'inline-flex items-stretch overflow-hidden rounded-lg',
+        fullWidth ? 'w-full' : 'w-full sm:w-auto',
+        // Outline: el borde envuelve todo el control segmentado (sin fills fuertes).
+        isOutline && 'border border-primary/30',
         className
       )}
     >
-      {/* Descargar CV — acción primaria, filled. */}
+      {/* CV ⬇ — descarga. "CV" (label visible) + ícono de descarga, un solo target.
+          El aria-label/title dan el nombre completo ("Descargar CV"). */}
       <a
         href={resolvedPdfHref}
         download
+        aria-label={downloadLabel}
+        title={downloadLabel}
         className={cn(
           HALF_BASE,
-          'flex-1 sm:flex-none bg-primary text-primary-foreground hover:bg-primary/90'
+          fullWidth ? 'flex-1' : 'flex-1 sm:flex-none',
+          isOutline
+            ? 'text-primary hover:bg-primary/10'
+            : 'bg-primary text-primary-foreground hover:bg-primary/90'
         )}
       >
+        CV
         <Download className="h-4 w-4 shrink-0" aria-hidden="true" />
-        {t('cvDownload')}
       </a>
 
-      {/* Ver CV — versión HTML, secundaria. */}
+      {/* 👁 — versión HTML, icon-only. Nombre accesible vía aria-label + sr-only. */}
       <Link
         href={viewHref}
+        aria-label={viewLabel}
+        title={viewLabel}
         className={cn(
           HALF_BASE,
-          'flex-1 sm:flex-none border-l border-primary/20 bg-primary/10 text-primary hover:bg-primary/20'
+          'shrink-0 border-l px-4 text-primary',
+          isOutline
+            ? 'border-primary/25 hover:bg-primary/10'
+            : 'border-primary/15 bg-primary/5 hover:bg-primary/15'
         )}
       >
         <Eye className="h-4 w-4 shrink-0" aria-hidden="true" />
-        {t('cvView')}
+        <span className="sr-only">{viewLabel}</span>
       </Link>
     </div>
   );
