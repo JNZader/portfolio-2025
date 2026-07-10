@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.19.2](https://github.com/JNZader/portfolio-2025/compare/v2.19.1...v2.19.2) (2026-07-10)
+
+
+### Bug Fixes
+
+* **github:** clean project tech chips and hide private repos ([#199](https://github.com/JNZader/portfolio-2025/issues/199)) ([c6783f7](https://github.com/JNZader/portfolio-2025/commits/c6783f7ee0c0fbb0d9e3e427dab955dcb39cfe58))
+
 ## [2.19.1](https://github.com/JNZader/portfolio-2025/compare/v2.19.0...v2.19.1) (2026-07-10)
 
 
