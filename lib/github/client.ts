@@ -88,8 +88,13 @@ export async function getFeaturedRepos(username?: string): Promise<GitHubRepo[]>
       returned: data.items.length,
     });
 
+    // Excluir repos privados: un portfolio público no debe listar repos que el
+    // visitante no puede abrir (enlaces rotos / 404 al clickear). El token del
+    // sitio puede tener acceso a privados, así que este guard es defensivo.
+    const publicRepos = data.items.filter((repo) => !repo.private);
+
     // Filtrar localmente por topics (más confiable que Search API)
-    const filtered = data.items.filter(
+    const filtered = publicRepos.filter(
       (repo) => repo.topics?.includes('portfolio') || repo.topics?.includes('featured')
     );
 
@@ -100,7 +105,7 @@ export async function getFeaturedRepos(username?: string): Promise<GitHubRepo[]>
 
     return filtered.length > 0
       ? (filtered as GitHubRepo[])
-      : (data.items.slice(0, 3) as GitHubRepo[]);
+      : (publicRepos.slice(0, 3) as GitHubRepo[]);
   } catch (error) {
     logger.error('Error fetching featured repos', error as Error, {
       service: 'github',
@@ -226,6 +231,17 @@ export function normalizeGitHubRepo(repo: GitHubRepo, readme?: string): Project 
 
   const topics = repo.topics ?? [];
 
+  // Depurar las topics que se muestran como "tech":
+  // - markers de curaduría (portfolio/featured) no son tecnología → fuera.
+  // - el lenguaje ya se antepone aparte; si además existe como topic
+  //   (p.ej. lang "Java" + topic "java") se duplicaría → fuera el topic.
+  // Se filtra ANTES del slice para no gastar uno de los 4 slots visibles.
+  const lang = repo.language;
+  const displayTopics = topics.filter((topic) => {
+    const t = topic.toLowerCase();
+    return t !== 'portfolio' && t !== 'featured' && t !== lang?.toLowerCase();
+  });
+
   return {
     id: `github-${repo.id}`,
     title: repo.name,
@@ -234,7 +250,7 @@ export function normalizeGitHubRepo(repo: GitHubRepo, readme?: string): Project 
     url: repo.html_url,
     github: repo.html_url,
     demo: repo.homepage ?? undefined,
-    tech: repo.language ? [repo.language, ...topics.slice(0, 4)] : topics.slice(0, 5),
+    tech: lang ? [lang, ...displayTopics.slice(0, 4)] : displayTopics.slice(0, 5),
     stars: repo.stargazers_count,
     source: 'github',
   };

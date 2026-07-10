@@ -12,6 +12,7 @@ export interface GitHubRepo {
   forks_count: number;
   language: string | null;
   topics: string[];
+  private: boolean;
   default_branch: string;
   created_at: string;
   updated_at: string;
