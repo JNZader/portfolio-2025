@@ -80,7 +80,7 @@
   },
   "Common": {
     "cvDownload": "Descargar CV",
-    "cvView": "Ver",
+    "cvView": "Ver CV",
     "backHome": "Volver al inicio",
     "explore": "Explorar",
     "exploreAria": "Explorar contenido",
@@ -289,8 +289,8 @@
     "badgeFeatured": "Destacado",
     "badgeCurated": "Curado",
     "viewDetails": "Ver detalles",
-    "noImage": "Sin imagen",
     "viewRepoAria": "Ver repositorio de {title} en GitHub",
+    "viewDemoAria": "Ver demo de {title}",
     "searchBadge": "Búsqueda: “{query}”"
   },
   "ProjectDetail": {
