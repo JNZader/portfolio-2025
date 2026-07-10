@@ -11,7 +11,7 @@ const cardVariants = cva(
         default: 'shadow-sm',
         elevated: 'shadow-md hover:shadow-xl hover:-translate-y-1',
         interactive:
-          'shadow-sm hover:shadow-xl hover:-translate-y-2 hover:border-primary/20 cursor-pointer group relative overflow-hidden',
+          'shadow-sm hover:shadow-xl hover:border-primary/20 cursor-pointer group relative overflow-hidden',
         glass: 'backdrop-blur-md bg-card/60 border-border/50 shadow-lg',
       },
     },

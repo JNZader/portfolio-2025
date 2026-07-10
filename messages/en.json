@@ -80,7 +80,7 @@
   },
   "Common": {
     "cvDownload": "Download CV",
-    "cvView": "View",
+    "cvView": "View CV",
     "backHome": "Back to home",
     "explore": "Explore",
     "exploreAria": "Explore content",
@@ -289,8 +289,8 @@
     "badgeFeatured": "Featured",
     "badgeCurated": "Curated",
     "viewDetails": "View details",
-    "noImage": "No image",
     "viewRepoAria": "View {title} repository on GitHub",
+    "viewDemoAria": "View {title} demo",
     "searchBadge": "Search: “{query}”"
   },
   "ProjectDetail": {
