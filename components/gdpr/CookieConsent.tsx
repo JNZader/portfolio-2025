@@ -2,7 +2,7 @@
 
 import Cookies from 'js-cookie';
 import { BarChart3, Cookie, Megaphone, Settings2, Shield, X } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { setDefaultGAConsent, updateGAConsent } from '@/lib/analytics/consent';
@@ -52,6 +52,7 @@ function ToggleSwitch({ id, checked, onChange, disabled }: Readonly<ToggleSwitch
 
 export function CookieConsent() {
   const t = useTranslations('Cookies');
+  const locale = useLocale();
   const [show, setShow] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -176,7 +177,7 @@ export function CookieConsent() {
             <p className="text-sm text-muted-foreground mb-5">
               {t('body')}{' '}
               <a
-                href="/privacy"
+                href={locale === 'en' ? '/en/privacy' : '/privacy'}
                 className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
               >
                 {t('policyLink')}

@@ -23,10 +23,16 @@ describe('formatDate', () => {
     expect(formatDate(date, 'short')).toMatch(/5\/10\/2025/);
   });
 
+  it('formats English absolute and relative dates', () => {
+    expect(formatDate('2025-10-05', 'long', 'en-US')).toMatch(/October.*2025/);
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    expect(formatDate(yesterday, 'relative', 'en-US')).toMatch(/yesterday|1 day ago/);
+  });
+
   it('should format date in relative format', () => {
     const now = new Date();
     const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-    expect(formatDate(yesterday, 'relative')).toMatch(/hace.*día/);
+    expect(formatDate(yesterday, 'relative')).toMatch(/ayer|hace.*día/);
   });
 });
 

@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { MESSAGES, verifyAndConsumeToken } from '@/lib/api/gdpr-utils';
+import { claimToken, MESSAGES, restoreToken } from '@/lib/api/gdpr-utils';
 import { logger } from '@/lib/monitoring/logger';
 import { confirmRateLimiter, getClientIdentifier } from '@/lib/rate-limit/redis';
 import { exportUserData } from '@/lib/services/gdpr';
@@ -119,14 +119,20 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify and consume token
-    const email = await verifyAndConsumeToken<string>(token, 'data-export');
+    const email = await claimToken<string>(token, 'data-export');
 
     if (!email) {
       return NextResponse.json({ message: MESSAGES.tokenExpired }, { status: 400 });
     }
 
     // Export data
-    const userData = await exportUserData(email);
+    let userData: Awaited<ReturnType<typeof exportUserData>>;
+    try {
+      userData = await exportUserData(email);
+    } catch (error) {
+      await restoreToken('data-export', token, email);
+      throw error;
+    }
 
     if (!userData) {
       return NextResponse.json(

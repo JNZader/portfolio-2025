@@ -3,18 +3,6 @@ name: Lighthouse CI
 on:
   pull_request:
     branches: [main]
-    paths:
-      - 'app/**'
-      - 'components/**'
-      - 'lib/**'
-      - 'prisma/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'tsconfig.json'
-      - 'next.config.*'
-      - 'biome.json'
-      - 'tailwind.config.*'
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -97,8 +85,7 @@ jobs:
 
       - name: Run Lighthouse CI
         run: |
-          npm install -g @lhci/cli@0.14.x
-          lhci autorun
+          npx lhci autorun --config=./lighthouserc.js
         env:
           CI: true
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

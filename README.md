@@ -30,7 +30,7 @@ Este repositorio es el código de este mismo portfolio: sirve tanto de sitio en 
 ![Next.js](https://img.shields.io/badge/Next.js-16.2.10-black)
 ![React](https://img.shields.io/badge/React-19.2-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6.0-blue)
-![Version](https://img.shields.io/badge/version-2.17.5-green)
+![Version](https://img.shields.io/github/package-json/v/JNZader/portfolio-2025)
 
 ![Portfolio Preview](public/images/portfolio-preview.png)
 
@@ -107,7 +107,6 @@ Este repositorio es el código de este mismo portfolio: sirve tanto de sitio en 
 - **Production Analytics:** Vercel Analytics v2.0 + Speed Insights v2.0
 - **Google Analytics:** GA4 con @next/third-parties v16.2
 - **Error Tracking:** Sentry v10.63 (`@sentry/nextjs`, client/server/edge)
-- **Web Vitals:** web-vitals v5.3
 
 ### SEO
 - **Structured Data:** schema-dts v2.0
@@ -152,7 +151,7 @@ Este repositorio es el código de este mismo portfolio: sirve tanto de sitio en 
 - Repositorio de GitHub con Discussions habilitadas
 - Base de datos PostgreSQL (cualquier proveedor: Neon, Supabase, Vercel Postgres, Railway…)
 - Cuenta de Resend para emails (opcional)
-- Cuenta de Upstash para Redis (opcional para rate limiting)
+- Cuenta de Upstash para Redis (obligatoria para rate limiting y confirmaciones GDPR)
 - GitHub Personal Access Token (opcional, para rate limits mejorados)
 - GitHub OAuth App (opcional, solo para el panel `/admin` con NextAuth)
 
@@ -355,7 +354,6 @@ portfolio/
 │   ├── actions/                # Server Actions (contact, newsletter, admin-newsletter)
 │   ├── api/                   # API Routes
 │   │   ├── admin/              # Health check y uptime del panel admin
-│   │   ├── analytics/          # Analytics endpoints (incl. web-vitals)
 │   │   ├── auth/[...nextauth]/ # NextAuth handler
 │   │   ├── data-deletion/      # GDPR data deletion (+ confirm)
 │   │   ├── data-export/        # GDPR data export (+ confirm)
@@ -372,7 +370,7 @@ portfolio/
 ├── components/
 │   ├── a11y/                  # ScreenReaderAnnouncer, SkipLinks
 │   ├── admin/                  # AdminDashboard, NewsletterBroadcaster, UptimeStatus
-│   ├── analytics/              # GoogleAnalytics, ThirdPartyScripts, WebVitals
+│   ├── analytics/              # GoogleAnalytics, ThirdPartyScripts
 │   ├── animations/             # AnimationProvider, RevealOnScroll (sin Framer Motion)
 │   ├── blog/                   # BlogFilters, Comments (Giscus), MarkdownRenderer,
 │   │                           #   PortableTextRenderer, PostCard/Grid, TableOfContents, etc.
@@ -521,7 +519,7 @@ Este proyecto está bajo la Licencia **MIT**. Ver el archivo [LICENSE](LICENSE) 
 - [Vitest](https://vitest.dev/) - Testing framework
 - [Playwright](https://playwright.dev/) - E2E testing
 - [Vercel](https://vercel.com/) - Hosting y Analytics
-- [Upstash](https://upstash.com/) - Redis para rate limiting
+- [Upstash](https://upstash.com/) - Redis para rate limiting y tokens GDPR
 - [Resend](https://resend.com/) - Email transaccional
 - [Prisma](https://www.prisma.io/) - ORM para PostgreSQL
 - [Sentry](https://sentry.io/) - Error tracking

@@ -1,6 +1,7 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { useLocale, useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
+import { Link } from '@/i18n/navigation';
 import { getPrimaryCategory } from '@/lib/utils/blog';
 import { formatDate } from '@/lib/utils/format';
 import { getImageUrl } from '@/sanity/lib/image';
@@ -11,13 +12,15 @@ interface RelatedPostsProps {
 }
 
 export function RelatedPosts({ posts }: Readonly<RelatedPostsProps>) {
+  const locale = useLocale();
+  const t = useTranslations('Blog');
   if (posts.length === 0) {
     return null;
   }
 
   return (
     <section className="mt-16 border-t border-border pt-12">
-      <h2 className="mb-6 text-2xl font-bold text-foreground">Artículos relacionados</h2>
+      <h2 className="mb-6 text-2xl font-bold text-foreground">{t('relatedPosts')}</h2>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => {
@@ -63,8 +66,8 @@ export function RelatedPosts({ posts }: Readonly<RelatedPostsProps>) {
                 </h3>
 
                 <p className="text-sm text-muted-foreground">
-                  {formatDate(post.publishedAt, 'short')}
-                  {post.readingTime && ` • ${post.readingTime} min`}
+                  {formatDate(post.publishedAt, 'short', locale)}
+                  {post.readingTime && ` • ${t('readingMinutes', { minutes: post.readingTime })}`}
                 </p>
               </div>
             </Link>

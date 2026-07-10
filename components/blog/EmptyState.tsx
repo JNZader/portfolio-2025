@@ -1,5 +1,6 @@
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
+import { Link } from '@/i18n/navigation';
 
 interface EmptyStateProps {
   title?: string;
@@ -10,11 +11,8 @@ interface EmptyStateProps {
   };
 }
 
-export function EmptyState({
-  title = 'No hay posts disponibles',
-  description = 'Aún no se han publicado artículos en esta categoría.',
-  action,
-}: Readonly<EmptyStateProps>) {
+export function EmptyState({ title, description, action }: Readonly<EmptyStateProps>) {
+  const t = useTranslations('Blog');
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
       {/* Icon */}
@@ -23,8 +21,10 @@ export function EmptyState({
       </div>
 
       {/* Text */}
-      <h2 className="mb-2 text-xl font-semibold">{title}</h2>
-      <p className="mb-6 max-w-md text-[var(--color-muted-foreground)]">{description}</p>
+      <h2 className="mb-2 text-xl font-semibold">{title ?? t('emptyTitle')}</h2>
+      <p className="mb-6 max-w-md text-[var(--color-muted-foreground)]">
+        {description ?? t('emptyDescription')}
+      </p>
 
       {/* Action */}
       {action && (
@@ -46,7 +46,7 @@ function DocumentIcon({ className }: Readonly<{ className?: string }>) {
       strokeWidth="1.5"
       stroke="currentColor"
     >
-      <title>Sin contenido</title>
+      <title>Empty</title>
       <path
         strokeLinecap="round"
         strokeLinejoin="round"

@@ -6,7 +6,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 import { logger } from '@/lib/monitoring/logger';
-import { createRateLimiter, safeRedisOp } from '@/lib/rate-limit/redis';
+import { createRateLimiter, getRedisClient } from '@/lib/rate-limit/redis';
 import { CSRF_ERROR_RESPONSE, verifyCsrf } from '@/lib/security/security-config';
 
 // Response messages
@@ -147,28 +147,32 @@ export async function verifyGdprRequest(
 }
 
 /**
- * Verify token from Redis and delete it (single use)
+ * Atomically claim a single-use token. GETDEL prevents two concurrent
+ * confirmations from executing the protected operation with the same token.
  */
-export async function verifyAndConsumeToken<T = string>(
-  token: string,
-  prefix: string
-): Promise<T | null> {
-  const data = await safeRedisOp((client) => client.get<T>(`${prefix}:${token}`));
-  if (!data) return null;
-
-  // Delete token (single use)
-  await safeRedisOp((client) => client.del(`${prefix}:${token}`));
-  return data;
+export async function claimToken<T = string>(token: string, prefix: string): Promise<T | null> {
+  return getRedisClient().getdel<T>(`${prefix}:${token}`);
 }
 
 /**
- * Store token in Redis with expiration
+ * Restore a claimed token after a retryable downstream failure. The shorter
+ * TTL limits exposure while giving the user a practical retry window.
  */
+export async function restoreToken(
+  prefix: string,
+  token: string,
+  data: string,
+  expirationSeconds = 300
+): Promise<void> {
+  await getRedisClient().set(`${prefix}:${token}`, data, { ex: expirationSeconds, nx: true });
+}
+
+/** Store a confirmation token. Redis is required for these security flows. */
 export async function storeToken(
   prefix: string,
   token: string,
   data: string,
   expirationSeconds = 900
 ): Promise<void> {
-  await safeRedisOp((client) => client.set(`${prefix}:${token}`, data, { ex: expirationSeconds }));
+  await getRedisClient().set(`${prefix}:${token}`, data, { ex: expirationSeconds });
 }

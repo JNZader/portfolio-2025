@@ -1,9 +1,11 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
+import { Link } from '@/i18n/navigation';
 import { logger } from '@/lib/monitoring/logger';
 
 export default function BlogError({
@@ -13,6 +15,7 @@ export default function BlogError({
   error: Error & { digest?: string };
   reset: () => void;
 }>) {
+  const t = useTranslations('Blog');
   useEffect(() => {
     logger.error('Blog page error', error, {
       service: 'blog',
@@ -28,24 +31,22 @@ export default function BlogError({
             <ExclamationIcon className="h-12 w-12 text-[var(--color-error)]" />
           </div>
 
-          <h2 className="mb-2 text-2xl font-bold">Algo salió mal</h2>
-          <p className="mb-6 max-w-md text-[var(--color-muted-foreground)]">
-            No pudimos cargar los posts del blog. Por favor, intenta de nuevo.
-          </p>
+          <h2 className="mb-2 text-2xl font-bold">{t('errorTitle')}</h2>
+          <p className="mb-6 max-w-md text-[var(--color-muted-foreground)]">{t('errorBody')}</p>
 
           <div className="flex gap-4">
             <Button onClick={reset} variant="default">
-              Intentar de nuevo
+              {t('retry')}
             </Button>
             <Button asChild variant="outline">
-              <a href="/">Volver al inicio</a>
+              <Link href="/">{t('backHome')}</Link>
             </Button>
           </div>
 
           {/* Error details (solo en dev) */}
           {process.env.NODE_ENV === 'development' && (
             <details className="mt-8 max-w-2xl text-left">
-              <summary className="cursor-pointer text-sm font-medium">Detalles del error</summary>
+              <summary className="cursor-pointer text-sm font-medium">{t('errorDetails')}</summary>
               <pre className="mt-2 overflow-auto rounded-lg bg-[var(--color-muted)] p-4 text-xs">
                 {error.message}
               </pre>

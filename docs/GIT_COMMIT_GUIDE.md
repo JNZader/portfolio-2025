@@ -291,7 +291,6 @@ git push
 # Agregar archivos
 git add scripts/audit-sanity-data.mjs
 git add scripts/clean-sanity-data.mjs
-git add scripts/measure-web-vitals.js
 git add scripts/README.md
 git add lib/utils/toast.ts
 git add hooks/
@@ -351,8 +350,6 @@ git add app/\(pages\)/proyectos/\[id\]/page.tsx
 git add app/\(pages\)/proyectos/page.tsx
 git add app/\(pages\)/sobre-mi/page.tsx
 git add app/actions/newsletter.ts
-git add app/api/analytics/route.ts
-git add app/api/analytics/web-vitals/route.ts
 git add app/api/data-deletion/route.ts
 git add app/api/data-export/route.ts
 git add app/api/newsletter/unsubscribe/route.ts
@@ -690,7 +687,7 @@ git commit -m "chore(config): update build and test configurations
 git push
 
 # === COMMIT 11: Utils ===
-git add scripts/audit-sanity-data.mjs scripts/clean-sanity-data.mjs scripts/measure-web-vitals.js scripts/README.md lib/utils/toast.ts hooks/
+git add scripts/audit-sanity-data.mjs scripts/clean-sanity-data.mjs scripts/README.md lib/utils/toast.ts hooks/
 git commit -m "feat(utils): add utility scripts and hooks
 
 - Add Sanity data audit and cleanup scripts
@@ -710,7 +707,7 @@ git commit -m "docs: update project documentation
 git push
 
 # === COMMIT 13: Pages ===
-git add "app/(pages)/blog/" "app/(pages)/data-request/page.tsx" "app/(pages)/design-system/page.tsx" "app/(pages)/proyectos/" "app/(pages)/sobre-mi/page.tsx" app/actions/newsletter.ts "app/api/analytics/" "app/api/data-deletion/route.ts" "app/api/data-export/route.ts" "app/api/newsletter/unsubscribe/route.ts" "app/api/resume/route.ts" app/globals.css app/layout.tsx app/page.tsx
+git add "app/(pages)/blog/" "app/(pages)/data-request/page.tsx" "app/(pages)/design-system/page.tsx" "app/(pages)/proyectos/" "app/(pages)/sobre-mi/page.tsx" app/actions/newsletter.ts "app/api/data-deletion/route.ts" "app/api/data-export/route.ts" "app/api/newsletter/unsubscribe/route.ts" "app/api/resume/route.ts" app/globals.css app/layout.tsx app/page.tsx
 git commit -m "refactor(pages): update pages and API routes
 
 - Update error boundaries across pages

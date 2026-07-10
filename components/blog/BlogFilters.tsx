@@ -1,11 +1,13 @@
 'use client';
 
 import { Filter, Search, X } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useId, useState, useTransition } from 'react';
 import { useDebounce } from 'use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useRouter } from '@/i18n/navigation';
 import { isValidSearchTerm } from '@/lib/utils/search';
 import type { Category } from '@/types/sanity';
 
@@ -16,6 +18,7 @@ interface BlogFiltersProps {
 
 export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProps>) {
   const router = useRouter();
+  const t = useTranslations('Blog');
   const searchParams = useSearchParams();
   const filtersPanelId = useId();
   const [isPending, startTransition] = useTransition();
@@ -101,10 +104,10 @@ export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProp
             type="text"
             name="search"
             id="blog-search"
-            aria-label="Buscar artículos del blog"
+            aria-label={t('searchLabel')}
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Buscar artículos por título, contenido, tags..."
+            placeholder={t('searchPlaceholder')}
             className="w-full pl-10 pr-4 py-2 border border-input bg-background rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground"
           />
           {searchInput && (
@@ -112,7 +115,7 @@ export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProp
               type="button"
               onClick={() => setSearchInput('')}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              aria-label="Limpiar búsqueda"
+              aria-label={t('clearSearch')}
             >
               <X className="h-4 w-4" />
             </button>
@@ -129,7 +132,7 @@ export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProp
             aria-controls={filtersPanelId}
           >
             <Filter className="h-4 w-4" />
-            Filtros
+            {t('filters')}
             {hasActiveFilters && (
               <Badge variant="secondary" className="ml-1 text-xs">
                 {activeFiltersCount}
@@ -140,7 +143,7 @@ export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProp
           {hasActiveFilters && (
             <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-2">
               <X className="h-4 w-4" />
-              Limpiar
+              {t('clear')}
             </Button>
           )}
         </div>
@@ -148,7 +151,7 @@ export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProp
 
       {/* Helper text para búsqueda */}
       {searchInput.length > 0 && searchInput.length < 2 && (
-        <p className="text-xs text-muted-foreground">Escribe al menos 2 caracteres</p>
+        <p className="text-xs text-muted-foreground">{t('minimumChars')}</p>
       )}
 
       {/* Panel de filtros */}
@@ -156,11 +159,11 @@ export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProp
         <section
           id={filtersPanelId}
           className="p-4 border border-border rounded-lg bg-muted/30 space-y-4"
-          aria-label="Filtros de búsqueda"
+          aria-label={t('searchFilters')}
         >
           {/* Filtro por categoría */}
           <fieldset className="border-0 p-0 m-0">
-            <legend className="text-sm font-medium mb-2 block">Categoría</legend>
+            <legend className="text-sm font-medium mb-2 block">{t('category')}</legend>
             <div className="flex flex-wrap gap-2">
               <Button
                 variant={currentCategory ? 'outline' : 'default'}
@@ -168,7 +171,7 @@ export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProp
                 onClick={() => handleCategoryClick(null)}
                 aria-pressed={!currentCategory}
               >
-                Todas
+                {t('all')}
               </Button>
               {categories.map((category) => {
                 const isSelected = currentCategory === category.slug.current;
@@ -195,15 +198,15 @@ export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProp
       {/* Resultados */}
       <div className="flex items-center justify-between text-sm text-muted-foreground">
         <output aria-live="polite" className="contents">
-          {totalPosts} artículo{totalPosts === 1 ? '' : 's'}
-          {hasActiveFilters && ' (filtrados)'}
+          {t('results', { count: totalPosts })}
+          {hasActiveFilters && ` (${t('filtered')})`}
         </output>
 
         {hasActiveFilters && (
           <div className="flex flex-wrap gap-1">
             {currentSearch && (
               <Badge variant="outline" className="text-xs">
-                Búsqueda: &ldquo;{currentSearch}&rdquo;
+                {t('searchBadge', { search: currentSearch })}
               </Badge>
             )}
             {activeCategory && (

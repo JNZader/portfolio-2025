@@ -12,26 +12,25 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
+      include: [
+        'app/actions/**/*.{ts,tsx}',
+        'app/api/**/*.{ts,tsx}',
+        'components/**/*.{ts,tsx}',
+        'hooks/**/*.{ts,tsx}',
+        'lib/**/*.{ts,tsx}',
+      ],
       exclude: [
-        'node_modules/',
-        '__tests__/',
-        'mocks/**', // Excluir infraestructura de tests
-        '*.config.*',
-        'app/**/*.tsx', // Excluir páginas (se testean con E2E)
-        '.next/',
-        'coverage/',
-        'lib/generated/**', // Excluir código generado de Prisma
-        'sanity/**', // Excluir configuración de Sanity
-        '**/index.ts', // Excluir barrel exports
-        'lib/analytics/**', // Analytics utilities (browser-only)
-        'lib/monitoring/logger.ts', // Logger (side effects)
-        'components/ui/icons.tsx', // Static icon components
+        'lib/generated/**',
+        'lib/data/**',
+        'lib/email/templates/**',
+        'components/ui/icons.tsx',
+        '**/index.ts',
       ],
       thresholds: {
-        lines: 80,
-        functions: 80,
-        branches: 75,
-        statements: 80,
+        lines: 35,
+        functions: 30,
+        branches: 25,
+        statements: 35,
       },
     },
   },

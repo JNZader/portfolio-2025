@@ -6,9 +6,39 @@ on:
       - main
 
 jobs:
+  quality-gate:
+    name: Release quality gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm install -g npm@11
+      - run: npm ci
+      - run: npx prisma generate
+        env:
+          DATABASE_URL: file:./prisma/dev.db
+          DIRECT_URL: file:./prisma/dev.db
+      - run: npm run verify
+      - run: npm run test:run
+      - run: npm run build
+        env:
+          DATABASE_URL: file:./prisma/dev.db
+          DIRECT_URL: file:./prisma/dev.db
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
+          NEXT_PUBLIC_SANITY_PROJECT_ID: dummy-project-id
+          NEXT_PUBLIC_SANITY_DATASET: production
+          NEXT_PUBLIC_SANITY_API_VERSION: 2024-01-01
+          RESEND_API_KEY: re_dummy_api_key_for_ci_build
+          RESEND_FROM_EMAIL: noreply@example.com
+          RESEND_TO_EMAIL: contact@example.com
+
   release:
     name: Create Release
     runs-on: ubuntu-latest
+    needs: quality-gate
     # Evitar loop infinito: solo ejecutar si NO es un commit de release
     if: "!contains(github.event.head_commit.message, 'chore(release)')"
 

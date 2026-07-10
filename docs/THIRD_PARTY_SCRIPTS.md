@@ -137,12 +137,7 @@ export function ThirdPartyScripts() {
 
 ### Monitoring
 
-Use Web Vitals tracking (already implemented) to monitor impact:
-
-```javascript
-// In browser console (development)
-// Web Vitals will be logged automatically
-```
+Production Core Web Vitals are collected by Vercel Speed Insights, rendered by `lib/analytics/vercel.tsx` alongside Vercel Web Analytics. There is no custom `/api/analytics` or in-memory Web Vitals collector. For a local one-off sample, use `scripts/measure-web-vitals.js` in the browser console or run Lighthouse.
 
 ## Best Practices
 

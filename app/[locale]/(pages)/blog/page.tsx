@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { RevealOnScroll } from '@/components/animations';
 import { BlogFilters } from '@/components/blog/BlogFilters';
 import { EmptyState } from '@/components/blog/EmptyState';
@@ -7,6 +8,7 @@ import { PostGrid } from '@/components/blog/PostGrid';
 import { SearchTracker } from '@/components/blog/SearchTracker';
 import Container from '@/components/ui/Container';
 import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
+import { localeAlternates } from '@/lib/seo/alternates';
 import { getPaginationRange, getTotalPages } from '@/lib/utils/blog';
 import { isValidSearchTerm, normalizeSearchTerm } from '@/lib/utils/search';
 import { sanityFetch } from '@/sanity/lib/client';
@@ -14,6 +16,7 @@ import { categoriesQuery, paginatedPostsQuery } from '@/sanity/lib/queries';
 import type { Category, Post } from '@/types/sanity';
 
 interface BlogPageProps {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<{
     page?: string;
     category?: string;
@@ -22,15 +25,18 @@ interface BlogPageProps {
 }
 
 export async function generateMetadata({
+  params,
   searchParams,
 }: Readonly<BlogPageProps>): Promise<Metadata> {
-  const params = await searchParams;
-  const isFiltered = Boolean(params.search || params.category || params.page);
+  const [{ locale }, query] = await Promise.all([params, searchParams]);
+  const t = await getTranslations({ locale, namespace: 'Blog' });
+  const paramsValue = query;
+  const isFiltered = Boolean(paramsValue.search || paramsValue.category || paramsValue.page);
 
   return {
     title: 'Blog',
-    description: 'Artículos sobre desarrollo web, programación y tecnología.',
-    alternates: { canonical: '/blog' },
+    description: t('metaDescription'),
+    alternates: await localeAlternates('/blog'),
     // Filtered views (search/category/page) are thin/duplicate of /blog.
     // Keep them out of the index but follow links (canonical above already
     // consolidates them to /blog).
@@ -40,11 +46,14 @@ export async function generateMetadata({
   };
 }
 
-export default async function BlogPage({ searchParams }: Readonly<BlogPageProps>) {
-  const params = await searchParams;
-  const currentPage = Number.parseInt(params.page ?? '1', 10);
-  const categorySlug = params.category ?? null;
-  const searchTerm = params.search ?? '';
+export default async function BlogPage({ params, searchParams }: Readonly<BlogPageProps>) {
+  const [{ locale }, query] = await Promise.all([params, searchParams]);
+  setRequestLocale(locale);
+  const t = await getTranslations('Blog');
+  const paramsValue = query;
+  const currentPage = Number.parseInt(paramsValue.page ?? '1', 10);
+  const categorySlug = paramsValue.category ?? null;
+  const searchTerm = paramsValue.search ?? '';
 
   // Normalizar búsqueda para GROQ
   const normalizedSearch =
@@ -80,15 +89,15 @@ export default async function BlogPage({ searchParams }: Readonly<BlogPageProps>
   let emptyDescription: string;
 
   if (normalizedSearch || categorySlug) {
-    emptyTitle = 'No se encontraron resultados';
+    emptyTitle = t('emptySearchTitle');
     if (normalizedSearch) {
-      emptyDescription = `No hay artículos que coincidan con "${searchTerm}". Intenta con otros términos.`;
+      emptyDescription = t('emptySearch', { search: searchTerm });
     } else {
-      emptyDescription = 'Prueba con otra categoría.';
+      emptyDescription = t('emptyCategory');
     }
   } else {
-    emptyTitle = 'No hay posts disponibles';
-    emptyDescription = 'Aún no se han publicado artículos.';
+    emptyTitle = t('emptyTitle');
+    emptyDescription = t('emptyDescription');
   }
 
   return (
@@ -129,7 +138,7 @@ export default async function BlogPage({ searchParams }: Readonly<BlogPageProps>
                 Blog
               </SectionTitle>
               <SectionDescription size="lg" className="mx-auto">
-                Artículos sobre desarrollo web, programación y las últimas tecnologías.
+                {t('heroDescription')}
               </SectionDescription>
             </SectionHeader>
           </RevealOnScroll>
@@ -165,7 +174,7 @@ export default async function BlogPage({ searchParams }: Readonly<BlogPageProps>
               description={emptyDescription}
               action={
                 normalizedSearch || categorySlug
-                  ? { label: 'Ver todos los posts', href: '/blog' }
+                  ? { label: t('viewAll'), href: '/blog' }
                   : undefined
               }
             />

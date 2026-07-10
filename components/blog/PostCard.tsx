@@ -1,9 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
+import { Link } from '@/i18n/navigation';
 import { getPrimaryCategory } from '@/lib/utils/blog';
 import { formatDate } from '@/lib/utils/format';
 import { highlightSearchTerm } from '@/lib/utils/search';
@@ -16,6 +17,8 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, priority = false }: Readonly<PostCardProps>) {
+  const locale = useLocale();
+  const t = useTranslations('Blog');
   const searchParams = useSearchParams();
   const searchTerm = searchParams.get('search') ?? '';
 
@@ -87,7 +90,9 @@ export function PostCard({ post, priority = false }: Readonly<PostCardProps>) {
           )}
 
           {post.readingTime && (
-            <span className="text-muted-foreground">{post.readingTime} min lectura</span>
+            <span className="text-muted-foreground">
+              {t('readingMinutes', { minutes: post.readingTime })}
+            </span>
           )}
         </div>
 
@@ -125,7 +130,7 @@ export function PostCard({ post, priority = false }: Readonly<PostCardProps>) {
           <div className="flex flex-col text-sm">
             {post.author && <span className="font-medium">{post.author.name}</span>}
             <time dateTime={post.publishedAt} className="text-muted-foreground">
-              {formatDate(post.publishedAt, 'short')}
+              {formatDate(post.publishedAt, 'short', locale)}
             </time>
           </div>
         </div>

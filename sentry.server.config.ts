@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
+import { redactSensitiveData } from '@/lib/monitoring/redact';
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
@@ -17,6 +18,6 @@ Sentry.init({
       return null;
     }
 
-    return event;
+    return redactSensitiveData(event);
   },
 });

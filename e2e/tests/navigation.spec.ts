@@ -32,6 +32,21 @@ test.describe('Navigation', () => {
     await expect(page).toHaveURL(/\/contacto/);
   });
 
+
+  test('English routes preserve locale and download the English CV', async ({ page }) => {
+    await page.goto('/en');
+    await dismissCookieConsent(page);
+
+    await expect(page.getByRole('link', { name: /download cv/i }).first()).toHaveAttribute(
+      'href',
+      '/api/resume?locale=en'
+    );
+
+    await page.goto('/en/privacy');
+    await page.getByRole('link', { name: /data request page/i }).click();
+    await expect(page).toHaveURL(/\/en\/data-request/);
+  });
+
   test('should have skip links', async ({ page }) => {
     await page.goto('/');
     await dismissCookieConsent(page);

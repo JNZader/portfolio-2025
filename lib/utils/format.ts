@@ -13,20 +13,21 @@
  */
 export function formatDate(
   date: string | Date,
-  format: 'long' | 'short' | 'relative' = 'long'
+  format: 'long' | 'short' | 'relative' = 'long',
+  locale = 'es-ES'
 ): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
 
   if (format === 'short') {
-    return dateObj.toLocaleDateString('es-ES');
+    return dateObj.toLocaleDateString(locale);
   }
 
   if (format === 'relative') {
-    return formatRelativeTime(dateObj);
+    return formatRelativeTime(dateObj, locale);
   }
 
   // Format: 'long'
-  return dateObj.toLocaleDateString('es-ES', {
+  return dateObj.toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -36,50 +37,36 @@ export function formatDate(
 /**
  * Formatea tiempo relativo (hace X días/horas/minutos)
  */
-function formatRelativeTime(date: Date): string {
+function formatRelativeTime(date: Date, locale: string): string {
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
   // Future date: a "hace X" (ago) label would be wrong. Show the absolute date
   // instead — least surprising than pretending it just happened.
   if (diffInSeconds < 0) {
-    return date.toLocaleDateString('es-ES', {
+    return date.toLocaleDateString(locale, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     });
   }
 
-  // Time intervals with English keys (avoids non-ASCII linting issues)
-  const intervals = {
-    year: 31536000,
-    month: 2592000,
-    week: 604800,
-    day: 86400,
-    hour: 3600,
-    minute: 60,
-  };
+  const intervals = [
+    ['year', 31536000],
+    ['month', 2592000],
+    ['week', 604800],
+    ['day', 86400],
+    ['hour', 3600],
+    ['minute', 60],
+  ] as const;
+  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
 
-  // Spanish translations for each time unit
-  const translations: Record<string, { singular: string; plural: string }> = {
-    year: { singular: 'año', plural: 'años' },
-    month: { singular: 'mes', plural: 'meses' },
-    week: { singular: 'semana', plural: 'semanas' },
-    day: { singular: 'día', plural: 'días' },
-    hour: { singular: 'hora', plural: 'horas' },
-    minute: { singular: 'minuto', plural: 'minutos' },
-  };
-
-  for (const [unit, seconds] of Object.entries(intervals)) {
+  for (const [unit, seconds] of intervals) {
     const interval = Math.floor(diffInSeconds / seconds);
-    if (interval >= 1) {
-      const translation = translations[unit];
-      const unitText = interval === 1 ? translation.singular : translation.plural;
-      return `hace ${interval} ${unitText}`;
-    }
+    if (interval >= 1) return formatter.format(-interval, unit);
   }
 
-  return 'hace un momento';
+  return formatter.format(0, 'second');
 }
 
 /**

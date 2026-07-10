@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
+import { redactSensitiveData } from '@/lib/monitoring/redact';
 import { logger } from '@/lib/monitoring/logger';
 
 Sentry.init({
@@ -38,7 +39,7 @@ Sentry.init({
       return null;
     }
 
-    return event;
+    return redactSensitiveData(event);
   },
 });
 

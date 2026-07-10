@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Suspense } from 'react';
 import { BlogPostTracker } from '@/components/blog/BlogPostTracker';
 import { Comments } from '@/components/blog/Comments';
@@ -12,8 +13,8 @@ import { TableOfContents } from '@/components/blog/TableOfContents';
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
 import { JsonLd } from '@/components/seo/JsonLd';
 import Container from '@/components/ui/Container';
-import { SITE_URL } from '@/lib/config/site-config';
 import { logger } from '@/lib/monitoring/logger';
+import { localizedPath, localizedUrl } from '@/lib/seo/locale-url';
 import { ogLocaleFields } from '@/lib/seo/metadata';
 import { generateBlogPostingSchema, generateBreadcrumbSchema } from '@/lib/seo/schema';
 import { generateTableOfContents, generateTableOfContentsFromMarkdown } from '@/lib/utils/toc';
@@ -25,7 +26,7 @@ import type { Post } from '@/types/sanity';
 /**
  * Renders the post content based on available format
  */
-function PostContent({ post }: Readonly<{ post: Post }>) {
+function PostContent({ post, emptyLabel }: Readonly<{ post: Post; emptyLabel: string }>) {
   if (post.markdownBody) {
     return <MarkdownRenderer content={post.markdownBody} />;
   }
@@ -33,7 +34,7 @@ function PostContent({ post }: Readonly<{ post: Post }>) {
     /* biome-ignore lint/suspicious/noExplicitAny: Type incompatibility between Sanity and Portable Text library */
     return <PortableTextRenderer value={post.body as any} />;
   }
-  return <p className="text-muted-foreground">No content available.</p>;
+  return <p className="text-muted-foreground">{emptyLabel}</p>;
 }
 
 interface PostPageProps {
@@ -69,6 +70,7 @@ async function RelatedPostsSection({
  */
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const { locale, slug } = await params;
+  const t = await getTranslations({ locale, namespace: 'Blog' });
 
   const post = await sanityFetch<Post>({
     query: postBySlugQuery,
@@ -78,7 +80,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 
   if (!post) {
     return {
-      title: 'Post no encontrado',
+      title: t('notFound'),
     };
   }
 
@@ -89,11 +91,11 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     description: post.seo?.metaDescription ?? post.excerpt,
     keywords: post.seo?.keywords,
     authors: post.author ? [{ name: post.author.name }] : undefined,
-    alternates: { canonical: `/blog/${slug}` },
+    alternates: { canonical: localizedPath(`/blog/${slug}`, locale) },
     openGraph: {
       title: post.seo?.metaTitle ?? post.title,
       description: post.seo?.metaDescription ?? post.excerpt,
-      url: `/blog/${slug}`,
+      url: localizedPath(`/blog/${slug}`, locale),
       type: 'article',
       ...ogLocaleFields(locale),
       publishedTime: post.publishedAt,
@@ -146,6 +148,8 @@ export async function generateStaticParams() {
  */
 export default async function PostPage({ params }: Readonly<PostPageProps>) {
   const { locale, slug } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations('Blog');
 
   // Fetch post
   const post = await sanityFetch<Post>({
@@ -165,7 +169,7 @@ export default async function PostPage({ params }: Readonly<PostPageProps>) {
 
   // Full URL for share buttons — SITE_URL falls back to the real domain,
   // never example.com.
-  const fullUrl = `${SITE_URL}/blog/${slug}`;
+  const fullUrl = localizedUrl(`/blog/${slug}`, locale);
 
   // Generate schemas
   const blogPostingSchema = generateBlogPostingSchema({
@@ -176,11 +180,12 @@ export default async function PostPage({ params }: Readonly<PostPageProps>) {
     updatedAt: post._updatedAt,
     image: getImageUrl(post.mainImage, 1200, 630),
     keywords: post.categories?.map((cat) => cat.title),
+    locale,
   });
 
   const breadcrumbSchema = generateBreadcrumbSchema(
     [
-      { name: 'Inicio', url: '/' },
+      { name: t('breadcrumbHome'), url: '/' },
       { name: 'Blog', url: '/blog' },
       { name: post.title, url: `/blog/${post.slug.current}` },
     ],
@@ -204,7 +209,7 @@ export default async function PostPage({ params }: Readonly<PostPageProps>) {
       <Container className="pt-8 pb-4">
         <Breadcrumbs
           items={[
-            { name: 'Inicio', href: '/' },
+            { name: t('breadcrumbHome'), href: '/' },
             { name: 'Blog', href: '/blog' },
             { name: post.title, href: `/blog/${post.slug.current}` },
           ]}
@@ -223,7 +228,7 @@ export default async function PostPage({ params }: Readonly<PostPageProps>) {
               {/* Body - Card estilizado con MEJOR OPACIDAD */}
               <div className="mb-12 bg-card backdrop-blur-sm rounded-xl border-2 border-border p-8 md:p-12 shadow-md">
                 {/* Markdown takes priority if available, otherwise use Portable Text */}
-                <PostContent post={post} />
+                <PostContent post={post} emptyLabel={t('noContent')} />
               </div>
 
               {/* Share buttons - Card con MEJOR OPACIDAD */}

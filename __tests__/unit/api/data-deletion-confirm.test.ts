@@ -21,10 +21,12 @@ vi.mock('@/lib/rate-limit/redis', () => ({
   getClientIdentifier: vi.fn().mockReturnValue('127.0.0.1'),
 }));
 
-const verifyAndConsumeToken = vi.fn();
+const claimToken = vi.fn();
+const restoreToken = vi.fn();
 vi.mock('@/lib/api/gdpr-utils', () => ({
   MESSAGES: { tokenMissing: 'token missing', tokenExpired: 'token expired' },
-  verifyAndConsumeToken: (...args: unknown[]) => verifyAndConsumeToken(...args),
+  claimToken: (...args: unknown[]) => claimToken(...args),
+  restoreToken: (...args: unknown[]) => restoreToken(...args),
 }));
 
 const deleteUserData = vi.fn().mockResolvedValue({ success: true, message: 'ok' });
@@ -53,7 +55,8 @@ function postRequestWithToken(token: string) {
 
 beforeEach(() => {
   sendMock.mockClear();
-  verifyAndConsumeToken.mockReset();
+  claimToken.mockReset();
+  restoreToken.mockReset();
   deleteUserData.mockClear();
 });
 
@@ -74,7 +77,7 @@ describe('GET /api/data-deletion/confirm', () => {
 
     // The critical invariant: GET must not consume the token, delete data,
     // or send email. A prefetcher hitting this URL must have zero side effect.
-    expect(verifyAndConsumeToken).not.toHaveBeenCalled();
+    expect(claimToken).not.toHaveBeenCalled();
     expect(deleteUserData).not.toHaveBeenCalled();
     expect(sendMock).not.toHaveBeenCalled();
   });
@@ -93,7 +96,7 @@ describe('GET /api/data-deletion/confirm', () => {
 
     expect(response.status).toBe(400);
     expect(response.headers.get('content-type')).toContain('text/html');
-    expect(verifyAndConsumeToken).not.toHaveBeenCalled();
+    expect(claimToken).not.toHaveBeenCalled();
     expect(deleteUserData).not.toHaveBeenCalled();
   });
 });
@@ -101,7 +104,7 @@ describe('GET /api/data-deletion/confirm', () => {
 describe('POST /api/data-deletion/confirm', () => {
   it('escapes attacker-controlled reason in the confirmation email html', async () => {
     const maliciousReason = '<script>alert(1)</script><a href="https://evil.example">phish</a>';
-    verifyAndConsumeToken.mockResolvedValue(
+    claimToken.mockResolvedValue(
       JSON.stringify({ email: 'victim@example.com', reason: maliciousReason })
     );
 
@@ -116,7 +119,7 @@ describe('POST /api/data-deletion/confirm', () => {
   });
 
   it('deletes data and redirects on a valid token', async () => {
-    verifyAndConsumeToken.mockResolvedValue(
+    claimToken.mockResolvedValue(
       JSON.stringify({ email: 'victim@example.com' })
     );
 
@@ -136,7 +139,7 @@ describe('POST /api/data-deletion/confirm', () => {
   });
 
   it('returns 400 when the token is expired or invalid', async () => {
-    verifyAndConsumeToken.mockResolvedValue(null);
+    claimToken.mockResolvedValue(null);
     const response = await POST(postRequestWithToken('bad-token'));
     expect(response.status).toBe(400);
     expect(deleteUserData).not.toHaveBeenCalled();
@@ -144,7 +147,7 @@ describe('POST /api/data-deletion/confirm', () => {
   });
 
   it('returns 404 when the user is not found', async () => {
-    verifyAndConsumeToken.mockResolvedValue(
+    claimToken.mockResolvedValue(
       JSON.stringify({ email: 'ghost@example.com' })
     );
     deleteUserData.mockResolvedValueOnce({ success: false, message: 'not found' });

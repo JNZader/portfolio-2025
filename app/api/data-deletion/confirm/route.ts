@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { MESSAGES, verifyAndConsumeToken } from '@/lib/api/gdpr-utils';
+import { claimToken, MESSAGES, restoreToken } from '@/lib/api/gdpr-utils';
 import { getSiteUrl } from '@/lib/config/site-url';
 import { resend } from '@/lib/email/resend';
 import { logger } from '@/lib/monitoring/logger';
@@ -132,7 +132,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify and consume token
-    const data = await verifyAndConsumeToken<string>(token, 'data-deletion');
+    const data = await claimToken<string>(token, 'data-deletion');
 
     if (!data) {
       return NextResponse.json({ message: MESSAGES.tokenExpired }, { status: 400 });
@@ -142,9 +142,16 @@ export async function POST(request: NextRequest) {
     const { email, reason } = JSON.parse(data) as DeletionTokenData;
 
     // Delete user data
-    const result = await deleteUserData(email);
+    let result: Awaited<ReturnType<typeof deleteUserData>>;
+    try {
+      result = await deleteUserData(email);
+    } catch (error) {
+      await restoreToken('data-deletion', token, data);
+      throw error;
+    }
 
     if (!result.success) {
+      await restoreToken('data-deletion', token, data);
       return NextResponse.json({ message: result.message }, { status: 404 });
     }
 

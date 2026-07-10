@@ -1,6 +1,7 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { useLocale, useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
+import { Link } from '@/i18n/navigation';
 import { formatDate } from '@/lib/utils/format';
 import { getImageBlurUrl, getImageUrl } from '@/sanity/lib/image';
 import type { Post } from '@/types/sanity';
@@ -10,6 +11,8 @@ interface PostHeaderProps {
 }
 
 export function PostHeader({ post }: Readonly<PostHeaderProps>) {
+  const locale = useLocale();
+  const t = useTranslations('Blog');
   const imageUrl = getImageUrl(post.mainImage, 1600, 900);
   const blurUrl = getImageBlurUrl(post.mainImage);
 
@@ -87,13 +90,15 @@ export function PostHeader({ post }: Readonly<PostHeaderProps>) {
               <span className="text-white/70">•</span>
 
               <time dateTime={post.publishedAt} className="drop-shadow">
-                {formatDate(post.publishedAt, 'long')}
+                {formatDate(post.publishedAt, 'long', locale)}
               </time>
 
               {post.readingTime && (
                 <>
                   <span className="text-white/70">•</span>
-                  <span className="drop-shadow">{post.readingTime} min lectura</span>
+                  <span className="drop-shadow">
+                    {t('readingMinutes', { minutes: post.readingTime })}
+                  </span>
                 </>
               )}
             </div>
