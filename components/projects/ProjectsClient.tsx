@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import type { Project } from '@/lib/github/types';
 import ProjectCard from './ProjectCard';
 
@@ -125,19 +126,19 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input
+          <Input
             type="search"
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder={t('searchPlaceholder')}
             aria-label={t('searchAria')}
-            className="w-full pl-10 pr-4 py-2 border border-input bg-background rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground"
+            className="pl-10 pr-12"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => handleSearchChange('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute right-0.5 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               aria-label={t('clearSearchAria')}
             >
               <X className="h-4 w-4" />

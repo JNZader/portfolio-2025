@@ -141,21 +141,21 @@ export function CookieConsent() {
   return (
     <section
       className={cn(
-        'fixed inset-x-0 bottom-0 z-50 p-4 transition-all duration-300 ease-out',
-        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+        'fixed inset-x-0 top-16 z-50 p-3 transition-all duration-300 ease-out sm:inset-x-auto sm:top-auto sm:right-4 sm:bottom-4 sm:w-[min(30rem,calc(100vw-2rem))] sm:p-0',
+        isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 sm:translate-y-full'
       )}
       aria-label={t('ariaLabel')}
     >
-      <div className="mx-auto max-w-2xl">
+      <div className="mx-auto max-w-lg sm:max-w-none">
         <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-background/95 backdrop-blur-xl shadow-2xl">
           {/* Decorative gradient */}
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
-          <div className="p-6">
+          <div className="max-h-[calc(100dvh-5.5rem)] overflow-y-auto p-4 sm:max-h-[calc(100dvh-2rem)] sm:p-5">
             {/* Header */}
-            <div className="flex items-start justify-between gap-4 mb-4">
+            <div className="mb-3 flex items-start justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                <div className="hidden h-10 w-10 items-center justify-center rounded-xl bg-primary/10 sm:flex">
                   <Cookie className="h-5 w-5 text-primary" />
                 </div>
                 <div>
@@ -166,15 +166,15 @@ export function CookieConsent() {
               <button
                 type="button"
                 onClick={acceptEssential}
-                className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                className="-mr-2 -mt-2 inline-flex size-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 aria-label={t('closeAria')}
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5" />
               </button>
             </div>
 
             {/* Description */}
-            <p className="text-sm text-muted-foreground mb-5">
+            <p className="mb-4 text-sm text-muted-foreground">
               {t('body')}{' '}
               <a
                 href={locale === 'en' ? '/en/privacy' : '/privacy'}
@@ -186,9 +186,9 @@ export function CookieConsent() {
 
             {/* Cookie Options (expanded) */}
             {showDetails && (
-              <div className="mb-5 space-y-3">
+              <div className="mb-4 space-y-2">
                 {/* Essential */}
-                <div className="flex items-center justify-between gap-4 rounded-xl bg-muted/50 p-4">
+                <div className="flex items-center justify-between gap-3 rounded-xl bg-muted/50 p-3">
                   <div className="flex items-center gap-3">
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500/10">
                       <Shield className="h-4 w-4 text-green-600 dark:text-green-400" />
@@ -209,7 +209,7 @@ export function CookieConsent() {
                 </div>
 
                 {/* Analytics */}
-                <div className="flex items-center justify-between gap-4 rounded-xl bg-muted/50 p-4">
+                <div className="flex items-center justify-between gap-3 rounded-xl bg-muted/50 p-3">
                   <div className="flex items-center gap-3">
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
                       <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
@@ -231,7 +231,7 @@ export function CookieConsent() {
                 </div>
 
                 {/* Marketing */}
-                <div className="flex items-center justify-between gap-4 rounded-xl bg-muted/50 p-4">
+                <div className="flex items-center justify-between gap-3 rounded-xl bg-muted/50 p-3">
                   <div className="flex items-center gap-3">
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10">
                       <Megaphone className="h-4 w-4 text-purple-600 dark:text-purple-400" />
@@ -255,7 +255,7 @@ export function CookieConsent() {
             )}
 
             {/* Actions */}
-            <div className="flex flex-col-reverse sm:flex-row gap-2">
+            <div className="grid gap-2 sm:grid-cols-3">
               {showDetails ? (
                 <Button onClick={saveCustom} variant="outline" className="flex-1 rounded-xl">
                   {t('save')}

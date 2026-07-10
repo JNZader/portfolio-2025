@@ -28,15 +28,18 @@ export default async function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Brand & Contact Column */}
             <div className="space-y-4">
-              <Link href="/" className="text-xl font-bold text-primary">
+              <Link
+                href="/"
+                className="inline-flex min-h-11 items-center text-xl font-bold text-primary"
+              >
                 JZ
               </Link>
               <p className="text-sm text-muted-foreground leading-relaxed">{t('brand')}</p>
-              <div className="flex gap-4">
+              <div className="flex gap-2">
                 <ExternalLink
                   href="https://github.com/JNZader"
                   trackLabel="GitHub"
-                  className="text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-110 hover:-translate-y-1 rounded-md p-1 -m-1 hover:ring-2 hover:ring-primary/20 focus-visible:ring-2 focus-visible:ring-primary"
+                  className="inline-flex size-11 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
                   aria-label={t('githubAria')}
                 >
                   <FaGithub className="h-5 w-5" />
@@ -44,7 +47,7 @@ export default async function Footer() {
                 <ExternalLink
                   href="https://www.linkedin.com/in/jnzader/"
                   trackLabel="LinkedIn"
-                  className="text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-110 hover:-translate-y-1 rounded-md p-1 -m-1 hover:ring-2 hover:ring-primary/20 focus-visible:ring-2 focus-visible:ring-primary"
+                  className="inline-flex size-11 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
                   aria-label={t('linkedinAria')}
                 >
                   <FaLinkedin className="h-5 w-5" />
@@ -52,7 +55,7 @@ export default async function Footer() {
               </div>
               <Link
                 href="/contacto"
-                className="text-sm text-primary hover:text-primary-700 dark:hover:text-primary-600 transition-colors inline-block underline underline-offset-2 decoration-primary/40 hover:decoration-primary-700"
+                className="inline-flex min-h-11 items-center text-sm text-primary underline decoration-primary/40 underline-offset-2 transition-colors hover:text-primary-700 hover:decoration-primary-700 dark:hover:text-primary-600"
               >
                 {t('contactLink')}
               </Link>
@@ -61,12 +64,12 @@ export default async function Footer() {
             {/* Navigation Column */}
             <nav className="space-y-4 md:text-center" aria-label={t('navAria')}>
               <p className="font-semibold">{t('navHeading')}</p>
-              <ul className="space-y-2">
+              <ul>
                 {MAIN_NAVIGATION.map((item) => (
                   <li key={item.key}>
                     <Link
                       href={item.href}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2 decoration-muted-foreground/40 hover:decoration-foreground"
+                      className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline decoration-muted-foreground/40 underline-offset-2 transition-colors hover:text-foreground hover:decoration-foreground"
                     >
                       {tNav(item.key)}
                     </Link>
@@ -107,16 +110,16 @@ export default async function Footer() {
               <span>{t('andMate')}</span>
             </div>
 
-            <div className="flex items-center gap-6">
+            <div className="flex flex-wrap items-center justify-center gap-x-4">
               <Link
                 href="/privacy"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2 decoration-muted-foreground/40 hover:decoration-foreground"
+                className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline decoration-muted-foreground/40 underline-offset-2 transition-colors hover:text-foreground hover:decoration-foreground"
               >
                 {t('privacy')}
               </Link>
               <Link
                 href="/data-request"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2 decoration-muted-foreground/40 hover:decoration-foreground"
+                className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline decoration-muted-foreground/40 underline-offset-2 transition-colors hover:text-foreground hover:decoration-foreground"
               >
                 {t('gdpr')}
               </Link>

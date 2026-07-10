@@ -229,15 +229,16 @@
     box-shadow: 0 0 0 4px color-mix(in oklch, var(--ring) 25%, transparent);
   }
 
-  /* Ensure all links are distinguishable without relying on color */
-  a:not([class*='button']):not([class*='btn']) {
+  /* Editorial links need a non-color affordance. Navigation, buttons, cards
+     and other UI links define their own interaction treatment locally. */
+  :is(.prose, .editorial-content, [data-link-scope='editorial']) a {
     text-decoration: underline;
     text-underline-offset: 2px;
     text-decoration-color: currentColor;
     text-decoration-thickness: 1px;
   }
 
-  a:not([class*='button']):not([class*='btn']):hover {
+  :is(.prose, .editorial-content, [data-link-scope='editorial']) a:hover {
     text-decoration-thickness: 2px;
   }
 }

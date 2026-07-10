@@ -16,12 +16,16 @@ export function LanguageSwitcher({ className }: Readonly<{ className?: string }>
   const t = useTranslations('LanguageSwitcher');
 
   return (
-    <nav className={cn('flex items-center gap-1', className)} aria-label={t('label')}>
+    <nav className={cn('flex items-center', className)} aria-label={t('label')}>
       {routing.locales.map((locale, i) => {
         const isActive = locale === active;
         return (
-          <span key={locale} className="flex items-center gap-1">
-            {i > 0 && <span className="text-muted-foreground/40">/</span>}
+          <span key={locale} className="flex items-center">
+            {i > 0 && (
+              <span className="-mx-1 text-muted-foreground/40" aria-hidden="true">
+                /
+              </span>
+            )}
             <Link
               href={pathname}
               locale={locale}
@@ -30,7 +34,7 @@ export function LanguageSwitcher({ className }: Readonly<{ className?: string }>
               tabIndex={isActive ? -1 : undefined}
               aria-label={locale === 'en' ? t('toEn') : t('toEs')}
               className={cn(
-                'text-xs font-semibold uppercase transition-colors',
+                'inline-flex size-11 items-center justify-center rounded-md text-xs font-semibold uppercase transition-colors',
                 isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
               )}
             >

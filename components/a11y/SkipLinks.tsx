@@ -17,11 +17,12 @@ export function SkipLinks() {
           href={link.href}
           className={cn(
             'skip-link',
-            'sr-only focus:not-sr-only',
-            'fixed top-4 left-4 z-[9999]',
+            'fixed top-4 left-4 z-[9999] max-w-[calc(100vw-2rem)]',
+            '-translate-y-[calc(100%+2rem)] focus:translate-y-0',
             'bg-primary text-primary-foreground',
-            'px-4 py-2 rounded-lg',
+            'min-h-11 px-4 py-2 rounded-lg inline-flex items-center',
             'font-medium text-sm',
+            'transition-transform duration-150 motion-reduce:transition-none',
             'focus:outline-none focus:ring-2 focus:ring-offset-2',
             'focus:ring-primary'
           )}
