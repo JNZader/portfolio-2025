@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.19.5](https://github.com/JNZader/portfolio-2025/compare/v2.19.4...v2.19.5) (2026-07-10)
+
+
+### Documentation
+
+* **readme:** reflect full test surface (unit + E2E), drop false iPad claim ([#202](https://github.com/JNZader/portfolio-2025/issues/202)) ([926fb75](https://github.com/JNZader/portfolio-2025/commits/926fb753c57d687ac2804ffecfaaaef5d28ec0d2))
+
 ## [2.19.4](https://github.com/JNZader/portfolio-2025/compare/v2.19.3...v2.19.4) (2026-07-10)
 
 
