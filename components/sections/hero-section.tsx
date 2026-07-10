@@ -103,7 +103,7 @@ export async function HeroSection({
 
             {/* CTA hierarchy: Descargar CV (filled, lowest-friction recruiter action) >
               primaryCta (outline) > secondaryCta (ghost). */}
-            <div className="animate-hero-reveal-5 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <div className="animate-hero-reveal-5 flex flex-col sm:flex-row sm:flex-wrap gap-4 justify-center lg:justify-start">
               {cvHref && (
                 // Split CV action: "Descargar CV" (filled, primary) + "Ver"
                 // → /cv (versión HTML indexable). Ambas mitades siempre
