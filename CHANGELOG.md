@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.19.1](https://github.com/JNZader/portfolio-2025/compare/v2.19.0...v2.19.1) (2026-07-10)
+
+
+### Bug Fixes
+
+* **ui:** rework CV control into compact CV + icon actions ([#198](https://github.com/JNZader/portfolio-2025/issues/198)) ([bfa47e3](https://github.com/JNZader/portfolio-2025/commits/bfa47e307666b39bafa3691c3a40dd641f448a22))
+
 ## [2.19.0](https://github.com/JNZader/portfolio-2025/compare/v2.18.0...v2.19.0) (2026-07-10)
 
 
