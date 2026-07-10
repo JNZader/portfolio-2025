@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.19.0](https://github.com/JNZader/portfolio-2025/compare/v2.18.0...v2.19.0) (2026-07-10)
+
+
+### Features
+
+* **ui:** project card visuals + a11y interaction targets ([#197](https://github.com/JNZader/portfolio-2025/issues/197)) ([1fd692d](https://github.com/JNZader/portfolio-2025/commits/1fd692dbc1b032e0ea23990621fbb4ae063e17ad))
+
 ## [2.18.0](https://github.com/JNZader/portfolio-2025/compare/v2.17.8...v2.18.0) (2026-07-10)
 
 
