@@ -25,12 +25,12 @@ export default async function Footer() {
       <Container>
         {/* Main Footer Content */}
         <div className="py-12 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div data-footer-grid="primary" className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Brand & Contact Column */}
-            <div className="space-y-4">
+            <div data-footer-column="brand" className="min-w-0 space-y-4">
               <Link
                 href="/"
-                className="inline-flex min-h-11 items-center text-xl font-bold text-primary"
+                className="inline-flex min-h-11 min-w-11 items-center text-xl font-bold text-primary"
               >
                 JZ
               </Link>
@@ -55,21 +55,25 @@ export default async function Footer() {
               </div>
               <Link
                 href="/contacto"
-                className="inline-flex min-h-11 items-center text-sm text-primary underline decoration-primary/40 underline-offset-2 transition-colors hover:text-primary-700 hover:decoration-primary-700 dark:hover:text-primary-600"
+                className="inline-flex min-h-11 min-w-11 items-center text-sm text-primary underline decoration-primary/40 underline-offset-2 transition-colors hover:text-primary-700 hover:decoration-primary-700 dark:hover:text-primary-600"
               >
                 {t('contactLink')}
               </Link>
             </div>
 
             {/* Navigation Column */}
-            <nav className="space-y-4 md:text-center" aria-label={t('navAria')}>
+            <nav
+              data-footer-column="navigation"
+              className="min-w-0 space-y-4"
+              aria-label={t('navAria')}
+            >
               <p className="font-semibold">{t('navHeading')}</p>
               <ul>
                 {MAIN_NAVIGATION.map((item) => (
                   <li key={item.key}>
                     <Link
                       href={item.href}
-                      className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline decoration-muted-foreground/40 underline-offset-2 transition-colors hover:text-foreground hover:decoration-foreground"
+                      className="inline-flex min-h-11 min-w-11 items-center text-sm text-muted-foreground underline decoration-muted-foreground/40 underline-offset-2 transition-colors hover:text-foreground hover:decoration-foreground"
                     >
                       {tNav(item.key)}
                     </Link>
@@ -79,7 +83,7 @@ export default async function Footer() {
             </nav>
 
             {/* Services Column */}
-            <div className="space-y-4 md:text-right">
+            <div data-footer-column="services" className="min-w-0 space-y-4">
               <p className="font-semibold">{t('servicesHeading')}</p>
               <ul className="space-y-2">
                 <li>
@@ -101,8 +105,11 @@ export default async function Footer() {
 
         {/* Bottom Bar */}
         <div className="py-6 border-t">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+          <div data-footer-bottom-bar className="flex flex-col sm:flex-row items-start gap-4">
+            <div
+              data-footer-bottom-group="copyright"
+              className="flex items-center gap-1 text-sm text-muted-foreground"
+            >
               <span>
                 © {currentYear} Javier Zader. {t('madeWith')}
               </span>
@@ -110,16 +117,19 @@ export default async function Footer() {
               <span>{t('andMate')}</span>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-x-4">
+            <div
+              data-footer-bottom-group="legal"
+              className="flex flex-wrap items-center justify-start gap-x-4"
+            >
               <Link
                 href="/privacy"
-                className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline decoration-muted-foreground/40 underline-offset-2 transition-colors hover:text-foreground hover:decoration-foreground"
+                className="inline-flex min-h-11 min-w-11 items-center text-sm text-muted-foreground underline decoration-muted-foreground/40 underline-offset-2 transition-colors hover:text-foreground hover:decoration-foreground"
               >
                 {t('privacy')}
               </Link>
               <Link
                 href="/data-request"
-                className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline decoration-muted-foreground/40 underline-offset-2 transition-colors hover:text-foreground hover:decoration-foreground"
+                className="inline-flex min-h-11 min-w-11 items-center text-sm text-muted-foreground underline decoration-muted-foreground/40 underline-offset-2 transition-colors hover:text-foreground hover:decoration-foreground"
               >
                 {t('gdpr')}
               </Link>

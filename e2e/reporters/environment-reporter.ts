@@ -24,6 +24,16 @@ export function classifyReporterTestOutcome(outcome: ReporterTestOutcome): Envir
     ? 'failed'
     : outcome.status;
 
+  if (status === 'passed' && outcome.projectBlocked) {
+    return {
+      type: 'environment',
+      status: 'blocked',
+      reason: outcome.environmentReason ?? 'Environment prevented test execution',
+      ...(outcome.testId ? { testId: outcome.testId } : {}),
+      ...(outcome.testTitle ? { testTitle: outcome.testTitle } : {}),
+    };
+  }
+
   if (status === undefined && outcome.projectBlocked) {
     return {
       type: 'environment',
@@ -85,11 +95,13 @@ export default class EnvironmentReporter implements Reporter {
       }
     }
     for (const { test, result } of this.results.values()) {
-      const environmentReason = test.annotations.find((annotation) => annotation.type === 'environment')?.description;
-      const projectBlocked = blockedProjects.has(test.parent.project()?.name ?? '');
-      results.push(classifyReporterTestOutcome({
-        status: result.status,
-        environmentReason,
+      const annotationReason = test.annotations.find((annotation) => annotation.type === 'environment')?.description;
+      const project = test.parent.project()?.name;
+      const blocked = project ? blockedProjects.get(project) : undefined;
+      const projectBlocked = blocked !== undefined;
+    results.push(classifyReporterTestOutcome({
+      status: result.status,
+      environmentReason: blocked?.reason ?? annotationReason,
         projectBlocked,
         testId: test.id,
         testTitle: test.title,

@@ -38,6 +38,22 @@ describe('environment reporter test classification', () => {
     })).toEqual({ status: 'failed' });
   });
 
+  it('keeps a blocked project from being counted as passed', () => {
+    expect(classifyReporterTestOutcome({
+      projectBlocked: true,
+      status: 'passed',
+      environmentReason: 'Firefox executable is unavailable',
+      testId: 'blocked-project-test',
+      testTitle: 'blocked project test',
+    })).toEqual({
+      type: 'environment',
+      status: 'blocked',
+      reason: 'Firefox executable is unavailable',
+      testId: 'blocked-project-test',
+      testTitle: 'blocked project test',
+    });
+  });
+
   it('keeps blocked and failed counts separate', () => {
     const outcomes = [
       classifyReporterTestOutcome({ projectBlocked: true, environmentReason: 'server unavailable' }),

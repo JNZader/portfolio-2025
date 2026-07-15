@@ -16,6 +16,32 @@ test.describe('Newsletter Subscription', () => {
     await expect(button).toBeVisible();
   });
 
+  test('should activate the newsletter button with Enter and Space independently', async ({ page }) => {
+    await page.goto('/');
+    await dismissCookieConsent(page);
+
+    const form = page.getByRole('form', { name: /newsletter/i });
+    const input = form.getByRole('textbox', { name: /email/i });
+    const button = form.getByRole('button', { name: /suscrib/i });
+
+    await input.fill('invalid');
+    await button.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.getByText(/email inválido/i)).toBeVisible();
+
+    const spacePage = await page.context().newPage();
+    await spacePage.goto('/');
+    await dismissCookieConsent(spacePage);
+    const spaceForm = spacePage.getByRole('form', { name: /newsletter/i });
+    const spaceInput = spaceForm.getByRole('textbox', { name: /email/i });
+    const spaceButton = spaceForm.getByRole('button', { name: /suscrib/i });
+    await spaceInput.fill('invalid-for-space');
+    await spaceButton.focus();
+    await spacePage.keyboard.press('Space');
+    await expect(spacePage.getByText(/email inválido/i)).toBeVisible();
+    await spacePage.close();
+  });
+
   test('should submit form and show response', async ({ page }) => {
     await page.goto('/');
     await dismissCookieConsent(page);
