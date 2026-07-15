@@ -18,6 +18,11 @@
     "navAria": "Mobile navigation",
     "title": "Navigation menu"
   },
+  "SkipLinks": {
+    "mainContent": "Skip to main content",
+    "mainNavigation": "Skip to main navigation",
+    "footer": "Skip to footer"
+  },
   "Footer": {
     "brand": "Backend Developer specialized in end-to-end systems with Java, Go and Rust — robust, scalable and maintainable solutions.",
     "githubAria": "Visit GitHub profile",

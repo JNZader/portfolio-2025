@@ -68,6 +68,7 @@ export function HeroTerminal() {
 
   return (
     <div
+      data-testid="hero-terminal"
       className="glass-card overflow-hidden rounded-xl border border-border/60 shadow-2xl shadow-primary/5"
       aria-hidden="true"
     >
@@ -96,9 +97,6 @@ export function HeroTerminal() {
       {/* Terminal body — dark in both themes; scrollable so the full run is browsable */}
       <div
         ref={bodyRef}
-        // tabIndex={-1}: el contenedor scrolleable puede volverse keyboard-focusable
-        // (Chrome), y un elemento enfocable dentro de aria-hidden viola ARIA.
-        tabIndex={-1}
         className="max-h-[19rem] overflow-y-auto bg-slate-950 px-4 py-4 font-mono text-[11px] leading-relaxed sm:text-xs md:text-[13px]"
       >
         {SCRIPT.slice(0, done).map((line, i) => {

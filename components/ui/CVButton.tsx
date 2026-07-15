@@ -28,11 +28,12 @@ const HALF_BASE =
  * - Mitad primaria "CV ⬇": descarga el PDF. El texto "CV" va PEGADO al ícono de
  *   descarga (no es una celda muerta), así que todo el bloque es un target
  *   clickeable y obvio como acción principal.
- * - Mitad "👁": icon-only → /cv (versión HTML indexable), acompaña sin competir.
+ * - Mitad "👁": navegación visible a /cv (versión HTML indexable), acompaña sin competir.
  *
  * Ambas acciones llevan aria-label (nombre accesible para lectores de pantalla)
- * + title (tooltip en hover, solo desktop) y no dependen de hover para
- * funcionar. El <a href="/cv"> queda crawleable vía el <span sr-only>.
+ * + title (tooltip en hover, solo desktop), y la navegación a /cv también muestra
+ * su nombre para no depender del hover para
+ * funcionar. El <a href="/cv"> queda crawleable con su etiqueta visible.
  * filled = acción principal above-fold; outline = eco callado (p.ej. sidebar).
  */
 export async function CVButton({
@@ -77,7 +78,7 @@ export async function CVButton({
         <Download className="h-4 w-4 shrink-0" aria-hidden="true" />
       </a>
 
-      {/* 👁 — versión HTML, icon-only. Nombre accesible vía aria-label + sr-only. */}
+      {/* 👁 — versión HTML. El nombre visible evita confundirlo con una previsualización. */}
       <Link
         href={viewHref}
         aria-label={viewLabel}
@@ -91,7 +92,7 @@ export async function CVButton({
         )}
       >
         <Eye className="h-4 w-4 shrink-0" aria-hidden="true" />
-        <span className="sr-only">{viewLabel}</span>
+        <span>{viewLabel}</span>
       </Link>
     </div>
   );

@@ -16,6 +16,14 @@ export default function MobileMenu({ open, onClose, navigation }: Readonly<Mobil
   const t = useTranslations('MobileMenu');
   const pathname = usePathname();
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
+  const navigatingRef = useRef(false);
+
+  const handleNavigation = (href: string) => {
+    navigatingRef.current = pathname !== href;
+    onClose();
+  };
 
   // Manage dialog open/close with native <dialog> API
   useEffect(() => {
@@ -23,11 +31,21 @@ export default function MobileMenu({ open, onClose, navigation }: Readonly<Mobil
     if (!dialog) return;
 
     if (open && !dialog.open) {
+      openerRef.current =
+        document.activeElement instanceof HTMLElement ? document.activeElement : null;
       dialog.showModal();
+      closeButtonRef.current?.focus();
     } else if (!open && dialog.open) {
       dialog.close();
     }
   }, [open]);
+
+  useEffect(() => {
+    if (!navigatingRef.current || !pathname) return;
+
+    document.querySelector<HTMLElement>('#main-content')?.focus();
+    navigatingRef.current = false;
+  }, [pathname]);
 
   // Handle native dialog close event (ESC key, etc.)
   useEffect(() => {
@@ -36,6 +54,9 @@ export default function MobileMenu({ open, onClose, navigation }: Readonly<Mobil
 
     const handleClose = () => {
       onClose();
+      if (!navigatingRef.current) {
+        openerRef.current?.focus();
+      }
     };
 
     dialog.addEventListener('close', handleClose);
@@ -62,19 +83,25 @@ export default function MobileMenu({ open, onClose, navigation }: Readonly<Mobil
         className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-background px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-border"
       >
         <div className="flex items-center justify-between">
-          <Link href="/" className="-m-1.5 p-1.5" onClick={onClose} aria-label={t('homeAria')}>
+          <Link
+            href="/"
+            className="-m-1.5 p-1.5"
+            onClick={() => handleNavigation('/')}
+            aria-label={t('homeAria')}
+          >
             <span className="text-xl font-bold text-primary" aria-hidden="true">
               JZ
             </span>
           </Link>
-          <h2 id="mobile-menu-title" className="sr-only">
+          <div id="mobile-menu-title" className="sr-only">
             {t('title')}
-          </h2>
+          </div>
           <button
             type="button"
             className="-m-2.5 rounded-md p-2.5 text-foreground"
             onClick={onClose}
             aria-label={t('closeAria')}
+            ref={closeButtonRef}
           >
             <X className="h-6 w-6" aria-hidden="true" />
           </button>
@@ -98,7 +125,7 @@ export default function MobileMenu({ open, onClose, navigation }: Readonly<Mobil
                           ? 'bg-primary/10 text-primary'
                           : 'text-foreground hover:bg-muted'
                     )}
-                    onClick={onClose}
+                    onClick={() => handleNavigation(item.href)}
                     aria-current={isActive ? 'page' : undefined}
                   >
                     {item.name}

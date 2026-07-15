@@ -188,9 +188,14 @@ export async function HeroSection({
             {/* Always-visible caption: states the achievement for mobile (no hover),
                 non-technical recruiters, and SEO — the terminal itself is aria-hidden. */}
             <p className="mt-3 text-center text-xs text-muted-foreground lg:text-left">
-              {t.rich('apigenCaption', {
-                b: (chunks) => <span className="font-medium text-foreground">{chunks}</span>,
-              })}
+              <Link
+                href="/proyectos/apigen"
+                className="underline decoration-primary/60 underline-offset-4 transition-colors hover:decoration-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                {t.rich('apigenCaption', {
+                  b: (chunks) => <strong className="font-medium text-foreground">{chunks}</strong>,
+                })}
+              </Link>
             </p>
           </div>
         </div>

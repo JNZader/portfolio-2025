@@ -50,6 +50,14 @@ describe('HeroTerminal', () => {
     expect(screen.getByText(/Ejemplo real generado con apigen/)).toBeInTheDocument();
   });
 
+  it('keeps the terminal decorative and without focusable descendants', () => {
+    render(<HeroTerminal />);
+
+    const terminal = screen.getByTestId('hero-terminal');
+    expect(terminal).toHaveAttribute('aria-hidden', 'true');
+    expect(terminal.querySelectorAll('a,button,input,select,textarea,[tabindex]')).toHaveLength(0);
+  });
+
   it('renders the full hardcoded output immediately under prefers-reduced-motion', () => {
     // Reduced motion → the effect sets done = SCRIPT.length synchronously,
     // so the whole script is present without advancing the timer cascade.

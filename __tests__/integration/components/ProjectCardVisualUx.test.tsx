@@ -35,4 +35,13 @@ describe('project card visual UX', () => {
     expect(screen.getByRole('link', { name: /repositorio de API Platform/i })).toHaveClass('size-11');
     expect(screen.getByRole('link', { name: /demo de API Platform/i })).toHaveClass('size-11');
   });
+
+  it('preserves the localized detail action and separate action layer', () => {
+    const { container } = render(<ProjectCard project={PROJECT} />);
+
+    const detail = screen.getByRole('link', { name: /ver detalles/i });
+    expect(detail).toHaveAttribute('href', '/proyectos/api-platform');
+    expect(detail.closest('h3')).toBeNull();
+    expect(container.querySelectorAll('h3 a').length).toBe(1);
+  });
 });

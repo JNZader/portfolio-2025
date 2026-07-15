@@ -1,14 +1,17 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 
 const skipLinks = [
-  { href: '#main-content', label: 'Saltar al contenido principal' },
-  { href: '#main-navigation', label: 'Saltar a navegación' },
-  { href: '#footer', label: 'Saltar al pie de página' },
-];
+  { href: '#main-content', key: 'mainContent' },
+  { href: '#main-navigation', key: 'mainNavigation' },
+  { href: '#footer', key: 'footer' },
+] as const;
 
 export function SkipLinks() {
+  const t = useTranslations('SkipLinks');
+
   return (
     <div className="skip-links">
       {skipLinks.map((link) => (
@@ -27,7 +30,7 @@ export function SkipLinks() {
             'focus:ring-primary'
           )}
         >
-          {link.label}
+          {t(link.key)}
         </a>
       ))}
     </div>
