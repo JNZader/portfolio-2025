@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/test';
 import { testData, dismissCookieConsent } from '../fixtures/test-data';
 
 test.describe('Blog', () => {

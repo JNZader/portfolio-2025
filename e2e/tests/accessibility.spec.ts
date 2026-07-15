@@ -1,6 +1,7 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page } from '../fixtures/test';
 import AxeBuilder from '@axe-core/playwright';
 import { dismissCookieConsent } from '../fixtures/test-data';
+import { contrastRatio } from '../helpers/contrast';
 
 const createAxeBuilder = (page: Page) => new AxeBuilder({ page });
 
@@ -50,6 +51,26 @@ test.describe('Accessibility', () => {
       .analyze();
 
     expect(accessibilityScanResults.violations).toEqual([]);
+  });
+
+  test('SkillBadge labels meet AA contrast in both themes and hover states', async ({ page }) => {
+    await page.goto('/');
+    await dismissCookieConsent(page);
+    const badge = page.locator('span').filter({ hasText: /^React$/ }).first();
+    await expect(badge).toBeVisible();
+
+    for (const dark of [false, true]) {
+      await page.evaluate((isDark) => document.documentElement.classList.toggle('dark', isDark), dark);
+      for (const state of ['normal', 'hover'] as const) {
+        if (state === 'hover') await badge.hover();
+        const colors = await badge.evaluate((element) => {
+          const style = window.getComputedStyle(element);
+          return { foreground: style.color, background: style.backgroundColor };
+        });
+        const ratio = contrastRatio(colors.foreground, colors.background);
+        expect(ratio, `${dark ? 'dark' : 'light'} ${state} SkillBadge contrast`).toBeGreaterThanOrEqual(4.5);
+      }
+    }
   });
 
   test('should be keyboard navigable', async ({ page, browserName }) => {

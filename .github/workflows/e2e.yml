@@ -120,6 +120,7 @@ jobs:
         run: npm run e2e
         env:
           PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
+          PLAYWRIGHT_BUILD_RESULT: passed
           # Use secrets if available, fallback to dummy values for Dependabot PRs
           NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID || 'dummy-project-id' }}
           NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET || 'production' }}

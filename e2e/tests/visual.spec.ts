@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/test';
 import { dismissCookieConsent } from '../fixtures/test-data';
 
 // Skip visual regression tests on CI - snapshots are platform-specific (win32 vs linux)

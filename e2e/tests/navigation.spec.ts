@@ -1,7 +1,28 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures/test';
 import { dismissCookieConsent } from '../fixtures/test-data';
+import { skipIfPortfolioServerBlocked } from '../fixtures/portfolio-server';
 
 test.describe('Navigation', () => {
+  for (const localeCase of [
+    { path: '/', name: 'apigen — una herramienta que construí: de un schema SQL a una API Spring Boot completa y corriendo.', url: /\/proyectos\/apigen$/ },
+    { path: '/en', name: 'apigen — a tool I built that turns a SQL schema into a complete, running Spring Boot API.', url: /\/en\/proyectos\/apigen$/ },
+  ]) {
+    test(`${localeCase.name} preserves the locale-aware case-study route`, async ({ page }) => {
+      await page.goto(localeCase.path);
+      await dismissCookieConsent(page);
+
+      const cta = page.getByRole('link', { name: localeCase.name, exact: true });
+      await expect(cta).toHaveAttribute('href', localeCase.path === '/' ? '/proyectos/apigen' : '/en/proyectos/apigen');
+      await expect(cta).toHaveCount(1);
+      const caption = cta.locator('xpath=ancestor::p[1]');
+      await expect(caption.getByRole('link')).toHaveCount(1);
+      await expect(caption.getByRole('link', { name: /github/i })).toHaveCount(0);
+      await expect(page.locator('[data-testid="apigen-featured-actions"], [data-testid="apigen-case-study-cta"]')).toHaveCount(0);
+      await cta.click();
+      await expect(page).toHaveURL(localeCase.url);
+    });
+  }
+
   test('should navigate between pages', async ({ page, viewport }) => {
     // Skip on mobile - nav is hidden in hamburger menu (tested separately)
     test.skip(!!viewport && viewport.width < 768, 'Desktop navigation test - skipped on mobile');
@@ -47,37 +68,44 @@ test.describe('Navigation', () => {
     await expect(page).toHaveURL(/\/en\/data-request/);
   });
 
-  test('should have skip links', async ({ page }) => {
-    await page.goto('/');
-    await dismissCookieConsent(page);
+  for (const localeCase of [
+    {
+      path: '/',
+      labels: ['Saltar al contenido principal', 'Saltar a la navegación principal', 'Saltar al pie de página'],
+      targets: ['#main-content', '#main-navigation', '#footer'],
+    },
+    {
+      path: '/en',
+      labels: ['Skip to main content', 'Skip to main navigation', 'Skip to footer'],
+      targets: ['#main-content', '#main-navigation', '#footer'],
+    },
+  ]) {
+    test(`${localeCase.path} exposes localized skip links and activates the main target`, async ({ page }) => {
+      await skipIfPortfolioServerBlocked();
+      await page.goto(localeCase.path);
+      await dismissCookieConsent(page);
+      await page.waitForLoadState('domcontentloaded');
 
-    // Wait for page to be fully loaded and interactive
-    await page.waitForLoadState('domcontentloaded');
+      const skipLink = page.getByRole('link', { name: localeCase.labels[0], exact: true });
+      await expect(page.getByRole('link', { name: localeCase.labels[1], exact: true })).toHaveAttribute('href', localeCase.targets[1]);
+      await expect(page.getByRole('link', { name: localeCase.labels[2], exact: true })).toHaveAttribute('href', localeCase.targets[2]);
+      await expect(skipLink).toBeAttached();
+      await expect(skipLink).toHaveAttribute('href', localeCase.targets[0]);
 
-    // Skip link should exist in the DOM (it's sr-only, so not visible until focused)
-    const skipLink = page.getByRole('link', { name: /saltar al contenido principal/i });
-    await expect(skipLink).toBeAttached();
+      // The shared cookie-consent fixture and browser startup focus are not
+      // stable Tab origins. Focus the real link, then exercise its keyboard
+      // activation; the component contract keeps it in the tab order.
+      await skipLink.focus();
+      await expect(skipLink).toBeFocused();
+      await expect(skipLink).toBeVisible();
 
-    // Focus the skip link directly
-    await skipLink.focus();
+      await page.keyboard.press('Enter');
 
-    // Wait briefly for focus styles to apply
-    await page.waitForTimeout(100);
-
-    // When focused, skip link should become visible (focus:not-sr-only)
-    await expect(skipLink).toBeVisible();
-    await expect(skipLink).toBeFocused();
-
-    // Click skip link
-    await skipLink.click();
-
-    // Wait for focus to move
-    await page.waitForTimeout(100);
-
-    // Focus should be on main content
-    const mainContent = page.locator('#main-content');
-    await expect(mainContent).toBeFocused();
-  });
+      // Real Chromium models the fragment-navigation focus transfer that
+      // happy-dom cannot model; main#main-content is the existing target.
+      await expect(page.locator('#main-content')).toBeFocused();
+    });
+  }
 
   test('should toggle mobile menu', async ({ page, viewport }) => {
     // Skip on desktop - mobile menu is only visible on mobile

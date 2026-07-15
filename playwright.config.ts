@@ -1,5 +1,6 @@
 import { devices } from '@playwright/test';
 import type { PlaywrightTestConfig } from '@playwright/test';
+import { environmentReportPath, environmentRunId } from './e2e/fixtures/environment-status';
 
 /**
  * Playwright E2E test configuration
@@ -8,8 +9,11 @@ import type { PlaywrightTestConfig } from '@playwright/test';
  * @see https://playwright.dev/docs/test-configuration
  */
 const config: PlaywrightTestConfig = {
+  forbidOnly: true,
   // Test directory
   testDir: './e2e/tests',
+
+  globalSetup: './e2e/fixtures/global-setup.ts',
 
   // Timeout per test (3 minutes)
   timeout: 3 * 60 * 1000,
@@ -30,8 +34,9 @@ const config: PlaywrightTestConfig = {
 
   // Reporter to use
   reporter: [
+    ['./e2e/reporters/environment-reporter.ts'],
     ['html'],
-    ['json', { outputFile: 'test-results/results.json' }],
+    ['json', { outputFile: environmentReportPath('results.json') }],
     ['list'],
   ],
 
@@ -111,7 +116,7 @@ const config: PlaywrightTestConfig = {
   ],
 
   // Web server configuration (auto-start dev server for local tests)
-  webServer: process.env.CI
+  webServer: process.env.CI || process.env.PLAYWRIGHT_TEST_BASE_URL
     ? undefined
     : {
         command: 'npm run dev',
@@ -121,7 +126,7 @@ const config: PlaywrightTestConfig = {
       },
 
   // Output folder for test results
-  outputDir: 'test-results/',
+  outputDir: `test-results/${environmentRunId()}/playwright/`,
 };
 
 export default config;

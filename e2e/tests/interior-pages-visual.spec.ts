@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../fixtures/test';
 import { dismissCookieConsent } from '../fixtures/test-data';
 
 test.describe('Interior page visual UX', () => {
