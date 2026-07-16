@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.20.4](https://github.com/JNZader/portfolio-2025/compare/v2.20.3...v2.20.4) (2026-07-16)
+
+
+### Code Refactoring
+
+* **ui:** replace loading-like divider ([339fde8](https://github.com/JNZader/portfolio-2025/commits/339fde8226d231ddac65d817b32714ccd09b995b))
+
 ## [2.20.3](https://github.com/JNZader/portfolio-2025/compare/v2.20.2...v2.20.3) (2026-07-16)
 
 
