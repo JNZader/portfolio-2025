@@ -102,15 +102,25 @@ describe('MarkdownContent', () => {
       expect((window as any).__xss).toBeUndefined();
     });
 
-    it('neutralizes javascript: URLs in links', () => {
-      const content = '[click](javascript:alert(1))';
+    it('neutralizes executable URL schemes in links', () => {
+      const executableSchemes = ['javascript:', 'vbscript:', 'data:'] as const;
+      const payloads = [
+        'javascript:alert(1)',
+        'JaVaScRiPt:alert(1)',
+        ' vbscript:msgbox(1)',
+        'VBScript:msgbox(1)',
+        'data:text/html,<script>alert(1)</script>',
+        ' DATA:text/html,<script>alert(1)</script>',
+      ];
 
-      const { container } = render(<MarkdownContent content={content} />);
+      for (const payload of payloads) {
+        const { container } = render(<MarkdownContent content={`[click](${payload})`} />);
 
-      const anchor = container.querySelector('a');
-      // Anchor may exist but its href must NOT be a javascript: URL.
-      const href = anchor?.getAttribute('href') ?? '';
-      expect(href.toLowerCase().startsWith('javascript:')).toBe(false);
+        const anchor = container.querySelector('a');
+        // Anchor may exist, but its normalized href must not use an executable scheme.
+        const href = (anchor?.getAttribute('href') ?? '').trim().toLowerCase();
+        expect(executableSchemes.some((scheme) => href.startsWith(scheme))).toBe(false);
+      }
     });
   });
 
