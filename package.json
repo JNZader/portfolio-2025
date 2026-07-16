@@ -26,6 +26,7 @@
     "e2e:chromium": "playwright test --project=chromium",
     "e2e:headed": "playwright test --headed",
     "e2e:report": "playwright show-report",
+    "e2e:assert-environment": "node e2e/scripts/assert-environment-report.mjs",
     "e2e:codegen": "playwright codegen http://localhost:3000",
     "lighthouse": "lhci autorun",
     "lighthouse:collect": "lhci collect",

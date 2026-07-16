@@ -120,6 +120,8 @@ jobs:
         run: npm run e2e
         env:
           PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
+          PLAYWRIGHT_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+          PLAYWRIGHT_ENVIRONMENT_PROVISIONED: 'true'
           PLAYWRIGHT_BUILD_RESULT: passed
           # Use secrets if available, fallback to dummy values for Dependabot PRs
           NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID || 'dummy-project-id' }}
@@ -127,6 +129,13 @@ jobs:
           NEXT_PUBLIC_SANITY_API_VERSION: ${{ secrets.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01' }}
           UPSTASH_REDIS_REST_URL: https://dummy-redis.upstash.io
           UPSTASH_REDIS_REST_TOKEN: dummy_redis_token_for_ci
+
+      - name: Assert Playwright environment report
+        if: always()
+        run: npm run e2e:assert-environment
+        env:
+          PLAYWRIGHT_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+          PLAYWRIGHT_ENVIRONMENT_PROVISIONED: 'true'
 
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v7
