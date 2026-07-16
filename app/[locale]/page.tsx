@@ -207,7 +207,7 @@ export default async function HomePage({
       </Section>
 
       {/* Decorative Divider */}
-      <SectionDivider variant="dots" />
+      <SectionDivider variant="gradient" />
 
       {/* Newsletter Section */}
       <Suspense fallback={<NewsletterSkeleton />}>
