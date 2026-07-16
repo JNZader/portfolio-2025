@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.20.3](https://github.com/JNZader/portfolio-2025/compare/v2.20.2...v2.20.3) (2026-07-16)
+
+
+### Bug Fixes
+
+* **security:** remediate transitive dependency vulnerabilities ([8aaa451](https://github.com/JNZader/portfolio-2025/commits/8aaa451bcbaa70f95dc4b212b6296bd34fda2f71))
+
 ## [2.20.2](https://github.com/JNZader/portfolio-2025/compare/v2.20.1...v2.20.2) (2026-07-16)
 
 
