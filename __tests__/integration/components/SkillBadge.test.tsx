@@ -18,7 +18,14 @@ describe('SkillBadge', () => {
     render(<SkillBadge name="TypeScript" icon={Code2} />);
 
     const badge = screen.getByText('TypeScript');
-    expect(badge).toHaveClass('bg-primary', 'text-primary-foreground', 'hover:bg-primary-700');
-    expect(badge).not.toHaveClass('bg-primary/10', 'text-primary');
+    expect(badge).toHaveClass(
+      'border-primary/30',
+      'bg-primary/15',
+      'text-primary-700',
+      'dark:text-primary',
+      'hover:border-primary/50',
+      'hover:bg-primary/15'
+    );
+    expect(badge).not.toHaveClass('bg-primary', 'text-primary-foreground');
   });
 });

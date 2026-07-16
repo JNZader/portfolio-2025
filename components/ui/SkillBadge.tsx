@@ -25,7 +25,7 @@ export function SkillBadge({ name, icon: Icon, color, className }: Readonly<Skil
     <span
       className={cn(
         'inline-flex items-center gap-1.5 px-3 py-1.5',
-        'bg-primary text-primary-foreground hover:bg-primary-700 text-xs rounded-full',
+        'border border-primary/30 bg-primary/15 text-primary-700 dark:text-primary hover:border-primary/50 hover:bg-primary/15 text-xs rounded-full',
         'transition-all duration-200 hover:scale-105',
         className
       )}
