@@ -107,14 +107,14 @@ export default async function HomePage({
       <Section background={SECTION_BG.MUTED} spacing="lg" className="content-auto">
         <StaggeredReveal
           staggerDelay={0.1}
-          className="flex flex-wrap justify-center gap-8 md:gap-16"
+          className="grid w-full grid-cols-2 gap-4 md:grid-cols-4 md:gap-8"
         >
           {STATS.map((stat) => {
             const Icon = stat.icon;
             return (
               <div
                 key={stat.key}
-                className="text-center group card-hover p-6 rounded-xl bg-card/50 border border-transparent hover:border-primary/20"
+                className="group w-full min-w-0 rounded-xl border border-transparent bg-card/50 p-6 text-center card-hover hover:border-primary/20"
               >
                 <div className="flex items-center justify-center gap-3 mb-2">
                   <div className="p-3 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
@@ -124,7 +124,7 @@ export default async function HomePage({
                 <div className="text-4xl font-bold text-display text-primary">{stat.value}</div>
                 <div className="mt-2 text-sm text-muted-foreground">{t(stat.key)}</div>
                 {'sublabelKey' in stat && (
-                  <div className="mt-1 font-mono text-xs text-muted-foreground/70">
+                  <div className="mt-1 font-mono text-xs text-muted-foreground">
                     {t(stat.sublabelKey)}
                   </div>
                 )}
