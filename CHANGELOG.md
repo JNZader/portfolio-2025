@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.20.2](https://github.com/JNZader/portfolio-2025/compare/v2.20.1...v2.20.2) (2026-07-16)
+
+
+### Bug Fixes
+
+* **ui:** equalize responsive quick stats cards ([5076517](https://github.com/JNZader/portfolio-2025/commits/5076517535c1c6d5eed868c84778fbc1c525e269))
+
 ## [2.20.1](https://github.com/JNZader/portfolio-2025/compare/v2.20.0...v2.20.1) (2026-07-16)
 
 ## [2.20.0](https://github.com/JNZader/portfolio-2025/compare/v2.19.6...v2.20.0) (2026-07-16)
