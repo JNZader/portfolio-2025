@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.20.0](https://github.com/JNZader/portfolio-2025/compare/v2.19.6...v2.20.0) (2026-07-16)
+
+
+### Features
+
+* **ui:** refine portfolio accessibility and project links ([f1db500](https://github.com/JNZader/portfolio-2025/commits/f1db50080d0ee1217e8cdae20871b505c06a43da))
+
+
+### Bug Fixes
+
+* **blog:** align loading skeleton with page layout ([b713b32](https://github.com/JNZader/portfolio-2025/commits/b713b323bde254d6a26bf47df0d66a17ffb347d0))
+* **sanity:** update icon imports for v5 ([6210ee9](https://github.com/JNZader/portfolio-2025/commits/6210ee952016bab9b0485ed447aa6dfe8f575eac))
+
 ## [2.19.6](https://github.com/JNZader/portfolio-2025/compare/v2.19.5...v2.19.6) (2026-07-10)
 
 
