@@ -1,5 +1,6 @@
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
+import { getClientIp } from '@/lib/utils/client-ip';
 
 /**
  * Check if Redis is properly configured
@@ -71,16 +72,11 @@ export const contactRateLimiter = redis
 
 /**
  * Helper para obtener identificador del cliente
- * Usa IP o fallback a 'anonymous'
+ * Delega en el resolver centralizado (@/lib/utils/client-ip), que confía en
+ * los headers de Vercel y NO en el primer x-forwarded-for (spoofeable).
  */
 export function getClientIdentifier(request: Request): string {
-  // Intentar obtener IP real (considerando proxies)
-  const forwarded = request.headers.get('x-forwarded-for');
-  const realIp = request.headers.get('x-real-ip');
-
-  const ip = forwarded?.split(',')[0] ?? realIp ?? 'anonymous';
-
-  return ip.trim();
+  return getClientIp(request);
 }
 
 /**
