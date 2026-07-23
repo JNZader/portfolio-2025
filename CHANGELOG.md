@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.20.8](https://github.com/JNZader/portfolio-2025/compare/v2.20.7...v2.20.8) (2026-07-23)
+
+
+### Bug Fixes
+
+* **security:** remediate find-my-way GHSA-c96f-x56v-gq3h via prisma 7.9.0 and override ([ca16c56](https://github.com/JNZader/portfolio-2025/commits/ca16c56e8f6b8e6c485ee48b646299a5733d49cc))
+
 ## [2.20.7](https://github.com/JNZader/portfolio-2025/compare/v2.20.6...v2.20.7) (2026-07-23)
 
 ## [2.20.6](https://github.com/JNZader/portfolio-2025/compare/v2.20.5...v2.20.6) (2026-07-23)
