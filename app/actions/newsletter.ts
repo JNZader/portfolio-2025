@@ -146,8 +146,10 @@ export async function subscribeToNewsletter(formData: FormData): Promise<Newslet
 
     const { success: rateLimitSuccess } = await newsletterRateLimiter.limit(identifier);
     if (rateLimitSuccess) {
-      // 3. Get IP and User-Agent for audit
-      const ipAddress = identifier === 'anonymous' ? null : identifier;
+      // 3. Get IP and User-Agent for audit.
+      // 'unknown' is the rate-limit fallback bucket (see lib/utils/client-ip);
+      // persist NULL instead of that literal when no IP could be resolved.
+      const ipAddress = identifier === 'unknown' ? null : identifier;
       const userAgent = headersList.get('user-agent') ?? null;
 
       // 4. Check if subscriber exists

@@ -10,12 +10,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const findUnique = vi.fn();
 const update = vi.fn();
+const updateMany = vi.fn();
 
 vi.mock('@/lib/db/prisma', () => ({
   prisma: {
     subscriber: {
       findUnique: (...args: unknown[]) => findUnique(...args),
       update: (...args: unknown[]) => update(...args),
+      updateMany: (...args: unknown[]) => updateMany(...args),
     },
   },
 }));
@@ -72,6 +74,7 @@ function postRequestWithToken(token?: string) {
 beforeEach(() => {
   findUnique.mockReset();
   update.mockReset();
+  updateMany.mockReset();
   sendMock.mockClear();
   limit.mockResolvedValue({ success: true });
 });
@@ -113,10 +116,10 @@ describe('GET /api/newsletter/confirm', () => {
     findUnique.mockResolvedValue(PENDING_SUBSCRIBER);
     await GET(getRequestWithToken('valid-token'));
 
-    update.mockResolvedValue({ ...PENDING_SUBSCRIBER, status: 'ACTIVE' });
+    updateMany.mockResolvedValue({ count: 1 });
     const response = await POST(postRequestWithToken('valid-token'));
 
-    expect(update).toHaveBeenCalledTimes(1);
+    expect(updateMany).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(200);
   });
 
@@ -184,17 +187,19 @@ describe('GET /api/newsletter/confirm', () => {
 describe('POST /api/newsletter/confirm', () => {
   it('confirms the subscription exactly once and sends the welcome email', async () => {
     findUnique.mockResolvedValue(PENDING_SUBSCRIBER);
-    update.mockResolvedValue({ ...PENDING_SUBSCRIBER, status: 'ACTIVE' });
+    updateMany.mockResolvedValue({ count: 1 });
 
     const response = await POST(postRequestWithToken('valid-token'));
 
-    expect(update).toHaveBeenCalledTimes(1);
-    expect(update).toHaveBeenCalledWith({
-      where: { id: 'sub-1' },
+    // Conditional transition: only a still-PENDING row holding this token can
+    // be flipped to ACTIVE. The token is RETAINED (same convention as the
+    // unsubscribe route) so a re-POST can be told apart from a bogus token.
+    expect(updateMany).toHaveBeenCalledTimes(1);
+    expect(updateMany).toHaveBeenCalledWith({
+      where: { id: 'sub-1', status: 'PENDING', confirmToken: 'valid-token' },
       data: {
         status: 'ACTIVE',
         confirmedAt: expect.any(Date),
-        confirmToken: null,
         confirmTokenExp: null,
       },
     });
@@ -211,7 +216,7 @@ describe('POST /api/newsletter/confirm', () => {
 
     expect(response.status).toBe(400);
     expect(findUnique).not.toHaveBeenCalled();
-    expect(update).not.toHaveBeenCalled();
+    expect(updateMany).not.toHaveBeenCalled();
   });
 
   it('returns 404 and does not mutate when the token does not exist', async () => {
@@ -220,7 +225,7 @@ describe('POST /api/newsletter/confirm', () => {
     const response = await POST(postRequestWithToken('ghost-token'));
 
     expect(response.status).toBe(404);
-    expect(update).not.toHaveBeenCalled();
+    expect(updateMany).not.toHaveBeenCalled();
     expect(sendMock).not.toHaveBeenCalled();
   });
 
@@ -233,17 +238,57 @@ describe('POST /api/newsletter/confirm', () => {
     const response = await POST(postRequestWithToken('valid-token'));
 
     expect(response.status).toBe(410);
-    expect(update).not.toHaveBeenCalled();
+    expect(updateMany).not.toHaveBeenCalled();
   });
 
-  it('does not mutate again when the subscription is already active', async () => {
-    findUnique.mockResolvedValue({ ...PENDING_SUBSCRIBER, status: 'ACTIVE' });
+  it('re-POST after a successful confirmation renders the friendly page without duplicating the welcome email', async () => {
+    // Real production sequence: GET (form) → POST (confirm) → POST again
+    // (refresh / double-click). The second POST must render the 200
+    // 'already confirmed' page, NOT a 404, and must not re-send the email.
+    findUnique
+      .mockResolvedValueOnce(PENDING_SUBSCRIBER) // GET lookup
+      .mockResolvedValueOnce(PENDING_SUBSCRIBER) // first POST lookup
+      .mockResolvedValueOnce({
+        ...PENDING_SUBSCRIBER,
+        status: 'ACTIVE',
+        confirmTokenExp: null,
+      }); // re-POST lookup: token retained, already confirmed
+    updateMany.mockResolvedValueOnce({ count: 1 });
 
-    const response = await POST(postRequestWithToken('valid-token'));
+    const getResponse = await GET(getRequestWithToken('valid-token'));
+    expect(getResponse.status).toBe(200);
 
-    expect(response.status).toBe(200);
-    expect(update).not.toHaveBeenCalled();
-    expect(sendMock).not.toHaveBeenCalled();
+    const first = await POST(postRequestWithToken('valid-token'));
+    expect(first.status).toBe(200);
+    expect(updateMany).toHaveBeenCalledTimes(1);
+    expect(sendMock).toHaveBeenCalledTimes(1);
+
+    const second = await POST(postRequestWithToken('valid-token'));
+    expect(second.status).toBe(200);
+    const body = await second.text();
+    expect(body).toContain('Ya Confirmado');
+    expect(body).not.toContain('Token No Encontrado');
+
+    // No second mutation, no duplicate welcome email.
+    expect(updateMany).toHaveBeenCalledTimes(1);
+    expect(sendMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('concurrent-style double transition sends exactly one welcome email', async () => {
+    // Both requests resolve the token as confirmable BEFORE either mutates;
+    // the conditional update lets only ONE of them win the transition.
+    findUnique.mockResolvedValue(PENDING_SUBSCRIBER);
+    updateMany.mockResolvedValueOnce({ count: 1 }).mockResolvedValueOnce({ count: 0 });
+
+    const [first, second] = await Promise.all([
+      POST(postRequestWithToken('valid-token')),
+      POST(postRequestWithToken('valid-token')),
+    ]);
+
+    expect(first.status).toBe(200);
+    expect(second.status).toBe(200);
+    expect(updateMany).toHaveBeenCalledTimes(2);
+    expect(sendMock).toHaveBeenCalledTimes(1);
   });
 
   it('returns 429 when rate limited, without mutating', async () => {
@@ -253,23 +298,23 @@ describe('POST /api/newsletter/confirm', () => {
 
     expect(response.status).toBe(429);
     expect(findUnique).not.toHaveBeenCalled();
-    expect(update).not.toHaveBeenCalled();
+    expect(updateMany).not.toHaveBeenCalled();
   });
 
   it('still confirms when the welcome email fails', async () => {
     findUnique.mockResolvedValue(PENDING_SUBSCRIBER);
-    update.mockResolvedValue({ ...PENDING_SUBSCRIBER, status: 'ACTIVE' });
+    updateMany.mockResolvedValue({ count: 1 });
     sendMock.mockRejectedValueOnce(new Error('resend down'));
 
     const response = await POST(postRequestWithToken('valid-token'));
 
-    expect(update).toHaveBeenCalledTimes(1);
+    expect(updateMany).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(200);
   });
 
   it('returns a 500 HTML page when the database update throws', async () => {
     findUnique.mockResolvedValue(PENDING_SUBSCRIBER);
-    update.mockRejectedValue(new Error('db down'));
+    updateMany.mockRejectedValue(new Error('db down'));
 
     const response = await POST(postRequestWithToken('valid-token'));
 

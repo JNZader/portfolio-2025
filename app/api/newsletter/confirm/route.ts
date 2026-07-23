@@ -226,8 +226,11 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST performs the actual confirmation. Same lookup/validation as GET, then
- * flips the subscriber to ACTIVE, clears the single-use token, and sends the
- * welcome email. Only reachable via the confirmation form submit.
+ * flips the subscriber to ACTIVE via a conditional update (single winner even
+ * under concurrent submits) and sends the welcome email. The token row is
+ * retained so a re-POST after success renders the friendly 'already
+ * confirmed' page instead of a 404. Only reachable via the confirmation form
+ * submit.
  */
 export async function POST(request: NextRequest) {
   const t = getApiTranslator(request, NAMESPACE);
@@ -260,16 +263,27 @@ export async function POST(request: NextRequest) {
 
     const { subscriber } = state;
 
-    // Confirmar suscripción
-    await prisma.subscriber.update({
-      where: { id: subscriber.id },
+    // Confirmar suscripción con transición condicional: solo la fila que siga
+    // PENDING y con ESTE token puede pasar a ACTIVE. Si dos POSTs concurrentes
+    // resuelven el token como confirmable, solo UNO gana (count === 1) y envía
+    // el email de bienvenida; el perdedor cae en la página de "ya confirmado".
+    // El confirmToken se CONSERVA (misma convención que unsubToken en la ruta
+    // de unsubscribe): permite distinguir un re-POST (página amigable 200) de
+    // un token que nunca existió (404). Se limpia confirmTokenExp para que el
+    // link consumido no degenere a 410 al expirar.
+    const { count } = await prisma.subscriber.updateMany({
+      where: { id: subscriber.id, status: 'PENDING', confirmToken: token },
       data: {
         status: 'ACTIVE',
         confirmedAt: new Date(),
-        confirmToken: null,
         confirmTokenExp: null,
       },
     });
+
+    if (count === 0) {
+      // Otro request ya confirmó esta suscripción (doble submit/refresh).
+      return statePageResponse(t, { kind: 'already-active' });
+    }
 
     logger.info('Newsletter subscription confirmed successfully', {
       email: subscriber.email,
