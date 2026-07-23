@@ -1,9 +1,8 @@
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 const SKELETON_POST_ITEMS = Array.from({ length: 6 }, (_, index) => `post-skeleton-${index}`);
-
-const PULSE = 'animate-pulse bg-muted-foreground/20';
 
 export default function BlogLoading() {
   return (
@@ -25,20 +24,20 @@ export default function BlogLoading() {
               data-region="hero-content"
               className="max-w-2xl"
             >
-              <div
+              <Skeleton
                 data-testid="blog-loading-hero-accent"
                 data-region="hero-accent"
-                className={`mb-5 h-1 w-16 rounded-full ${PULSE}`}
+                className="mb-5 h-1 w-16 rounded-full"
               />
-              <div
+              <Skeleton
                 data-testid="blog-loading-hero-title"
                 data-region="hero-title"
-                className={`h-12 w-3/4 rounded-lg md:h-14 ${PULSE}`}
+                className="h-12 w-3/4 rounded-lg md:h-14"
               />
-              <div
+              <Skeleton
                 data-testid="blog-loading-hero-description"
                 data-region="hero-description"
-                className={`mt-6 h-16 w-full max-w-2xl rounded-lg ${PULSE}`}
+                className="mt-6 h-16 w-full max-w-2xl rounded-lg"
               />
             </div>
             <div className="flex justify-center md:justify-end">
@@ -47,7 +46,7 @@ export default function BlogLoading() {
                 data-region="hero-motif"
                 className="w-full rounded-3xl border border-border/70 bg-card/55 p-4 shadow-sm md:p-6"
               >
-                <div className={`aspect-square w-full rounded-2xl ${PULSE}`} />
+                <Skeleton className="aspect-square w-full rounded-2xl" />
               </div>
             </div>
           </div>
@@ -63,21 +62,21 @@ export default function BlogLoading() {
             className="space-y-4"
           >
             <div className="flex flex-col gap-4 sm:flex-row">
-              <div
+              <Skeleton
                 data-testid="blog-loading-search"
                 data-region="search"
-                className={`h-10 min-w-0 flex-1 rounded-md border border-input bg-background ${PULSE}`}
+                className="h-10 min-w-0 flex-1 border border-input bg-background"
               />
-              <div
+              <Skeleton
                 data-testid="blog-loading-filter-control"
                 data-region="control"
-                className={`h-10 w-24 rounded-md border border-border ${PULSE}`}
+                className="h-10 w-24 border border-border"
               />
             </div>
-            <div
+            <Skeleton
               data-testid="blog-loading-result-count"
               data-region="result-count"
-              className={`h-5 w-32 rounded ${PULSE}`}
+              className="h-5 w-32"
             />
           </div>
         </Container>
@@ -98,19 +97,19 @@ export default function BlogLoading() {
                 data-region="card"
                 className="overflow-hidden rounded-lg border border-border bg-background"
               >
-                <div data-region="card-image" className={`aspect-[16/9] ${PULSE}`} />
+                <Skeleton data-region="card-image" className="aspect-[16/9] rounded-none" />
                 <div data-region="card-content" className="p-6">
-                  <div className={`mb-3 h-6 w-20 rounded-full ${PULSE}`} />
-                  <div className={`mb-2 h-6 w-full rounded ${PULSE}`} />
+                  <Skeleton className="mb-3 h-6 w-20 rounded-full" />
+                  <Skeleton className="mb-2 h-6 w-full" />
                   <div className="mb-4 space-y-2">
-                    <div className={`h-4 w-full rounded ${PULSE}`} />
-                    <div className={`h-4 w-3/4 rounded ${PULSE}`} />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-3/4" />
                   </div>
                   <div data-region="card-author" className="flex items-center gap-3 pt-4">
-                    <div className={`h-10 w-10 rounded-full ${PULSE}`} />
+                    <Skeleton className="h-10 w-10 rounded-full" />
                     <div className="space-y-1">
-                      <div className={`h-4 w-24 rounded ${PULSE}`} />
-                      <div className={`h-3 w-20 rounded ${PULSE}`} />
+                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="h-3 w-20" />
                     </div>
                   </div>
                 </div>

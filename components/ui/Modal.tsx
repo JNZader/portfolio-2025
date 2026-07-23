@@ -171,7 +171,7 @@ export function Modal({
           onClick={onClose}
           className={cn(
             'absolute top-4 right-4',
-            'p-2 rounded-lg',
+            'inline-flex size-11 items-center justify-center rounded-lg',
             'hover:bg-muted',
             'focus:outline-none focus:ring-2 focus:ring-primary'
           )}
