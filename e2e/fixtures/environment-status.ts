@@ -70,10 +70,41 @@ export function createEnvironmentBlocked(reason: string, project?: string): Envi
   };
 }
 
+/**
+ * Reason emitted when Sanity checks are skipped because the CI run has no
+ * real Sanity secrets (Dependabot/fork PRs build with placeholder
+ * credentials). The skip is NEUTRAL: it must never count as blocked, or
+ * every Dependabot PR would get a guaranteed-red E2E gate.
+ */
+export const SANITY_OPTIONAL_REASON =
+  'Sanity checks optional: real Sanity secrets unavailable (PLAYWRIGHT_SANITY_OPTIONAL)';
+
+export function isSanityOptionalReason(reason: string | undefined): boolean {
+  return reason === SANITY_OPTIONAL_REASON;
+}
+
+// Matches the placeholder project id the CI workflows fall back to when
+// secrets are unavailable (Dependabot actor, fork PRs).
+const CI_PLACEHOLDER_SANITY_PROJECT_ID = 'dummy-project-id';
+
 export function preflightSanityEnvironment(
   env: Readonly<Record<string, string | undefined>>,
   fetcher: typeof fetch = fetch
 ): Promise<EnvironmentResult> {
+  // When the workflow explicitly marks Sanity as optional (no real secrets),
+  // placeholder/missing credentials produce a neutral skip instead of a
+  // blocked environment. A REAL project id still goes through the fetch
+  // below and can block — the gate is unchanged for provisioned runs.
+  const sanityOptional = env.PLAYWRIGHT_SANITY_OPTIONAL === 'true';
+  const projectId = env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+  if (sanityOptional && (!projectId || projectId === CI_PLACEHOLDER_SANITY_PROJECT_ID)) {
+    return Promise.resolve({
+      type: 'environment',
+      status: ENVIRONMENT_STATUS.SKIPPED,
+      reason: SANITY_OPTIONAL_REASON,
+    });
+  }
+
   if (!env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
     return Promise.resolve(createEnvironmentBlocked('Missing NEXT_PUBLIC_SANITY_PROJECT_ID'));
   }

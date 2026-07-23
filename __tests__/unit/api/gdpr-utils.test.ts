@@ -12,9 +12,30 @@ vi.mock('@/lib/rate-limit/redis', () => ({
 vi.mock('@/lib/db/prisma', () => ({ prisma: {} }));
 vi.mock('@/lib/monitoring/logger', () => ({ logger: { warn: vi.fn() } }));
 
-import { claimToken, restoreToken, storeToken } from '@/lib/api/gdpr-utils';
+import { claimToken, getClientIp, restoreToken, storeToken } from '@/lib/api/gdpr-utils';
 
 beforeEach(() => vi.clearAllMocks());
+
+describe('getClientIp (GDPR audit trail)', () => {
+  it('records the Vercel IP, not a spoofed x-forwarded-for first entry', () => {
+    const request = new Request('http://localhost/api/data-export', {
+      headers: {
+        'x-forwarded-for': '1.2.3.4',
+        'x-vercel-forwarded-for': '1.2.3.4, 203.0.113.10',
+      },
+    });
+
+    expect(getClientIp(request as never)).toBe('203.0.113.10');
+  });
+
+  it('falls back to the LAST x-forwarded-for entry outside Vercel', () => {
+    const request = new Request('http://localhost/api/data-export', {
+      headers: { 'x-forwarded-for': '1.2.3.4, 10.0.0.1, 203.0.113.99' },
+    });
+
+    expect(getClientIp(request as never)).toBe('203.0.113.99');
+  });
+});
 
 describe('GDPR token persistence', () => {
   it('persists tokens before email delivery can proceed', async () => {

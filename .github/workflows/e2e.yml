@@ -11,6 +11,12 @@ jobs:
   e2e:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      # 'true' when real Sanity secrets are available (maintainer PRs/pushes).
+      # GitHub withholds secrets from the dependabot actor and fork PRs; those
+      # runs build with placeholder credentials, so Sanity checks become
+      # neutral skips instead of a guaranteed-red gate.
+      SANITY_SECRETS_AVAILABLE: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID != '' }}
 
     steps:
       - uses: actions/checkout@v7
@@ -123,6 +129,10 @@ jobs:
           PLAYWRIGHT_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
           PLAYWRIGHT_ENVIRONMENT_PROVISIONED: 'true'
           PLAYWRIGHT_BUILD_RESULT: passed
+          # 'true' only when Sanity secrets are absent (dependabot/fork PRs):
+          # the Sanity preflight and Sanity-dependent tests become neutral
+          # skips. Provisioned runs keep the hard gate.
+          PLAYWRIGHT_SANITY_OPTIONAL: ${{ env.SANITY_SECRETS_AVAILABLE != 'true' }}
           # Use secrets if available, fallback to dummy values for Dependabot PRs
           NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID || 'dummy-project-id' }}
           NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET || 'production' }}
@@ -135,7 +145,11 @@ jobs:
         run: npm run e2e:assert-environment
         env:
           PLAYWRIGHT_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
-          PLAYWRIGHT_ENVIRONMENT_PROVISIONED: 'true'
+          # The hard gate (exit 1 on blocked environment) applies ONLY when
+          # real secrets provisioned this run. Dependabot/fork runs print the
+          # report but stay advisory — their placeholder-credentials outcomes
+          # are neutral skips, not failures.
+          PLAYWRIGHT_ENVIRONMENT_PROVISIONED: ${{ env.SANITY_SECRETS_AVAILABLE }}
 
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v7

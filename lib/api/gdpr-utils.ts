@@ -8,6 +8,7 @@ import { prisma } from '@/lib/db/prisma';
 import { logger } from '@/lib/monitoring/logger';
 import { createRateLimiter, getRedisClient } from '@/lib/rate-limit/redis';
 import { CSRF_ERROR_RESPONSE, verifyCsrf } from '@/lib/security/security-config';
+import { getClientIp } from '@/lib/utils/client-ip';
 
 // Response messages
 export const MESSAGES = {
@@ -23,15 +24,11 @@ export const MESSAGES = {
 } as const;
 
 /**
- * Get client IP from request headers
+ * Get client IP from request headers.
+ * Delegates to the centralized resolver (@/lib/utils/client-ip), which trusts
+ * Vercel's edge headers — never the spoofable first x-forwarded-for entry.
  */
-export function getClientIp(request: NextRequest): string {
-  return (
-    request.headers.get('x-forwarded-for')?.split(',')[0] ??
-    request.headers.get('x-real-ip') ??
-    'unknown'
-  );
-}
+export { getClientIp };
 
 type RateLimitWindow = `${number} ${'s' | 'm' | 'h' | 'd'}`;
 
