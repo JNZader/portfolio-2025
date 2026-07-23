@@ -4,7 +4,6 @@ import { email } from './email';
 export function PrivacyEn() {
   return (
     <>
-      <h1>Privacy Policy</h1>
       <p className="lead">
         Last updated: <time dateTime="2025-01-01">January 2025</time>
       </p>

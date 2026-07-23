@@ -109,40 +109,37 @@ export default async function BlogPage({ params, searchParams }: Readonly<BlogPa
       {/* Hero — shared InteriorHero (same language as projects/contact/about) */}
       <InteriorHero variant="blog" title="Blog" description={t('heroDescription')} />
 
-      {/* Search and Filters */}
+      {/* Search, filters and posts grid — one section to avoid dead vertical gap */}
       <Section spacing="lg">
         <Container>
-          <RevealOnScroll>
-            <BlogFilters categories={categories} totalPosts={total} />
-          </RevealOnScroll>
-        </Container>
-      </Section>
+          <div className="space-y-8">
+            <RevealOnScroll>
+              <BlogFilters categories={categories} totalPosts={total} />
+            </RevealOnScroll>
 
-      {/* Posts Grid */}
-      <Section>
-        <Container>
-          {posts.length > 0 ? (
-            <>
-              <PostGrid posts={posts} />
+            {posts.length > 0 ? (
+              <>
+                <PostGrid posts={posts} />
 
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="mt-12">
-                  <Pagination currentPage={currentPage} totalPages={totalPages} />
-                </div>
-              )}
-            </>
-          ) : (
-            <EmptyState
-              title={emptyTitle}
-              description={emptyDescription}
-              action={
-                normalizedSearch || categorySlug
-                  ? { label: t('viewAll'), href: '/blog' }
-                  : undefined
-              }
-            />
-          )}
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="mt-12">
+                    <Pagination currentPage={currentPage} totalPages={totalPages} />
+                  </div>
+                )}
+              </>
+            ) : (
+              <EmptyState
+                title={emptyTitle}
+                description={emptyDescription}
+                action={
+                  normalizedSearch || categorySlug
+                    ? { label: t('viewAll'), href: '/blog' }
+                    : undefined
+                }
+              />
+            )}
+          </div>
         </Container>
       </Section>
     </>

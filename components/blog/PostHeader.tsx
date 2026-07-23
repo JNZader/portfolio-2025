@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
 import { Link } from '@/i18n/navigation';
+import { cn } from '@/lib/utils';
 import { formatDate } from '@/lib/utils/format';
 import { getImageBlurUrl, getImageUrl } from '@/sanity/lib/image';
 import type { Post } from '@/types/sanity';
@@ -19,7 +20,12 @@ export function PostHeader({ post }: Readonly<PostHeaderProps>) {
   return (
     <header className="relative">
       {/* Hero Image Container */}
-      <div className="relative w-full aspect-[16/9] max-h-[600px] overflow-hidden bg-muted">
+      <div
+        className={cn(
+          'relative w-full aspect-[16/9] max-h-[600px] overflow-hidden',
+          imageUrl ? 'bg-muted' : 'bg-gradient-to-br from-primary/10 to-tertiary/10'
+        )}
+      >
         {imageUrl && (
           <>
             {/* Image */}
@@ -64,17 +70,32 @@ export function PostHeader({ post }: Readonly<PostHeaderProps>) {
               ))}
             </div>
 
-            {/* Title - ALWAYS white for maximum contrast */}
-            <h1 className="mb-4 text-4xl font-bold text-white md:text-5xl lg:text-6xl drop-shadow-lg">
+            {/* Title - white over image, foreground over gradient fallback */}
+            <h1
+              className={cn(
+                'mb-4 text-4xl font-bold md:text-5xl lg:text-6xl',
+                imageUrl ? 'text-white drop-shadow-lg' : 'text-foreground'
+              )}
+            >
               {post.title}
             </h1>
 
-            {/* Meta - ALWAYS white/light for maximum contrast */}
-            <div className="flex flex-wrap items-center gap-4 text-sm text-white/95">
+            {/* Meta - white over image, foreground over gradient fallback */}
+            <div
+              className={cn(
+                'flex flex-wrap items-center gap-4 text-sm',
+                imageUrl ? 'text-white/95' : 'text-foreground'
+              )}
+            >
               {post.author && (
                 <div className="flex items-center gap-2">
                   {post.author.image && (
-                    <div className="relative h-8 w-8 overflow-hidden rounded-full ring-2 ring-white/30">
+                    <div
+                      className={cn(
+                        'relative h-8 w-8 overflow-hidden rounded-full ring-2',
+                        imageUrl ? 'ring-white/30' : 'ring-foreground/20'
+                      )}
+                    >
                       <Image
                         src={getImageUrl(post.author.image, 32, 32)}
                         alt={post.author.name}
@@ -83,20 +104,22 @@ export function PostHeader({ post }: Readonly<PostHeaderProps>) {
                       />
                     </div>
                   )}
-                  <span className="font-medium drop-shadow">{post.author.name}</span>
+                  <span className={cn('font-medium', imageUrl && 'drop-shadow')}>
+                    {post.author.name}
+                  </span>
                 </div>
               )}
 
-              <span className="text-white/70">•</span>
+              <span className={imageUrl ? 'text-white/70' : 'text-foreground/70'}>•</span>
 
-              <time dateTime={post.publishedAt} className="drop-shadow">
+              <time dateTime={post.publishedAt} className={cn(imageUrl && 'drop-shadow')}>
                 {formatDate(post.publishedAt, 'long', locale)}
               </time>
 
               {post.readingTime && (
                 <>
-                  <span className="text-white/70">•</span>
-                  <span className="drop-shadow">
+                  <span className={imageUrl ? 'text-white/70' : 'text-foreground/70'}>•</span>
+                  <span className={cn(imageUrl && 'drop-shadow')}>
                     {t('readingMinutes', { minutes: post.readingTime })}
                   </span>
                 </>

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getLocale, getTranslations, setRequestLocale } from 'next-intl/server';
-import Container from '@/components/ui/Container';
+import { InteriorHero } from '@/components/ui/InteriorHero';
 import Section from '@/components/ui/Section';
 import { localeAlternates } from '@/lib/seo/alternates';
 import { PrivacyEn } from './PrivacyEn';
@@ -21,14 +21,18 @@ export default async function PrivacyPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const current = await getLocale();
+  const t = await getTranslations('Privacy');
 
   return (
-    <Container className="py-12">
+    <>
+      {/* Hero — shared InteriorHero (same language as projects/contact/blog) */}
+      <InteriorHero variant="legal" title={t('heroTitle')} description={t('heroSubtitle')} />
+
       <Section>
         <article className="prose prose-lg dark:prose-invert max-w-none">
           {current === 'en' ? <PrivacyEn /> : <PrivacyEs />}
         </article>
       </Section>
-    </Container>
+    </>
   );
 }
