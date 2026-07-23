@@ -3,6 +3,7 @@ import {
   ENVIRONMENT_STATUS,
   createEnvironmentBlocked,
   blockProjectsForEnvironment,
+  isSanityOptionalReason,
   preflightBuildEnvironment,
   preflightPortfolioServer,
   preflightSanityEnvironment,
@@ -58,6 +59,68 @@ describe('environment status reporting', () => {
       { NEXT_PUBLIC_SANITY_PROJECT_ID: 'project', NEXT_PUBLIC_SANITY_DATASET: 'production' },
       async () => new Response(JSON.stringify({ result: { _id: 'project-1', title: 'APiGen' } }), { status: 200 })
     )).toEqual({ type: 'environment', status: 'passed' });
+  });
+
+  it('skips Sanity checks as neutral when optional and CI placeholder credentials are in use', async () => {
+    let fetchCalled = false;
+    const result = await preflightSanityEnvironment(
+      {
+        NEXT_PUBLIC_SANITY_PROJECT_ID: 'dummy-project-id',
+        NEXT_PUBLIC_SANITY_DATASET: 'production',
+        PLAYWRIGHT_SANITY_OPTIONAL: 'true',
+      },
+      async () => {
+        fetchCalled = true;
+        throw new Error('must not fetch placeholder credentials');
+      }
+    );
+
+    expect(result.status).toBe('skipped');
+    expect(fetchCalled).toBe(false);
+    expect(isSanityOptionalReason(result.status === 'skipped' ? result.reason : undefined)).toBe(true);
+  });
+
+  it('skips Sanity checks as neutral when optional and the project id is missing', async () => {
+    const result = await preflightSanityEnvironment(
+      { PLAYWRIGHT_SANITY_OPTIONAL: 'true' },
+      async () => {
+        throw new Error('must not fetch without credentials');
+      }
+    );
+
+    expect(result.status).toBe('skipped');
+    expect(isSanityOptionalReason(result.status === 'skipped' ? result.reason : undefined)).toBe(true);
+  });
+
+  it('still blocks a real Sanity outage when optional but a real project id is configured', async () => {
+    const result = await preflightSanityEnvironment(
+      {
+        NEXT_PUBLIC_SANITY_PROJECT_ID: 'realproject',
+        NEXT_PUBLIC_SANITY_DATASET: 'production',
+        PLAYWRIGHT_SANITY_OPTIONAL: 'true',
+      },
+      async () => {
+        throw new Error('connection refused');
+      }
+    );
+
+    expect(result).toEqual({
+      type: 'environment',
+      status: 'blocked',
+      reason: 'Sanity representative fetch failed: network or timeout error',
+    });
+  });
+
+  it('blocks placeholder credentials when NOT optional (gate unchanged for provisioned runs)', async () => {
+    const result = await preflightSanityEnvironment(
+      { NEXT_PUBLIC_SANITY_PROJECT_ID: 'dummy-project-id', NEXT_PUBLIC_SANITY_DATASET: 'production' },
+      async () => {
+        throw new Error('connection refused');
+      }
+    );
+
+    expect(result.status).toBe('blocked');
+    expect(isSanityOptionalReason(result.status === 'blocked' ? result.reason : undefined)).toBe(false);
   });
 
   it('reports the known production build prerequisite block without running the build', async () => {
