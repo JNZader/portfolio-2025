@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { SANITY_OPTIONAL_REASON } from '@/e2e/fixtures/environment-status';
 import { classifyReporterTestOutcome } from '@/e2e/reporters/environment-reporter';
 
 describe('environment reporter test classification', () => {
@@ -26,6 +27,22 @@ describe('environment reporter test classification', () => {
       type: 'environment',
       status: 'blocked',
       reason: 'Portfolio server unavailable',
+    });
+  });
+
+  it('classifies an optional-Sanity skip as a neutral skip, never blocked', () => {
+    expect(classifyReporterTestOutcome({
+      projectBlocked: false,
+      status: 'skipped',
+      environmentReason: SANITY_OPTIONAL_REASON,
+      testId: 'optional-test',
+      testTitle: 'optional test',
+    })).toEqual({
+      type: 'environment',
+      status: 'skipped',
+      reason: SANITY_OPTIONAL_REASON,
+      testId: 'optional-test',
+      testTitle: 'optional test',
     });
   });
 
