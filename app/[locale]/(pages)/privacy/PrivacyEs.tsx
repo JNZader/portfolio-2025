@@ -4,7 +4,6 @@ import { email } from './email';
 export function PrivacyEs() {
   return (
     <>
-      <h1>Política de Privacidad</h1>
       <p className="lead">
         Última actualización: <time dateTime="2025-01-01">Enero de 2025</time>
       </p>

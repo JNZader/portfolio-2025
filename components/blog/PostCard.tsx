@@ -1,5 +1,6 @@
 'use client';
 
+import { Star } from 'lucide-react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
@@ -84,7 +85,8 @@ export function PostCard({ post, priority = false }: Readonly<PostCardProps>) {
               variant="default"
               className="bg-gradient-to-r from-primary to-primary-600 border-0 shadow-lg shadow-primary/30"
             >
-              ⭐ Destacado
+              <Star className="mr-1 size-3 fill-current" />
+              {t('featured')}
             </Badge>
           </div>
         )}
