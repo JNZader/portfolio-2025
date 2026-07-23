@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import type { FullConfig, Reporter, TestCase, TestResult, Suite } from '@playwright/test/reporter';
 import {
+  isSanityOptionalReason,
   summarizeEnvironmentResults,
   type EnvironmentResult,
   type EnvironmentReport,
@@ -45,6 +46,18 @@ export function classifyReporterTestOutcome(outcome: ReporterTestOutcome): Envir
   }
 
   if (status === 'skipped' && outcome.environmentReason) {
+    // An optional-Sanity skip is NEUTRAL (no real secrets on Dependabot/fork
+    // PRs): reporting it as blocked would turn every such PR's E2E red by
+    // construction. Any other environment skip remains blocked.
+    if (isSanityOptionalReason(outcome.environmentReason)) {
+      return {
+        type: 'environment',
+        status: 'skipped',
+        reason: outcome.environmentReason,
+        ...(outcome.testId ? { testId: outcome.testId } : {}),
+        ...(outcome.testTitle ? { testTitle: outcome.testTitle } : {}),
+      };
+    }
     return {
       type: 'environment',
       status: 'blocked',

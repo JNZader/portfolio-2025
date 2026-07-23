@@ -4,6 +4,7 @@ import type { Page, TestInfo } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import {
   environmentReportPath,
+  isSanityOptionalReason,
   preflightSanityEnvironment,
   type EnvironmentResult,
 } from '../fixtures/environment-status';
@@ -54,9 +55,18 @@ function isSanityReason(reason: string | undefined): boolean {
     || reason?.startsWith('Sanity representative fetch ') === true;
 }
 
-async function sanityBlockReason(): Promise<string | undefined> {
+interface SanitySkip {
+  reason: string;
+  // optional = no real Sanity secrets (Dependabot/fork PRs): the skip must be
+  // reported as neutral, never as a blocked environment.
+  optional: boolean;
+}
+
+async function sanitySkipReason(): Promise<SanitySkip | undefined> {
   const missingVariable = SANITY_PREREQUISITES.find((variable) => !process.env[variable]);
-  if (missingVariable) return `Missing ${missingVariable}`;
+  if (missingVariable && process.env.PLAYWRIGHT_SANITY_OPTIONAL !== 'true') {
+    return { reason: `Missing ${missingVariable}`, optional: false };
+  }
 
   try {
     const raw = await readFile(environmentReportPath('environment-preflight.json'), 'utf8');
@@ -64,14 +74,24 @@ async function sanityBlockReason(): Promise<string | undefined> {
     const blockedSanity = entries.find(
       (entry) => entry.status === 'blocked' && isSanityReason(entry.reason),
     );
-    if (blockedSanity?.status === 'blocked') return blockedSanity.reason;
+    if (blockedSanity?.status === 'blocked') return { reason: blockedSanity.reason, optional: false };
+    const optionalSanity = entries.find(
+      (entry) => entry.status === 'skipped' && isSanityOptionalReason(entry.reason),
+    );
+    if (optionalSanity?.status === 'skipped' && optionalSanity.reason) {
+      return { reason: optionalSanity.reason, optional: true };
+    }
   } catch {
     // Re-run the narrow Sanity preflight below so a missing report is not a
     // generic navigation failure or an accidental pass.
   }
 
   const result = await preflightSanityEnvironment(process.env);
-  return result.status === 'blocked' ? result.reason : undefined;
+  if (result.status === 'blocked') return { reason: result.reason, optional: false };
+  if (result.status === 'skipped' && result.reason) {
+    return { reason: result.reason, optional: true };
+  }
+  return undefined;
 }
 
 function isSanityFetchFailure(error: unknown): boolean {
@@ -234,9 +254,17 @@ async function assertLoadingGeometry(page: Page): Promise<void> {
 
 test.describe('Blog loading contract', () => {
   test('checks responsive theme geometry and the loading-to-resolved transition', async ({ page }, testInfo) => {
-    const blockedSanityReason = await sanityBlockReason();
-    if (blockedSanityReason) {
-      blockUnavailableRuntime(testInfo, blockedSanityReason);
+    const sanitySkip = await sanitySkipReason();
+    if (sanitySkip) {
+      if (sanitySkip.optional) {
+        // Neutral skip: no real Sanity secrets on this run (Dependabot/fork).
+        // Annotate with the raw optional reason so the environment reporter
+        // classifies this as a skip, not a blocked environment.
+        testInfo.annotations.push({ type: 'environment', description: sanitySkip.reason });
+        testInfo.skip(true, sanitySkip.reason);
+      } else {
+        blockUnavailableRuntime(testInfo, sanitySkip.reason);
+      }
       return;
     }
 

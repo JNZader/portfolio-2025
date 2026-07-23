@@ -55,4 +55,36 @@ describe('post-E2E environment report assertion', () => {
 
     expect(result.stdout).toContain('Missing NEXT_PUBLIC_SANITY_DATASET');
   });
+
+  it('reports but does not fail a CI run without real secrets (dependabot/fork PRs)', async () => {
+    // Weekly Dependabot PRs cannot access secrets, so the workflow builds with
+    // placeholder Sanity credentials and sets PLAYWRIGHT_ENVIRONMENT_PROVISIONED
+    // to 'false'. The assert must stay advisory in that case — a blocked
+    // environment is printed, not gated — while provisioned runs still fail.
+    const report = await writeReport({
+      counts: { passed: 3, failed: 0, skipped: 2, blocked: 0 },
+      entries: [{ type: 'environment', status: 'passed' }],
+      incomplete: false,
+    });
+
+    const result = await execFile(process.execPath, [script, '--report', report], {
+      env: { ...process.env, CI: 'true', PLAYWRIGHT_ENVIRONMENT_PROVISIONED: 'false' },
+    });
+
+    expect(result.stdout).toContain('Environment verification is complete');
+  });
+
+  it('reports blocked entries without exiting 1 when provisioning is off in CI', async () => {
+    const report = await writeReport({
+      counts: { passed: 0, failed: 0, skipped: 1, blocked: 0 },
+      entries: [{ type: 'environment', status: 'skipped', reason: 'Sanity checks optional' }],
+      incomplete: false,
+    });
+
+    const result = await execFile(process.execPath, [script, '--report', report], {
+      env: { ...process.env, CI: 'true', PLAYWRIGHT_ENVIRONMENT_PROVISIONED: 'false' },
+    });
+
+    expect(result.stdout).toContain('Environment verification is complete');
+  });
 });
