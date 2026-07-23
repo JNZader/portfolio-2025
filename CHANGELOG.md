@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.20.6](https://github.com/JNZader/portfolio-2025/compare/v2.20.5...v2.20.6) (2026-07-23)
+
+
+### Bug Fixes
+
+* **newsletter:** idempotent confirm post and unknown ip guard ([772f79d](https://github.com/JNZader/portfolio-2025/commits/772f79da32144b9223e139272501d7a9a0bc0ed2))
+* **security:** centralize client ip resolution and trust vercel headers ([adb8816](https://github.com/JNZader/portfolio-2025/commits/adb88169193b6c82427fb6ae005ae455ab0f9380))
+* **security:** require post for newsletter confirm and unsubscribe ([e92694a](https://github.com/JNZader/portfolio-2025/commits/e92694a10fe40bd25e9c56db146b78c4f9a44df9))
+
 ## [2.20.5](https://github.com/JNZader/portfolio-2025/compare/v2.20.4...v2.20.5) (2026-07-23)
 
 
