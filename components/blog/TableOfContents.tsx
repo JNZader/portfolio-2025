@@ -48,7 +48,7 @@ export function TableOfContents({ items }: Readonly<TableOfContentsProps>) {
   return (
     <nav className="space-y-1" aria-label={t('navAria')}>
       <p className="mb-4 text-sm font-semibold uppercase tracking-wide text-[var(--color-muted-foreground)]">
-        Contenido
+        {t('title')}
       </p>
 
       <ul className="space-y-2 text-sm">

@@ -64,8 +64,6 @@ export default async function NewsletterPage({
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <StatItem label={t('statFrequency')} value={t('statFrequencyValue')} />
-                  <StatItem label={t('statSubscribers')} value="1,234+" />
-                  <StatItem label={t('statOpenRate')} value="42%" />
                 </CardContent>
               </Card>
 

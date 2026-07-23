@@ -8,6 +8,7 @@ import {
   Rss,
   Send,
   Server,
+  ShieldCheck,
   Sparkles,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
@@ -20,6 +21,7 @@ const HERO_VARIANTS = {
   BLOG: 'blog',
   NEWSLETTER: 'newsletter',
   ABOUT: 'about',
+  LEGAL: 'legal',
 } as const;
 
 type HeroVariant = (typeof HERO_VARIANTS)[keyof typeof HERO_VARIANTS];
@@ -41,6 +43,7 @@ const BLOB_BY_VARIANT: Record<HeroVariant, string> = {
   blog: '-right-24 -top-32 bg-primary/10',
   newsletter: '-bottom-36 -left-24 bg-tertiary/10',
   about: '-right-24 -top-32 bg-primary/10',
+  legal: '-bottom-36 -left-24 bg-tertiary/10',
 };
 
 function ProjectsMotif() {
@@ -131,11 +134,30 @@ function NewsletterMotif() {
   );
 }
 
+function LegalMotif() {
+  return (
+    <div
+      className="relative mx-auto flex h-48 w-full max-w-sm items-center justify-center"
+      aria-hidden="true"
+    >
+      <div className="absolute left-1/2 top-1/2 h-2/3 w-px -translate-y-1/2 bg-gradient-to-b from-transparent via-primary/40 to-transparent" />
+      <div className="z-10 flex size-20 items-center justify-center rounded-full border border-primary/30 bg-background text-primary shadow-lg">
+        <ShieldCheck className="size-9" />
+      </div>
+      <div className="absolute bottom-4 right-1/2 flex h-9 translate-x-1/2 items-center gap-2 rounded-lg border bg-card px-3 text-[10px] text-muted-foreground shadow-sm">
+        <span className="size-1.5 rounded-full bg-success" />
+        GDPR / Ley 25.326
+      </div>
+    </div>
+  );
+}
+
 const MOTIF_BY_VARIANT: Partial<Record<HeroVariant, ReactNode>> = {
   projects: <ProjectsMotif />,
   contact: <ContactMotif />,
   blog: <BlogMotif />,
   newsletter: <NewsletterMotif />,
+  legal: <LegalMotif />,
 };
 
 /**

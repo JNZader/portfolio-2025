@@ -30,12 +30,12 @@ export default function ErrorPage({
   }, [error]);
 
   return (
-    <Container className="flex min-h-screen flex-col items-center justify-center py-24">
+    <Container className="flex min-h-[50vh] flex-col items-center justify-center py-24">
       <div className="text-center space-y-6 max-w-md">
         {/* Error Icon */}
-        <div className="mx-auto w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center">
+        <div className="mx-auto w-16 h-16 rounded-full bg-error/10 flex items-center justify-center">
           <svg
-            className="w-8 h-8 text-red-500"
+            className="w-8 h-8 text-error"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth="1.5"
@@ -58,8 +58,8 @@ export default function ErrorPage({
 
         {/* Error Details (development only) */}
         {process.env.NODE_ENV === 'development' && (
-          <div className="mt-4 p-4 bg-red-500/10 rounded-lg text-left">
-            <p className="text-xs font-mono text-red-500 break-all">{error.message}</p>
+          <div className="mt-4 p-4 bg-error/10 rounded-lg text-left">
+            <p className="text-xs font-mono text-error break-all">{error.message}</p>
           </div>
         )}
 

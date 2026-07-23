@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DataDeletionForm } from '@/components/gdpr/DataDeletionForm';
 import { DataRequestForm } from '@/components/gdpr/DataRequestForm';
-import Container from '@/components/ui/Container';
+import { InteriorHero } from '@/components/ui/InteriorHero';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
 import Section from '@/components/ui/Section';
 import { localeAlternates } from '@/lib/seo/alternates';
@@ -26,12 +26,12 @@ export default async function DataRequestPage({
   setRequestLocale(locale);
   const t = await getTranslations('DataRequest');
   return (
-    <Container className="py-12">
+    <>
+      {/* Hero — shared InteriorHero (same language as projects/contact/blog) */}
+      <InteriorHero variant="legal" title={t('heroTitle')} description={t('heroSubtitle')} />
+
       <Section>
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-4xl font-bold mb-4">{t('heroTitle')}</h1>
-          <p className="text-lg text-[var(--color-foreground)]/70 mb-12">{t('heroSubtitle')}</p>
-
           <div className="space-y-12">
             {/* Export data */}
             <div className="border border-[var(--color-border)] rounded-lg p-6">
@@ -100,6 +100,6 @@ export default async function DataRequestPage({
           </div>
         </div>
       </Section>
-    </Container>
+    </>
   );
 }

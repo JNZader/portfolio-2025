@@ -427,8 +427,6 @@
     "statsTitle": "Stats",
     "statFrequency": "Frequency",
     "statFrequencyValue": "Weekly",
-    "statSubscribers": "Subscribers",
-    "statOpenRate": "Open rate",
     "privacyTitle": "Your Privacy",
     "p1": "Double opt-in (confirmation required)",
     "p2": "No spam, only quality content",
@@ -487,7 +485,9 @@
   },
   "Privacy": {
     "metaTitle": "Privacy Policy",
-    "metaDescription": "Privacy policy and personal data processing"
+    "metaDescription": "Privacy policy and personal data processing",
+    "heroTitle": "Privacy Policy",
+    "heroSubtitle": "How your personal data is collected, used, and protected on this site."
   },
   "NewsletterBroadcaster": {
     "contentLabel": "Content"
@@ -503,7 +503,8 @@
     "konamiClose": "Close"
   },
   "TableOfContents": {
-    "navAria": "Table of contents"
+    "navAria": "Table of contents",
+    "title": "Contents"
   },
   "ThemeToggle": {
     "toLight": "Switch to light mode",
@@ -559,6 +560,7 @@
     "all": "All",
     "results": "{count, plural, =1 {# article} other {# articles}}",
     "filtered": "filtered",
-    "searchBadge": "Search: “{search}”"
+    "searchBadge": "Search: “{search}”",
+    "featured": "Featured"
   }
 }
