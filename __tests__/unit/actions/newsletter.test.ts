@@ -31,7 +31,6 @@ vi.mock('@/lib/rate-limit/redis', () => ({
   newsletterRateLimiter: { limit: (...args: unknown[]) => limit(...args) },
   getClientIdentifier: vi.fn().mockReturnValue('127.0.0.1'),
 }));
-
 vi.mock('next/headers', () => ({
   headers: vi.fn().mockResolvedValue(new Headers({ 'user-agent': 'vitest' })),
 }));
@@ -50,6 +49,9 @@ vi.mock('@/lib/monitoring/performance', () => ({
 process.env.RESEND_API_KEY = 'test-key';
 
 import { subscribeToNewsletter } from '@/app/actions/newsletter';
+import { getClientIdentifier } from '@/lib/rate-limit/redis';
+
+const mockedGetClientIdentifier = vi.mocked(getClientIdentifier);
 
 function formDataWith(email: string) {
   const fd = new FormData();
@@ -71,6 +73,7 @@ describe('subscribeToNewsletter — anti-enumeration', () => {
     update.mockClear();
     sendMock.mockClear();
     limit.mockResolvedValue({ success: true });
+    mockedGetClientIdentifier.mockReturnValue('127.0.0.1');
   });
 
   it('returns the SAME response for every subscriber state', async () => {
@@ -109,5 +112,64 @@ describe('subscribeToNewsletter — anti-enumeration', () => {
     const result = await subscribeToNewsletter(formDataWith('not-an-email'));
     expect(result.success).toBe(false);
     expect(findUnique).not.toHaveBeenCalled();
+  });
+});
+
+// Regression: getClientIdentifier falls back to the literal 'unknown' when no
+// IP header resolves. That fallback is correct for rate-limit bucketing but
+// must NOT be persisted as subscriber.ipAddress — the persistence boundary
+// maps it to null.
+describe('subscribeToNewsletter — ipAddress persistence', () => {
+  beforeEach(() => {
+    findUnique.mockReset();
+    create.mockClear();
+    update.mockClear();
+    sendMock.mockClear();
+    limit.mockResolvedValue({ success: true });
+    mockedGetClientIdentifier.mockReturnValue('127.0.0.1');
+  });
+
+  it('persists ipAddress NULL on the create path when no IP header resolves', async () => {
+    mockedGetClientIdentifier.mockReturnValue('unknown');
+
+    await subscribeAs(null);
+
+    expect(create).toHaveBeenCalledTimes(1);
+    expect(create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ ipAddress: null }),
+    });
+  });
+
+  it('persists the resolved IP on the create path when headers are present', async () => {
+    mockedGetClientIdentifier.mockReturnValue('203.0.113.10');
+
+    await subscribeAs(null);
+
+    expect(create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ ipAddress: '203.0.113.10' }),
+    });
+  });
+
+  it('persists ipAddress NULL on the resubscribe path when no IP header resolves', async () => {
+    mockedGetClientIdentifier.mockReturnValue('unknown');
+
+    await subscribeAs({ status: 'UNSUBSCRIBED' });
+
+    expect(update).toHaveBeenCalledTimes(1);
+    expect(update).toHaveBeenCalledWith({
+      where: { email: 'x@example.com' },
+      data: expect.objectContaining({ ipAddress: null }),
+    });
+  });
+
+  it('persists the resolved IP on the resubscribe path when headers are present', async () => {
+    mockedGetClientIdentifier.mockReturnValue('203.0.113.10');
+
+    await subscribeAs({ status: 'UNSUBSCRIBED' });
+
+    expect(update).toHaveBeenCalledWith({
+      where: { email: 'x@example.com' },
+      data: expect.objectContaining({ ipAddress: '203.0.113.10' }),
+    });
   });
 });

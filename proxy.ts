@@ -5,6 +5,7 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { routing } from '@/i18n/routing';
 import { logger } from '@/lib/monitoring/logger';
+import { getClientIp } from '@/lib/utils/client-ip';
 
 // next-intl locale routing, composed into this middleware below.
 const handleI18nRouting = createMiddleware(routing);
@@ -64,17 +65,6 @@ const BLOCKED_USER_AGENTS = [
 ];
 
 /**
- * Get client IP from request headers
- */
-function getClientIP(request: NextRequest): string {
-  const forwarded = request.headers.get('x-forwarded-for');
-  const realIp = request.headers.get('x-real-ip');
-  // Deploy is Vercel (not Cloudflare); cf-connecting-ip would be 100%
-  // attacker-controlled → rate-limit bypass. Trust only x-forwarded-for/x-real-ip.
-  return forwarded?.split(',')[0]?.trim() ?? realIp ?? 'unknown';
-}
-
-/**
  * Check if user agent is malicious
  */
 function isMaliciousUserAgent(userAgent: string | null): boolean {
@@ -90,7 +80,7 @@ function isMaliciousUserAgent(userAgent: string | null): boolean {
  */
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const clientIP = getClientIP(request);
+  const clientIP = getClientIp(request);
   const userAgent = request.headers.get('user-agent');
 
   // =========================================

@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.20.5](https://github.com/JNZader/portfolio-2025/compare/v2.20.4...v2.20.5) (2026-07-23)
+
+
+### Bug Fixes
+
+* **build:** add use client directive to radix slot components ([18f9fe9](https://github.com/JNZader/portfolio-2025/commits/18f9fe9eac2ccec1ead581fdf34f419b57bc9599))
+* **security:** remediate adm-zip CVE-2026-39244 via scoped overrides ([d9f56be](https://github.com/JNZader/portfolio-2025/commits/d9f56beb8084eef04269bb0ecdad051167a67e78))
+* **security:** remediate remaining npm audit findings ([4190121](https://github.com/JNZader/portfolio-2025/commits/419012142e5599c479fc30c6db81f64b73b5ec50))
+
 ## [2.20.4](https://github.com/JNZader/portfolio-2025/compare/v2.20.3...v2.20.4) (2026-07-16)
 
 
