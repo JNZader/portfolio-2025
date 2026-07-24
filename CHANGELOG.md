@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.25.0](https://github.com/JNZader/portfolio-2025/compare/v2.24.1...v2.25.0) (2026-07-24)
+
+
+### Features
+
+* **ui:** add featured projects section to home page ([#220](https://github.com/JNZader/portfolio-2025/issues/220)) ([d110623](https://github.com/JNZader/portfolio-2025/commits/d1106232ca375b052525d5bb424a656d526b2b60))
+
 ## [2.24.1](https://github.com/JNZader/portfolio-2025/compare/v2.24.0...v2.24.1) (2026-07-24)
 
 ## [2.24.0](https://github.com/JNZader/portfolio-2025/compare/v2.23.1...v2.24.0) (2026-07-24)
