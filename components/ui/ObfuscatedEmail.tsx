@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { logger } from '@/lib/monitoring/logger';
 
 interface ObfuscatedEmailProps {
@@ -12,52 +12,27 @@ interface ObfuscatedEmailProps {
 }
 
 /**
- * Componente anti-scraping que NO muestra el email directamente
- * Muestra un menú de opciones al hacer clic
+ * Email en el punto de conversión (N-03): UN clic para actuar.
+ *
+ * El email nunca se ensambla durante el render ni aparece literal en el HTML
+ * inicial, lo que mantiene la protección anti-scraping. El usuario actúa con
+ * un solo clic: "Enviar email" abre el cliente de correo, "Copiar" copia la
+ * dirección al portapapeles. Sin menú desplegable → sin aria-haspopup
+ * engañoso.
  */
-export function ObfuscatedEmail({
-  user,
-  domain,
-  className = '',
-  showIcon = false,
-}: Readonly<ObfuscatedEmailProps>) {
+export function ObfuscatedEmail({ user, domain, className = '' }: Readonly<ObfuscatedEmailProps>) {
   const t = useTranslations('Email');
-  const [showMenu, setShowMenu] = useState(false);
   const [copied, setCopied] = useState(false);
-  const menuRef = useRef<HTMLSpanElement>(null);
 
-  // Cerrar menú al hacer clic fuera o con Escape
-  useEffect(() => {
-    if (!showMenu) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowMenu(false);
-      }
-    };
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setShowMenu(false);
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEscape);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [showMenu]);
-
-  // Construir email dinámicamente (solo cuando se necesita)
-  const getEmail = () => `${user}@${domain}`;
+  const handleSend = () => {
+    globalThis.location.href = `mailto:${user}@${domain}`;
+  };
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(getEmail());
+      await navigator.clipboard.writeText(`${user}@${domain}`);
       setCopied(true);
-      setTimeout(() => {
-        setCopied(false);
-        setShowMenu(false);
-      }, 2000);
+      setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       logger.error('Error al copiar email', err as Error, {
         service: 'obfuscated-email',
@@ -65,62 +40,27 @@ export function ObfuscatedEmail({
     }
   };
 
-  const handleMailto = () => {
-    globalThis.location.href = `mailto:${getEmail()}`;
-    setShowMenu(false);
-  };
-
   return (
-    <span className="relative inline-block" ref={menuRef}>
-      {/* Botón - NO muestra el email */}
+    <span className={`inline-flex flex-wrap items-center gap-2 ${className}`}>
       <button
         type="button"
-        onClick={() => setShowMenu(!showMenu)}
-        className={`inline-flex items-center gap-1 select-none ${className}`}
-        aria-label={t('options')}
-        aria-haspopup="menu"
-        aria-expanded={showMenu}
+        onClick={handleSend}
+        className="inline-flex items-center gap-2 text-primary hover:underline"
+        aria-label={t('sendAria')}
       >
-        {showIcon && <EmailIcon className="h-4 w-4" />}
-        <span className="hover:underline">{t('contact')}</span>
-        <ChevronIcon className={`h-3 w-3 transition-transform ${showMenu ? 'rotate-180' : ''}`} />
+        <EmailIcon className="h-4 w-4" />
+        {t('send')}
       </button>
 
-      {/* Menú desplegable */}
-      {showMenu && (
-        <span className="absolute z-50 mt-2 w-56 rounded-lg border border-border bg-background shadow-lg block">
-          <span className="p-2 block">
-            <button
-              type="button"
-              onClick={handleMailto}
-              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-muted transition-colors text-left"
-            >
-              <SendIcon className="h-4 w-4 text-primary" />
-              <span>{t('send')}</span>
-            </button>
+      <button
+        type="button"
+        onClick={handleCopy}
+        aria-label={t('copy')}
+        className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+      >
+        {copied ? <CheckIcon className="h-4 w-4 text-success" /> : <CopyIcon className="h-4 w-4" />}
+      </button>
 
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-muted transition-colors text-left"
-            >
-              {copied ? (
-                <>
-                  <CheckIcon className="h-4 w-4 text-success" />
-                  <span className="text-success">{t('copied')}</span>
-                </>
-              ) : (
-                <>
-                  <CopyIcon className="h-4 w-4 text-primary" />
-                  <span>{t('copy')}</span>
-                </>
-              )}
-            </button>
-          </span>
-        </span>
-      )}
-
-      {/* Live region: anuncia el copiado a lectores de pantalla */}
       <span aria-live="polite" className="sr-only">
         {copied ? t('copiedAnnouncement') : ''}
       </span>
@@ -129,7 +69,8 @@ export function ObfuscatedEmail({
 }
 
 /**
- * Versión aún más ofuscada - no muestra el email completo hasta hacer hover
+ * Versión aún más ofuscada - no muestra el email completo hasta hacer hover.
+ * El ensamblado sigue pasando por un useEffect para que no aparezca en el SSR.
  */
 export function ObfuscatedEmailButton({
   user,
@@ -180,40 +121,6 @@ function EmailIcon({ className }: Readonly<{ className?: string }>) {
         strokeLinecap="round"
         strokeLinejoin="round"
         d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-      />
-    </svg>
-  );
-}
-
-function ChevronIcon({ className }: Readonly<{ className?: string }>) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="2"
-      stroke="currentColor"
-      aria-hidden="true"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-    </svg>
-  );
-}
-
-function SendIcon({ className }: Readonly<{ className?: string }>) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.5"
-      stroke="currentColor"
-      aria-hidden="true"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
       />
     </svg>
   );

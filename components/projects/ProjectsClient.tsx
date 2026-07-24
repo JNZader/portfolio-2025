@@ -1,6 +1,6 @@
 'use client';
 
-import { Filter, Search, X } from 'lucide-react';
+import { Check, Filter, Search, X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
@@ -11,6 +11,16 @@ import type { Project } from '@/lib/github/types';
 import ProjectCard from './ProjectCard';
 
 type ProjectSource = 'all' | 'sanity' | 'github';
+
+/**
+ * Chips de filtro (toggle): el seleccionado lleva un check desnudo (sin
+ * círculo) + tinte primary suave; el no seleccionado se queda en gris muted.
+ * Nada de filled-vs-outline a secas — se leía como "cargando" o como slider.
+ */
+const chipClassName = (selected: boolean) =>
+  selected
+    ? 'border-primary/50 bg-primary/10 text-primary hover:bg-primary/15'
+    : 'text-muted-foreground hover:text-foreground';
 
 interface ProjectsClientProps {
   projects: Project[];
@@ -166,35 +176,39 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
           id="project-filters"
           className="p-4 border border-border rounded-lg bg-muted/30 space-y-4"
         >
-          {/* Filtro por fuente — aria-pressed: la selección no puede comunicarse
-              solo por la variante de color (filled vs outline) */}
+          {/* Filtro por fuente — aria-pressed + check: la selección no puede
+              comunicarse solo por color */}
           <div>
             <h4 className="text-sm font-medium mb-2">{t('sourceHeading')}</h4>
             <div className="flex flex-wrap gap-2">
-              <Button
-                variant={selectedSource === 'all' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => handleSourceChange('all')}
-                aria-pressed={selectedSource === 'all'}
-              >
-                {t('sourceAll')}
-              </Button>
-              <Button
-                variant={selectedSource === 'sanity' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => handleSourceChange('sanity')}
-                aria-pressed={selectedSource === 'sanity'}
-              >
-                {t('sourceCurated')}
-              </Button>
-              <Button
-                variant={selectedSource === 'github' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => handleSourceChange('github')}
-                aria-pressed={selectedSource === 'github'}
-              >
-                {t('sourceGithub')}
-              </Button>
+              {(
+                [
+                  { value: 'all', label: t('sourceAll') },
+                  { value: 'sanity', label: t('sourceCurated') },
+                  { value: 'github', label: t('sourceGithub') },
+                ] as const
+              ).map(({ value, label }) => {
+                const isSelected = selectedSource === value;
+                return (
+                  <Button
+                    key={value}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleSourceChange(value)}
+                    aria-pressed={isSelected}
+                    className={chipClassName(isSelected)}
+                  >
+                    {isSelected && (
+                      <Check
+                        data-testid="filter-check"
+                        className="h-3.5 w-3.5"
+                        aria-hidden="true"
+                      />
+                    )}
+                    {label}
+                  </Button>
+                );
+              })}
             </div>
           </div>
 
@@ -202,19 +216,28 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
           <div>
             <h4 className="text-sm font-medium mb-2">{t('techHeading')}</h4>
             <div className="flex flex-wrap gap-2">
-              {allTechs.map((tech) => (
-                <Button
-                  key={tech}
-                  variant={selectedTechs.includes(tech) ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => toggleTech(tech)}
-                  aria-pressed={selectedTechs.includes(tech)}
-                  className="text-xs"
-                >
-                  {tech}
-                  {selectedTechs.includes(tech) && <X className="ml-1 h-3 w-3" />}
-                </Button>
-              ))}
+              {allTechs.map((tech) => {
+                const isSelected = selectedTechs.includes(tech);
+                return (
+                  <Button
+                    key={tech}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => toggleTech(tech)}
+                    aria-pressed={isSelected}
+                    className={`text-xs ${chipClassName(isSelected)}`}
+                  >
+                    {isSelected && (
+                      <Check
+                        data-testid="filter-check"
+                        className="h-3.5 w-3.5"
+                        aria-hidden="true"
+                      />
+                    )}
+                    {tech}
+                  </Button>
+                );
+              })}
             </div>
             {selectedTechs.length > 0 && (
               <p className="text-xs text-muted-foreground mt-2">{t('techHint')}</p>

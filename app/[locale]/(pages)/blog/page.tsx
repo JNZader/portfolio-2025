@@ -9,12 +9,10 @@ import { SearchTracker } from '@/components/blog/SearchTracker';
 import Container from '@/components/ui/Container';
 import { InteriorHero } from '@/components/ui/InteriorHero';
 import Section from '@/components/ui/Section';
+import { getBlogListing } from '@/lib/data/blog-page';
 import { localeAlternates } from '@/lib/seo/alternates';
 import { getPaginationRange, getTotalPages } from '@/lib/utils/blog';
 import { isValidSearchTerm, normalizeSearchTerm } from '@/lib/utils/search';
-import { sanityFetch } from '@/sanity/lib/client';
-import { categoriesQuery, paginatedPostsQuery } from '@/sanity/lib/queries';
-import type { Category, Post } from '@/types/sanity';
 
 interface BlogPageProps {
   params: Promise<{ locale: string }>;
@@ -60,28 +58,16 @@ export default async function BlogPage({ params, searchParams }: Readonly<BlogPa
   const normalizedSearch =
     searchTerm && isValidSearchTerm(searchTerm) ? normalizeSearchTerm(searchTerm) : null;
 
-  // Categories and posts are independent queries — fetch them in parallel
-  // instead of paying two sequential Sanity round-trips.
+  // Una sola llamada: categorías + página de posts en paralelo, con fallback
+  // a listing vacío (EmptyState) cuando Sanity no está disponible (V-01,
+  // mismo patrón que /cv).
   const { start, end } = getPaginationRange(currentPage);
-  const [categories, { posts, total }] = await Promise.all([
-    sanityFetch<Category[]>({
-      query: categoriesQuery,
-      tags: ['category'],
-    }),
-    sanityFetch<{
-      posts: Post[];
-      total: number;
-    }>({
-      query: paginatedPostsQuery,
-      params: {
-        start,
-        end,
-        category: categorySlug,
-        search: normalizedSearch,
-      },
-      tags: ['post'],
-    }),
-  ]);
+  const { categories, posts, total } = await getBlogListing({
+    start,
+    end,
+    category: categorySlug,
+    search: normalizedSearch,
+  });
 
   const totalPages = getTotalPages(total);
 

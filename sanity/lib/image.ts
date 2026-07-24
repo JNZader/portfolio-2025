@@ -1,23 +1,30 @@
 import { createImageUrlBuilder } from '@sanity/image-url';
 import type { Image } from 'sanity';
-import { dataset, projectId } from '../env';
+import { dataset, isSanityConfigured, projectId } from '../env';
 
 /**
  * Image URL builder
  * Genera URLs optimizadas para imágenes de Sanity
+ *
+ * `null` cuando falta la config de Sanity (V-01): el módulo debe evaluar sin
+ * env vars para que las páginas públicas degraden en vez de crashear.
  */
-const imageBuilder = createImageUrlBuilder({
-    projectId,
-    dataset,
-});
+const imageBuilder = isSanityConfigured
+    ? createImageUrlBuilder({
+          projectId,
+          dataset,
+      })
+    : null;
 
 /**
  * Helper para generar URLs de imágenes
+ * Devuelve `null` cuando Sanity no está configurado.
  *
  * @example
- * urlForImage(post.mainImage).width(800).height(600).url()
+ * urlForImage(post.mainImage)?.width(800).height(600).url()
  */
 export const urlForImage = (source: Image | undefined) => {
+    if (!imageBuilder) return null;
     if (!source?.asset?._ref) {
         return imageBuilder.image({
             _type: 'image',
@@ -41,13 +48,10 @@ export function getImageUrl(
 ): string {
     if (!source) return '';
 
-    let builder = urlForImage(source).width(width);
+    const builder = urlForImage(source)?.width(width);
+    if (!builder) return '';
 
-    if (height) {
-        builder = builder.height(height);
-    }
-
-    return builder.url();
+    return (height ? builder.height(height) : builder).url();
 }
 
 /**
@@ -56,5 +60,5 @@ export function getImageUrl(
 export function getImageBlurUrl(source: Image | undefined): string {
     if (!source) return '';
 
-    return urlForImage(source).width(20).quality(20).blur(50).url();
+    return urlForImage(source)?.width(20).quality(20).blur(50).url() ?? '';
 }
