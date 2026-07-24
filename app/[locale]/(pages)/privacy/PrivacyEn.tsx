@@ -120,7 +120,7 @@ export function PrivacyEn() {
       </p>
 
       <h2>7. Your Rights</h2>
-      <div className="bg-[var(--color-primary)]/10 border border-[var(--color-primary)] rounded-lg p-6 my-6">
+      <div className="bg-primary/10 border border-primary rounded-lg p-6 my-6">
         <h3 className="mt-0">User Rights (Law 25.326 and GDPR)</h3>
         <ul className="mb-0">
           <li>
@@ -221,7 +221,7 @@ export function PrivacyEn() {
       <p>
         For any questions about this policy or to exercise your data protection rights, contact:
       </p>
-      <div className="bg-[var(--color-muted)] rounded-lg p-4 my-4">
+      <div className="bg-muted rounded-lg p-4 my-4">
         <p className="mb-2">
           <strong>Data Controller:</strong>
         </p>
@@ -253,7 +253,7 @@ export function PrivacyEn() {
       </ul>
 
       <hr />
-      <p className="text-sm text-[var(--color-foreground)]/60">
+      <p className="text-sm text-foreground/60">
         <strong>Version:</strong> 1.0 | <strong>Effective date:</strong> January 2025
       </p>
     </>

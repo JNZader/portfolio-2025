@@ -27,12 +27,12 @@ export default function BlogError({
     <Section>
       <Container>
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="mb-6 rounded-full bg-[var(--color-error-light)] p-6">
-            <ExclamationIcon className="h-12 w-12 text-[var(--color-error)]" />
+          <div className="mb-6 rounded-full bg-error/10 p-6">
+            <ExclamationIcon className="h-12 w-12 text-error" />
           </div>
 
           <h2 className="mb-2 text-2xl font-bold">{t('errorTitle')}</h2>
-          <p className="mb-6 max-w-md text-[var(--color-muted-foreground)]">{t('errorBody')}</p>
+          <p className="mb-6 max-w-md text-muted-foreground">{t('errorBody')}</p>
 
           <div className="flex gap-4">
             <Button onClick={reset} variant="default">
@@ -47,7 +47,7 @@ export default function BlogError({
           {process.env.NODE_ENV === 'development' && (
             <details className="mt-8 max-w-2xl text-left">
               <summary className="cursor-pointer text-sm font-medium">{t('errorDetails')}</summary>
-              <pre className="mt-2 overflow-auto rounded-lg bg-[var(--color-muted)] p-4 text-xs">
+              <pre className="mt-2 overflow-auto rounded-lg bg-muted p-4 text-xs">
                 {error.message}
               </pre>
             </details>

@@ -11,7 +11,7 @@ export default function PostLoading() {
       <Skeleton className="relative aspect-[16/9] max-h-[600px] rounded-none" />
 
       {/* Excerpt skeleton */}
-      <div className="border-b bg-[var(--color-muted)] py-8">
+      <div className="border-b bg-muted py-8">
         <div className="mx-auto max-w-4xl px-6">
           <Skeleton className="h-6 w-full" />
           <Skeleton className="mt-2 h-6 w-3/4" />

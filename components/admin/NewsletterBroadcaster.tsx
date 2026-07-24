@@ -146,17 +146,14 @@ Hola a todos,
               role="alertdialog"
               aria-label="Confirmar envío del broadcast"
               aria-describedby="broadcast-confirm-warning"
-              className="rounded-md border border-red-300 dark:border-red-900 bg-red-50 dark:bg-red-950/30 p-4"
+              className="rounded-md border border-destructive/30 bg-destructive/10 p-4"
               onKeyDown={(e) => {
                 if (e.key === 'Escape') {
                   cancelConfirm();
                 }
               }}
             >
-              <p
-                id="broadcast-confirm-warning"
-                className="font-medium text-red-800 dark:text-red-300 mb-3"
-              >
+              <p id="broadcast-confirm-warning" className="font-medium text-destructive mb-3">
                 ⚠️ ¿Enviar esto a <strong>TODOS</strong> los suscriptores? Esta acción no se puede
                 deshacer.
               </p>
@@ -168,7 +165,7 @@ Hola a todos,
                   ref={confirmActionRef}
                   size="sm"
                   onClick={doBroadcast}
-                  className="bg-red-600 hover:bg-red-700 text-white"
+                  className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
                 >
                   Sí, enviar a todos
                 </Button>
@@ -192,7 +189,7 @@ Hola a todos,
               variant="default"
               onClick={requestBroadcast}
               disabled={isLoading || confirming}
-              className="flex-[2] bg-red-600 hover:bg-red-700 text-white"
+              className="flex-[2] bg-destructive hover:bg-destructive/90 text-destructive-foreground"
             >
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -205,7 +202,7 @@ Hola a todos,
         </div>
       </div>
 
-      <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-lg p-4 text-sm text-blue-800 dark:text-blue-300">
+      <div className="bg-info/10 border border-info/30 rounded-lg p-4 text-sm text-info">
         <h3 className="font-bold mb-2">📝 Guía Rápida</h3>
         <ul className="list-disc pl-5 space-y-1">
           <li>

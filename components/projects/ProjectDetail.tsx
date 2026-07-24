@@ -99,7 +99,7 @@ export function ProjectDetail({
               {/* Stars (for GitHub projects) */}
               {project.source === 'github' && project.stars !== undefined && project.stars > 0 && (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-                  <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />
+                  <Star className="h-4 w-4 fill-warning text-warning" />
                   <span>
                     {project.stars} {t('stars')}
                   </span>

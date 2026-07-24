@@ -10,8 +10,8 @@ export default function UnauthorizedPage() {
   return (
     <Container className="flex min-h-[60vh] items-center justify-center">
       <div className="w-full max-w-md space-y-6 text-center">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-500/10">
-          <ShieldX className="h-8 w-8 text-red-500" />
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
+          <ShieldX className="h-8 w-8 text-destructive" />
         </div>
 
         <div className="space-y-2">

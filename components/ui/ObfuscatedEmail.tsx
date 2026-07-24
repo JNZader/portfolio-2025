@@ -88,30 +88,30 @@ export function ObfuscatedEmail({
 
       {/* Menú desplegable */}
       {showMenu && (
-        <span className="absolute z-50 mt-2 w-56 rounded-lg border border-[var(--color-border)] bg-[var(--color-background)] shadow-lg block">
+        <span className="absolute z-50 mt-2 w-56 rounded-lg border border-border bg-background shadow-lg block">
           <span className="p-2 block">
             <button
               type="button"
               onClick={handleMailto}
-              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-[var(--color-muted)] transition-colors text-left"
+              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-muted transition-colors text-left"
             >
-              <SendIcon className="h-4 w-4 text-[var(--color-primary)]" />
+              <SendIcon className="h-4 w-4 text-primary" />
               <span>{t('send')}</span>
             </button>
 
             <button
               type="button"
               onClick={handleCopy}
-              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-[var(--color-muted)] transition-colors text-left"
+              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-muted transition-colors text-left"
             >
               {copied ? (
                 <>
-                  <CheckIcon className="h-4 w-4 text-green-500" />
-                  <span className="text-green-600 dark:text-green-400">{t('copied')}</span>
+                  <CheckIcon className="h-4 w-4 text-success" />
+                  <span className="text-success">{t('copied')}</span>
                 </>
               ) : (
                 <>
-                  <CopyIcon className="h-4 w-4 text-[var(--color-primary)]" />
+                  <CopyIcon className="h-4 w-4 text-primary" />
                   <span>{t('copy')}</span>
                 </>
               )}
