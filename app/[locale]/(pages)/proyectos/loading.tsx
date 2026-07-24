@@ -1,77 +1,130 @@
 import Container from '@/components/ui/Container';
-import { Card, CardContent } from '@/components/ui/card';
-import Section, { SECTION_BG } from '@/components/ui/Section';
+import Section from '@/components/ui/Section';
+import { Skeleton } from '@/components/ui/Skeleton';
 
-const SKELETON_TECH_ITEMS = [1, 2, 3];
-const SKELETON_PROJECT_CARDS = ['a', 'b', 'c', 'd', 'e', 'f'];
-
-function ProjectCardSkeleton() {
-  return (
-    <Card className="overflow-hidden h-full flex flex-col">
-      {/* Image skeleton */}
-      <div className="relative h-48 overflow-hidden bg-muted animate-pulse" />
-
-      {/* Content skeleton */}
-      <CardContent className="flex-1 flex flex-col p-6">
-        {/* Title skeleton */}
-        <div className="h-6 bg-muted rounded animate-pulse mb-3 w-3/4" />
-
-        {/* Description skeleton */}
-        <div className="space-y-2 mb-4 flex-1">
-          <div className="h-4 bg-muted rounded animate-pulse" />
-          <div className="h-4 bg-muted rounded animate-pulse w-5/6" />
-          <div className="h-4 bg-muted rounded animate-pulse w-4/6" />
-        </div>
-
-        {/* Technologies skeleton */}
-        <div className="flex flex-wrap gap-1 mb-4">
-          {SKELETON_TECH_ITEMS.map((i) => (
-            <div key={i} className="h-5 w-16 bg-muted rounded animate-pulse" />
-          ))}
-        </div>
-
-        {/* Actions skeleton */}
-        <div className="flex items-center justify-between mt-auto pt-4 border-t">
-          <div className="h-8 w-24 bg-muted rounded animate-pulse" />
-          <div className="flex space-x-1">
-            <div className="h-8 w-8 bg-muted rounded animate-pulse" />
-            <div className="h-8 w-8 bg-muted rounded animate-pulse" />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
+const SKELETON_PROJECT_ITEMS = Array.from({ length: 6 }, (_, index) => `project-skeleton-${index}`);
 
 export default function ProyectosLoading() {
   return (
-    <>
-      {/* Hero Section */}
-      <Section background={SECTION_BG.GRADIENT} spacing="xl">
+    <div role="status" aria-busy="true" aria-label="Loading projects page">
+      {/* Hero — mirrors InteriorHero used by the real page */}
+      <Section
+        container={false}
+        spacing={null}
+        className="relative overflow-hidden border-b py-16 md:py-24"
+      >
         <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="h-12 bg-muted/50 rounded animate-pulse mb-6 w-2/3 mx-auto" />
-            <div className="h-6 bg-muted/50 rounded animate-pulse w-full mx-auto" />
+          <div
+            data-testid="proyectos-loading-hero"
+            data-region="hero"
+            aria-hidden="true"
+            className="grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_minmax(18rem,0.8fr)] md:gap-14"
+          >
+            <div
+              data-testid="proyectos-loading-hero-content"
+              data-region="hero-content"
+              className="max-w-2xl"
+            >
+              <Skeleton
+                data-testid="proyectos-loading-hero-accent"
+                data-region="hero-accent"
+                className="mb-5 h-1 w-16 rounded-full"
+              />
+              <Skeleton
+                data-testid="proyectos-loading-hero-title"
+                data-region="hero-title"
+                className="h-12 w-3/4 rounded-lg md:h-14"
+              />
+              <Skeleton
+                data-testid="proyectos-loading-hero-description"
+                data-region="hero-description"
+                className="mt-6 h-16 w-full max-w-2xl rounded-lg"
+              />
+            </div>
+            <div className="flex justify-center md:justify-end">
+              <div
+                data-testid="proyectos-loading-hero-motif"
+                data-region="hero-motif"
+                className="w-full rounded-3xl border border-border/70 bg-card/55 p-4 shadow-sm md:p-6"
+              >
+                <Skeleton className="h-48 w-full rounded-2xl" />
+              </div>
+            </div>
           </div>
         </Container>
       </Section>
 
-      {/* Projects Section */}
-      <Section>
+      {/* Projects section — left-aligned search/filter row + card grid */}
+      <Section spacing="lg" container={false}>
         <Container>
-          {/* Search skeleton */}
-          <div className="mb-8">
-            <div className="h-10 bg-muted rounded-lg animate-pulse max-w-md mx-auto" />
-          </div>
+          <div className="space-y-6">
+            <div
+              data-testid="proyectos-loading-filters"
+              data-region="filter"
+              aria-hidden="true"
+              className="flex flex-col gap-4 sm:flex-row"
+            >
+              <Skeleton
+                data-testid="proyectos-loading-search"
+                data-region="search"
+                className="h-12 min-w-0 flex-1 border border-input bg-background"
+              />
+              <Skeleton
+                data-testid="proyectos-loading-filter-control"
+                data-region="control"
+                className="h-12 w-28 border border-border"
+              />
+            </div>
+            <Skeleton
+              data-testid="proyectos-loading-result-count"
+              data-region="result-count"
+              aria-hidden="true"
+              className="h-5 w-40"
+            />
 
-          {/* Grid skeleton */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {SKELETON_PROJECT_CARDS.map((id) => (
-              <ProjectCardSkeleton key={id} />
-            ))}
+            <div
+              data-testid="proyectos-loading-cards"
+              data-region="cards"
+              aria-hidden="true"
+              className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+            >
+              {SKELETON_PROJECT_ITEMS.map((id) => (
+                <div
+                  key={id}
+                  data-testid="proyectos-loading-card"
+                  data-region="card"
+                  className="overflow-hidden rounded-lg border border-border bg-card"
+                >
+                  <Skeleton data-region="card-image" className="h-48 rounded-none" />
+                  <div data-region="card-content" className="p-6">
+                    <Skeleton className="mb-3 h-7 w-3/4" />
+                    <div className="mb-4 space-y-2">
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-4 w-5/6" />
+                      <Skeleton className="h-4 w-4/6" />
+                    </div>
+                    <div data-region="card-tech" className="mb-4 flex flex-wrap gap-1.5">
+                      <Skeleton className="h-5 w-14 rounded-full" />
+                      <Skeleton className="h-5 w-14 rounded-full" />
+                      <Skeleton className="h-5 w-14 rounded-full" />
+                    </div>
+                    <div
+                      data-region="card-actions"
+                      className="flex items-center justify-between border-t border-border/50 pt-4"
+                    >
+                      <Skeleton className="h-9 w-24" />
+                      <div className="flex gap-1">
+                        <Skeleton className="h-9 w-9" />
+                        <Skeleton className="h-9 w-9" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </Container>
       </Section>
-    </>
+    </div>
   );
 }

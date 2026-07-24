@@ -90,7 +90,7 @@ function NewsletterCard({ className, size = 'lg' }: Readonly<NewsletterCardProps
           disabled={status === 'loading' || status === 'success'}
           className={cn(
             currentSize.button,
-            status === 'success' && 'bg-green-600 hover:bg-green-700'
+            status === 'success' && 'bg-success hover:bg-success/90'
           )}
         >
           {status === 'loading' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -147,15 +147,15 @@ export function NewsletterHero() {
 
           <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-600" />
+              <CheckCircle className="h-4 w-4 text-success" />
               <span>{t('benefit1')}</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-600" />
+              <CheckCircle className="h-4 w-4 text-success" />
               <span>{t('benefit2')}</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-600" />
+              <CheckCircle className="h-4 w-4 text-success" />
               <span>{t('benefit3')}</span>
             </div>
           </div>

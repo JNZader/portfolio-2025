@@ -50,6 +50,7 @@ const BLOB_BY_VARIANT: Record<HeroVariant, string> = {
 };
 
 function ProjectsMotif() {
+  const t = useTranslations('InteriorHero');
   return (
     <div
       className="relative mx-auto flex h-48 w-full max-w-sm items-center justify-center"
@@ -68,7 +69,7 @@ function ProjectsMotif() {
       </div>
       <div className="absolute bottom-2 right-1/2 flex h-10 translate-x-1/2 items-center gap-2 rounded-lg border bg-card px-3 font-mono text-[10px] text-muted-foreground shadow-sm">
         <span className="size-1.5 rounded-full bg-success" />
-        API / build / ship
+        {t('projectsBadge')}
       </div>
     </div>
   );
@@ -116,6 +117,7 @@ function BlogMotif() {
 }
 
 function NewsletterMotif() {
+  const t = useTranslations('InteriorHero');
   return (
     <div
       className="relative mx-auto flex h-48 w-full max-w-sm items-center justify-center"
@@ -131,7 +133,7 @@ function NewsletterMotif() {
       <Sparkles className="absolute bottom-8 left-8 size-5 text-primary/40" />
       <div className="absolute bottom-4 right-1/2 flex h-9 translate-x-1/2 items-center gap-2 rounded-lg border bg-card px-3 text-[10px] text-muted-foreground shadow-sm">
         <span className="size-1.5 rounded-full bg-success" />
-        double opt-in
+        {t('newsletterBadge')}
       </div>
     </div>
   );

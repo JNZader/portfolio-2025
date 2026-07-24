@@ -44,4 +44,11 @@ describe('project card visual UX', () => {
     expect(detail.closest('h3')).toBeNull();
     expect(container.querySelectorAll('h3 a').length).toBe(1);
   });
+
+  it('renders the translated private case study badge when flagged', () => {
+    render(<ProjectCard project={{ ...PROJECT, privateCaseStudy: true }} />);
+
+    expect(screen.getByText('Caso de Estudio Privado')).toBeInTheDocument();
+    expect(screen.queryByText('Private Case Study')).not.toBeInTheDocument();
+  });
 });

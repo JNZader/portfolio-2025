@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.23.0](https://github.com/JNZader/portfolio-2025/compare/v2.22.0...v2.23.0) (2026-07-24)
+
+
+### Features
+
+* **ui:** visual batch 4 color tokens ([108e2e3](https://github.com/JNZader/portfolio-2025/commits/108e2e3147912156401ad563245e2197c62dcdc5))
+
 ## [2.22.0](https://github.com/JNZader/portfolio-2025/compare/v2.21.0...v2.22.0) (2026-07-24)
 
 
