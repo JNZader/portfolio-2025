@@ -46,6 +46,9 @@ jobs:
 
       - name: Run tests with coverage
         run: npm run test:coverage
+        env:
+          DATABASE_URL: file:./prisma/dev.db
+          DIRECT_URL: file:./prisma/dev.db
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v7
