@@ -5,7 +5,10 @@ import { visionTool } from '@sanity/vision';
 import { codeInput } from '@sanity/code-input';
 import { markdownSchema } from 'sanity-plugin-markdown';
 import { schemaTypes } from './schemas';
-import { apiVersion, dataset, projectId } from './env';
+import { apiVersion, requireSanityEnv } from './env';
+
+// El Studio EXIGE la config de Sanity: falla en arranque con mensaje claro.
+const { dataset, projectId } = requireSanityEnv();
 
 export default defineConfig({
     name: 'default',

@@ -40,7 +40,7 @@ export async function GET() {
 ${posts
   .map((post) => {
     const postUrl = `${SITE_URL}/blog/${post.slug.current}`;
-    const imageUrl = post.mainImage ? urlForImage(post.mainImage).width(1200).url() : '';
+    const imageUrl = post.mainImage ? (urlForImage(post.mainImage)?.width(1200).url() ?? '') : '';
 
     return `    <item>
       <title><![CDATA[${escapeCdata(post.title)}]]></title>

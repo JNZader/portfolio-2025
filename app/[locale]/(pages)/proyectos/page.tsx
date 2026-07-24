@@ -6,15 +6,11 @@ import Container from '@/components/ui/Container';
 import { InteriorHero } from '@/components/ui/InteriorHero';
 import Section from '@/components/ui/Section';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { mergeLocalAndSanityProjects } from '@/lib/data/projects';
+import { getSanityProjects } from '@/lib/data/projects-page';
 import { getCachedFeaturedProjects } from '@/lib/github/queries';
 import type { Project } from '@/lib/github/types';
 import { logger } from '@/lib/monitoring/logger';
 import { localeAlternates } from '@/lib/seo/alternates';
-import { convertSanityProject } from '@/lib/utils/project';
-import { sanityFetch } from '@/sanity/lib/client';
-import { projectsQuery } from '@/sanity/lib/queries';
-import type { Project as SanityProject } from '@/types/sanity';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('Projects');
@@ -37,37 +33,18 @@ export default async function ProyectosPage({
   setRequestLocale(locale);
   const t = await getTranslations('Projects');
   // Sanity y GitHub son fetches independientes — en paralelo, cada uno con su
-  // propio fallback (allSettled preserva el manejo de error por fuente).
-  const [sanityResult, githubResult] = await Promise.allSettled([
-    sanityFetch<SanityProject[]>({
-      query: projectsQuery,
-      tags: ['project'],
+  // propio fallback. Sanity degrada a los case studies locales cuando falta
+  // su config (V-01, mismo patrón que /cv); GitHub degrada a lista vacía.
+  const [sanityProjects, githubProjects] = await Promise.all([
+    getSanityProjects(locale),
+    getCachedFeaturedProjects().catch((error: unknown): Project[] => {
+      logger.error('Failed to fetch GitHub projects', error as Error, {
+        service: 'projects',
+        path: '/proyectos',
+      });
+      return [];
     }),
-    getCachedFeaturedProjects(),
   ]);
-
-  let sanityProjects: Project[] = [];
-  if (sanityResult.status === 'fulfilled') {
-    sanityProjects = mergeLocalAndSanityProjects(sanityResult.value).map((p) =>
-      convertSanityProject(p, locale)
-    );
-  } else {
-    logger.error('Failed to fetch Sanity projects', sanityResult.reason as Error, {
-      service: 'projects',
-      path: '/proyectos',
-    });
-    sanityProjects = mergeLocalAndSanityProjects([]).map((p) => convertSanityProject(p, locale));
-  }
-
-  let githubProjects: Project[] = [];
-  if (githubResult.status === 'fulfilled') {
-    githubProjects = githubResult.value;
-  } else {
-    logger.error('Failed to fetch GitHub projects', githubResult.reason as Error, {
-      service: 'projects',
-      path: '/proyectos',
-    });
-  }
 
   // Combinar proyectos (Sanity primero, luego GitHub)
   const curatedKeys = new Set(
