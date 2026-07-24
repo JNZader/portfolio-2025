@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Suspense } from 'react';
 import { RevealOnScroll, StaggeredReveal } from '@/components/animations';
 import { NewsletterSkeleton } from '@/components/newsletter/NewsletterSkeleton';
+import { FeaturedProjects } from '@/components/sections/FeaturedProjects';
 import { HeroSection } from '@/components/sections/hero-section';
 import { JsonLd } from '@/components/seo/JsonLd';
 import Section, {
@@ -133,6 +134,12 @@ export default async function HomePage({
           })}
         </StaggeredReveal>
       </Section>
+
+      {/* Decorative Divider */}
+      <SectionDivider variant="gradient" />
+
+      {/* Featured Projects - curated subset, full grid lives at /proyectos */}
+      <FeaturedProjects locale={locale} />
 
       {/* Decorative Divider */}
       <SectionDivider variant="gradient" />

@@ -77,7 +77,11 @@
     "roleYears": "20+ years in tech",
     "certsTitle": "Certifications",
     "certsDetail": "4+ technical certifications",
-    "apigenCaption": "<b>apigen</b> — a tool I built that turns a SQL schema into a complete, running Spring Boot API."
+    "apigenCaption": "<b>apigen</b> — a tool I built that turns a SQL schema into a complete, running Spring Boot API.",
+    "featuredProjectsTitle": "Featured Projects",
+    "featuredProjectsSubtitle": "A selection of recent work",
+    "featuredProjectsCta": "View all projects",
+    "featuredProjectsViewAll": "View all projects"
   },
   "HeroTerminal": {
     "tooltipBold": "Real example generated with apigen.",
