@@ -1,5 +1,4 @@
 import { getTranslations } from 'next-intl/server';
-import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
 import { Link } from '@/i18n/navigation';
 import { MAIN_NAVIGATION } from '@/lib/constants/navigation';
@@ -48,13 +47,10 @@ export default async function Header() {
             ))}
           </div>
 
-          {/* Desktop theme toggle + language + Contacto CTA */}
+          {/* Desktop theme toggle + language */}
           <div className="hidden md:flex md:flex-1 md:justify-end md:items-center md:gap-3">
             <LanguageSwitcher />
             <ThemeToggle />
-            <Button size="sm" asChild>
-              <Link href="/contacto">{tHeader('contactCta')}</Link>
-            </Button>
           </div>
 
           {/* Mobile controls - Client components */}

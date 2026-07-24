@@ -199,7 +199,7 @@ test.describe('Visual UX accessibility and interactions', () => {
     expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(320);
   });
 
-  test('mobile navigation keeps Contact as a clear primary action', async ({ page }) => {
+  test('mobile navigation keeps Contact as a plain nav link', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 720 });
     await page.goto('/');
     await dismissCookieConsent(page);
@@ -209,7 +209,8 @@ test.describe('Visual UX accessibility and interactions', () => {
     const contact = menu.getByRole('link', { name: /^contacto$/i });
     await expect(contact).toBeVisible();
     await expectMinimumTarget(contact);
-    await expect(contact).toHaveClass(/bg-primary/);
+    await expect(contact).not.toHaveClass(/bg-primary/);
+    await expect(contact).not.toHaveClass(/justify-center/);
   });
 
   for (const menuCase of [

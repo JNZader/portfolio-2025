@@ -5,31 +5,35 @@ import { Button } from '@/components/ui/button';
 import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
 import { Link } from '@/i18n/navigation';
 import { getSanityProjects } from '@/lib/data/projects-page';
+import type { Project } from '@/lib/github/types';
 import { selectFeaturedProjects } from '@/lib/utils/projects';
 
 interface FeaturedProjectsProps {
   locale: string;
+  featuredProjects?: Project[];
 }
 
-export async function FeaturedProjects({ locale }: Readonly<FeaturedProjectsProps>) {
+export async function FeaturedProjects({
+  locale,
+  featuredProjects,
+}: Readonly<FeaturedProjectsProps>) {
   const t = await getTranslations('Home');
   const tProjects = await getTranslations('Projects');
-  const projects = await getSanityProjects(locale);
-  const featuredProjects = selectFeaturedProjects(projects);
+  const projects = featuredProjects ?? selectFeaturedProjects(await getSanityProjects(locale));
 
-  if (featuredProjects.length === 0) {
+  if (projects.length === 0) {
     return null;
   }
 
   return (
-    <Section className="content-auto">
+    <Section id="featured-projects" className="content-auto">
       <SectionHeader centered>
         <SectionTitle>{t('featuredProjectsTitle')}</SectionTitle>
         <SectionDescription className="mx-auto">{t('featuredProjectsSubtitle')}</SectionDescription>
       </SectionHeader>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {featuredProjects.map((project) => (
+        {projects.map((project) => (
           <FeaturedProjectCard
             key={project.id}
             project={project}

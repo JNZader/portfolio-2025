@@ -30,10 +30,6 @@ interface HeroSectionProps {
     text: string;
     href: string;
   };
-  secondaryCta?: {
-    text: string;
-    href: string;
-  };
   /** CV/resume download href — rendered as the filled primary CTA via <a download>. */
   cvHref?: string;
   socialLinks?: {
@@ -42,6 +38,7 @@ interface HeroSectionProps {
     email?: string;
     cv?: string;
   };
+  scrollTargetId?: string;
   showScrollIndicator?: boolean;
 }
 
@@ -52,9 +49,9 @@ export async function HeroSection({
   subtitle,
   description,
   primaryCta,
-  secondaryCta,
   cvHref,
   socialLinks,
+  scrollTargetId = 'content',
   showScrollIndicator = true,
 }: Readonly<HeroSectionProps>) {
   const t = await getTranslations('Home');
@@ -101,8 +98,7 @@ export async function HeroSection({
               {description}
             </p>
 
-            {/* CTA hierarchy: Descargar CV (filled, lowest-friction recruiter action) >
-              primaryCta (outline) > secondaryCta (ghost). */}
+            {/* CTA hierarchy: Descargar CV (filled) > primary CTA (outline). */}
             <div className="animate-hero-reveal-5 flex flex-col sm:flex-row sm:flex-wrap gap-4 justify-center lg:justify-start">
               {cvHref && (
                 // Split CV action: "Descargar CV" (filled, primary) + "Ver"
@@ -119,14 +115,6 @@ export async function HeroSection({
                   />
                 </Link>
               </Button>
-              {secondaryCta && (
-                <Button size="lg" variant="ghost" className="btn-ripple" asChild>
-                  <Link href={secondaryCta.href}>
-                    <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
-                    {secondaryCta.text}
-                  </Link>
-                </Button>
-              )}
             </div>
 
             {/* Social Links with hover effects */}
@@ -203,7 +191,7 @@ export async function HeroSection({
         {/* Scroll Indicator */}
         {showScrollIndicator && (
           <div className="animate-hero-reveal-5 absolute bottom-8 left-1/2 transform -translate-x-1/2">
-            <ScrollIndicator targetId="content" />
+            <ScrollIndicator targetId={scrollTargetId} />
           </div>
         )}
       </Container>

@@ -31,10 +31,8 @@ vi.mock('next-intl/server', () => ({
   },
 }));
 
-vi.mock('next/dynamic', () => ({
-  default: () => function DynamicPlaceholder(): ReactNode {
-    return <div data-testid="hero-terminal" aria-hidden="true" />;
-  },
+vi.mock('@/components/sections/HeroTerminal', () => ({
+  HeroTerminal: () => <div data-testid="hero-terminal" aria-hidden="true" />,
 }));
 
 vi.mock('@/i18n/navigation', () => ({
@@ -54,7 +52,11 @@ vi.mock('@/components/ui/ExternalLink', () => ({
 }));
 
 vi.mock('@/components/ui/HeroBackground', () => ({ HeroBackground: () => null }));
-vi.mock('@/components/ui/ScrollIndicator', () => ({ ScrollIndicator: () => null }));
+vi.mock('@/components/ui/ScrollIndicator', () => ({
+  ScrollIndicator: ({ targetId }: { targetId?: string }) => (
+    <div data-testid="scroll-indicator" data-target-id={targetId} />
+  ),
+}));
 
 async function renderHero(nextLocale: 'es' | 'en') {
   locale = nextLocale;
@@ -75,19 +77,15 @@ describe('HeroSection project conversion contract', () => {
   ] as const)('renders the whole localized caption as the sole APiGen link in %s', async (nextLocale, caption) => {
     await renderHero(nextLocale);
 
-    const terminal = screen.getByTestId('hero-terminal');
     const links = screen.getAllByRole('link', { name: exactName(caption) });
     const link = links[0];
-    const paragraph = link.closest('p');
 
     expect(links).toHaveLength(1);
+    expect(screen.getByRole('link', { name: 'Projects' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /contact/i })).not.toBeInTheDocument();
     expect(link).toHaveAttribute('href', nextLocale === 'en' ? '/en/proyectos/apigen' : '/proyectos/apigen');
     expect(link.querySelector('strong')).toHaveTextContent('apigen');
     expect(link).toHaveClass('underline', 'focus-visible:outline-2');
-    expect(paragraph?.previousElementSibling).toBe(terminal);
-    expect(paragraph?.parentElement).toBe(terminal.parentElement);
-    expect(terminal).toHaveAttribute('aria-hidden', 'true');
-    expect(terminal.querySelector('a,button,input,select,textarea,[tabindex]')).toBeNull();
     expect(screen.queryByRole('link', { name: /github/i })).not.toBeInTheDocument();
     expect(screen.queryByTestId('apigen-featured-actions')).not.toBeInTheDocument();
   });

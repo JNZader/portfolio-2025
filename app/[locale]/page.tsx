@@ -1,25 +1,21 @@
-import { Award, Briefcase, Layers, TrendingUp } from 'lucide-react';
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Suspense } from 'react';
-import { RevealOnScroll, StaggeredReveal } from '@/components/animations';
+import { RevealOnScroll } from '@/components/animations';
 import { NewsletterSkeleton } from '@/components/newsletter/NewsletterSkeleton';
 import { FeaturedProjects } from '@/components/sections/FeaturedProjects';
 import { HeroSection } from '@/components/sections/hero-section';
 import { JsonLd } from '@/components/seo/JsonLd';
-import Section, {
-  SECTION_BG,
-  SectionDescription,
-  SectionHeader,
-  SectionTitle,
-} from '@/components/ui/Section';
+import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
 import { SectionDivider } from '@/components/ui/SectionDivider';
 import { SkillsList } from '@/components/ui/SkillsList';
 import { SKILLS_DATA_HOME } from '@/lib/constants';
+import { getSanityProjects } from '@/lib/data/projects-page';
 import { localeAlternates } from '@/lib/seo/alternates';
 import { ogLocaleFields } from '@/lib/seo/metadata';
 import { generatePersonSchema, generateWebSiteSchema } from '@/lib/seo/schema';
+import { selectFeaturedProjects } from '@/lib/utils/projects';
 
 export async function generateMetadata({
   params,
@@ -50,29 +46,18 @@ const NewsletterHero = dynamic(
   }
 );
 
-// Labels/sublabels resolve from the `Home` message namespace. `sublabelKey`
-// (optional) renders small under the label — defines the term for non-technical
-// readers without relying on tooltips (useless on mobile).
-const STATS = [
-  { value: '20+', key: 'statYears', icon: TrendingUp },
-  // Defensible from resume.json: the CV lists exactly 6 end-to-end projects.
-  { value: '6', key: 'statSystems', sublabelKey: 'statSystemsSublabel', icon: Briefcase },
-  { value: '4+', key: 'statCertifications', icon: Award },
-  // Defensible from SKILLS_DATA (backend 6 + frontend 6 + databases 4 + devops 5
-  // = 21 technologies listed across the site); rounded down to 20+.
-  { value: '20+', key: 'statTechnologies', icon: Layers },
-] as const;
-
 export default async function HomePage({
   params,
 }: Readonly<{ params: Promise<{ locale: string }> }>) {
   const { locale } = await params;
   // Opt into static rendering while using translations.
   setRequestLocale(locale);
-  const t = await getTranslations('Home');
+  const [t, projects] = await Promise.all([getTranslations('Home'), getSanityProjects(locale)]);
+  const featuredProjects = selectFeaturedProjects(projects);
   // Generate structured data schemas
   const personSchema = generatePersonSchema(locale);
   const websiteSchema = generateWebSiteSchema();
+  const scrollTargetId = featuredProjects.length > 0 ? 'featured-projects' : 'content';
 
   return (
     <>
@@ -86,17 +71,14 @@ export default async function HomePage({
         jobTitle={t('heroJobTitle')}
         title="Javier Zader"
         description={t('heroDescription')}
-        // CTA hierarchy: Descargar CV (filled, lowest-friction recruiter action) >
-        // Ver Proyectos (outline) > Contactar (ghost). CV renders as <a download>
-        // so the /api/resume PDF attachment downloads instead of SPA-navigating.
+        // CTA hierarchy: Descargar CV (filled) > Ver Proyectos (outline).
+        // CV renders as <a download> so the /api/resume PDF attachment
+        // downloads instead of SPA-navigating.
         cvHref={locale === 'en' ? '/api/resume?locale=en' : '/api/resume'}
+        scrollTargetId={scrollTargetId}
         primaryCta={{
           text: t('heroCtaProjects'),
           href: '/proyectos',
-        }}
-        secondaryCta={{
-          text: t('heroCtaContact'),
-          href: '/contacto',
         }}
         socialLinks={{
           github: 'https://github.com/JNZader',
@@ -104,42 +86,8 @@ export default async function HomePage({
         }}
       />
 
-      {/* Quick Stats - below the fold, use content-visibility */}
-      <Section background={SECTION_BG.MUTED} spacing="lg" className="content-auto">
-        <StaggeredReveal
-          staggerDelay={0.1}
-          className="grid w-full grid-cols-2 gap-4 md:grid-cols-4 md:gap-8"
-        >
-          {STATS.map((stat) => {
-            const Icon = stat.icon;
-            return (
-              <div
-                key={stat.key}
-                className="group w-full min-w-0 rounded-xl border border-transparent bg-card/50 p-6 text-center card-hover hover:border-primary/20"
-              >
-                <div className="flex items-center justify-center gap-3 mb-2">
-                  <div className="p-3 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                    <Icon className="w-6 h-6 text-primary" aria-hidden="true" />
-                  </div>
-                </div>
-                <div className="text-4xl font-bold text-display text-primary">{stat.value}</div>
-                <div className="mt-2 text-sm text-muted-foreground">{t(stat.key)}</div>
-                {'sublabelKey' in stat && (
-                  <div className="mt-1 font-mono text-xs text-muted-foreground">
-                    {t(stat.sublabelKey)}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </StaggeredReveal>
-      </Section>
-
-      {/* Decorative Divider */}
-      <SectionDivider variant="gradient" />
-
       {/* Featured Projects - curated subset, full grid lives at /proyectos */}
-      <FeaturedProjects locale={locale} />
+      <FeaturedProjects locale={locale} featuredProjects={featuredProjects} />
 
       {/* Decorative Divider */}
       <SectionDivider variant="gradient" />
@@ -154,7 +102,7 @@ export default async function HomePage({
         </RevealOnScroll>
 
         <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             {/* Main Content */}
             <RevealOnScroll className="lg:col-span-2">
               <div className="space-y-6">
@@ -181,8 +129,7 @@ export default async function HomePage({
             {/* Sidebar */}
             <RevealOnScroll delay={0.2}>
               <div className="space-y-6">
-                {/* Skills Card */}
-                <div className="glass-card p-6 rounded-xl card-hover">
+                <div className="rounded-xl border border-border/70 bg-card/70 p-6 shadow-sm">
                   <h3 className="text-lg font-bold mb-4 heading-accent">{t('skillsHeading')}</h3>
                   <div className="space-y-4">
                     <SkillsList title="Backend" skills={SKILLS_DATA_HOME.backend} />
@@ -191,8 +138,7 @@ export default async function HomePage({
                   </div>
                 </div>
 
-                {/* Experience Card */}
-                <div className="glass-card p-6 rounded-xl card-hover">
+                <div className="rounded-xl border border-border/70 bg-card/70 p-6 shadow-sm">
                   <h3 className="text-lg font-bold mb-4 heading-accent">
                     {t('experienceHeading')}
                   </h3>
@@ -212,9 +158,6 @@ export default async function HomePage({
           </div>
         </div>
       </Section>
-
-      {/* Decorative Divider */}
-      <SectionDivider variant="gradient" />
 
       {/* Newsletter Section */}
       <Suspense fallback={<NewsletterSkeleton />}>

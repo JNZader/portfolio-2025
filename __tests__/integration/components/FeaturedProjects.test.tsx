@@ -4,8 +4,10 @@ import { render, screen } from '@/__tests__/test-utils';
 import { FeaturedProjects } from '@/components/sections/FeaturedProjects';
 import type { Project } from '@/lib/github/types';
 
-async function renderFeaturedProjects(locale: string) {
-  return render(<>{await FeaturedProjects({ locale })}</>);
+async function renderFeaturedProjects(locale: string, featuredProjects: Project[]) {
+  return render(
+    <>{await FeaturedProjects({ locale, featuredProjects } as never)}</>
+  );
 }
 
 vi.mock('@/lib/data/projects-page', () => ({
@@ -50,14 +52,16 @@ function createProject(id: string, overrides: Partial<Project> = {}): Project {
 describe('FeaturedProjects', () => {
   it('renders the section heading and subtitle', async () => {
     const { getSanityProjects } = await import('@/lib/data/projects-page');
-    vi.mocked(getSanityProjects).mockResolvedValue([
-      createProject('alpha'),
-    ]);
+    vi.mocked(getSanityProjects).mockResolvedValue([createProject('from-loader')]);
 
-    await renderFeaturedProjects('es');
+    await renderFeaturedProjects('es', [createProject('alpha')]);
 
     expect(screen.getByRole('heading', { name: 'Proyectos Destacados' })).toBeInTheDocument();
     expect(screen.getByText('Una selección de trabajos recientes')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Proyectos Destacados' }).closest('section')).toHaveAttribute(
+      'id',
+      'featured-projects'
+    );
   });
 
   it('renders up to 4 project cards and prefers featured projects first', async () => {
@@ -70,7 +74,12 @@ describe('FeaturedProjects', () => {
       createProject('third', { featured: false }),
     ]);
 
-    await renderFeaturedProjects('es');
+    await renderFeaturedProjects('es', [
+      createProject('featured-1', { featured: true }),
+      createProject('featured-2', { featured: true }),
+      createProject('first', { featured: false }),
+      createProject('second', { featured: false }),
+    ]);
 
     const links = screen.getAllByRole('link', { name: /Project / });
     expect(links).toHaveLength(4);
@@ -87,12 +96,11 @@ describe('FeaturedProjects', () => {
       createProject('fallback-1', { featured: false }),
     ]);
 
-    await renderFeaturedProjects('es');
+    await renderFeaturedProjects('es', [createProject('only-featured', { featured: true })]);
 
     const links = screen.getAllByRole('link', { name: /Project / });
-    expect(links).toHaveLength(2);
+    expect(links).toHaveLength(1);
     expect(links[0]).toHaveAttribute('href', '/proyectos/only-featured');
-    expect(links[1]).toHaveAttribute('href', '/proyectos/fallback-1');
   });
 
   it('renders the view-all CTA linking to /proyectos', async () => {
@@ -101,7 +109,7 @@ describe('FeaturedProjects', () => {
       createProject('alpha'),
     ]);
 
-    await renderFeaturedProjects('es');
+    await renderFeaturedProjects('es', [createProject('alpha')]);
 
     const cta = screen.getByRole('link', { name: 'Ver todos los proyectos' });
     expect(cta).toHaveAttribute('href', '/proyectos');
@@ -111,7 +119,7 @@ describe('FeaturedProjects', () => {
     const { getSanityProjects } = await import('@/lib/data/projects-page');
     vi.mocked(getSanityProjects).mockResolvedValue([]);
 
-    await renderFeaturedProjects('es');
+    await renderFeaturedProjects('es', []);
 
     expect(screen.queryByRole('heading', { name: 'Proyectos Destacados' })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /Project / })).not.toBeInTheDocument();

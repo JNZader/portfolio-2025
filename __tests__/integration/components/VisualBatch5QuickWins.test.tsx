@@ -81,6 +81,34 @@ describe('batch 5 / N-02: private case study badge is i18n', () => {
   });
 });
 
+describe('batch 5 / N-03: anti-template home/nav keys are pruned', () => {
+  it('removes Home from the main nav source', () => {
+    const source = readSource('lib/constants/navigation.ts');
+
+    expect(source).not.toContain("{ key: 'home', href: '/' }");
+    expect(source).toContain("{ key: 'about', href: '/sobre-mi' }");
+    expect(source).toContain("{ key: 'projects', href: '/proyectos' }");
+    expect(source).toContain("{ key: 'blog', href: '/blog' }");
+    expect(source).toContain("{ key: 'contact', href: '/contacto' }");
+  });
+
+  it('removes the footer Services column source block', () => {
+    const source = readSource('components/layout/Footer.tsx');
+
+    expect(source).not.toContain('data-footer-column="services"');
+    expect(source).not.toContain('servicesHeading');
+    expect(source).not.toContain('serviceBackend');
+    expect(source).not.toContain('serviceApis');
+  });
+
+  it('prunes Home and Services keys from both locale catalogs', () => {
+    expect(esMessages.Nav.home).toBeUndefined();
+    expect(enMessages.Nav.home).toBeUndefined();
+    expect(esMessages.Footer.servicesHeading).toBeUndefined();
+    expect(enMessages.Footer.servicesHeading).toBeUndefined();
+  });
+});
+
 describe('batch 5 / N-04: token sweep leftovers migrated', () => {
   const FILES = [
     'components/newsletter/NewsletterHero.tsx',

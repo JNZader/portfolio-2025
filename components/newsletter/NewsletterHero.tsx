@@ -60,8 +60,9 @@ function NewsletterCard({ className, size = 'lg' }: Readonly<NewsletterCardProps
 
   return (
     <div
+      data-testid="newsletter-card"
       className={cn(
-        'rounded-lg border bg-card text-card-foreground shadow-sm',
+        'rounded-xl border border-border/70 bg-card/80 text-card-foreground shadow-sm backdrop-blur-sm',
         currentSize.container,
         className
       )}
@@ -128,33 +129,32 @@ function NewsletterCard({ className, size = 'lg' }: Readonly<NewsletterCardProps
 export function NewsletterHero() {
   const t = useTranslations('Newsletter');
   return (
-    <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+    <section className="py-12 border-t border-border/50 bg-muted/20">
       <div className="container max-w-4xl mx-auto px-4">
-        <div className="text-center space-y-8">
-          <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+        <div className="text-center space-y-6">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/80 px-3 py-1 text-sm font-medium text-muted-foreground">
               <Mail className="h-4 w-4" />
               {t('badge')}
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold">{t('heading')}</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{t('description')}</p>
+            <h2 className="text-2xl font-bold md:text-3xl">{t('heading')}</h2>
+            <p className="mx-auto max-w-2xl text-base text-muted-foreground md:text-lg">
+              {t('description')}
+            </p>
           </div>
 
-          <NewsletterCard
-            size="lg"
-            className="max-w-md mx-auto border-2 border-primary/20 bg-background/60 backdrop-blur-sm"
-          />
+          <NewsletterCard size="md" className="mx-auto max-w-lg" />
 
-          <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 rounded-full border border-border/60 bg-background/70 px-3 py-1">
               <CheckCircle className="h-4 w-4 text-success" />
               <span>{t('benefit1')}</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 rounded-full border border-border/60 bg-background/70 px-3 py-1">
               <CheckCircle className="h-4 w-4 text-success" />
               <span>{t('benefit2')}</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 rounded-full border border-border/60 bg-background/70 px-3 py-1">
               <CheckCircle className="h-4 w-4 text-success" />
               <span>{t('benefit3')}</span>
             </div>
