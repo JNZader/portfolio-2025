@@ -2,8 +2,8 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Button } from '@/components/ui/button';
-import { useRouter } from '@/i18n/navigation';
+import { buttonVariants } from '@/components/ui/button';
+import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { getPageNumbers } from '@/lib/utils/blog';
 
@@ -13,14 +13,13 @@ interface PaginationProps {
 }
 
 export function Pagination({ currentPage, totalPages }: Readonly<PaginationProps>) {
-  const router = useRouter();
   const t = useTranslations('Blog');
   const searchParams = useSearchParams();
 
-  const handlePageChange = (page: number) => {
+  const pageHref = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('page', page.toString());
-    router.push(`/blog?${params.toString()}`);
+    return `/blog?${params.toString()}`;
   };
 
   const pageNumbers = getPageNumbers(currentPage, totalPages);
@@ -29,19 +28,29 @@ export function Pagination({ currentPage, totalPages }: Readonly<PaginationProps
     return null;
   }
 
+  const prevNextClasses = cn(
+    buttonVariants({ variant: 'outline', size: 'sm' }),
+    'h-11 no-underline'
+  );
+
   return (
     <nav className="flex items-center justify-center gap-2" aria-label={t('paginationLabel')}>
-      {/* Previous */}
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => handlePageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        aria-label={t('previousPage')}
-      >
-        <ChevronLeftIcon className="h-4 w-4" />
-        <span className="sr-only sm:not-sr-only sm:ml-2">{t('previous')}</span>
-      </Button>
+      {/* Previous — span deshabilitado en la primera página (no es navegable) */}
+      {currentPage > 1 ? (
+        <Link
+          href={pageHref(currentPage - 1)}
+          className={prevNextClasses}
+          aria-label={t('previousPage')}
+        >
+          <ChevronLeftIcon className="h-4 w-4" />
+          <span className="sr-only sm:not-sr-only sm:ml-2">{t('previous')}</span>
+        </Link>
+      ) : (
+        <span className={cn(prevNextClasses, 'pointer-events-none opacity-50')} aria-hidden="true">
+          <ChevronLeftIcon className="h-4 w-4" />
+          <span className="sr-only sm:not-sr-only sm:ml-2">{t('previous')}</span>
+        </span>
+      )}
 
       {/* Page numbers */}
       <div className="hidden sm:flex sm:gap-2">
@@ -52,7 +61,7 @@ export function Pagination({ currentPage, totalPages }: Readonly<PaginationProps
             return (
               <span
                 key={`ellipsis-after-${prevPage}`}
-                className="flex h-9 w-9 items-center justify-center"
+                className="flex size-11 items-center justify-center"
               >
                 ...
               </span>
@@ -62,17 +71,19 @@ export function Pagination({ currentPage, totalPages }: Readonly<PaginationProps
           const isActive = pageNum === currentPage;
 
           return (
-            <Button
+            <Link
               key={pageNum}
-              variant={isActive ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => handlePageChange(pageNum)}
-              className={cn('h-9 w-9 p-0', isActive && 'pointer-events-none')}
+              href={pageHref(pageNum)}
+              className={cn(
+                buttonVariants({ variant: isActive ? 'default' : 'outline', size: 'sm' }),
+                'size-11 px-0 no-underline',
+                isActive && 'pointer-events-none'
+              )}
               aria-label={t('pageNumber', { page: pageNum })}
               aria-current={isActive ? 'page' : undefined}
             >
               {pageNum}
-            </Button>
+            </Link>
           );
         })}
       </div>
@@ -84,17 +95,22 @@ export function Pagination({ currentPage, totalPages }: Readonly<PaginationProps
         </span>
       </div>
 
-      {/* Next */}
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => handlePageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        aria-label={t('nextPage')}
-      >
-        <span className="sr-only sm:not-sr-only sm:mr-2">{t('next')}</span>
-        <ChevronRightIcon className="h-4 w-4" />
-      </Button>
+      {/* Next — span deshabilitado en la última página (no es navegable) */}
+      {currentPage < totalPages ? (
+        <Link
+          href={pageHref(currentPage + 1)}
+          className={prevNextClasses}
+          aria-label={t('nextPage')}
+        >
+          <span className="sr-only sm:not-sr-only sm:mr-2">{t('next')}</span>
+          <ChevronRightIcon className="h-4 w-4" />
+        </Link>
+      ) : (
+        <span className={cn(prevNextClasses, 'pointer-events-none opacity-50')} aria-hidden="true">
+          <span className="sr-only sm:not-sr-only sm:mr-2">{t('next')}</span>
+          <ChevronRightIcon className="h-4 w-4" />
+        </span>
+      )}
     </nav>
   );
 }

@@ -1,12 +1,12 @@
 'use client';
 
-import { Filter, Search, X } from 'lucide-react';
+import { Filter, X } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useId, useState, useTransition } from 'react';
-import { useDebounce } from 'use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { SearchInput } from '@/components/ui/SearchInput';
 import { useRouter } from '@/i18n/navigation';
 import { isValidSearchTerm } from '@/lib/utils/search';
 import type { Category } from '@/types/sanity';
@@ -27,8 +27,8 @@ export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProp
   const [searchInput, setSearchInput] = useState(searchParams.get('search') ?? '');
   const [showFilters, setShowFilters] = useState(false);
 
-  // Debounced search
-  const [debouncedSearch] = useDebounce(searchInput, 500);
+  // Valor debounceado emitido por SearchInput (URL sync)
+  const [debouncedSearch, setDebouncedSearch] = useState(searchParams.get('search') ?? '');
 
   // Valores actuales de URL
   const currentCategory = searchParams.get('category');
@@ -98,29 +98,15 @@ export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProp
     <div className={`space-y-4 ${isPending ? 'opacity-70' : ''}`}>
       {/* Barra de búsqueda */}
       <search className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input
-            type="text"
-            name="search"
-            id="blog-search"
-            aria-label={t('searchLabel')}
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder={t('searchPlaceholder')}
-            className="w-full pl-10 pr-4 py-2 border border-input bg-background rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground"
-          />
-          {searchInput && (
-            <button
-              type="button"
-              onClick={() => setSearchInput('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              aria-label={t('clearSearch')}
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-        </div>
+        <SearchInput
+          id="blog-search"
+          value={searchInput}
+          onChange={setSearchInput}
+          onDebouncedChange={setDebouncedSearch}
+          placeholder={t('searchPlaceholder')}
+          ariaLabel={t('searchLabel')}
+          clearAriaLabel={t('clearSearch')}
+        />
 
         <div className="flex gap-2">
           <Button

@@ -17,6 +17,26 @@ interface PostCardProps {
   priority?: boolean;
 }
 
+/**
+ * Fallback visual para posts sin mainImage, análogo a ProjectVisual en
+ * proyectos: gradiente temático + inicial del título, manteniendo el
+ * aspect ratio 16:9 del contenedor padre.
+ */
+function PostVisual({ title }: Readonly<{ title: string }>) {
+  const initial = title.trim().charAt(0).toUpperCase() || '·';
+
+  return (
+    <div
+      data-post-visual
+      aria-hidden="true"
+      className="absolute inset-0 flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary/15 via-background to-tertiary/15"
+    >
+      <div className="absolute inset-4 rounded-xl border border-primary/10" />
+      <span className="text-5xl font-bold text-primary/50">{initial}</span>
+    </div>
+  );
+}
+
 export function PostCard({ post, priority = false }: Readonly<PostCardProps>) {
   const locale = useLocale();
   const t = useTranslations('Blog');
@@ -39,7 +59,7 @@ export function PostCard({ post, priority = false }: Readonly<PostCardProps>) {
         className="relative aspect-[16/9] overflow-hidden bg-muted"
         aria-label={post.title}
       >
-        {imageUrl && (
+        {imageUrl ? (
           <>
             <Image
               src={imageUrl}
@@ -54,6 +74,8 @@ export function PostCard({ post, priority = false }: Readonly<PostCardProps>) {
             {/* Gradient overlay for better badge contrast */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent" />
           </>
+        ) : (
+          <PostVisual title={post.title} />
         )}
 
         {/* Featured badge */}

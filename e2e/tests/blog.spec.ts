@@ -305,7 +305,7 @@ test.describe('Blog loading contract', () => {
     await expect(loadingStatus).toHaveCount(0, { timeout: 30000 });
     await expect(page).toHaveURL(/\/blog(?:\?.*)?$/);
     await expect(page.getByRole('heading', { name: /blog/i, level: 1 })).toBeVisible();
-    await expect(page.getByRole('textbox', { name: /buscar/i })).toBeVisible();
+    await expect(page.getByRole('searchbox', { name: /buscar/i })).toBeVisible();
     await expect(page.locator('[data-region="hero"], [data-region="filter"], [data-region="cards"]')).toHaveCount(0);
   });
 });
@@ -403,7 +403,7 @@ test.describe('Blog', () => {
     await dismissCookieConsent(page);
 
     // Find search input - should always be visible
-    const searchInput = page.getByRole('textbox', { name: /buscar/i });
+    const searchInput = page.getByRole('searchbox', { name: /buscar/i });
     await expect(searchInput).toBeVisible();
   });
 
@@ -411,7 +411,7 @@ test.describe('Blog', () => {
     await page.goto('/blog');
     await dismissCookieConsent(page);
 
-    const searchInput = page.getByRole('textbox', { name: /buscar/i });
+    const searchInput = page.getByRole('searchbox', { name: /buscar/i });
     await searchInput.fill(testData.search.noResultsQuery);
 
     // Wait for URL to update (indicates search completed)

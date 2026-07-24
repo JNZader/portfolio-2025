@@ -26,6 +26,7 @@ interface ToggleSwitchProps {
 }
 
 function ToggleSwitch({ id, checked, onChange, disabled }: Readonly<ToggleSwitchProps>) {
+  // Hit area de 44x44 (size-11) alrededor del track visual de 40x24.
   return (
     <button
       id={id}
@@ -35,17 +36,23 @@ function ToggleSwitch({ id, checked, onChange, disabled }: Readonly<ToggleSwitch
       disabled={disabled}
       onClick={() => !disabled && onChange(!checked)}
       className={cn(
-        'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
-        checked ? 'bg-primary' : 'bg-muted-foreground/30',
+        'inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
         disabled && 'cursor-not-allowed opacity-60'
       )}
     >
       <span
         className={cn(
-          'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out',
-          checked ? 'translate-x-5' : 'translate-x-0'
+          'relative inline-flex h-6 w-10 items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out',
+          checked ? 'bg-primary' : 'bg-muted-foreground/30'
         )}
-      />
+      >
+        <span
+          className={cn(
+            'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out',
+            checked ? 'translate-x-4' : 'translate-x-0'
+          )}
+        />
+      </span>
     </button>
   );
 }

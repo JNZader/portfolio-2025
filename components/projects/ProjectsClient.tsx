@@ -4,10 +4,9 @@ import { Filter, Search, X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
-import { useDebounce } from 'use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { SearchInput } from '@/components/ui/SearchInput';
 import type { Project } from '@/lib/github/types';
 import ProjectCard from './ProjectCard';
 
@@ -35,8 +34,9 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
 
   // Debounced URL sync: the input stays instantly responsive (local state +
   // live filtering), but the router.replace side-effect is debounced so we
-  // don't push a history/URL update on every keystroke.
-  const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
+  // don't push a history/URL update on every keystroke. El debounce vive en
+  // SearchInput; aquí solo recibimos el valor ya asentado.
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
 
   // Extraer todas las tecnologías únicas
   const allTechs = useMemo(() => {
@@ -124,27 +124,14 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
     <div className="space-y-6">
       {/* Barra de búsqueda */}
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            value={searchQuery}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            placeholder={t('searchPlaceholder')}
-            aria-label={t('searchAria')}
-            className="pl-10 pr-12"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => handleSearchChange('')}
-              className="absolute right-0.5 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              aria-label={t('clearSearchAria')}
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-        </div>
+        <SearchInput
+          value={searchQuery}
+          onChange={handleSearchChange}
+          onDebouncedChange={setDebouncedSearchQuery}
+          placeholder={t('searchPlaceholder')}
+          ariaLabel={t('searchAria')}
+          clearAriaLabel={t('clearSearchAria')}
+        />
 
         <div className="flex gap-2">
           <Button
