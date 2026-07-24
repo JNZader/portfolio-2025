@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.21.0](https://github.com/JNZader/portfolio-2025/compare/v2.20.9...v2.21.0) (2026-07-24)
+
+
+### Features
+
+* **ui:** batch 2 shared primitives and loading states ([b33dd05](https://github.com/JNZader/portfolio-2025/commits/b33dd051656ee6455abeaf17cce91fe8299b6602))
+
 ## [2.20.9](https://github.com/JNZader/portfolio-2025/compare/v2.20.8...v2.20.9) (2026-07-23)
 
 
