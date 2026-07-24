@@ -121,7 +121,7 @@ export function PrivacyEs() {
       </p>
 
       <h2>7. Tus Derechos</h2>
-      <div className="bg-[var(--color-primary)]/10 border border-[var(--color-primary)] rounded-lg p-6 my-6">
+      <div className="bg-primary/10 border border-primary rounded-lg p-6 my-6">
         <h3 className="mt-0">Derechos del Usuario (Ley 25.326 y GDPR)</h3>
         <ul className="mb-0">
           <li>
@@ -225,7 +225,7 @@ export function PrivacyEs() {
         Para cualquier pregunta sobre esta política o para ejercer tus derechos de protección de
         datos, contacta a:
       </p>
-      <div className="bg-[var(--color-muted)] rounded-lg p-4 my-4">
+      <div className="bg-muted rounded-lg p-4 my-4">
         <p className="mb-2">
           <strong>Responsable del Tratamiento:</strong>
         </p>
@@ -260,7 +260,7 @@ export function PrivacyEs() {
       </ul>
 
       <hr />
-      <p className="text-sm text-[var(--color-foreground)]/60">
+      <p className="text-sm text-foreground/60">
         <strong>Versión:</strong> 1.0 | <strong>Fecha efectiva:</strong> Enero de 2025
       </p>
     </>

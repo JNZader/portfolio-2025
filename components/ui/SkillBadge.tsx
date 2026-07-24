@@ -17,7 +17,7 @@ interface SkillBadgeProps {
  *
  * @example
  * ```tsx
- * <SkillBadge name="React" icon={Code2} color="text-cyan-500" />
+ * <SkillBadge name="React" icon={Code2} color="text-info" />
  * ```
  */
 export function SkillBadge({ name, icon: Icon, color, className }: Readonly<SkillBadgeProps>) {

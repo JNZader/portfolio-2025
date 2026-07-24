@@ -170,7 +170,7 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
 
         {project.source === 'github' && project.stars !== undefined && project.stars > 0 && (
           <div className="mb-4 flex items-center gap-1.5 text-sm text-muted-foreground">
-            <Star className="size-4 fill-yellow-500 text-yellow-500" />
+            <Star className="size-4 fill-warning text-warning" />
             <span className="font-medium">{project.stars}</span>
           </div>
         )}

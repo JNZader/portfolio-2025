@@ -120,8 +120,8 @@ export default async function SobreMiPage({
                   </div>
 
                   <div className="relative pl-8">
-                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-purple-500/10 border-2 border-purple-500 flex items-center justify-center">
-                      <BookOpen className="w-3 h-3 text-purple-500" />
+                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center">
+                      <BookOpen className="w-3 h-3 text-primary" />
                     </div>
                     <h4 className="font-semibold text-sm">{t('edu2Degree')}</h4>
                     <p className="text-xs text-muted-foreground mt-1">Alura LATAM</p>
@@ -129,8 +129,8 @@ export default async function SobreMiPage({
                   </div>
 
                   <div className="relative pl-8">
-                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-orange-500/10 border-2 border-orange-500 flex items-center justify-center">
-                      <Code2 className="w-3 h-3 text-orange-500" />
+                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-accent-warm/10 border-2 border-accent-warm flex items-center justify-center">
+                      <Code2 className="w-3 h-3 text-accent-warm" />
                     </div>
                     <h4 className="font-semibold text-sm">{t('edu3Degree')}</h4>
                     <p className="text-xs text-muted-foreground mt-1">Alura LATAM</p>
@@ -138,8 +138,8 @@ export default async function SobreMiPage({
                   </div>
 
                   <div className="relative pl-8">
-                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-green-500/10 border-2 border-green-500 flex items-center justify-center">
-                      <BookOpen className="w-3 h-3 text-green-500" />
+                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-success/10 border-2 border-success flex items-center justify-center">
+                      <BookOpen className="w-3 h-3 text-success" />
                     </div>
                     <h4 className="font-semibold text-sm">Argentina Programa</h4>
                     <p className="text-xs text-muted-foreground mt-1">{t('edu4Sub')}</p>
@@ -147,8 +147,8 @@ export default async function SobreMiPage({
                   </div>
 
                   <div className="relative pl-8">
-                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-blue-500/10 border-2 border-blue-500 flex items-center justify-center">
-                      <Award className="w-3 h-3 text-blue-500" />
+                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-info/10 border-2 border-info flex items-center justify-center">
+                      <Award className="w-3 h-3 text-info" />
                     </div>
                     <h4 className="font-semibold text-sm">{t('edu5Degree')}</h4>
                     <p className="text-xs text-muted-foreground mt-1">Fundación Proydesa</p>

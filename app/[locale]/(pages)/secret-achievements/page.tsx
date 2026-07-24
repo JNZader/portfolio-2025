@@ -48,7 +48,7 @@ export default function SecretAchievementsPage() {
             key={achievement.id}
             className={`flex items-center gap-4 p-5 rounded-lg border-2 transition-all ${
               achievement.unlocked
-                ? 'bg-card border-green-500/50 shadow-md'
+                ? 'bg-card border-success/50 shadow-md'
                 : 'bg-muted/30 border-border opacity-50'
             }`}
           >
@@ -66,7 +66,7 @@ export default function SecretAchievementsPage() {
             </div>
 
             {achievement.unlocked && (
-              <span className="text-green-500 text-sm font-medium shrink-0">✓</span>
+              <span className="text-success text-sm font-medium shrink-0">✓</span>
             )}
           </div>
         ))}

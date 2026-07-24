@@ -197,8 +197,8 @@ export function CookieConsent() {
                 {/* Essential */}
                 <div className="flex items-center justify-between gap-3 rounded-xl bg-muted/50 p-3">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500/10">
-                      <Shield className="h-4 w-4 text-green-600 dark:text-green-400" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success/10">
+                      <Shield className="h-4 w-4 text-success" />
                     </div>
                     <div>
                       <label htmlFor="essential" className="font-medium text-sm text-foreground">
@@ -218,8 +218,8 @@ export function CookieConsent() {
                 {/* Analytics */}
                 <div className="flex items-center justify-between gap-3 rounded-xl bg-muted/50 p-3">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
-                      <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-info/10">
+                      <BarChart3 className="h-4 w-4 text-info" />
                     </div>
                     <div>
                       <label htmlFor="analytics" className="font-medium text-sm text-foreground">
@@ -240,8 +240,8 @@ export function CookieConsent() {
                 {/* Marketing */}
                 <div className="flex items-center justify-between gap-3 rounded-xl bg-muted/50 p-3">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10">
-                      <Megaphone className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-warm/10">
+                      <Megaphone className="h-4 w-4 text-accent-warm" />
                     </div>
                     <div>
                       <label htmlFor="marketing" className="font-medium text-sm text-foreground">
