@@ -49,7 +49,7 @@ export function DataRequestForm() {
         {isLoading ? t('submitting') : t('exportSubmit')}
       </Button>
 
-      <p className="text-sm text-[var(--color-foreground)]/60">{t('exportHelper')}</p>
+      <p className="text-sm text-foreground/60">{t('exportHelper')}</p>
     </form>
   );
 }
