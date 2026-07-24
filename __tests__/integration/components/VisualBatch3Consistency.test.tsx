@@ -54,6 +54,10 @@ vi.mock('@/lib/utils/tech-icons', () => ({ getTechIcon: () => ({ icon: () => nul
 
 // ContactForm side-effect dependencies
 vi.mock('@/app/actions/contact', () => ({ sendContactEmail: vi.fn() }));
+// NewsletterForm imports the server action, which imports Prisma at module
+// level and throws without DATABASE_URL. Mock it so this spec stays hermetic
+// (same pattern as NewsletterForm.test.tsx).
+vi.mock('@/app/actions/newsletter', () => ({ subscribeToNewsletter: vi.fn() }));
 vi.mock('@/lib/validations/email-validator-client', () => ({
   quickValidateEmail: vi.fn(() => ({ isValid: true })),
 }));
