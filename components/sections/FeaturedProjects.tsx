@@ -13,6 +13,7 @@ interface FeaturedProjectsProps {
 
 export async function FeaturedProjects({ locale }: Readonly<FeaturedProjectsProps>) {
   const t = await getTranslations('Home');
+  const tProjects = await getTranslations('Projects');
   const projects = await getSanityProjects(locale);
   const featuredProjects = selectFeaturedProjects(projects);
 
@@ -29,7 +30,12 @@ export async function FeaturedProjects({ locale }: Readonly<FeaturedProjectsProp
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         {featuredProjects.map((project) => (
-          <FeaturedProjectCard key={project.id} project={project} />
+          <FeaturedProjectCard
+            key={project.id}
+            project={project}
+            badgeCuratedLabel={tProjects('badgeCurated')}
+            viewDetailsLabel={tProjects('viewDetails')}
+          />
         ))}
       </div>
 

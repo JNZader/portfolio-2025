@@ -1,7 +1,4 @@
-'use client';
-
 import { ArrowRight } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,11 +7,15 @@ import type { Project } from '@/lib/github/types';
 
 interface FeaturedProjectCardProps {
   project: Project;
+  badgeCuratedLabel: string;
+  viewDetailsLabel: string;
 }
 
-export function FeaturedProjectCard({ project }: Readonly<FeaturedProjectCardProps>) {
-  const t = useTranslations('Projects');
-
+export function FeaturedProjectCard({
+  project,
+  badgeCuratedLabel,
+  viewDetailsLabel,
+}: Readonly<FeaturedProjectCardProps>) {
   return (
     <Card
       variant="interactive"
@@ -25,7 +26,7 @@ export function FeaturedProjectCard({ project }: Readonly<FeaturedProjectCardPro
           variant="secondary"
           className="border border-border/50 bg-background/85 shadow-sm backdrop-blur-sm"
         >
-          {project.source === 'github' ? 'GitHub' : t('badgeCurated')}
+          {project.source === 'github' ? 'GitHub' : badgeCuratedLabel}
         </Badge>
       </div>
 
@@ -59,7 +60,7 @@ export function FeaturedProjectCard({ project }: Readonly<FeaturedProjectCardPro
         <div className="mt-auto flex items-center border-t border-border/50 pt-4">
           <Button variant="ghost" size="sm" asChild className="group/btn relative z-10">
             <Link href={`/proyectos/${project.id}`}>
-              {t('viewDetails')}
+              {viewDetailsLabel}
               <ArrowRight className="ml-1 size-4 transition-transform group-hover/btn:translate-x-1 motion-reduce:transition-none" />
             </Link>
           </Button>
