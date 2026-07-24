@@ -57,10 +57,13 @@ vi.mock('@/components/sections/FeaturedProjects', () => ({
       if (props.featuredProjects && props.featuredProjects.length === 0) return null;
       return (
         <section
+          id="featured-projects"
           data-testid="featured-projects"
           data-locale={props.locale ?? ''}
           data-count={props.featuredProjects?.length ?? 0}
-        />
+        >
+          <a href="/proyectos">View all projects</a>
+        </section>
       );
     }
   ),
@@ -111,6 +114,12 @@ describe('HomePage anti-template composition', () => {
     const dividers = screen.getAllByTestId('divider');
 
     expect(hero).toHaveAttribute('data-scroll-target', 'featured-projects');
+    expect(hero).toHaveAttribute('data-scroll-target', featured.id);
+    expect(featured).toHaveAttribute('id', 'featured-projects');
+    expect(screen.getByRole('link', { name: 'View all projects' })).toHaveAttribute(
+      'href',
+      '/proyectos'
+    );
     expect(hero).toHaveAttribute('data-has-secondary', 'no');
     expect(hero.nextElementSibling).toBe(featured);
     expect(dividers).toHaveLength(1);
@@ -125,6 +134,10 @@ describe('HomePage anti-template composition', () => {
 
     expect(screen.queryByTestId('featured-projects')).not.toBeInTheDocument();
     expect(screen.getByTestId('hero')).toHaveAttribute('data-scroll-target', 'content');
+    expect(screen.getByTestId('hero')).toHaveAttribute(
+      'data-scroll-target',
+      screen.getByText('About Me').closest('section')?.id
+    );
     expect(screen.getByText('Real backend: production systems, observability, and less gloss.'))
       .toBeInTheDocument();
   });

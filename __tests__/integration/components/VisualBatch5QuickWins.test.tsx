@@ -101,6 +101,21 @@ describe('batch 5 / N-03: anti-template home/nav keys are pruned', () => {
     expect(source).not.toContain('serviceApis');
   });
 
+  it('keeps touched Home/Nav/Footer/Newsletter catalogs in key parity with non-empty values', () => {
+    for (const namespace of ['Home', 'Nav', 'Footer', 'Newsletter'] as const) {
+      const esKeys = Object.keys(esMessages[namespace]).sort();
+      const enKeys = Object.keys(enMessages[namespace]).sort();
+
+      expect(enKeys, `${namespace} keys`).toEqual(esKeys);
+      for (const key of esKeys) {
+        expect(esMessages[namespace][key], `es.${namespace}.${key}`).toEqual(expect.any(String));
+        expect(esMessages[namespace][key].trim(), `es.${namespace}.${key}`).not.toBe('');
+        expect(enMessages[namespace][key], `en.${namespace}.${key}`).toEqual(expect.any(String));
+        expect(enMessages[namespace][key].trim(), `en.${namespace}.${key}`).not.toBe('');
+      }
+    }
+  });
+
   it('prunes Home and Services keys from both locale catalogs', () => {
     expect(esMessages.Nav.home).toBeUndefined();
     expect(enMessages.Nav.home).toBeUndefined();
