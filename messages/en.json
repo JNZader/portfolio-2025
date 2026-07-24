@@ -95,7 +95,9 @@
     "backToTopAria": "Back to top"
   },
   "InteriorHero": {
-    "legalBadge": "GDPR / Law 25,326"
+    "legalBadge": "GDPR / Law 25,326",
+    "projectsBadge": "API / build / ship",
+    "newsletterBadge": "double opt-in"
   },
   "MarkdownContent": {
     "list": "List",
@@ -353,6 +355,7 @@
     "clearAll": "Clear all filters",
     "badgeFeatured": "Featured",
     "badgeCurated": "Curated",
+    "privateCaseStudy": "Private Case Study",
     "viewDetails": "View details",
     "viewRepoAria": "View {title} repository on GitHub",
     "viewDemoAria": "View {title} demo",

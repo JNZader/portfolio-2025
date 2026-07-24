@@ -160,7 +160,7 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
 
         {project.privateCaseStudy && (
           <Badge variant="outline" className="mb-3 w-fit text-[11px]">
-            Private Case Study
+            {t('privateCaseStudy')}
           </Badge>
         )}
 

@@ -95,7 +95,9 @@
     "backToTopAria": "Volver arriba"
   },
   "InteriorHero": {
-    "legalBadge": "GDPR / Ley 25.326"
+    "legalBadge": "GDPR / Ley 25.326",
+    "projectsBadge": "API / construir / desplegar",
+    "newsletterBadge": "doble opt-in"
   },
   "MarkdownContent": {
     "list": "Lista",
@@ -353,6 +355,7 @@
     "clearAll": "Limpiar todos los filtros",
     "badgeFeatured": "Destacado",
     "badgeCurated": "Curado",
+    "privateCaseStudy": "Caso de Estudio Privado",
     "viewDetails": "Ver detalles",
     "viewRepoAria": "Ver repositorio de {title} en GitHub",
     "viewDemoAria": "Ver demo de {title}",

@@ -113,7 +113,7 @@ export default async function Footer() {
               <span>
                 © {currentYear} Javier Zader. {t('madeWith')}
               </span>
-              <Heart className="h-4 w-4 text-red-500 fill-current" />
+              <Heart className="h-4 w-4 text-destructive fill-current" />
               <span>{t('andMate')}</span>
             </div>
 
