@@ -18,7 +18,7 @@ const buttonVariants = cva(
         'gradient-warm':
           'bg-gradient-to-r from-accent-warm to-orange-600 text-accent-warm-foreground hover:shadow-xl hover:shadow-accent-warm/40 hover:-translate-y-1',
         destructive:
-          'bg-destructive text-white hover:bg-destructive/90 hover:shadow-lg hover:shadow-destructive/25 hover:-translate-y-0.5 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
+          'bg-destructive text-destructive-foreground hover:bg-destructive/90 hover:shadow-lg hover:shadow-destructive/25 hover:-translate-y-0.5 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
         outline:
           'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground hover:border-primary/30 dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
         'outline-glow':

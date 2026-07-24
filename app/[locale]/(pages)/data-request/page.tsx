@@ -34,7 +34,7 @@ export default async function DataRequestPage({
         <div className="max-w-3xl mx-auto">
           <div className="space-y-12">
             {/* Export data */}
-            <div className="border border rounded-lg p-6">
+            <div className="border rounded-lg p-6">
               <h2 className="text-2xl font-semibold mb-2">{t('exportTitle')}</h2>
               <p className="text-foreground/70 mb-6">{t('exportDesc')}</p>
               <DataRequestForm />
@@ -66,7 +66,7 @@ export default async function DataRequestPage({
             <div>
               <h3 className="font-semibold mb-3">{t('otherTitle')}</h3>
               <div className="grid gap-4 sm:grid-cols-2">
-                <div className="border border rounded-lg p-4">
+                <div className="border rounded-lg p-4">
                   <h4 className="font-medium mb-2">{t('rectTitle')}</h4>
                   <p className="text-sm text-foreground/70">
                     {t('rectPrefix')}
@@ -75,17 +75,17 @@ export default async function DataRequestPage({
                   </p>
                 </div>
 
-                <div className="border border rounded-lg p-4">
+                <div className="border rounded-lg p-4">
                   <h4 className="font-medium mb-2">{t('portTitle')}</h4>
                   <p className="text-sm text-foreground/70">{t('portDesc')}</p>
                 </div>
 
-                <div className="border border rounded-lg p-4">
+                <div className="border rounded-lg p-4">
                   <h4 className="font-medium mb-2">{t('oppTitle')}</h4>
                   <p className="text-sm text-foreground/70">{t('oppDesc')}</p>
                 </div>
 
-                <div className="border border rounded-lg p-4">
+                <div className="border rounded-lg p-4">
                   <h4 className="font-medium mb-2">{t('limTitle')}</h4>
                   <p className="text-sm text-foreground/70">
                     {t('limPrefix')}
