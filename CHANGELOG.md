@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.23.1](https://github.com/JNZader/portfolio-2025/compare/v2.23.0...v2.23.1) (2026-07-24)
+
+
+### Bug Fixes
+
+* **ui:** visual batch 5 quick wins ([d314bec](https://github.com/JNZader/portfolio-2025/commits/d314bec84e705992ab1922cd32920eb4ecc5b365))
+
 ## [2.23.0](https://github.com/JNZader/portfolio-2025/compare/v2.22.0...v2.23.0) (2026-07-24)
 
 
