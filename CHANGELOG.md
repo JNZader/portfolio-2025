@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.22.0](https://github.com/JNZader/portfolio-2025/compare/v2.21.0...v2.22.0) (2026-07-24)
+
+
+### Features
+
+* **ui:** visual batch 3 consistency ([81b571c](https://github.com/JNZader/portfolio-2025/commits/81b571c1ff44bfc6304c500d4741491438045c0c))
+
+
+### Bug Fixes
+
+* **ci:** mock newsletter action in batch 3 spec and pass DATABASE_URL to CI test steps ([db8f600](https://github.com/JNZader/portfolio-2025/commits/db8f6008eab3ecf865254759ac8ca53669edbbd4)), closes [#214](https://github.com/JNZader/portfolio-2025/issues/214)
+
 ## [2.21.0](https://github.com/JNZader/portfolio-2025/compare/v2.20.9...v2.21.0) (2026-07-24)
 
 
