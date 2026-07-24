@@ -94,11 +94,8 @@
     "aEmail": "Enviar correo electrónico",
     "backToTopAria": "Volver arriba"
   },
-  "Icons": {
-    "loading": "Cargando",
-    "send": "Enviar",
-    "completed": "Completado",
-    "copy": "Copiar"
+  "InteriorHero": {
+    "legalBadge": "GDPR / Ley 25.326"
   },
   "MarkdownContent": {
     "list": "Lista",

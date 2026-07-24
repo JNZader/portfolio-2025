@@ -97,7 +97,9 @@ function SectionTitle({
     xl: 'text-4xl md:text-5xl font-bold',
   };
 
-  return <Component className={cn(sizeClasses[size], 'mb-4', className)} {...props} />;
+  return (
+    <Component className={cn(sizeClasses[size], 'text-display-lg', 'mb-4', className)} {...props} />
+  );
 }
 
 function SectionDescription({

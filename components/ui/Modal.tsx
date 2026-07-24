@@ -1,64 +1,42 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { type ReactNode, useEffect, useId, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
-// Context para manejar el contador de modales abiertos de forma segura
-const ModalCountContext = createContext<{
-  increment: () => void;
-  decrement: () => void;
-} | null>(null);
+// Lock body scroll when a modal is open, using a data attribute counter
+// to support nested modals.
+function useModalBodyLock(isOpen: boolean) {
+  const wasOpenRef = useRef(false);
 
-// Hook para usar el contexto de modales
-function useModalCount() {
-  const context = useContext(ModalCountContext);
-  // Fallback para cuando no hay provider (uso directo del Modal)
-  if (context) {
-    return context;
-  }
-  return {
-    increment: () => {
+  useEffect(() => {
+    const lock = () => {
       const count = Number(document.body.dataset.modalCount ?? '0') + 1;
       document.body.dataset.modalCount = String(count);
       if (count === 1) document.body.style.overflow = 'hidden';
-    },
-    decrement: () => {
+    };
+
+    const unlock = () => {
       const count = Math.max(0, Number(document.body.dataset.modalCount ?? '0') - 1);
       document.body.dataset.modalCount = String(count);
       if (count === 0) document.body.style.overflow = '';
-    },
-  };
-}
+    };
 
-// Provider opcional para aplicaciones con múltiples modales
-export function ModalProvider({ children }: Readonly<{ children: ReactNode }>) {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (count === 0) {
-      document.body.style.overflow = '';
-    } else {
-      document.body.style.overflow = 'hidden';
+    if (isOpen && !wasOpenRef.current) {
+      lock();
+      wasOpenRef.current = true;
+    } else if (!isOpen && wasOpenRef.current) {
+      unlock();
+      wasOpenRef.current = false;
     }
-  }, [count]);
 
-  const increment = useCallback(() => setCount((c) => c + 1), []);
-  const decrement = useCallback(() => setCount((c) => Math.max(0, c - 1)), []);
-
-  const contextValue = useMemo(() => ({ increment, decrement }), [increment, decrement]);
-
-  return <ModalCountContext.Provider value={contextValue}>{children}</ModalCountContext.Provider>;
+    return () => {
+      if (wasOpenRef.current) {
+        unlock();
+        wasOpenRef.current = false;
+      }
+    };
+  }, [isOpen]);
 }
 
 interface ModalProps {
@@ -83,8 +61,7 @@ export function Modal({
   const titleId = `modal-title-${modalId}`;
   const descriptionId = `modal-description-${modalId}`;
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const wasOpenRef = useRef(false);
-  const { increment, decrement } = useModalCount();
+  useModalBodyLock(isOpen);
 
   // Manage dialog open/close with native <dialog> API
   useEffect(() => {
@@ -110,24 +87,6 @@ export function Modal({
     dialog.addEventListener('close', handleClose);
     return () => dialog.removeEventListener('close', handleClose);
   }, [onClose]);
-
-  // Prevenir scroll del body - usando context/data-attribute para manejar múltiples modales
-  useEffect(() => {
-    if (isOpen && !wasOpenRef.current) {
-      increment();
-      wasOpenRef.current = true;
-    } else if (!isOpen && wasOpenRef.current) {
-      decrement();
-      wasOpenRef.current = false;
-    }
-
-    return () => {
-      if (wasOpenRef.current) {
-        decrement();
-        wasOpenRef.current = false;
-      }
-    };
-  }, [isOpen, increment, decrement]);
 
   const sizeClasses = {
     sm: 'max-w-md',

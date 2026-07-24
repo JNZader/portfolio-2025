@@ -90,7 +90,9 @@ export function ProjectDetail({
                 )}
               </div>
 
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">{project.title}</h1>
+              <h1 className="text-display-lg text-4xl md:text-5xl font-bold mb-4">
+                {project.title}
+              </h1>
 
               <p className="text-xl text-muted-foreground mb-6">{project.description}</p>
 

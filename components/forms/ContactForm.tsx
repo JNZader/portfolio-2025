@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Lightbulb, Loader2, Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
@@ -8,7 +9,6 @@ import { useForm } from 'react-hook-form';
 import { sendContactEmail } from '@/app/actions/contact';
 import { useAnnouncer } from '@/components/a11y/ScreenReaderAnnouncer';
 import { Button } from '@/components/ui/button';
-import { SendIcon, SpinnerIcon } from '@/components/ui/icons';
 import { trackContactSubmit } from '@/lib/analytics/events';
 import { logger } from '@/lib/monitoring/logger';
 import { showError, showSuccess } from '@/lib/utils/toast';
@@ -155,18 +155,14 @@ export function ContactForm() {
           ref={suggestionRef}
           role="alert"
           tabIndex={-1}
-          className="rounded-lg border-2 border-[var(--color-primary)] bg-[var(--color-primary)]/10 p-4"
+          className="rounded-lg border-2 border-primary bg-primary/10 p-4"
         >
           <div className="flex items-start gap-3">
-            <span className="text-2xl">💡</span>
+            <Lightbulb className="h-6 w-6 text-primary" aria-hidden="true" />
             <div className="flex-1">
               <p className="font-medium mb-2">{t('suggestTitle')}</p>
-              <p className="text-sm text-[var(--color-muted-foreground)] mb-3">
-                {t('suggestBody')}
-              </p>
-              <p className="font-mono font-bold text-[var(--color-primary)] mb-4">
-                {emailSuggestion}
-              </p>
+              <p className="text-sm text-muted-foreground mb-3">{t('suggestBody')}</p>
+              <p className="font-mono font-bold text-primary mb-4">{emailSuggestion}</p>
               <div className="flex gap-2 flex-wrap">
                 <Button
                   type="button"
@@ -258,19 +254,19 @@ export function ContactForm() {
       >
         {isSubmitting ? (
           <>
-            <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
             {t('submitting')}
           </>
         ) : (
           <>
-            <SendIcon className="mr-2 h-4 w-4" />
+            <Send className="mr-2 h-4 w-4" aria-hidden="true" />
             {t('submit')}
           </>
         )}
       </Button>
 
       {/* Helper text */}
-      <p className="text-center text-sm text-[var(--color-muted-foreground)]">{t('formHelper')}</p>
+      <p className="text-center text-sm text-muted-foreground">{t('formHelper')}</p>
     </form>
   );
 }

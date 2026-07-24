@@ -1,3 +1,5 @@
+'use client';
+
 import {
   ArrowRight,
   Braces,
@@ -11,6 +13,7 @@ import {
   ShieldCheck,
   Sparkles,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import Container from '@/components/ui/Container';
 import { cn } from '@/lib/utils';
@@ -135,6 +138,7 @@ function NewsletterMotif() {
 }
 
 function LegalMotif() {
+  const t = useTranslations('InteriorHero');
   return (
     <div
       className="relative mx-auto flex h-48 w-full max-w-sm items-center justify-center"
@@ -146,7 +150,7 @@ function LegalMotif() {
       </div>
       <div className="absolute bottom-4 right-1/2 flex h-9 translate-x-1/2 items-center gap-2 rounded-lg border bg-card px-3 text-[10px] text-muted-foreground shadow-sm">
         <span className="size-1.5 rounded-full bg-success" />
-        GDPR / Ley 25.326
+        {t('legalBadge')}
       </div>
     </div>
   );

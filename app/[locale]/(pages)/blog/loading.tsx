@@ -65,12 +65,12 @@ export default function BlogLoading() {
               <Skeleton
                 data-testid="blog-loading-search"
                 data-region="search"
-                className="h-10 min-w-0 flex-1 border border-input bg-background"
+                className="h-12 min-w-0 flex-1 border border-input bg-background"
               />
               <Skeleton
                 data-testid="blog-loading-filter-control"
                 data-region="control"
-                className="h-10 w-24 border border-border"
+                className="h-12 w-24 border border-border"
               />
             </div>
             <Skeleton

@@ -1,13 +1,13 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2, Mail } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAnnouncer } from '@/components/a11y/ScreenReaderAnnouncer';
 import { InputField } from '@/components/forms/FormField';
 import { Button } from '@/components/ui/button';
-import { MailIcon, SpinnerIcon } from '@/components/ui/icons';
 import { useNewsletterSubscription } from '@/hooks/useNewsletterSubscription';
 import { type NewsletterFormData, newsletterSchema } from '@/lib/validations/newsletter';
 
@@ -69,12 +69,12 @@ export function NewsletterForm() {
         <Button type="submit" size="lg" className="w-full mt-4" disabled={isSubmitting}>
           {isSubmitting ? (
             <>
-              <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
               {t('subscribing')}
             </>
           ) : (
             <>
-              <MailIcon className="mr-2 h-4 w-4" />
+              <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
               {t('subscribe')}
             </>
           )}
