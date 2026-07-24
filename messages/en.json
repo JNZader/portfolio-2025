@@ -94,11 +94,8 @@
     "aEmail": "Send email",
     "backToTopAria": "Back to top"
   },
-  "Icons": {
-    "loading": "Loading",
-    "send": "Send",
-    "completed": "Completed",
-    "copy": "Copy"
+  "InteriorHero": {
+    "legalBadge": "GDPR / Law 25,326"
   },
   "MarkdownContent": {
     "list": "List",

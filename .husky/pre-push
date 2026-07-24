@@ -2,7 +2,7 @@ echo "⚙️ Generating Prisma Client..."
 DATABASE_URL="file:./prisma/dev.db" npx prisma generate
 
 echo "🧪 Running tests before push..."
-npm run test:run
+DATABASE_URL="file:./prisma/dev.db" npm run test:run
 
 echo "🔍 Running verification checks..."
 npm run verify

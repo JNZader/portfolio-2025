@@ -34,32 +34,30 @@ export default async function DataRequestPage({
         <div className="max-w-3xl mx-auto">
           <div className="space-y-12">
             {/* Export data */}
-            <div className="border border-[var(--color-border)] rounded-lg p-6">
+            <div className="border border rounded-lg p-6">
               <h2 className="text-2xl font-semibold mb-2">{t('exportTitle')}</h2>
-              <p className="text-[var(--color-foreground)]/70 mb-6">{t('exportDesc')}</p>
+              <p className="text-foreground/70 mb-6">{t('exportDesc')}</p>
               <DataRequestForm />
             </div>
 
             {/* Delete data */}
             <div className="border border-destructive/30 rounded-lg p-6">
               <h2 className="text-2xl font-semibold mb-2 text-destructive">{t('deleteTitle')}</h2>
-              <p className="text-[var(--color-foreground)]/70 mb-6">
-                {t.rich('deleteDesc', { b: bold })}
-              </p>
+              <p className="text-foreground/70 mb-6">{t.rich('deleteDesc', { b: bold })}</p>
               <DataDeletionForm />
             </div>
 
             {/* Additional info */}
-            <div className="bg-[var(--color-muted)] rounded-lg p-6">
+            <div className="bg-muted rounded-lg p-6">
               <h3 className="font-semibold mb-3">{t('infoTitle')}</h3>
-              <ul className="space-y-2 text-sm text-[var(--color-foreground)]/70">
+              <ul className="space-y-2 text-sm text-foreground/70">
                 <li>• {t.rich('info1', { b: bold })}</li>
                 <li>• {t.rich('info2', { b: bold })}</li>
                 <li>• {t.rich('info3', { b: bold })}</li>
                 <li>• {t.rich('info4', { b: bold })}</li>
                 <li>
                   • <strong>{t('contactBold')}</strong> {t('info5Prefix')}
-                  <ObfuscatedEmail {...email} className="text-[var(--color-primary)]" />
+                  <ObfuscatedEmail {...email} className="text-primary" />
                 </li>
               </ul>
             </div>
@@ -68,30 +66,30 @@ export default async function DataRequestPage({
             <div>
               <h3 className="font-semibold mb-3">{t('otherTitle')}</h3>
               <div className="grid gap-4 sm:grid-cols-2">
-                <div className="border border-[var(--color-border)] rounded-lg p-4">
+                <div className="border border rounded-lg p-4">
                   <h4 className="font-medium mb-2">{t('rectTitle')}</h4>
-                  <p className="text-sm text-[var(--color-foreground)]/70">
+                  <p className="text-sm text-foreground/70">
                     {t('rectPrefix')}
-                    <ObfuscatedEmail {...email} className="text-[var(--color-primary)]" />
+                    <ObfuscatedEmail {...email} className="text-primary" />
                     {t('rectSuffix')}
                   </p>
                 </div>
 
-                <div className="border border-[var(--color-border)] rounded-lg p-4">
+                <div className="border border rounded-lg p-4">
                   <h4 className="font-medium mb-2">{t('portTitle')}</h4>
-                  <p className="text-sm text-[var(--color-foreground)]/70">{t('portDesc')}</p>
+                  <p className="text-sm text-foreground/70">{t('portDesc')}</p>
                 </div>
 
-                <div className="border border-[var(--color-border)] rounded-lg p-4">
+                <div className="border border rounded-lg p-4">
                   <h4 className="font-medium mb-2">{t('oppTitle')}</h4>
-                  <p className="text-sm text-[var(--color-foreground)]/70">{t('oppDesc')}</p>
+                  <p className="text-sm text-foreground/70">{t('oppDesc')}</p>
                 </div>
 
-                <div className="border border-[var(--color-border)] rounded-lg p-4">
+                <div className="border border rounded-lg p-4">
                   <h4 className="font-medium mb-2">{t('limTitle')}</h4>
-                  <p className="text-sm text-[var(--color-foreground)]/70">
+                  <p className="text-sm text-foreground/70">
                     {t('limPrefix')}
-                    <ObfuscatedEmail {...email} className="text-[var(--color-primary)]" />
+                    <ObfuscatedEmail {...email} className="text-primary" />
                     {t('limSuffix')}
                   </p>
                 </div>

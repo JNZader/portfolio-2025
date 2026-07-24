@@ -47,7 +47,7 @@ export function TableOfContents({ items }: Readonly<TableOfContentsProps>) {
 
   return (
     <nav className="space-y-1" aria-label={t('navAria')}>
-      <p className="mb-4 text-sm font-semibold uppercase tracking-wide text-[var(--color-muted-foreground)]">
+      <p className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
         {t('title')}
       </p>
 
@@ -60,10 +60,10 @@ export function TableOfContents({ items }: Readonly<TableOfContentsProps>) {
               <Link
                 href={`#${item.id}`}
                 className={cn(
-                  'block border-l-2 py-1 pl-3 transition-colors hover:text-[var(--color-primary)]',
+                  'block border-l-2 py-1 pl-3 transition-colors hover:text-primary',
                   isActive
-                    ? 'border-[var(--color-primary)] font-medium text-[var(--color-primary)]'
-                    : 'border-transparent text-[var(--color-muted-foreground)]'
+                    ? 'border-primary font-medium text-primary'
+                    : 'border-transparent text-muted-foreground'
                 )}
               >
                 {item.text}

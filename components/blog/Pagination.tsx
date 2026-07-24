@@ -1,5 +1,6 @@
 'use client';
 
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { buttonVariants } from '@/components/ui/button';
@@ -42,12 +43,12 @@ export function Pagination({ currentPage, totalPages }: Readonly<PaginationProps
           className={prevNextClasses}
           aria-label={t('previousPage')}
         >
-          <ChevronLeftIcon className="h-4 w-4" />
+          <ChevronLeft className="h-4 w-4" aria-hidden="true" />
           <span className="sr-only sm:not-sr-only sm:ml-2">{t('previous')}</span>
         </Link>
       ) : (
         <span className={cn(prevNextClasses, 'pointer-events-none opacity-50')} aria-hidden="true">
-          <ChevronLeftIcon className="h-4 w-4" />
+          <ChevronLeft className="h-4 w-4" aria-hidden="true" />
           <span className="sr-only sm:not-sr-only sm:ml-2">{t('previous')}</span>
         </span>
       )}
@@ -90,7 +91,7 @@ export function Pagination({ currentPage, totalPages }: Readonly<PaginationProps
 
       {/* Mobile: current page indicator */}
       <div className="flex items-center gap-2 sm:hidden">
-        <span className="text-sm text-[var(--color-muted-foreground)]">
+        <span className="text-sm text-muted-foreground">
           {t('pageOf', { current: currentPage, total: totalPages })}
         </span>
       </div>
@@ -103,45 +104,14 @@ export function Pagination({ currentPage, totalPages }: Readonly<PaginationProps
           aria-label={t('nextPage')}
         >
           <span className="sr-only sm:not-sr-only sm:mr-2">{t('next')}</span>
-          <ChevronRightIcon className="h-4 w-4" />
+          <ChevronRight className="h-4 w-4" aria-hidden="true" />
         </Link>
       ) : (
         <span className={cn(prevNextClasses, 'pointer-events-none opacity-50')} aria-hidden="true">
           <span className="sr-only sm:not-sr-only sm:mr-2">{t('next')}</span>
-          <ChevronRightIcon className="h-4 w-4" />
+          <ChevronRight className="h-4 w-4" aria-hidden="true" />
         </span>
       )}
     </nav>
-  );
-}
-
-// Iconos SVG
-function ChevronLeftIcon({ className }: Readonly<{ className?: string }>) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.5"
-      stroke="currentColor"
-    >
-      <title>Previous</title>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-    </svg>
-  );
-}
-
-function ChevronRightIcon({ className }: Readonly<{ className?: string }>) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.5"
-      stroke="currentColor"
-    >
-      <title>Next</title>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-    </svg>
   );
 }

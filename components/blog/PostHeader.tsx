@@ -72,10 +72,10 @@ export function PostHeader({ post }: Readonly<PostHeaderProps>) {
 
             {/* Title - white over image, foreground over gradient fallback */}
             <h1
-              className={cn(
+              className={`text-display-lg ${cn(
                 'mb-4 text-4xl font-bold md:text-5xl lg:text-6xl',
                 imageUrl ? 'text-white drop-shadow-lg' : 'text-foreground'
-              )}
+              )}`}
             >
               {post.title}
             </h1>
