@@ -15,8 +15,11 @@ function exactName(value: string): RegExp {
 }
 
 vi.mock('next-intl/server', () => ({
+  getLocale: async () => locale,
   getTranslations: async (namespace: string) => {
     const messages: Record<string, string> = {
+      'Common.cvDownload': 'Descargar CV',
+      'Common.cvView': 'Ver CV',
       'Common.aGithub': 'Visitar perfil de GitHub',
       'Common.aLinkedin': 'Visitar perfil de LinkedIn',
       'Common.aEmail': 'Enviar correo electrónico',
@@ -32,9 +35,25 @@ vi.mock('next-intl/server', () => ({
 }));
 
 vi.mock('next/dynamic', () => ({
-  default: () => function DynamicPlaceholder(): ReactNode {
-    return <div data-testid="hero-terminal" aria-hidden="true" />;
-  },
+  default: () => ({ targetId }: { targetId?: string }) =>
+    targetId ? <div data-testid="scroll-indicator" data-target-id={targetId} /> : null,
+}));
+
+vi.mock('@/components/sections/HeroTerminal', () => ({
+  HeroTerminal: () => <div data-testid="hero-terminal" aria-hidden="true" />,
+}));
+
+vi.mock('@/components/ui/CVButton', () => ({
+  CVButton: ({ pdfHref }: { pdfHref: string }) => (
+    <div data-testid="cv-button">
+      <a href={pdfHref} download aria-label="Descargar CV">
+        CV
+      </a>
+      <a href="/cv" aria-label="Ver CV">
+        Ver CV
+      </a>
+    </div>
+  ),
 }));
 
 vi.mock('@/i18n/navigation', () => ({
@@ -54,7 +73,11 @@ vi.mock('@/components/ui/ExternalLink', () => ({
 }));
 
 vi.mock('@/components/ui/HeroBackground', () => ({ HeroBackground: () => null }));
-vi.mock('@/components/ui/ScrollIndicator', () => ({ ScrollIndicator: () => null }));
+vi.mock('@/components/ui/ScrollIndicator', () => ({
+  ScrollIndicator: ({ targetId }: { targetId?: string }) => (
+    <div data-testid="scroll-indicator" data-target-id={targetId} />
+  ),
+}));
 
 async function renderHero(nextLocale: 'es' | 'en') {
   locale = nextLocale;
@@ -63,7 +86,8 @@ async function renderHero(nextLocale: 'es' | 'en') {
       title: 'Javier Zader',
       description: 'Description',
       primaryCta: { text: 'Projects', href: '/proyectos' },
-      showScrollIndicator: false,
+      cvHref: '/api/resume',
+      showScrollIndicator: true,
     })
   );
 }
@@ -75,19 +99,22 @@ describe('HeroSection project conversion contract', () => {
   ] as const)('renders the whole localized caption as the sole APiGen link in %s', async (nextLocale, caption) => {
     await renderHero(nextLocale);
 
-    const terminal = screen.getByTestId('hero-terminal');
     const links = screen.getAllByRole('link', { name: exactName(caption) });
     const link = links[0];
-    const paragraph = link.closest('p');
 
     expect(links).toHaveLength(1);
+    expect(screen.getByRole('link', { name: 'Descargar CV' })).toHaveAttribute(
+      'href',
+      '/api/resume'
+    );
+    expect(screen.getByRole('link', { name: 'Descargar CV' })).toHaveAttribute('download');
+    expect(screen.getByRole('link', { name: 'Ver CV' })).toHaveAttribute('href', '/cv');
+    expect(screen.getByRole('link', { name: 'Projects' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /contact/i })).not.toBeInTheDocument();
+    expect(screen.getByTestId('scroll-indicator')).toHaveAttribute('data-target-id', 'content');
     expect(link).toHaveAttribute('href', nextLocale === 'en' ? '/en/proyectos/apigen' : '/proyectos/apigen');
     expect(link.querySelector('strong')).toHaveTextContent('apigen');
     expect(link).toHaveClass('underline', 'focus-visible:outline-2');
-    expect(paragraph?.previousElementSibling).toBe(terminal);
-    expect(paragraph?.parentElement).toBe(terminal.parentElement);
-    expect(terminal).toHaveAttribute('aria-hidden', 'true');
-    expect(terminal.querySelector('a,button,input,select,textarea,[tabindex]')).toBeNull();
     expect(screen.queryByRole('link', { name: /github/i })).not.toBeInTheDocument();
     expect(screen.queryByTestId('apigen-featured-actions')).not.toBeInTheDocument();
   });

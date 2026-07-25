@@ -4,7 +4,6 @@
  * (the locale prefix is applied by the i18n-aware Link).
  */
 export const MAIN_NAVIGATION = [
-  { key: 'home', href: '/' },
   { key: 'about', href: '/sobre-mi' },
   { key: 'projects', href: '/proyectos' },
   { key: 'blog', href: '/blog' },

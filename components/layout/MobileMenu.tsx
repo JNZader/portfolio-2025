@@ -119,11 +119,7 @@ export default function MobileMenu({ open, onClose, navigation }: Readonly<Mobil
                     href={item.href}
                     className={cn(
                       '-mx-3 flex min-h-11 items-center rounded-lg px-3 py-2 text-base font-semibold leading-7',
-                      item.href === '/contacto'
-                        ? 'mt-4 justify-center bg-primary text-primary-foreground shadow-sm hover:bg-primary/90'
-                        : isActive
-                          ? 'bg-primary/10 text-primary'
-                          : 'text-foreground hover:bg-muted'
+                      isActive ? 'bg-primary/10 text-primary' : 'text-foreground hover:bg-muted'
                     )}
                     onClick={() => handleNavigation(item.href)}
                     aria-current={isActive ? 'page' : undefined}

@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import es from '@/messages/es.json';
 import en from '@/messages/en.json';
 import MobileMenu from '@/components/layout/MobileMenu';
+import { MAIN_NAVIGATION } from '@/lib/constants/navigation';
 import type { AnchorHTMLAttributes } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -24,8 +25,10 @@ vi.mock('@/i18n/navigation', () => ({
 }));
 
 const navigation = [
-  { name: 'Inicio', href: '/' },
+  { name: 'Sobre mí', href: '/sobre-mi' },
   { name: 'Proyectos', href: '/proyectos' },
+  { name: 'Blog', href: '/blog' },
+  { name: 'Contacto', href: '/contacto' },
 ];
 
 function renderMenu(open = true, onClose = vi.fn()) {
@@ -43,6 +46,15 @@ describe('MobileMenu', () => {
   beforeEach(() => {
     locale = 'es';
     pathname = '/';
+  });
+
+  it('uses the canonical main navigation without Home/Inicio', () => {
+    expect(MAIN_NAVIGATION.map((item) => item.key)).toEqual([
+      'about',
+      'projects',
+      'blog',
+      'contact',
+    ]);
   });
 
   it.each([
@@ -150,8 +162,19 @@ describe('MobileMenu', () => {
     expect(screen.getByRole('main')).toHaveFocus();
   });
 
+  it('renders Contact once without promoting it to a second CTA style', () => {
+    renderMenu();
+
+    const contact = screen.getByRole('link', { name: 'Contacto' });
+    expect(contact).toBeInTheDocument();
+    expect(contact).not.toHaveClass('bg-primary');
+    expect(contact).not.toHaveClass('justify-center');
+    expect(screen.queryByRole('link', { name: 'Inicio' })).not.toBeInTheDocument();
+  });
+
   it('restores the opener when navigation stays on the current route', () => {
     const onClose = vi.fn();
+    pathname = '/contacto';
     const { rerender } = renderMenu(false, onClose);
     const opener = screen.getByRole('button', { name: 'Abrir menú' });
     opener.focus();
@@ -163,7 +186,7 @@ describe('MobileMenu', () => {
         <MobileMenu open={true} onClose={onClose} navigation={navigation} />
       </>
     );
-    screen.getByRole('link', { name: 'Inicio' }).click();
+    screen.getByRole('link', { name: 'Contacto' }).click();
     screen.getByRole('dialog').dispatchEvent(new Event('close'));
 
     expect(opener).toHaveFocus();

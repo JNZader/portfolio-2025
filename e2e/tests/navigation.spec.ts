@@ -95,7 +95,7 @@ async function expectFooterGeometry(page: Page, viewportWidth: number) {
 
   await expect(footer).toBeVisible();
   await expect(grid).toHaveCount(1);
-  await expect(columns).toHaveCount(3);
+  await expect(columns).toHaveCount(2);
   await expect(bottomBar).toHaveCount(1);
   await expect(bottomGroups).toHaveCount(2);
 
@@ -106,7 +106,7 @@ async function expectFooterGeometry(page: Page, viewportWidth: number) {
   expect(documentWidth.scrollWidth).toBeLessThanOrEqual(documentWidth.clientWidth);
 
   const regions = await Promise.all(
-    [grid, ...Array.from({ length: 3 }, (_, index) => columns.nth(index)), bottomBar, ...Array.from({ length: 2 }, (_, index) => bottomGroups.nth(index))].map(
+    [grid, ...Array.from({ length: 2 }, (_, index) => columns.nth(index)), bottomBar, ...Array.from({ length: 2 }, (_, index) => bottomGroups.nth(index))].map(
       async (region) => region.boundingBox()
     )
   );
@@ -122,10 +122,10 @@ async function expectFooterGeometry(page: Page, viewportWidth: number) {
     columns.evaluateAll((elements) =>
       elements.map((element) => ['left', 'start'].includes(getComputedStyle(element).textAlign))
     )
-  ).resolves.toEqual([true, true, true]);
+  ).resolves.toEqual([true, true]);
 
   const columnStarts = await Promise.all(
-    Array.from({ length: 3 }, (_, index) => Promise.all([
+    Array.from({ length: 2 }, (_, index) => Promise.all([
       columns.nth(index).boundingBox(),
       columns.nth(index).locator(':scope > :first-child').boundingBox(),
     ]))
@@ -137,17 +137,17 @@ async function expectFooterGeometry(page: Page, viewportWidth: number) {
   }
 
   const primary = regions[0];
-  const bottom = regions[4];
+  const bottom = regions[3];
   expect(primary).not.toBeNull();
   expect(bottom).not.toBeNull();
   expect(bottom?.x ?? -1).toBeCloseTo(primary?.x ?? -2, 0);
 
-  for (let first = 1; first < 4; first += 1) {
-    for (let second = first + 1; second < 4; second += 1) {
+  for (let first = 1; first < 3; first += 1) {
+    for (let second = first + 1; second < 3; second += 1) {
       expect(rectanglesOverlap(regions[first] as FooterRectangle, regions[second] as FooterRectangle)).toBe(false);
     }
   }
-  expect(rectanglesOverlap(regions[5] as FooterRectangle, regions[6] as FooterRectangle)).toBe(false);
+  expect(rectanglesOverlap(regions[4] as FooterRectangle, regions[5] as FooterRectangle)).toBe(false);
 
   for (const target of await footer.getByRole('link').all()) {
     const box = await target.boundingBox();
@@ -345,7 +345,7 @@ test.describe('Navigation', () => {
       contactHref: '/contacto',
       privacyHref: '/privacy',
       dataRequestHref: '/data-request',
-      navLabels: ['Inicio', 'Sobre mí', 'Proyectos', 'Blog', 'Contacto'],
+      navLabels: ['Sobre mí', 'Proyectos', 'Blog', 'Contacto'],
       githubLabel: 'Visitar perfil de GitHub',
       linkedinLabel: 'Visitar perfil de LinkedIn',
       contactLabel: 'Contactar →',
@@ -358,7 +358,7 @@ test.describe('Navigation', () => {
       contactHref: '/en/contacto',
       privacyHref: '/en/privacy',
       dataRequestHref: '/en/data-request',
-      navLabels: ['Home', 'About', 'Projects', 'Blog', 'Contact'],
+      navLabels: ['About', 'Projects', 'Blog', 'Contact'],
       githubLabel: 'Visit GitHub profile',
       linkedinLabel: 'Visit LinkedIn profile',
       contactLabel: 'Get in touch →',

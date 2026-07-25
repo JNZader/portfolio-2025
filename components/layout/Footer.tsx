@@ -25,7 +25,7 @@ export default async function Footer() {
       <Container>
         {/* Main Footer Content */}
         <div className="py-12 relative z-10">
-          <div data-footer-grid="primary" className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div data-footer-grid="primary" className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {/* Brand & Contact Column */}
             <div data-footer-column="brand" className="min-w-0 space-y-4">
               <Link
@@ -81,25 +81,6 @@ export default async function Footer() {
                 ))}
               </ul>
             </nav>
-
-            {/* Services Column */}
-            <div data-footer-column="services" className="min-w-0 space-y-4">
-              <p className="font-semibold">{t('servicesHeading')}</p>
-              <ul className="space-y-2">
-                <li>
-                  <span className="text-sm text-muted-foreground">{t('serviceBackend')}</span>
-                </li>
-                <li>
-                  <span className="text-sm text-muted-foreground">{t('serviceApis')}</span>
-                </li>
-                <li>
-                  <span className="text-sm text-muted-foreground">{t('serviceFullstack')}</span>
-                </li>
-                <li>
-                  <span className="text-sm text-muted-foreground">{t('serviceConsulting')}</span>
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
 
