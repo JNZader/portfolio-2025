@@ -117,4 +117,22 @@ test.describe('Accessibility', () => {
       expect(alt).not.toBeNull();
     }
   });
+
+  for (const profileCase of [
+    { path: '/', heading: 'Sobre mí', contact: 'Contacto', cv: 'Ver CV' },
+    { path: '/en', heading: 'About me', contact: 'Contact', cv: 'View CV' },
+  ]) {
+    test(`${profileCase.path} integrated profile exposes accessible image and actions`, async ({ page }) => {
+      await page.goto(`${profileCase.path}#sobre-mi`);
+      await dismissCookieConsent(page);
+
+      const profile = page.locator('#sobre-mi');
+      await expect(profile).toHaveCount(1);
+      await expect(profile).toHaveAttribute('aria-labelledby', 'about-profile-heading');
+      await expect(profile.getByRole('heading', { name: profileCase.heading, exact: true })).toHaveCount(1);
+      await expect(profile.getByRole('img', { name: 'Javier Zader', exact: true })).toHaveAttribute('alt', 'Javier Zader');
+      await expect(profile.getByRole('link', { name: profileCase.cv, exact: true })).toBeVisible();
+      await expect(profile.getByRole('link', { name: profileCase.contact, exact: true })).toBeVisible();
+    });
+  }
 });

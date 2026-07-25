@@ -92,10 +92,11 @@ describe('batch 4: semantic token mappings applied', () => {
     expect(source).toContain('text-gray-300');
   });
 
-  it('sobre-mi timeline dots use theme accents', () => {
+  it('sobre-mi is a server redirect without obsolete page styling', () => {
     const source = readSource('app/[locale]/(pages)/sobre-mi/page.tsx');
-    expect(source).toContain('border-accent-warm');
-    expect(source).toContain('border-success');
-    expect(source).toContain('border-info');
+    expect(source).toContain('permanentRedirect');
+    expect(source).not.toContain('border-accent-warm');
+    expect(source).not.toContain('border-success');
+    expect(source).not.toContain('border-info');
   });
 });

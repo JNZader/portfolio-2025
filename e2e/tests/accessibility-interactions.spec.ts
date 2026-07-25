@@ -57,6 +57,24 @@ async function expectCaptionGeometry(
 }
 
 test.describe('Visual UX accessibility and interactions', () => {
+  for (const profileCase of [
+    { path: '/', heading: 'Sobre mí', contact: 'Contacto' },
+    { path: '/en', heading: 'About me', contact: 'Contact' },
+  ]) {
+    test(`${profileCase.path} exposes the integrated profile target and actions`, async ({ page }) => {
+      await page.goto(`${profileCase.path}#sobre-mi`);
+      await dismissCookieConsent(page);
+      const profile = page.locator('#sobre-mi');
+      await expect(profile).toHaveCount(1);
+      await expect(profile.getByRole('heading', { name: profileCase.heading }).first()).toBeVisible();
+      await expect(profile.getByRole('img', { name: 'Javier Zader' })).toHaveAttribute('width', '220');
+      await expect(profile.getByRole('link', { name: /cv/i }).first()).toBeVisible();
+      await expect(profile.getByRole('link', { name: profileCase.contact })).toBeVisible();
+      await expect(profile.getByRole('list')).toHaveCount(3);
+      await expect(page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).resolves.toBe(true);
+    });
+  }
+
   for (const localeCase of [
     {
       name: 'Spanish',

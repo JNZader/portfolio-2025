@@ -220,9 +220,8 @@ test.describe('Navigation', () => {
     // Home
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 
-    // About
-    await nav.getByRole('link', { name: /sobre mí/i }).click();
-    await expect(page).toHaveURL(/\/sobre-mi/);
+    await expect(nav.getByRole('link')).toHaveText(['Proyectos', 'Blog', 'Contacto']);
+    await expect(nav.getByRole('link', { name: /sobre mí/i })).toHaveCount(0);
 
     // Projects
     await nav.getByRole('link', { name: /proyectos/i }).click();
@@ -235,6 +234,28 @@ test.describe('Navigation', () => {
     // Contact
     await nav.getByRole('link', { name: /contacto/i }).click();
     await expect(page).toHaveURL(/\/contacto/);
+  });
+
+  for (const legacyCase of [
+    { source: '/sobre-mi', target: '/?tag=a&tag=b&empty=&encoded=a%2Fb%3Fc&space=hello+world#sobre-mi' },
+    { source: '/en/sobre-mi', target: '/en?tag=a&tag=b&empty=&encoded=a%2Fb%3Fc&space=hello+world#sobre-mi' },
+    { source: '/sobre-mi/', target: '/?tag=a&tag=b&empty=&encoded=a%2Fb%3Fc&space=hello+world#sobre-mi' },
+    { source: '/en/sobre-mi/', target: '/en?tag=a&tag=b&empty=&encoded=a%2Fb%3Fc&space=hello+world#sobre-mi' },
+  ]) {
+    test(`legacy About route permanently redirects: ${legacyCase.source}`, async ({ request }) => {
+      const response = await request.get(`${legacyCase.source}?tag=a&tag=b&empty=&encoded=a%2Fb%3Fc&space=hello%20world`, { maxRedirects: 0 });
+      expect(response.status()).toBe(308);
+      expect(response.headers().location).toBe(legacyCase.target);
+    });
+  }
+
+  test('following the legacy redirect preserves history without an About back-loop', async ({ page }) => {
+    await page.goto('/en/sobre-mi?tag=a&tag=b&empty=');
+    await expect(page).toHaveURL('/en?tag=a&tag=b&empty=#sobre-mi');
+    await expect(page.locator('#sobre-mi')).toBeVisible();
+
+    await page.goBack();
+    await expect(page).not.toHaveURL(/\/sobre-mi/);
   });
 
 
@@ -345,7 +366,7 @@ test.describe('Navigation', () => {
       contactHref: '/contacto',
       privacyHref: '/privacy',
       dataRequestHref: '/data-request',
-      navLabels: ['Sobre mí', 'Proyectos', 'Blog', 'Contacto'],
+      navLabels: ['Proyectos', 'Blog', 'Contacto'],
       githubLabel: 'Visitar perfil de GitHub',
       linkedinLabel: 'Visitar perfil de LinkedIn',
       contactLabel: 'Contactar →',
@@ -358,7 +379,7 @@ test.describe('Navigation', () => {
       contactHref: '/en/contacto',
       privacyHref: '/en/privacy',
       dataRequestHref: '/en/data-request',
-      navLabels: ['About', 'Projects', 'Blog', 'Contact'],
+      navLabels: ['Projects', 'Blog', 'Contact'],
       githubLabel: 'Visit GitHub profile',
       linkedinLabel: 'Visit LinkedIn profile',
       contactLabel: 'Get in touch →',
