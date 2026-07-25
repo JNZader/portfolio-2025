@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.26.0](https://github.com/JNZader/portfolio-2025/compare/v2.25.0...v2.26.0) (2026-07-25)
+
+
+### Features
+
+* **ui:** simplify home chrome and nav ([#221](https://github.com/JNZader/portfolio-2025/issues/221)) ([839b46f](https://github.com/JNZader/portfolio-2025/commits/839b46fd5250f8878f028521f7c1001c15d7fb42))
+
 ## [2.25.0](https://github.com/JNZader/portfolio-2025/compare/v2.24.1...v2.25.0) (2026-07-24)
 
 
