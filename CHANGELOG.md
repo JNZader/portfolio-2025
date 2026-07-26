@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.30.0](https://github.com/JNZader/portfolio-2025/compare/v2.29.0...v2.30.0) (2026-07-26)
+
+
+### Features
+
+* **security:** harden rate limit config and fix resume limit ([#225](https://github.com/JNZader/portfolio-2025/issues/225)) ([e37e696](https://github.com/JNZader/portfolio-2025/commits/e37e6963af7e83d86ecd4560ebfe8e2734379a01))
+
 ## [2.29.0](https://github.com/JNZader/portfolio-2025/compare/v2.28.0...v2.29.0) (2026-07-26)
 
 
