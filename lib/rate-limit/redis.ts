@@ -105,13 +105,18 @@ export const unsubscribeRateLimiter = redis
   : noopRateLimiter;
 
 /**
- * Rate limiter para resume/CV download: 3 por hora por IP
+ * Rate limiter para resume/CV download: 10 por hora por IP
  * Previene DoS y scraping en endpoint de generación de PDF
  */
+export const RESUME_RATE_LIMIT = { max: 10, window: '1 h' } as const;
+
 export const resumeRateLimiter = redis
   ? new Ratelimit({
       redis,
-      limiter: Ratelimit.slidingWindow(process.env.NODE_ENV === 'development' ? 100 : 3, '1 h'),
+      limiter: Ratelimit.slidingWindow(
+        process.env.NODE_ENV === 'development' ? 100 : RESUME_RATE_LIMIT.max,
+        RESUME_RATE_LIMIT.window
+      ),
       analytics: true,
       prefix: 'ratelimit:resume',
     })

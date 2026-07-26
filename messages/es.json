@@ -229,7 +229,7 @@
   "NewsletterConfirmPage": {
     "rateLimitTitle": "Demasiadas solicitudes",
     "rateLimitHeading": "Demasiadas Solicitudes",
-    "rateLimitBody": "Has realizado demasiadas solicitudes. Por favor, intenta de nuevo en 1 hora.",
+    "rateLimitBody": "Has realizado demasiadas solicitudes. Por favor, intenta de nuevo en una hora.",
     "backHome": "Volver al inicio",
     "invalidTitle": "Enlace inválido",
     "invalidHeading": "❌ Token Inválido",
@@ -263,7 +263,7 @@
   "NewsletterUnsubscribePage": {
     "rateLimitTitle": "Demasiadas solicitudes",
     "rateLimitHeading": "⏳ Demasiadas Solicitudes",
-    "rateLimitBody": "Has realizado demasiadas solicitudes. Por favor, intenta de nuevo en 1 hora.",
+    "rateLimitBody": "Has realizado demasiadas solicitudes. Por favor, intenta de nuevo en una hora.",
     "backHome": "Volver al inicio",
     "invalidTitle": "Enlace inválido",
     "invalidHeading": "❌ Token Inválido",
