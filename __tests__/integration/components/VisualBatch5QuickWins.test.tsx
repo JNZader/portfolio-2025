@@ -66,6 +66,32 @@ describe('batch 5 / N-01: proyectos loading skeleton mirrors the real page', () 
   });
 });
 
+describe('proyectos filters redesign: skeleton mirrors the always-visible filter layout', () => {
+  const source = () => readSource('app/[locale]/(pages)/proyectos/loading.tsx');
+
+  it('exposes a tech-bar region with chip-shaped placeholders and a More-trigger shape', () => {
+    const src = source();
+    expect(src).toContain('data-region="tech-bar"');
+    expect(src).toContain('h-11 w-20 rounded-md');
+    expect(src).toContain('h-11 w-24 rounded-md');
+  });
+
+  it('reshapes the control placeholder as a segmented control, not a toggle button', () => {
+    const src = source();
+    expect(src).toContain('h-11 w-full sm:w-64');
+    expect(src).not.toContain('h-12 w-28');
+  });
+
+  it('keeps the established region hooks and a single status wrapper', () => {
+    const src = source();
+    expect(src).toContain('data-region="filter"');
+    expect(src).toContain('data-region="search"');
+    expect(src).toContain('data-region="control"');
+    expect(src.match(/role="status"/g)).toHaveLength(1);
+    expect(src).toContain('aria-busy="true"');
+  });
+});
+
 describe('batch 5 / N-02: private case study badge is i18n', () => {
   it('ProjectCard no longer hardcodes the English string', () => {
     expect(readSource('components/projects/ProjectCard.tsx')).not.toContain('Private Case Study');

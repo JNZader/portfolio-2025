@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, Filter, Search, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
@@ -9,55 +9,45 @@ import { Button } from '@/components/ui/button';
 import { SearchInput } from '@/components/ui/SearchInput';
 import type { Project } from '@/lib/github/types';
 import ProjectCard from './ProjectCard';
-
-type ProjectSource = 'all' | 'sanity' | 'github';
-
-/**
- * Chips de filtro (toggle): el seleccionado lleva un check desnudo (sin
- * círculo) + tinte primary suave; el no seleccionado se queda en gris muted.
- * Nada de filled-vs-outline a secas — se leía como "cargando" o como slider.
- */
-const chipClassName = (selected: boolean) =>
-  selected
-    ? 'border-primary/50 bg-primary/10 text-primary hover:bg-primary/15'
-    : 'text-muted-foreground hover:text-foreground';
+import { type ProjectSource, SourceSegmentedControl } from './SourceSegmentedControl';
+import { TechFilterBar } from './TechFilterBar';
 
 interface ProjectsClientProps {
   projects: Project[];
 }
 
+const PROJECT_SOURCES: readonly ProjectSource[] = ['all', 'sanity', 'github'];
+
+/**
+ * Composition root: state + URL sync + the always-visible filter layout
+ * (search, source segmented control, tech chip bar). No toggle panel —
+ * every filter dimension is visible on initial render.
+ */
 export default function ProjectsClient({ projects }: Readonly<ProjectsClientProps>) {
   const t = useTranslations('Projects');
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  // Validate the hydrated source param: a corrupted value (e.g.
+  // ?source=banana) falls back to 'all' so every segment keeps a checked
+  // state and the radiogroup stays keyboard-reachable (roving tabindex).
+  const rawSource = searchParams.get('source') as ProjectSource | null;
+  const initialSource: ProjectSource =
+    rawSource && PROJECT_SOURCES.includes(rawSource) ? rawSource : 'all';
+
   // Estado para búsqueda y filtros
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') ?? '');
   const [selectedTechs, setSelectedTechs] = useState<string[]>(
     searchParams.get('tech')?.split(',').filter(Boolean) ?? []
   );
-  const [selectedSource, setSelectedSource] = useState<ProjectSource>(
-    (searchParams.get('source') as ProjectSource) ?? 'all'
-  );
-  const [showFilters, setShowFilters] = useState(false);
+  const [selectedSource, setSelectedSource] = useState<ProjectSource>(initialSource);
 
   // Debounced URL sync: the input stays instantly responsive (local state +
   // live filtering), but the router.replace side-effect is debounced so we
   // don't push a history/URL update on every keystroke. El debounce vive en
   // SearchInput; aquí solo recibimos el valor ya asentado.
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
-
-  // Extraer todas las tecnologías únicas
-  const allTechs = useMemo(() => {
-    const techSet = new Set<string>();
-    for (const project of projects) {
-      for (const tech of project.tech) {
-        techSet.add(tech);
-      }
-    }
-    return Array.from(techSet).sort((a, b) => a.localeCompare(b));
-  }, [projects]);
 
   // Filtrar proyectos
   const filteredProjects = useMemo(() => {
@@ -118,48 +108,28 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
     setSearchQuery('');
     setSelectedTechs([]);
     setSelectedSource('all');
-    setShowFilters(false);
     router.replace(pathname);
   };
 
   const hasActiveFilters = searchQuery || selectedTechs.length > 0 || selectedSource !== 'all';
 
-  const activeFiltersCount = [
-    searchQuery && 1,
-    selectedTechs.length,
-    selectedSource !== 'all' && 1,
-  ].filter(Boolean).length;
-
   return (
     <div className="space-y-6">
-      {/* Barra de búsqueda */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <SearchInput
-          value={searchQuery}
-          onChange={handleSearchChange}
-          onDebouncedChange={setDebouncedSearchQuery}
-          placeholder={t('searchPlaceholder')}
-          ariaLabel={t('searchAria')}
-          clearAriaLabel={t('clearSearchAria')}
-        />
+      {/* Filtros siempre visibles: búsqueda + fuente + tecnologías */}
+      <div data-region="filter" className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row">
+          <div data-region="search" className="min-w-0 flex-1">
+            <SearchInput
+              value={searchQuery}
+              onChange={handleSearchChange}
+              onDebouncedChange={setDebouncedSearchQuery}
+              placeholder={t('searchPlaceholder')}
+              ariaLabel={t('searchAria')}
+              clearAriaLabel={t('clearSearchAria')}
+            />
+          </div>
 
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowFilters(!showFilters)}
-            aria-expanded={showFilters}
-            aria-controls="project-filters"
-            className="gap-2"
-          >
-            <Filter className="h-4 w-4" />
-            {t('filters')}
-            {hasActiveFilters && (
-              <Badge variant="secondary" className="ml-1 text-xs">
-                {activeFiltersCount}
-              </Badge>
-            )}
-          </Button>
+          <SourceSegmentedControl value={selectedSource} onChange={handleSourceChange} />
 
           {hasActiveFilters && (
             <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-2">
@@ -168,83 +138,13 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
             </Button>
           )}
         </div>
+
+        <TechFilterBar
+          projects={projects}
+          selectedTechs={selectedTechs}
+          onToggleTech={toggleTech}
+        />
       </div>
-
-      {/* Panel de filtros */}
-      {showFilters && (
-        <div
-          id="project-filters"
-          className="p-4 border border-border rounded-lg bg-muted/30 space-y-4"
-        >
-          {/* Filtro por fuente — aria-pressed + check: la selección no puede
-              comunicarse solo por color */}
-          <div>
-            <h4 className="text-sm font-medium mb-2">{t('sourceHeading')}</h4>
-            <div className="flex flex-wrap gap-2">
-              {(
-                [
-                  { value: 'all', label: t('sourceAll') },
-                  { value: 'sanity', label: t('sourceCurated') },
-                  { value: 'github', label: t('sourceGithub') },
-                ] as const
-              ).map(({ value, label }) => {
-                const isSelected = selectedSource === value;
-                return (
-                  <Button
-                    key={value}
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleSourceChange(value)}
-                    aria-pressed={isSelected}
-                    className={chipClassName(isSelected)}
-                  >
-                    {isSelected && (
-                      <Check
-                        data-testid="filter-check"
-                        className="h-3.5 w-3.5"
-                        aria-hidden="true"
-                      />
-                    )}
-                    {label}
-                  </Button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Filtro por tecnología */}
-          <div>
-            <h4 className="text-sm font-medium mb-2">{t('techHeading')}</h4>
-            <div className="flex flex-wrap gap-2">
-              {allTechs.map((tech) => {
-                const isSelected = selectedTechs.includes(tech);
-                return (
-                  <Button
-                    key={tech}
-                    variant="outline"
-                    size="sm"
-                    onClick={() => toggleTech(tech)}
-                    aria-pressed={isSelected}
-                    className={`text-xs ${chipClassName(isSelected)}`}
-                  >
-                    {isSelected && (
-                      <Check
-                        data-testid="filter-check"
-                        className="h-3.5 w-3.5"
-                        aria-hidden="true"
-                      />
-                    )}
-                    {tech}
-                  </Button>
-                );
-              })}
-            </div>
-            {selectedTechs.length > 0 && (
-              <p className="text-xs text-muted-foreground mt-2">{t('techHint')}</p>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Resultados — live region: anuncia a SR el conteo al filtrar */}
       <div className="flex items-center justify-between text-sm text-muted-foreground">
