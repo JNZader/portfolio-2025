@@ -25,7 +25,6 @@ vi.mock('@/i18n/navigation', () => ({
 }));
 
 const navigation = [
-  { name: 'Sobre mí', href: '/sobre-mi' },
   { name: 'Proyectos', href: '/proyectos' },
   { name: 'Blog', href: '/blog' },
   { name: 'Contacto', href: '/contacto' },
@@ -50,7 +49,6 @@ describe('MobileMenu', () => {
 
   it('uses the canonical main navigation without Home/Inicio', () => {
     expect(MAIN_NAVIGATION.map((item) => item.key)).toEqual([
-      'about',
       'projects',
       'blog',
       'contact',
@@ -170,6 +168,18 @@ describe('MobileMenu', () => {
     expect(contact).not.toHaveClass('bg-primary');
     expect(contact).not.toHaveClass('justify-center');
     expect(screen.queryByRole('link', { name: 'Inicio' })).not.toBeInTheDocument();
+  });
+
+  it('renders exactly the shared three-item navigation without About', () => {
+    renderMenu();
+
+    expect(screen.getAllByRole('link').map((link) => link.textContent)).toEqual([
+      'JZ',
+      'Proyectos',
+      'Blog',
+      'Contacto',
+    ]);
+    expect(screen.queryByRole('link', { name: 'Sobre mí' })).not.toBeInTheDocument();
   });
 
   it('restores the opener when navigation stays on the current route', () => {

@@ -15,7 +15,7 @@ const bilingualAlternates = (path: string) => ({
 });
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Static pages. The fully-translated pages (home, sobre-mi, contacto, cv,
+  // Static pages. The fully-translated pages (home, contacto, cv,
   // proyectos) declare es+en hreflang. The blog stays Spanish-canonical by
   // design (opt-in per post; see i18n phasing).
   const staticPages: MetadataRoute.Sitemap = [
@@ -24,12 +24,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'daily',
       priority: 1,
       alternates: bilingualAlternates('/'),
-    },
-    {
-      url: `${SITE_URL}/sobre-mi`,
-      changeFrequency: 'monthly',
-      priority: 0.8,
-      alternates: bilingualAlternates('/sobre-mi'),
     },
     {
       url: `${SITE_URL}/proyectos`,

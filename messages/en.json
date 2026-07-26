@@ -1,6 +1,5 @@
 {
   "Nav": {
-    "about": "About",
     "projects": "Projects",
     "blog": "Blog",
     "contact": "Contact"
@@ -48,22 +47,6 @@
     "heroJobTitle": "Backend Developer · End-to-end systems",
     "heroDescription": "I build backend systems in Java, Go and Rust — from industrial platforms running predictive ML on edge hardware to AI-powered dev tools that write and review code. 20+ years in tech.",
     "heroCtaProjects": "View Projects",
-    "aboutHeading": "About Me",
-    "aboutSubtitle": "Real backend: production systems, observability, and less gloss.",
-    "journeyHeading": "My Journey",
-    "journeyP1": "I've spent 20+ years around technology. It started in IT support and hardware maintenance — which taught me how systems really work under the hood. Then came several years running a farm, where a bad call costs you a season, not a rollback.",
-    "journeyP2": "That mix of hands-on experience is what pulled me back into software. Now I build systems end to end in Java, Go and Rust — I own the whole stack, from the database to the deploy — and I'm always picking up something new.",
-    "approachHeading": "My Approach",
-    "approach1": "I ship end-to-end systems: database, backend, frontend, and deploy.",
-    "approach2": "I make architecture, performance, and maintainability tradeoffs explicit.",
-    "approach3": "I back every change with tests and observability to reduce risk.",
-    "approach4": "I prefer simple surfaces: less chrome, more operational clarity.",
-    "skillsHeading": "Technical Skills",
-    "experienceHeading": "Experience",
-    "roleTitle": "Backend Developer",
-    "roleYears": "20+ years in tech",
-    "certsTitle": "Certifications",
-    "certsDetail": "4+ technical certifications",
     "apigenCaption": "<b>apigen</b> — a tool I built that turns a SQL schema into a complete, running Spring Boot API.",
     "featuredProjectsTitle": "Featured Projects",
     "featuredProjectsSubtitle": "A selection of recent work",
@@ -154,7 +137,8 @@
     "contactHeading": "Contact",
     "contactLocationLabel": "Location:",
     "contactAvailabilityLabel": "Availability:",
-    "contactAvailability": "Open to new projects"
+    "contactAvailability": "Open to new projects",
+    "work3": "<b>Tests and observability as proof.</b> Every change ships with signals that make production risk visible and understandable."
   },
   "Contact": {
     "metaTitle": "Contact",

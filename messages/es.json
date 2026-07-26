@@ -1,6 +1,5 @@
 {
   "Nav": {
-    "about": "Sobre mí",
     "projects": "Proyectos",
     "blog": "Blog",
     "contact": "Contacto"
@@ -48,22 +47,6 @@
     "heroJobTitle": "Backend Developer · Sistemas end-to-end",
     "heroDescription": "Sistemas backend en Java, Go y Rust — desde plataformas industriales con ML predictivo en el edge (detección de anomalías, predicción de fallos) hasta herramientas de desarrollo con IA (generación de código, code review automático). 20+ años en tecnología.",
     "heroCtaProjects": "Ver Proyectos",
-    "aboutHeading": "Sobre Mí",
-    "aboutSubtitle": "Backend real: sistemas en producción, observabilidad y menos pose.",
-    "journeyHeading": "Mi Trayectoria",
-    "journeyP1": "Con más de 20 años en el mundo tecnológico, mi camino comenzó en soporte técnico y mantenimiento de equipos, lo que me dio una base sólida para entender los sistemas desde su núcleo. Después pasé varios años como productor agropecuario — un rubro donde los errores no se arreglan con un rollback.",
-    "journeyP2": "Esa doble experiencia práctica me trajo de vuelta al software: hoy construyo sistemas end-to-end con Java, Go y Rust — es decir, me hago cargo de todas las capas de un sistema, desde los datos y el backend hasta el frontend y el deploy — y sigo aprendiendo nuevas tecnologías para seguir creciendo profesionalmente.",
-    "approachHeading": "Mi Enfoque",
-    "approach1": "Entrego sistemas de punta a punta: base de datos, backend, frontend y deploy.",
-    "approach2": "Dejo explícitos los tradeoffs de arquitectura, performance y mantenibilidad.",
-    "approach3": "Acompaño cada cambio con tests y observabilidad para bajar el riesgo.",
-    "approach4": "Prefiero superficies simples: menos chrome, más claridad operativa.",
-    "skillsHeading": "Habilidades Técnicas",
-    "experienceHeading": "Experiencia",
-    "roleTitle": "Backend Developer",
-    "roleYears": "20+ años en tecnología",
-    "certsTitle": "Certificaciones",
-    "certsDetail": "4+ certificaciones técnicas",
     "apigenCaption": "<b>apigen</b> — una herramienta que construí: de un schema SQL a una API Spring Boot completa y corriendo.",
     "featuredProjectsTitle": "Proyectos Destacados",
     "featuredProjectsSubtitle": "Una selección de trabajos recientes",
@@ -154,7 +137,8 @@
     "contactHeading": "Contacto",
     "contactLocationLabel": "Ubicación:",
     "contactAvailabilityLabel": "Disponibilidad:",
-    "contactAvailability": "Abierto a nuevos proyectos"
+    "contactAvailability": "Abierto a nuevos proyectos",
+    "work3": "<b>Tests y observabilidad como prueba.</b> Acompaño cada cambio con señales que permitan detectar y entender el riesgo en producción."
   },
   "Contact": {
     "metaTitle": "Contacto",

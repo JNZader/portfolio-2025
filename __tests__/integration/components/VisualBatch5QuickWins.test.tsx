@@ -86,7 +86,7 @@ describe('batch 5 / N-03: anti-template home/nav keys are pruned', () => {
     const source = readSource('lib/constants/navigation.ts');
 
     expect(source).not.toContain("{ key: 'home', href: '/' }");
-    expect(source).toContain("{ key: 'about', href: '/sobre-mi' }");
+    expect(source).not.toContain("{ key: 'about', href: '/sobre-mi' }");
     expect(source).toContain("{ key: 'projects', href: '/proyectos' }");
     expect(source).toContain("{ key: 'blog', href: '/blog' }");
     expect(source).toContain("{ key: 'contact', href: '/contacto' }");
