@@ -86,8 +86,8 @@ describe('batch 4: semantic token mappings applied', () => {
     );
   });
 
-  it('ProjectCard terminal mock keeps its intentional dark look', () => {
-    const source = readSource('components/projects/ProjectCard.tsx');
+  it('shared ProjectVisual terminal mock keeps its intentional dark look', () => {
+    const source = readSource('components/projects/ProjectVisual.tsx');
     expect(source).toContain('bg-gray-950');
     expect(source).toContain('text-gray-300');
   });

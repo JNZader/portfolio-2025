@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@/__tests__/test-utils';
 import { FeaturedProjects } from '@/components/sections/FeaturedProjects';
 import type { Project } from '@/lib/github/types';
+import en from '@/messages/en.json';
+import es from '@/messages/es.json';
 
 async function renderFeaturedProjects(locale: string, featuredProjects: Project[]) {
   return render(
@@ -87,6 +89,70 @@ describe('FeaturedProjects', () => {
     expect(links[1]).toHaveAttribute('href', '/proyectos/featured-2');
     expect(links[2]).toHaveAttribute('href', '/proyectos/first');
     expect(links[3]).toHaveAttribute('href', '/proyectos/second');
+    const cards = screen.getAllByTestId('featured-project-card');
+    expect(cards).toHaveLength(4);
+    expect(cards.map((card) => card.className)).toEqual(Array(4).fill(cards[0].className));
+    expect(cards[0]).toHaveClass('basis-[86%]', 'md:basis-[calc((100%_-_1.5rem)/2)]');
+    expect(screen.queryByTestId('featured-project-spotlight')).not.toBeInTheDocument();
+    expect(document.querySelector('[data-featured-project-role="spotlight"]')).toBeNull();
+    expect(screen.getByTestId('featured-projects-rail')).toHaveAttribute('data-scroll-snap', 'x mandatory');
+  });
+
+  it('renders no arrow controls and keeps the progress indicator decorative', async () => {
+    await renderFeaturedProjects('es', [createProject('alpha'), createProject('beta')]);
+
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /anterior|siguiente|previous|next/i })
+    ).not.toBeInTheDocument();
+
+    const progress = screen.getByTestId('featured-projects-progress');
+    expect(progress).toHaveAttribute('aria-hidden', 'true');
+    expect(progress).not.toHaveAttribute('role');
+    expect(progress).not.toHaveAttribute('tabindex');
+  });
+
+  it('keeps Home message keys in parity across locales without unused arrow labels', () => {
+    expect(Object.keys(es.Home).sort()).toEqual(Object.keys(en.Home).sort());
+    expect(es.Home).not.toHaveProperty('featuredProjectsPrevious');
+    expect(es.Home).not.toHaveProperty('featuredProjectsNext');
+    expect(en.Home).not.toHaveProperty('featuredProjectsPrevious');
+    expect(en.Home).not.toHaveProperty('featuredProjectsNext');
+  });
+
+  it('renders image-backed and deterministic fallback visuals for every project', async () => {
+    await renderFeaturedProjects('es', [
+      createProject('with-image', { image: 'https://cdn.example.com/project.png' }),
+      createProject('without-image'),
+    ]);
+
+    expect(screen.getByTestId('project-image')).toHaveAttribute(
+      'src',
+      expect.stringContaining('/_next/image?url=')
+    );
+    expect(screen.getByTestId('project-visual-fallback')).toBeInTheDocument();
+    expect(screen.getAllByTestId('featured-project-media')).toHaveLength(2);
+    expect(
+      screen.getAllByTestId('featured-project-media').every((media) =>
+        media.classList.contains('aspect-video')
+      )
+    ).toBe(true);
+  });
+
+  it('keeps every project detail link keyboard reachable with a semantic name', async () => {
+    await renderFeaturedProjects('es', [createProject('alpha'), createProject('beta')]);
+
+    const links = screen
+      .getAllByRole('link')
+      .filter((link) => link.getAttribute('href')?.startsWith('/proyectos/'));
+    expect(links).toHaveLength(4);
+    expect(links.map((link) => link.getAttribute('href'))).toEqual([
+      '/proyectos/alpha',
+      '/proyectos/alpha',
+      '/proyectos/beta',
+      '/proyectos/beta',
+    ]);
+    expect(links.every((link) => link.getAttribute('href'))).toBe(true);
   });
 
   it('falls back to available projects when fewer than 3 are featured', async () => {
