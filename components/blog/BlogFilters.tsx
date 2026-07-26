@@ -1,11 +1,12 @@
 'use client';
 
-import { Check, Filter, X } from 'lucide-react';
+import { Filter, X } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useId, useState, useTransition } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { FilterChip } from '@/components/ui/FilterChip';
 import { SearchInput } from '@/components/ui/SearchInput';
 import { useRouter } from '@/i18n/navigation';
 import { isValidSearchTerm } from '@/lib/utils/search';
@@ -15,15 +16,6 @@ interface BlogFiltersProps {
   categories: Category[];
   totalPosts: number;
 }
-
-/**
- * Mismo lenguaje que los chips de /proyectos: toggle con check desnudo para
- * el seleccionado, gris muted para el resto (tokens del design system).
- */
-const chipClassName = (selected: boolean) =>
-  selected
-    ? 'border-primary/50 bg-primary/10 text-primary hover:bg-primary/15'
-    : 'text-muted-foreground hover:text-foreground';
 
 export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProps>) {
   const router = useRouter();
@@ -160,41 +152,22 @@ export function BlogFilters({ categories, totalPosts }: Readonly<BlogFiltersProp
           <fieldset className="border-0 p-0 m-0">
             <legend className="text-sm font-medium mb-2 block">{t('category')}</legend>
             <div className="flex flex-wrap gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleCategoryClick(null)}
-                aria-pressed={!currentCategory}
-                className={chipClassName(!currentCategory)}
-              >
-                {!currentCategory && (
-                  <Check data-testid="filter-check" className="h-3.5 w-3.5" aria-hidden="true" />
-                )}
+              <FilterChip selected={!currentCategory} onToggle={() => handleCategoryClick(null)}>
                 {t('all')}
-              </Button>
+              </FilterChip>
               {categories.map((category) => {
                 const isSelected = currentCategory === category.slug.current;
                 return (
-                  <Button
+                  <FilterChip
                     key={category._id}
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleCategoryClick(category.slug.current)}
-                    aria-pressed={isSelected}
-                    className={chipClassName(isSelected)}
+                    selected={isSelected}
+                    onToggle={() => handleCategoryClick(category.slug.current)}
                   >
-                    {isSelected && (
-                      <Check
-                        data-testid="filter-check"
-                        className="h-3.5 w-3.5"
-                        aria-hidden="true"
-                      />
-                    )}
                     {category.title}
                     {category.postCount !== undefined && (
                       <span className="ml-1 text-xs opacity-70">({category.postCount})</span>
                     )}
-                  </Button>
+                  </FilterChip>
                 );
               })}
             </div>
