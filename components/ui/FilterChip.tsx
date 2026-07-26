@@ -25,13 +25,9 @@ export const filterChipUnselectedClasses =
  * communicated by color alone. The unselected state is de-grayed
  * (foreground tones on the card surface, no muted-on-muted).
  */
-export function FilterChip({
-  selected,
-  onToggle,
-  children,
-  className,
-}: Readonly<FilterChipProps>) {
+export function FilterChip({ selected, onToggle, children, className }: Readonly<FilterChipProps>) {
   return (
+    // biome-ignore lint/a11y/useSemanticElements: spec mandates a native button with explicit checkbox semantics (styled chip, not a form input)
     <button
       type="button"
       role="checkbox"
@@ -43,9 +39,7 @@ export function FilterChip({
         className
       )}
     >
-      {selected && (
-        <Check data-testid="filter-check" className="h-3.5 w-3.5" aria-hidden="true" />
-      )}
+      {selected && <Check data-testid="filter-check" className="h-3.5 w-3.5" aria-hidden="true" />}
       {children}
     </button>
   );

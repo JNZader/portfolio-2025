@@ -34,9 +34,7 @@ export function TechFilterBar({
     }
   }
 
-  const sorted = [...frequency.entries()].sort(
-    (a, b) => b[1] - a[1] || a[0].localeCompare(b[0])
-  );
+  const sorted = [...frequency.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   const topN = sorted.slice(0, TOP_N).map(([tech]) => tech);
   const pinned = selectedTechs
     .filter((tech) => frequency.has(tech) && !topN.includes(tech))
@@ -47,6 +45,7 @@ export function TechFilterBar({
     .sort((a, b) => a.localeCompare(b));
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: design contract is a labeled group wrapper, not a form fieldset
     <div
       role="group"
       aria-label={t('techBarLabel')}

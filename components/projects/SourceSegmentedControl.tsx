@@ -29,10 +29,7 @@ const OPTIONS = [
  * selection (focus-follows-selection), Home/End jump to the ends. Below
  * `sm` the three segments share the full row width equally.
  */
-export function SourceSegmentedControl({
-  value,
-  onChange,
-}: Readonly<SourceSegmentedControlProps>) {
+export function SourceSegmentedControl({ value, onChange }: Readonly<SourceSegmentedControlProps>) {
   const t = useTranslations('Projects');
   const segmentRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -76,6 +73,7 @@ export function SourceSegmentedControl({
       {OPTIONS.map((option, index) => {
         const checked = value === option.value;
         return (
+          // biome-ignore lint/a11y/useSemanticElements: spec mandates segmented buttons with radio semantics (roving tabindex), not form inputs
           <button
             key={option.value}
             ref={(element) => {

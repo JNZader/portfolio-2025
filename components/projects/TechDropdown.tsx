@@ -4,11 +4,8 @@ import * as Popover from '@radix-ui/react-popover';
 import { Check, ChevronDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
+import { filterChipBaseClasses, filterChipUnselectedClasses } from '@/components/ui/FilterChip';
 import { cn } from '@/lib/utils';
-import {
-  filterChipBaseClasses,
-  filterChipUnselectedClasses,
-} from '@/components/ui/FilterChip';
 
 interface TechDropdownProps {
   /** Non-visible techs (already sorted with localeCompare). */
@@ -118,17 +115,19 @@ export function TechDropdown({
             className="mb-2 h-11 w-full rounded-md border border-input bg-background px-3 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
           />
           {matches.length > 0 ? (
-            <ul
+            <div
               id={listboxId}
               role="listbox"
               aria-multiselectable="true"
               aria-activedescendant={active ? optionId(active) : undefined}
+              tabIndex={-1}
               className="space-y-1"
             >
               {matches.map((tech) => {
                 const selected = selectedTechs.includes(tech);
                 return (
-                  <li
+                  // biome-ignore lint/a11y/useFocusableInteractive: options are navigated via aria-activedescendant; DOM focus stays in the filter input by design
+                  <div
                     key={tech}
                     id={optionId(tech)}
                     role="option"
@@ -149,10 +148,10 @@ export function TechDropdown({
                       />
                     )}
                     {tech}
-                  </li>
+                  </div>
                 );
               })}
-            </ul>
+            </div>
           ) : (
             <p className="px-3 py-2 text-sm text-muted-foreground">{t('techNoResults')}</p>
           )}
