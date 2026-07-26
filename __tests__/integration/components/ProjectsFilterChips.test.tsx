@@ -153,6 +153,21 @@ describe('URL persistence round-trips all filter dimensions', () => {
     }
   });
 
+  it('hydrates a corrupted source param as Todos and keeps the radiogroup keyboard-accessible', () => {
+    currentSearchParams = new URLSearchParams('source=banana');
+    render(<ProjectsClient projects={PROJECTS} />);
+
+    const todos = screen.getByRole('radio', { name: 'Todos' });
+    expect(todos).toHaveAttribute('aria-checked', 'true');
+    // Roving tabindex survives: the checked segment stays tabbable and the
+    // others are reachable via arrows (none stuck without a tabbable entry).
+    expect(todos).toHaveAttribute('tabindex', '0');
+    for (const name of ['Curados', 'GitHub']) {
+      expect(screen.getByRole('radio', { name })).toHaveAttribute('tabindex', '-1');
+      expect(screen.getByRole('radio', { name })).toHaveAttribute('aria-checked', 'false');
+    }
+  });
+
   it('sets the source param for non-default sources and omits it for Todos', async () => {
     const user = userEvent.setup();
     render(<ProjectsClient projects={PROJECTS} />);

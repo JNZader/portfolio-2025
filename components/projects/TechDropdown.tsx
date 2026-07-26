@@ -3,7 +3,7 @@
 import * as Popover from '@radix-ui/react-popover';
 import { Check, ChevronDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { filterChipBaseClasses, filterChipUnselectedClasses } from '@/components/ui/FilterChip';
 import { cn } from '@/lib/utils';
 
@@ -14,14 +14,19 @@ interface TechDropdownProps {
   onToggleTech: (tech: string) => void;
 }
 
-const optionId = (tech: string) => `tech-option-${tech}`;
+// Slugified ids: raw tech names ("Next.js", "Tailwind CSS") are not valid
+// HTML id fragments for aria-activedescendant.
+const optionId = (tech: string) =>
+  `tech-option-${tech.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`;
 
 /**
  * Overflow dropdown for the tech bar: a Radix popover anchored to the
  * "More" trigger with a typeahead filter input and a multiselect listbox.
- * Focus stays in the input while arrows move aria-activedescendant;
- * Enter/Space toggles without closing; Esc/outside-click close via Radix
- * and return focus to the trigger.
+ * The input owns the combobox semantics (role/expanded/controls/
+ * activedescendant) and keeps DOM focus while arrows move the active
+ * option; Enter always toggles, Space toggles only with an empty query
+ * (otherwise it types a space); Esc/outside-click close via Radix and
+ * return focus to the trigger.
  */
 export function TechDropdown({
   remainingTechs,
@@ -50,6 +55,13 @@ export function TechDropdown({
     : remainingTechs;
   const active = activeTech && matches.includes(activeTech) ? activeTech : (matches[0] ?? null);
 
+  // Keep the active option visible inside the max-h-80 scrollable listbox.
+  useEffect(() => {
+    if (!open || !active) return;
+    // scrollIntoView is not implemented in jsdom — guard for tests.
+    document.getElementById(optionId(active))?.scrollIntoView?.({ block: 'nearest' });
+  }, [open, active]);
+
   const moveActive = (direction: 1 | -1) => {
     if (matches.length === 0) return;
     const index = active ? matches.indexOf(active) : 0;
@@ -68,9 +80,16 @@ export function TechDropdown({
         moveActive(-1);
         break;
       case 'Enter':
-      case ' ':
-        // Toggle the active option without closing (multiselect listbox).
+        // Enter always toggles the active option without closing.
         if (active) {
+          event.preventDefault();
+          onToggleTech(active);
+        }
+        break;
+      case ' ':
+        // Space is a printable character: it toggles only with an empty
+        // query; once the user is typing, it must insert a space.
+        if (query === '' && active) {
           event.preventDefault();
           onToggleTech(active);
         }
@@ -85,7 +104,9 @@ export function TechDropdown({
           type="button"
           aria-haspopup="listbox"
           aria-controls={listboxId}
-          aria-label={t('techMoreAria', { count: remainingTechs.length })}
+          // WCAG Label-in-Name: the accessible name must contain the
+          // visible "+N más" label, so it prefixes the longer description.
+          aria-label={`${t('techMore', { count: remainingTechs.length })}: ${t('techMoreAria', { count: remainingTechs.length })}`}
           className={cn(filterChipBaseClasses, filterChipUnselectedClasses)}
         >
           {t('techMore', { count: remainingTechs.length })}
@@ -110,6 +131,12 @@ export function TechDropdown({
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={handleKeyDown}
+            // Combobox semantics live on the focused input (not the
+            // unfocused listbox) so screen readers announce the active option.
+            role="combobox"
+            aria-expanded="true"
+            aria-controls={listboxId}
+            aria-activedescendant={active ? optionId(active) : undefined}
             aria-label={t('techSearchPlaceholder')}
             placeholder={t('techSearchPlaceholder')}
             className="mb-2 h-11 w-full rounded-md border border-input bg-background px-3 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
@@ -119,21 +146,19 @@ export function TechDropdown({
               id={listboxId}
               role="listbox"
               aria-multiselectable="true"
-              aria-activedescendant={active ? optionId(active) : undefined}
               tabIndex={-1}
               className="space-y-1"
             >
               {matches.map((tech) => {
                 const selected = selectedTechs.includes(tech);
                 return (
-                  // biome-ignore lint/a11y/useFocusableInteractive: options are navigated via aria-activedescendant; DOM focus stays in the filter input by design
+                  // biome-ignore lint/a11y/useFocusableInteractive lint/a11y/useKeyWithClickEvents: options are navigated via aria-activedescendant; keyboard interaction lives on the combobox input by design (DOM focus never reaches the options)
                   <div
                     key={tech}
                     id={optionId(tech)}
                     role="option"
                     aria-selected={selected}
                     onClick={() => onToggleTech(tech)}
-                    onKeyDown={handleKeyDown}
                     className={cn(
                       'flex min-h-11 cursor-pointer items-center gap-2 rounded-md px-3 text-sm',
                       selected ? 'bg-primary/10 text-primary' : 'text-foreground/80',

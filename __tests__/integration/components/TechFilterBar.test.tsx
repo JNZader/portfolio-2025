@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from '@/__tests__/test-utils';
 import userEvent from '@testing-library/user-event';
@@ -44,6 +45,22 @@ function renderBar(selectedTechs: string[] = [], onToggleTech = vi.fn()) {
   return { onToggleTech };
 }
 
+/** Stateful harness: lifts selectedTechs like ProjectsClient does. */
+function StatefulBar() {
+  const [selected, setSelected] = useState<string[]>([]);
+  return (
+    <TechFilterBar
+      projects={PROJECTS}
+      selectedTechs={selected}
+      onToggleTech={(tech) =>
+        setSelected((prev) =>
+          prev.includes(tech) ? prev.filter((t) => t !== tech) : [...prev, tech]
+        )
+      }
+    />
+  );
+}
+
 describe('TechFilterBar', () => {
   it('renders exactly the top 8 techs by frequency in deterministic order', () => {
     renderBar();
@@ -87,8 +104,8 @@ describe('TechFilterBar', () => {
   it('shows the remaining count on the More trigger with listbox semantics', () => {
     renderBar();
 
-    // 9 total - 8 visible = 1 remaining
-    const more = screen.getByRole('button', { name: 'Mostrar 1 tecnologías más' });
+    // 9 total - 8 top = 1 dropdown tech (singular ICU plural branch)
+    const more = screen.getByRole('button', { name: '+1 más: Mostrar 1 tecnología más' });
     expect(more).toHaveAttribute('aria-haspopup', 'listbox');
     expect(more).toHaveAttribute('aria-expanded', 'false');
     expect(more.textContent).toContain('+1 más');
@@ -102,16 +119,59 @@ describe('TechFilterBar', () => {
     const group = screen.getByRole('group', { name: 'Filtrar por tecnología' });
     expect(within(group).getAllByRole('checkbox')).toHaveLength(3);
     expect(
-      screen.queryByRole('button', { name: /tecnologías más/i })
+      screen.queryByRole('button', { name: /tecnolog.as? más/i })
     ).not.toBeInTheDocument();
   });
 
-  it('hides the More trigger when pinning covers every remaining tech', () => {
+  it('keeps the More trigger when pinning covers every dropdown tech', () => {
     renderBar(['Rust']);
 
-    expect(
-      screen.queryByRole('button', { name: /tecnologías más/i })
-    ).not.toBeInTheDocument();
+    // Pinned Rust stays in the dropdown list too — the trigger never
+    // disappears because a tech got selected.
+    const more = screen.getByRole('button', { name: /tecnolog.a.? más/i });
+    expect(more).toBeInTheDocument();
+  });
+
+  it('keeps a dropdown-selected tech in the open listbox with aria-selected and a check', async () => {
+    const user = userEvent.setup();
+    renderBar(['Rust']);
+
+    await user.click(screen.getByRole('button', { name: /tecnolog.a.? más/i }));
+
+    const listbox = screen.getByRole('listbox');
+    const rust = within(listbox).getByRole('option', { name: /Rust/ });
+    expect(rust).toHaveAttribute('aria-selected', 'true');
+    expect(within(rust).getByTestId('filter-check')).toBeInTheDocument();
+  });
+
+  it('toggling a dropdown tech flips aria-selected without unmounting the popover', async () => {
+    const user = userEvent.setup();
+    render(<StatefulBar />);
+
+    await user.click(screen.getByRole('button', { name: /tecnolog.a.? más/i }));
+    const rustOption = screen.getByRole('option', { name: /Rust/ });
+    expect(rustOption).toHaveAttribute('aria-selected', 'false');
+
+    // Select from the dropdown: option stays, aria-selected flips, popover open
+    await user.click(rustOption);
+    const selected = screen.getByRole('option', { name: /Rust/ });
+    expect(selected).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    // ...and the pinned chip appears in the visible bar too
+    const bar = screen.getByRole('group', { name: 'Filtrar por tecnología' });
+    expect(within(bar).getByRole('checkbox', { name: 'Rust' })).toHaveAttribute(
+      'aria-checked',
+      'true'
+    );
+
+    // Deselect the LAST remaining dropdown tech: popover and trigger survive
+    await user.click(selected);
+    expect(screen.getByRole('option', { name: /Rust/ })).toHaveAttribute(
+      'aria-selected',
+      'false'
+    );
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /tecnolog.a.? más/i })).toBeInTheDocument();
   });
 
   it('forwards chip toggles to onToggleTech', async () => {

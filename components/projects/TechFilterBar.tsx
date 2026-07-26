@@ -17,8 +17,11 @@ const TOP_N = 8;
  * Always-visible technology chip bar: the top 8 techs by frequency across
  * the project list (deterministic: frequency desc, localeCompare tie-break)
  * UNION any selected techs outside the top 8 (pinned at the end, sorted),
- * with the remainder reachable through the "More" dropdown. Purely
- * presentational derivation — no memoization (React Compiler).
+ * with everything outside the top 8 reachable through the "More" dropdown.
+ * The dropdown excludes ONLY the top 8 — selected (pinned) techs stay in
+ * the listbox with aria-selected so toggling them never unmounts the open
+ * popover. Purely presentational derivation — no memoization (React
+ * Compiler).
  */
 export function TechFilterBar({
   projects,
@@ -40,8 +43,11 @@ export function TechFilterBar({
     .filter((tech) => frequency.has(tech) && !topN.includes(tech))
     .sort((a, b) => a.localeCompare(b));
   const visible = [...topN, ...pinned];
+  // The dropdown hides only the top 8: pinned selections remain listed so
+  // toggling a tech from the open listbox never removes the option
+  // mid-interaction (it flips aria-selected and shows a check instead).
   const remaining = [...frequency.keys()]
-    .filter((tech) => !visible.includes(tech))
+    .filter((tech) => !topN.includes(tech))
     .sort((a, b) => a.localeCompare(b));
 
   return (

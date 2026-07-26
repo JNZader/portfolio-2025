@@ -1,4 +1,5 @@
 import { execSync } from 'node:child_process';
+import { createTranslator } from 'next-intl';
 import es from '@/messages/es.json';
 import en from '@/messages/en.json';
 import { describe, expect, it } from 'vitest';
@@ -34,11 +35,33 @@ describe('projects filters redesign messages', () => {
     expect(Object.keys(enProjects).sort()).toEqual(Object.keys(esProjects).sort());
   });
 
-  it('interpolates the remaining count placeholder in both locales', () => {
+  it('interpolates the remaining count via ICU plural rules in both locales', () => {
     for (const projects of [esProjects, enProjects]) {
-      expect(projects.techMore).toContain('{count}');
-      expect(projects.techMoreAria).toContain('{count}');
+      for (const key of ['techMore', 'techMoreAria'] as const) {
+        expect(projects[key], `${key} must use an ICU plural on {count}`).toContain(
+          '{count, plural,'
+        );
+        expect(projects[key]).toContain('one {');
+        expect(projects[key]).toContain('other {');
+      }
     }
+  });
+
+  it('renders grammatical singular and plural copy in both locales', () => {
+    const tEs = createTranslator({ locale: 'es', namespace: 'Projects', messages: es });
+    const tEn = createTranslator({ locale: 'en', namespace: 'Projects', messages: en });
+
+    // Singular branch (was the ungrammatical "Mostrar 1 tecnologías más")
+    expect(tEs('techMore', { count: 1 })).toBe('+1 más');
+    expect(tEs('techMoreAria', { count: 1 })).toBe('Mostrar 1 tecnología más');
+    expect(tEn('techMore', { count: 1 })).toBe('+1 more');
+    expect(tEn('techMoreAria', { count: 1 })).toBe('Show 1 more technology');
+
+    // Plural branch
+    expect(tEs('techMore', { count: 3 })).toBe('+3 más');
+    expect(tEs('techMoreAria', { count: 3 })).toBe('Mostrar 3 tecnologías más');
+    expect(tEn('techMore', { count: 3 })).toBe('+3 more');
+    expect(tEn('techMoreAria', { count: 3 })).toBe('Show 3 more technologies');
   });
 
   it('pruned keys are verified unused before deletion (usage guard)', () => {

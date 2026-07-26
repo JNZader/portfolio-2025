@@ -16,6 +16,8 @@ interface ProjectsClientProps {
   projects: Project[];
 }
 
+const PROJECT_SOURCES: readonly ProjectSource[] = ['all', 'sanity', 'github'];
+
 /**
  * Composition root: state + URL sync + the always-visible filter layout
  * (search, source segmented control, tech chip bar). No toggle panel —
@@ -27,14 +29,19 @@ export default function ProjectsClient({ projects }: Readonly<ProjectsClientProp
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  // Validate the hydrated source param: a corrupted value (e.g.
+  // ?source=banana) falls back to 'all' so every segment keeps a checked
+  // state and the radiogroup stays keyboard-reachable (roving tabindex).
+  const rawSource = searchParams.get('source') as ProjectSource | null;
+  const initialSource: ProjectSource =
+    rawSource && PROJECT_SOURCES.includes(rawSource) ? rawSource : 'all';
+
   // Estado para búsqueda y filtros
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') ?? '');
   const [selectedTechs, setSelectedTechs] = useState<string[]>(
     searchParams.get('tech')?.split(',').filter(Boolean) ?? []
   );
-  const [selectedSource, setSelectedSource] = useState<ProjectSource>(
-    (searchParams.get('source') as ProjectSource) ?? 'all'
-  );
+  const [selectedSource, setSelectedSource] = useState<ProjectSource>(initialSource);
 
   // Debounced URL sync: the input stays instantly responsive (local state +
   // live filtering), but the router.replace side-effect is debounced so we

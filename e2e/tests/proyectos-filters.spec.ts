@@ -73,7 +73,7 @@ test.describe('proyectos filters redesign', () => {
     );
 
     // Tech from the dropdown (when the dataset overflows the top 8)
-    const more = page.getByRole('button', { name: /tecnologías más/i });
+    const more = page.getByRole('button', { name: /tecnolog.a.? más/i });
     if ((await more.count()) > 0) {
       await more.click();
       const input = page.getByPlaceholder(/filtrar tecnologías/i);
@@ -105,7 +105,7 @@ test.describe('proyectos filters redesign', () => {
   }) => {
     await gotoProyectos(page);
 
-    const more = page.getByRole('button', { name: /tecnologías más/i });
+    const more = page.getByRole('button', { name: /tecnolog.a.? más/i });
     test.skip((await more.count()) === 0, 'dataset fits in the visible bar — no dropdown techs');
 
     // Select a dropdown-only tech plus the GitHub source, then reload the URL.
@@ -160,7 +160,7 @@ test.describe('proyectos filters redesign', () => {
       await expectMinimumTarget(chip);
     }
 
-    const more = page.getByRole('button', { name: /tecnologías más/i });
+    const more = page.getByRole('button', { name: /tecnolog.a.? más/i });
     if ((await more.count()) > 0) {
       await expectMinimumTarget(more);
       await more.click();
@@ -199,7 +199,7 @@ test.describe('proyectos filters redesign', () => {
 
     const segments = page.getByRole('radio');
     await expect(segments).toHaveCount(3);
-    const boxes = [];
+    const boxes: Array<{ x: number; y: number; width: number; height: number } | null> = [];
     for (const segment of await segments.all()) {
       await expect(segment).toBeVisible();
       const box = await segment.boundingBox();
