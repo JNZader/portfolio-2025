@@ -22,8 +22,6 @@ vi.mock('next-intl/server', () => ({
       'featuredProjectsTitle': 'Proyectos Destacados',
       'featuredProjectsSubtitle': 'Una selección de trabajos recientes',
       'featuredProjectsCta': 'Ver todos los proyectos',
-      'featuredProjectsPrevious': 'Proyecto anterior',
-      'featuredProjectsNext': 'Proyecto siguiente',
     };
     return messages[key] ?? key;
   },
@@ -100,23 +98,26 @@ describe('FeaturedProjects', () => {
     expect(screen.getByTestId('featured-projects-rail')).toHaveAttribute('data-scroll-snap', 'x mandatory');
   });
 
-  it('renders localized, keyboard-accessible rail controls', async () => {
+  it('renders no arrow controls and keeps the progress indicator decorative', async () => {
     await renderFeaturedProjects('es', [createProject('alpha'), createProject('beta')]);
 
-    const previous = screen.getByRole('button', { name: 'Proyecto anterior' });
-    const next = screen.getByRole('button', { name: 'Proyecto siguiente' });
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /anterior|siguiente|previous|next/i })
+    ).not.toBeInTheDocument();
 
-    expect(previous).toBeDisabled();
-    expect(next).toBeEnabled();
-    expect(previous).toHaveAttribute('type', 'button');
-    expect(next).toHaveClass('size-11', 'focus-visible:ring-[3px]');
+    const progress = screen.getByTestId('featured-projects-progress');
+    expect(progress).toHaveAttribute('aria-hidden', 'true');
+    expect(progress).not.toHaveAttribute('role');
+    expect(progress).not.toHaveAttribute('tabindex');
   });
 
-  it('keeps previous and next control labels explicit in both locales', () => {
-    expect(es.Home.featuredProjectsPrevious).toBe('Proyecto anterior');
-    expect(es.Home.featuredProjectsNext).toBe('Proyecto siguiente');
-    expect(en.Home.featuredProjectsPrevious).toBe('Previous project');
-    expect(en.Home.featuredProjectsNext).toBe('Next project');
+  it('keeps Home message keys in parity across locales without unused arrow labels', () => {
+    expect(Object.keys(es.Home).sort()).toEqual(Object.keys(en.Home).sort());
+    expect(es.Home).not.toHaveProperty('featuredProjectsPrevious');
+    expect(es.Home).not.toHaveProperty('featuredProjectsNext');
+    expect(en.Home).not.toHaveProperty('featuredProjectsPrevious');
+    expect(en.Home).not.toHaveProperty('featuredProjectsNext');
   });
 
   it('renders image-backed and deterministic fallback visuals for every project', async () => {

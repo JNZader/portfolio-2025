@@ -33,11 +33,7 @@ export async function FeaturedProjects({
         <SectionDescription className="mx-auto">{t('featuredProjectsSubtitle')}</SectionDescription>
       </SectionHeader>
 
-      <FeaturedProjectsRail
-        itemCount={projects.length}
-        previousLabel={t('featuredProjectsPrevious')}
-        nextLabel={t('featuredProjectsNext')}
-      >
+      <FeaturedProjectsRail itemCount={projects.length}>
         {projects.map((project) => (
           <li
             key={project.id}

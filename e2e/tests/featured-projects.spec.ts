@@ -124,4 +124,59 @@ test.describe('Featured projects responsive rail', () => {
       ).toBeLessThanOrEqual(pageWidths.viewportWidth);
     }
   });
+
+  test('shows a decorative progress indicator that tracks rail scroll position', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.goto('/');
+    await dismissCookieConsent(page);
+
+    const section = page.locator('#featured-projects');
+    await expect(section).toBeVisible();
+    await section.scrollIntoViewIfNeeded();
+
+    await expect(
+      section.getByRole('button'),
+      'rail should not render previous/next arrow controls'
+    ).toHaveCount(0);
+
+    const rail = section.getByTestId('featured-projects-rail');
+    const progress = section.getByTestId('featured-projects-progress');
+    const indicator = section.getByTestId('featured-projects-progress-indicator');
+
+    await expect(progress).toHaveAttribute('aria-hidden', 'true');
+
+    const readIndicator = () =>
+      indicator.evaluate((element) => ({
+        transform: element.style.transform,
+        width: element.style.width,
+      }));
+
+    const atStart = await readIndicator();
+    expect(atStart.transform, 'progress should start at the rail origin').toBe('translateX(0%)');
+
+    await rail.evaluate((element) => {
+      element.scrollLeft = (element.scrollWidth - element.clientWidth) / 2;
+      element.dispatchEvent(new Event('scroll'));
+    });
+
+    const halfway = await readIndicator();
+    const halfwayTranslate = Number.parseFloat(/translateX\(([\d.]+)%\)/.exec(halfway.transform)?.[1] ?? 'NaN');
+    expect(halfwayTranslate, 'progress should advance after scrolling').toBeGreaterThan(10);
+
+    await rail.evaluate((element) => {
+      element.scrollLeft = element.scrollWidth - element.clientWidth;
+      element.dispatchEvent(new Event('scroll'));
+    });
+
+    const atEnd = await readIndicator();
+    const endTranslate = Number.parseFloat(/translateX\(([\d.]+)%\)/.exec(atEnd.transform)?.[1] ?? 'NaN');
+    expect(endTranslate, 'progress should keep advancing toward the rail end').toBeGreaterThan(
+      halfwayTranslate
+    );
+
+    const cursor = await rail.evaluate((element) => getComputedStyle(element).cursor);
+    expect(cursor, 'rail should advertise grab dragging').toBe('grab');
+  });
 });
