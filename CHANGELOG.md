@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.29.0](https://github.com/JNZader/portfolio-2025/compare/v2.28.0...v2.29.0) (2026-07-26)
+
+
+### Features
+
+* **projects:** always-visible filter layout with accessible dropdown ([#224](https://github.com/JNZader/portfolio-2025/issues/224)) ([8fac4df](https://github.com/JNZader/portfolio-2025/commits/8fac4dff4f0a78d8f6e7c57e76d5afaeb9d2f1f1))
+
 ## [2.28.0](https://github.com/JNZader/portfolio-2025/compare/v2.27.0...v2.28.0) (2026-07-26)
 
 
