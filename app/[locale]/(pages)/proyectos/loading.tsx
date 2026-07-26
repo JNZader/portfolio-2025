@@ -3,6 +3,7 @@ import Section from '@/components/ui/Section';
 import { Skeleton } from '@/components/ui/Skeleton';
 
 const SKELETON_PROJECT_ITEMS = Array.from({ length: 6 }, (_, index) => `project-skeleton-${index}`);
+const SKELETON_TECH_CHIPS = Array.from({ length: 8 }, (_, index) => `tech-chip-skeleton-${index}`);
 
 export default function ProyectosLoading() {
   return (
@@ -62,18 +63,26 @@ export default function ProyectosLoading() {
               data-testid="proyectos-loading-filters"
               data-region="filter"
               aria-hidden="true"
-              className="flex flex-col gap-4 sm:flex-row"
+              className="flex flex-col gap-4"
             >
-              <Skeleton
-                data-testid="proyectos-loading-search"
-                data-region="search"
-                className="h-12 min-w-0 flex-1 border border-input bg-background"
-              />
-              <Skeleton
-                data-testid="proyectos-loading-filter-control"
-                data-region="control"
-                className="h-12 w-28 border border-border"
-              />
+              <div className="flex flex-col gap-4 sm:flex-row">
+                <Skeleton
+                  data-testid="proyectos-loading-search"
+                  data-region="search"
+                  className="h-12 min-w-0 flex-1 border border-input bg-background"
+                />
+                <Skeleton
+                  data-testid="proyectos-loading-filter-control"
+                  data-region="control"
+                  className="h-11 w-full sm:w-64 rounded-md border border-border"
+                />
+              </div>
+              <div data-region="tech-bar" className="flex flex-wrap gap-2">
+                {SKELETON_TECH_CHIPS.map((id) => (
+                  <Skeleton key={id} className="h-11 w-20 rounded-md" />
+                ))}
+                <Skeleton className="h-11 w-24 rounded-md" />
+              </div>
             </div>
             <Skeleton
               data-testid="proyectos-loading-result-count"
