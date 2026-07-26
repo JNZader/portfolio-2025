@@ -5,6 +5,8 @@
  * del proyecto en un solo lugar para facil mantenimiento.
  */
 
+import { RATE_LIMIT_BUCKETS } from '@/lib/rate-limit/policy';
+
 /**
  * Dominios permitidos para CORS
  */
@@ -110,8 +112,24 @@ export const RATE_LIMITS = {
     max: 2,
     window: '1d',
   },
-  global: {
-    max: 100,
+  // Buckets del proxy (4-bucket policy). `lib/rate-limit/policy.ts` es la
+  // fuente de verdad — estos valores referencian RATE_LIMIT_BUCKETS, que a su
+  // vez puede sobreescribirse con las env vars RATE_LIMIT_* (defaults:
+  // page-read 300, page-mutation 100, api-read 120, api-mutation 60 req/min/IP).
+  pageRead: {
+    max: RATE_LIMIT_BUCKETS['page-read'],
+    window: '1m',
+  },
+  pageMutation: {
+    max: RATE_LIMIT_BUCKETS['page-mutation'],
+    window: '1m',
+  },
+  apiRead: {
+    max: RATE_LIMIT_BUCKETS['api-read'],
+    window: '1m',
+  },
+  apiMutation: {
+    max: RATE_LIMIT_BUCKETS['api-mutation'],
     window: '1m',
   },
 } as const;

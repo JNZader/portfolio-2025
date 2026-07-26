@@ -229,7 +229,7 @@
   "NewsletterConfirmPage": {
     "rateLimitTitle": "Too many requests",
     "rateLimitHeading": "Too Many Requests",
-    "rateLimitBody": "You have made too many requests. Please try again in 1 hour.",
+    "rateLimitBody": "You have made too many requests. Please try again in an hour.",
     "backHome": "Back to home",
     "invalidTitle": "Invalid link",
     "invalidHeading": "❌ Invalid Token",
@@ -263,7 +263,7 @@
   "NewsletterUnsubscribePage": {
     "rateLimitTitle": "Too many requests",
     "rateLimitHeading": "⏳ Too Many Requests",
-    "rateLimitBody": "You have made too many requests. Please try again in 1 hour.",
+    "rateLimitBody": "You have made too many requests. Please try again in an hour.",
     "backHome": "Back to home",
     "invalidTitle": "Invalid link",
     "invalidHeading": "❌ Invalid Token",

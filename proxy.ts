@@ -5,7 +5,7 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { routing } from '@/i18n/routing';
 import { logger } from '@/lib/monitoring/logger';
-import { resolveRateLimitBucket } from '@/lib/rate-limit/policy';
+import { RATE_LIMIT_BUCKETS, resolveRateLimitBucket } from '@/lib/rate-limit/policy';
 import { getClientIp } from '@/lib/utils/client-ip';
 
 // next-intl locale routing, composed into this middleware below.
@@ -25,49 +25,50 @@ const redis = isRedisConfigured
     })
   : null;
 
-// Page mutations (server actions POST to page paths): 100 requests per minute per IP
+// Page mutations (server actions POST to page paths). Limit is the source of
+// truth in lib/rate-limit/policy.ts (RATE_LIMIT_BUCKETS, default 100/min/IP).
 const globalRateLimiter = redis
   ? new Ratelimit({
       redis,
-      limiter: Ratelimit.slidingWindow(100, '1 m'),
+      limiter: Ratelimit.slidingWindow(RATE_LIMIT_BUCKETS['page-mutation'], '1 m'),
       analytics: true,
       prefix: 'ratelimit:global',
       ephemeralCache: new Map(),
     })
   : null;
 
-// Generous page reads limiter: 300 requests per minute per IP. Normal browsing
-// never approaches this, but it bounds amplification attacks where a query param
+// Generous page reads limiter (default 300/min/IP). Normal browsing never
+// approaches this, but it bounds amplification attacks where a query param
 // (e.g. /blog?search=...) bypasses the Next.js data cache and fans out to
 // upstream Sanity API calls.
 const pageReadRateLimiter = redis
   ? new Ratelimit({
       redis,
-      limiter: Ratelimit.slidingWindow(300, '1 m'),
+      limiter: Ratelimit.slidingWindow(RATE_LIMIT_BUCKETS['page-read'], '1 m'),
       analytics: true,
       prefix: 'ratelimit:page-read',
       ephemeralCache: new Map(),
     })
   : null;
 
-// Stricter rate limiter for API mutations: 60 requests per minute
+// Stricter rate limiter for API mutations (default 60/min/IP)
 const apiRateLimiter = redis
   ? new Ratelimit({
       redis,
-      limiter: Ratelimit.slidingWindow(60, '1 m'),
+      limiter: Ratelimit.slidingWindow(RATE_LIMIT_BUCKETS['api-mutation'], '1 m'),
       analytics: true,
       prefix: 'ratelimit:api',
       ephemeralCache: new Map(),
     })
   : null;
 
-// Generous limiter for API reads (health checks, resume downloads, etc.):
-// 120 requests per minute. Combined with the page-read limiter, normal browsing
+// Generous limiter for API reads (health checks, resume downloads, etc.,
+// default 120/min/IP). Combined with the page-read limiter, normal browsing
 // never trips a 429 while upstream amplification is bounded.
 const apiReadRateLimiter = redis
   ? new Ratelimit({
       redis,
-      limiter: Ratelimit.slidingWindow(120, '1 m'),
+      limiter: Ratelimit.slidingWindow(RATE_LIMIT_BUCKETS['api-read'], '1 m'),
       analytics: true,
       prefix: 'ratelimit:api-read',
       ephemeralCache: new Map(),
