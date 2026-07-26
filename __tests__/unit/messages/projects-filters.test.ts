@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process';
 import es from '@/messages/es.json';
 import en from '@/messages/en.json';
 import { describe, expect, it } from 'vitest';
@@ -38,5 +39,35 @@ describe('projects filters redesign messages', () => {
       expect(projects.techMore).toContain('{count}');
       expect(projects.techMoreAria).toContain('{count}');
     }
+  });
+
+  it('pruned keys are verified unused before deletion (usage guard)', () => {
+    // The removed toggle/panel referenced these Projects.* keys. Before
+    // deletion, a repo-wide search confirmed no remaining reference — Blog
+    // uses its own `filters` key in the Blog namespace and is unaffected.
+    const PRUNED = ['filters', 'sourceHeading', 'techHeading', 'techHint'];
+    const projectsSourceRefs = execSync(
+      `grep -rn "useTranslations('Projects')" --include="*.tsx" app components || true`,
+      { cwd: process.cwd(), encoding: 'utf8' }
+    );
+    const files = projectsSourceRefs
+      .split('\n')
+      .filter(Boolean)
+      .map((line) => line.split(':')[0]);
+    for (const file of new Set(files)) {
+      const content = execSync(`cat "${file}"`, { cwd: process.cwd(), encoding: 'utf8' });
+      for (const key of PRUNED) {
+        expect(content.includes(`'${key}'`), `${file} must not reference Projects.${key}`).toBe(
+          false
+        );
+      }
+    }
+
+    for (const key of ['sourceHeading', 'techHeading', 'techHint'] as const) {
+      expect(esProjects[key], `es.Projects.${key} must be pruned`).toBeUndefined();
+      expect(enProjects[key], `en.Projects.${key} must be pruned`).toBeUndefined();
+    }
+    expect(esProjects.filters, 'es.Projects.filters must be pruned').toBeUndefined();
+    expect(enProjects.filters, 'en.Projects.filters must be pruned').toBeUndefined();
   });
 });
