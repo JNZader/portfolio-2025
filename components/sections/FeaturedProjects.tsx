@@ -25,6 +25,8 @@ export async function FeaturedProjects({
     return null;
   }
 
+  const [spotlight, ...railProjects] = projects;
+
   return (
     <Section id="featured-projects" className="content-auto">
       <SectionHeader centered>
@@ -32,14 +34,38 @@ export async function FeaturedProjects({
         <SectionDescription className="mx-auto">{t('featuredProjectsSubtitle')}</SectionDescription>
       </SectionHeader>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {projects.map((project) => (
+      <div
+        className="flex snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain pb-4"
+        data-testid="featured-projects-rail"
+        data-scroll-snap="x mandatory"
+      >
+        <div
+          className="w-[85%] shrink-0 snap-start md:w-[58%]"
+          data-testid="featured-project-spotlight"
+          data-featured-project-role="spotlight"
+        >
           <FeaturedProjectCard
-            key={project.id}
-            project={project}
+            project={spotlight}
+            spotlight
             badgeCuratedLabel={tProjects('badgeCurated')}
+            sourceGithubLabel={tProjects('sourceGithub')}
             viewDetailsLabel={tProjects('viewDetails')}
           />
+        </div>
+        {railProjects.map((project) => (
+          <div
+            key={project.id}
+            className="w-[85%] shrink-0 snap-start md:w-[32%]"
+            data-testid="featured-project-rail-card"
+            data-featured-project-role="rail"
+          >
+            <FeaturedProjectCard
+              project={project}
+              badgeCuratedLabel={tProjects('badgeCurated')}
+              sourceGithubLabel={tProjects('sourceGithub')}
+              viewDetailsLabel={tProjects('viewDetails')}
+            />
+          </div>
         ))}
       </div>
 

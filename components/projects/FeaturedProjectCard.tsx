@@ -1,4 +1,6 @@
 import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
+import { ProjectVisual } from '@/components/projects/ProjectVisual';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,29 +10,51 @@ import type { Project } from '@/lib/github/types';
 interface FeaturedProjectCardProps {
   project: Project;
   badgeCuratedLabel: string;
+  sourceGithubLabel: string;
   viewDetailsLabel: string;
+  spotlight?: boolean;
 }
 
 export function FeaturedProjectCard({
   project,
   badgeCuratedLabel,
+  sourceGithubLabel,
   viewDetailsLabel,
+  spotlight = false,
 }: Readonly<FeaturedProjectCardProps>) {
   return (
     <Card
       variant="interactive"
       className="relative h-full overflow-hidden focus-within:border-primary/30 focus-within:ring-2 focus-within:ring-ring/40"
     >
-      <div className="absolute right-4 top-4">
-        <Badge
-          variant="secondary"
-          className="border border-border/50 bg-background/85 shadow-sm backdrop-blur-sm"
-        >
-          {project.source === 'github' ? 'GitHub' : badgeCuratedLabel}
-        </Badge>
+      <div className="relative h-48 overflow-hidden bg-muted md:h-56">
+        {project.image ? (
+          <>
+            <Image
+              src={project.image}
+              alt=""
+              fill
+              sizes={spotlight ? '(max-width: 768px) 85vw, 58vw' : '(max-width: 768px) 85vw, 32vw'}
+              priority={spotlight}
+              data-testid="project-image"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent" />
+          </>
+        ) : (
+          <ProjectVisual project={project} />
+        )}
+        <div className="absolute right-4 top-4">
+          <Badge
+            variant="secondary"
+            className="border border-border/50 bg-background/85 shadow-sm backdrop-blur-sm"
+          >
+            {project.source === 'github' ? sourceGithubLabel : badgeCuratedLabel}
+          </Badge>
+        </div>
       </div>
 
-      <CardContent className="flex flex-1 flex-col p-6 pt-14">
+      <CardContent className="flex flex-1 flex-col p-6">
         <h3 className="mb-3 line-clamp-2 text-xl font-semibold">
           <Link
             href={`/proyectos/${project.id}`}

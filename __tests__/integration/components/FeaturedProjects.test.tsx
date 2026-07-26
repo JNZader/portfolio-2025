@@ -87,6 +87,38 @@ describe('FeaturedProjects', () => {
     expect(links[1]).toHaveAttribute('href', '/proyectos/featured-2');
     expect(links[2]).toHaveAttribute('href', '/proyectos/first');
     expect(links[3]).toHaveAttribute('href', '/proyectos/second');
+    expect(screen.getByTestId('featured-project-spotlight')).toHaveTextContent('Project featured-1');
+    expect(screen.getAllByTestId('featured-project-rail-card')).toHaveLength(3);
+    expect(screen.getByTestId('featured-projects-rail')).toHaveAttribute('data-scroll-snap', 'x mandatory');
+  });
+
+  it('renders image-backed and deterministic fallback visuals for every project', async () => {
+    await renderFeaturedProjects('es', [
+      createProject('with-image', { image: 'https://cdn.example.com/project.png' }),
+      createProject('without-image'),
+    ]);
+
+    expect(screen.getByTestId('project-image')).toHaveAttribute(
+      'src',
+      expect.stringContaining('/_next/image?url=')
+    );
+    expect(screen.getByTestId('project-visual-fallback')).toBeInTheDocument();
+  });
+
+  it('keeps every project detail link keyboard reachable with a semantic name', async () => {
+    await renderFeaturedProjects('es', [createProject('alpha'), createProject('beta')]);
+
+    const links = screen
+      .getAllByRole('link')
+      .filter((link) => link.getAttribute('href')?.startsWith('/proyectos/'));
+    expect(links).toHaveLength(4);
+    expect(links.map((link) => link.getAttribute('href'))).toEqual([
+      '/proyectos/alpha',
+      '/proyectos/alpha',
+      '/proyectos/beta',
+      '/proyectos/beta',
+    ]);
+    expect(links.every((link) => link.getAttribute('href'))).toBe(true);
   });
 
   it('falls back to available projects when fewer than 3 are featured', async () => {
