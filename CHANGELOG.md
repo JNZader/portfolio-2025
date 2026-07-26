@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.27.0](https://github.com/JNZader/portfolio-2025/compare/v2.26.0...v2.27.0) (2026-07-26)
+
+
+### Features
+
+* **ui:** integrate about profile into home ([#222](https://github.com/JNZader/portfolio-2025/issues/222)) ([4a78408](https://github.com/JNZader/portfolio-2025/commits/4a784083863a88ce5b3f2e7cdbcde71d7d70c2a1))
+
 ## [2.26.0](https://github.com/JNZader/portfolio-2025/compare/v2.25.0...v2.26.0) (2026-07-25)
 
 
