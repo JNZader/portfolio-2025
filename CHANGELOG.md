@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.28.0](https://github.com/JNZader/portfolio-2025/compare/v2.27.0...v2.28.0) (2026-07-26)
+
+
+### Features
+
+* **ui:** add featured projects spotlight rail ([#223](https://github.com/JNZader/portfolio-2025/issues/223)) ([c21ae20](https://github.com/JNZader/portfolio-2025/commits/c21ae20fc75c72fd7943118259b45ebafdba5e81))
+
 ## [2.27.0](https://github.com/JNZader/portfolio-2025/compare/v2.26.0...v2.27.0) (2026-07-26)
 
 
