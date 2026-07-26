@@ -12,7 +12,6 @@ interface FeaturedProjectCardProps {
   badgeCuratedLabel: string;
   sourceGithubLabel: string;
   viewDetailsLabel: string;
-  spotlight?: boolean;
 }
 
 export function FeaturedProjectCard({
@@ -20,22 +19,23 @@ export function FeaturedProjectCard({
   badgeCuratedLabel,
   sourceGithubLabel,
   viewDetailsLabel,
-  spotlight = false,
 }: Readonly<FeaturedProjectCardProps>) {
   return (
     <Card
       variant="interactive"
-      className="relative h-full overflow-hidden focus-within:border-primary/30 focus-within:ring-2 focus-within:ring-ring/40"
+      className="relative h-full w-full overflow-hidden focus-within:border-primary/30 focus-within:ring-2 focus-within:ring-ring/40"
     >
-      <div className="relative h-48 overflow-hidden bg-muted md:h-56">
+      <div
+        className="relative aspect-video shrink-0 overflow-hidden bg-muted"
+        data-testid="featured-project-media"
+      >
         {project.image ? (
           <>
             <Image
               src={project.image}
               alt=""
               fill
-              sizes={spotlight ? '(max-width: 768px) 85vw, 58vw' : '(max-width: 768px) 85vw, 32vw'}
-              priority={spotlight}
+              sizes="(max-width: 767px) 86vw, (max-width: 1023px) calc(50vw - 2.25rem), calc(33vw - 2rem)"
               data-testid="project-image"
               className="object-cover"
             />

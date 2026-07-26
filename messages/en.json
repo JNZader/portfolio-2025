@@ -51,7 +51,9 @@
     "featuredProjectsTitle": "Featured Projects",
     "featuredProjectsSubtitle": "A selection of recent work",
     "featuredProjectsCta": "View all projects",
-    "featuredProjectsViewAll": "View all projects"
+    "featuredProjectsViewAll": "View all projects",
+    "featuredProjectsPrevious": "Previous project",
+    "featuredProjectsNext": "Next project"
   },
   "HeroTerminal": {
     "tooltipBold": "Real example generated with apigen.",

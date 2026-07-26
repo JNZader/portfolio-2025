@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { FeaturedProjectCard } from '@/components/projects/FeaturedProjectCard';
+import { FeaturedProjectsRail } from '@/components/projects/FeaturedProjectsRail';
 import { Button } from '@/components/ui/button';
 import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
 import { Link } from '@/i18n/navigation';
@@ -25,8 +26,6 @@ export async function FeaturedProjects({
     return null;
   }
 
-  const [spotlight, ...railProjects] = projects;
-
   return (
     <Section id="featured-projects" className="content-auto">
       <SectionHeader centered>
@@ -34,30 +33,17 @@ export async function FeaturedProjects({
         <SectionDescription className="mx-auto">{t('featuredProjectsSubtitle')}</SectionDescription>
       </SectionHeader>
 
-      <div
-        className="flex snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain pb-4"
-        data-testid="featured-projects-rail"
-        data-scroll-snap="x mandatory"
+      <FeaturedProjectsRail
+        itemCount={projects.length}
+        previousLabel={t('featuredProjectsPrevious')}
+        nextLabel={t('featuredProjectsNext')}
       >
-        <div
-          className="w-[85%] shrink-0 snap-start md:w-[58%]"
-          data-testid="featured-project-spotlight"
-          data-featured-project-role="spotlight"
-        >
-          <FeaturedProjectCard
-            project={spotlight}
-            spotlight
-            badgeCuratedLabel={tProjects('badgeCurated')}
-            sourceGithubLabel={tProjects('sourceGithub')}
-            viewDetailsLabel={tProjects('viewDetails')}
-          />
-        </div>
-        {railProjects.map((project) => (
-          <div
+        {projects.map((project) => (
+          <li
             key={project.id}
-            className="w-[85%] shrink-0 snap-start md:w-[32%]"
-            data-testid="featured-project-rail-card"
-            data-featured-project-role="rail"
+            className="flex basis-[86%] shrink-0 snap-start md:basis-[calc((100%_-_1.5rem)/2)] lg:basis-[calc((100%_-_3rem)/3)]"
+            data-testid="featured-project-card"
+            data-featured-project-item
           >
             <FeaturedProjectCard
               project={project}
@@ -65,9 +51,9 @@ export async function FeaturedProjects({
               sourceGithubLabel={tProjects('sourceGithub')}
               viewDetailsLabel={tProjects('viewDetails')}
             />
-          </div>
+          </li>
         ))}
-      </div>
+      </FeaturedProjectsRail>
 
       <div className="mt-12 flex justify-center">
         <Button variant="default" size="lg" asChild className="group/btn">
