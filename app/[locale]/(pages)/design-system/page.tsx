@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { PatternBackground, type PatternVariant } from '@/components/ui/PatternBackground';
 import Section, {
   SECTION_BG,
   SectionDescription,
@@ -290,6 +291,42 @@ export default function DesignSystemPage() {
         </Container>
       </Section>
 
+      {/* Pattern Backgrounds — masked-gradient CSS (pattern-craft) preview.
+          Toggle the theme in the header to review each variant in light + dark. */}
+      <Section background={SECTION_BG.MUTED}>
+        <Container>
+          <RevealOnScroll>
+            <h2 className="text-3xl font-bold mb-2">Pattern Backgrounds</h2>
+            <p className="text-muted-foreground mb-6 max-w-2xl">
+              Fondos CSS puros (grid/puntos/glow) con mask-image que disuelve el patrón en la
+              página. Cero JS, cero SVG. Leen los tokens del tema, así que se mantienen sutiles en
+              claro y oscuro. Alterná el tema en el header para revisar ambos.
+            </p>
+          </RevealOnScroll>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            <PatternPreview
+              variant="grid"
+              title="Option 1 — Grid"
+              hint="Blueprint, se desvanece desde arriba"
+              cssClass=".bg-pattern-grid"
+            />
+            <PatternPreview
+              variant="dots"
+              title="Option 2 — Dots"
+              hint="Más silencioso, se desvanece en los bordes"
+              cssClass=".bg-pattern-dots"
+            />
+            <PatternPreview
+              variant="glow"
+              title="Option 3 — Glow"
+              hint="Halo radial de --primary, el más calmo"
+              cssClass=".bg-pattern-glow"
+            />
+          </div>
+        </Container>
+      </Section>
+
       {/* Component Composition */}
       <Section>
         <Container>
@@ -340,6 +377,26 @@ export default function DesignSystemPage() {
 }
 
 // Helper Components
+function PatternPreview({
+  variant,
+  title,
+  hint,
+  cssClass,
+}: Readonly<{ variant: PatternVariant; title: string; hint: string; cssClass: string }>) {
+  return (
+    <div className="space-y-2">
+      <div className="relative h-56 overflow-hidden rounded-xl border bg-background">
+        <PatternBackground variant={variant} />
+        <div className="relative z-10 flex h-full flex-col justify-end p-4">
+          <p className="text-lg font-semibold text-display">{title}</p>
+          <p className="text-sm text-muted-foreground">{hint}</p>
+        </div>
+      </div>
+      <p className="text-center font-mono text-xs text-muted-foreground">{cssClass}</p>
+    </div>
+  );
+}
+
 function ColorSwatch({ name, className }: Readonly<{ name: string; className: string }>) {
   return (
     <div className="space-y-2">

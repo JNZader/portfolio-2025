@@ -28,6 +28,11 @@ export function HeroBackground({
 }: Readonly<HeroBackgroundProps>) {
   return (
     <>
+      {/* Alternative: pattern-craft masked backgrounds (grid / dots / glow) live
+          in components/ui/PatternBackground.tsx — drop <PatternBackground
+          variant="grid" /> here to swap the mesh for a masked grid. Preview all
+          three at /design-system. Left off by default pending visual review. */}
+
       {/* Static gradient background - renders immediately */}
       <div className={cn('absolute inset-0 -z-10', className)}>
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-tertiary/5" />

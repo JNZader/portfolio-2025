@@ -3,7 +3,12 @@ import { getTranslations } from 'next-intl/server';
 import { RevealOnScroll } from '@/components/animations';
 import { CVButton } from '@/components/ui/CVButton';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
-import Section, { SectionDescription, SectionHeader, SectionTitle } from '@/components/ui/Section';
+import Section, {
+  SECTION_BG,
+  SectionDescription,
+  SectionHeader,
+  SectionTitle,
+} from '@/components/ui/Section';
 import { SkillsList } from '@/components/ui/SkillsList';
 import { Link } from '@/i18n/navigation';
 import { SKILLS_DATA } from '@/lib/constants';
@@ -11,7 +16,12 @@ import { SKILLS_DATA } from '@/lib/constants';
 export async function AboutProfile() {
   const t = await getTranslations('About');
   return (
-    <Section id="sobre-mi" aria-labelledby="about-profile-heading" className="scroll-mt-24">
+    <Section
+      id="sobre-mi"
+      aria-labelledby="about-profile-heading"
+      className="scroll-mt-24"
+      background={SECTION_BG.GLOW}
+    >
       <SectionHeader>
         <SectionTitle id="about-profile-heading">{t('heroTitle')}</SectionTitle>
         <SectionDescription>{t('heroSubtitle')}</SectionDescription>

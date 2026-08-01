@@ -9,7 +9,8 @@ export type SectionBackground =
   | 'accent'
   | 'primary'
   | 'gradient'
-  | 'gradient-primary';
+  | 'gradient-primary'
+  | 'glow';
 
 export type SectionSpacing = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
@@ -21,6 +22,7 @@ export const SECTION_BG = {
   PRIMARY: 'primary',
   GRADIENT: 'gradient',
   GRADIENT_PRIMARY: 'gradient-primary',
+  GLOW: 'glow',
 } as const satisfies Record<string, SectionBackground>;
 
 const sectionVariants = cva('w-full', {
@@ -40,6 +42,7 @@ const sectionVariants = cva('w-full', {
       primary: 'bg-primary/5',
       gradient: 'bg-gradient-to-br from-background via-background to-muted/20',
       'gradient-primary': 'bg-gradient-to-br from-primary/5 via-background to-secondary/5',
+      glow: 'bg-pattern-glow',
     } satisfies Record<SectionBackground, string>,
   },
   defaultVariants: {
