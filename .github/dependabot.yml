@@ -23,8 +23,24 @@ updates:
     commit-message:
       prefix: 'chore'
       include: 'scope'
-    # Group minor and patch updates together
+    # Lockstep families FIRST: coupled packages update together in ONE PR
+    # (including majors) so a partial bump can't break peer-version typechecks
+    # (the AI-SDK coupled-majors scar, ghagga #289). A dep lands in the first
+    # group it matches, so these precede the minor-and-patch catch-all.
     groups:
+      react:
+        patterns:
+          - 'react'
+          - 'react-dom'
+          - '@types/react'
+          - '@types/react-dom'
+      radix-ui:
+        patterns:
+          - '@radix-ui/*'
+      next:
+        patterns:
+          - 'next'
+      # Everything else: minor+patch batched to reduce PR noise (majors solo).
       minor-and-patch:
         patterns:
           - '*'
