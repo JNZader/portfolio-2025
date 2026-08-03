@@ -41,7 +41,7 @@
     "@giscus/react": "^3.1.0",
     "@hookform/resolvers": "^5.4.0",
     "@next/third-parties": "^16.2.11",
-    "@portabletext/react": "^6.2.0",
+    "@portabletext/react": "^7.0.1",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.9.0",
     "@radix-ui/react-popover": "^1.1.23",
