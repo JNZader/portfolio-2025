@@ -176,7 +176,7 @@
       "@hono/node-server": "^2.0.5",
       "find-my-way": "^9.7.0"
     },
-    "dompurify": "^3.4.12",
+    "dompurify": "^3.4.13",
     "ajv": {
       "fast-uri": "^3.1.4"
     },
