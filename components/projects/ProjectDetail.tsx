@@ -5,6 +5,7 @@ import { FaGithub } from 'react-icons/fa';
 import type { BreadcrumbList, CreativeWork, SoftwareSourceCode, WithContext } from 'schema-dts';
 import { PortableTextRenderer } from '@/components/blog/PortableTextRenderer';
 import { MarkdownContent } from '@/components/markdown/MarkdownContent';
+import { ViewTransitionBoundary } from '@/components/page-transition';
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { Badge } from '@/components/ui/badge';
@@ -63,6 +64,7 @@ export function ProjectDetail({
           <div className="py-4">
             <Link
               href="/proyectos"
+              transitionTypes={['nav-back']}
               className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
@@ -132,13 +134,15 @@ export function ProjectDetail({
             {/* Project Image */}
             {project.image && (
               <div className="relative h-64 md:h-96 rounded-xl overflow-hidden mb-12 bg-muted">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
+                <ViewTransitionBoundary name={`project-${project.id}`} share="morph" default="none">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </ViewTransitionBoundary>
               </div>
             )}
 

@@ -56,6 +56,7 @@ export function PostCard({ post, priority = false }: Readonly<PostCardProps>) {
       {/* Image */}
       <Link
         href={`/blog/${post.slug.current}`}
+        transitionTypes={['nav-forward']}
         className="relative aspect-[16/9] overflow-hidden bg-muted"
         aria-label={post.title}
       >
@@ -124,6 +125,7 @@ export function PostCard({ post, priority = false }: Readonly<PostCardProps>) {
         <h2 className="mb-2 line-clamp-2 text-xl font-semibold">
           <Link
             href={`/blog/${post.slug.current}`}
+            transitionTypes={['nav-forward']}
             className="hover:text-primary transition-colors"
           >
             <HighlightedText parts={titleParts} />
