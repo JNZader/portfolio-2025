@@ -90,7 +90,7 @@ export default function MobileMenu({ open, onClose, navigation }: Readonly<Mobil
             onClick={() => handleNavigation('/')}
             aria-label={t('homeAria')}
           >
-            <JzMark className="text-xl" aria-hidden />
+            <JzMark className="text-2xl" aria-hidden />
           </Link>
           <div id="mobile-menu-title" className="sr-only">
             {t('title')}

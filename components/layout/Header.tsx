@@ -32,7 +32,7 @@ export default async function Header() {
               className="group -m-1.5 p-1.5 flex items-center gap-1"
               aria-label={tHeader('logoAria')}
             >
-              <JzMark className="text-2xl" />
+              <JzMark className="text-3xl" />
               <span className="hidden sm:inline text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors">
                 dev
               </span>

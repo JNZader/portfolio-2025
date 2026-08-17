@@ -26,11 +26,11 @@ export default async function Footer() {
       <Container>
         {/* Main Footer Content */}
         <div className="py-12 relative z-10">
-          <div data-footer-grid="primary" className="grid grid-cols-1 gap-8 md:grid-cols-[2fr_1fr]">
+          <div data-footer-grid="primary" className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {/* Brand & Contact Column */}
             <div data-footer-column="brand" className="min-w-0 space-y-4">
               <Link href="/" className="inline-flex min-h-11 min-w-11 items-center">
-                <JzMark className="text-xl" />
+                <JzMark className="text-3xl" />
               </Link>
               <p className="text-sm text-muted-foreground leading-relaxed">{t('brand')}</p>
               <div className="flex gap-2">
