@@ -62,7 +62,7 @@ export default async function Footer() {
             {/* Navigation Column */}
             <nav
               data-footer-column="navigation"
-              className="min-w-0 space-y-4"
+              className="min-w-0 space-y-4 md:justify-self-end"
               aria-label={t('navAria')}
             >
               <p className="font-semibold">{t('navHeading')}</p>
