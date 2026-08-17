@@ -66,7 +66,7 @@ export default async function Footer() {
               aria-label={t('navAria')}
             >
               <p className="font-semibold">{t('navHeading')}</p>
-              <ul className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
+              <ul className="space-y-2">
                 {MAIN_NAVIGATION.map((item) => (
                   <li key={item.key}>
                     <Link
