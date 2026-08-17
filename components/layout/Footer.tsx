@@ -5,6 +5,7 @@ import Container from '@/components/ui/Container';
 import { ExternalLink } from '@/components/ui/ExternalLink';
 import { Link } from '@/i18n/navigation';
 import { MAIN_NAVIGATION } from '@/lib/constants/navigation';
+import JzMark from './JzMark';
 
 export default async function Footer() {
   const currentYear = new Date().getFullYear();
@@ -28,11 +29,8 @@ export default async function Footer() {
           <div data-footer-grid="primary" className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {/* Brand & Contact Column */}
             <div data-footer-column="brand" className="min-w-0 space-y-4">
-              <Link
-                href="/"
-                className="inline-flex min-h-11 min-w-11 items-center text-xl font-bold text-primary"
-              >
-                JZ
+              <Link href="/" className="inline-flex min-h-11 min-w-11 items-center">
+                <JzMark className="text-3xl" />
               </Link>
               <p className="text-sm text-muted-foreground leading-relaxed">{t('brand')}</p>
               <div className="flex gap-2">
@@ -64,11 +62,11 @@ export default async function Footer() {
             {/* Navigation Column */}
             <nav
               data-footer-column="navigation"
-              className="min-w-0 space-y-4"
+              className="min-w-0 space-y-4 md:justify-self-end"
               aria-label={t('navAria')}
             >
               <p className="font-semibold">{t('navHeading')}</p>
-              <ul>
+              <ul className="space-y-2">
                 {MAIN_NAVIGATION.map((item) => (
                   <li key={item.key}>
                     <Link
