@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.30.5](https://github.com/JNZader/portfolio-2025/compare/v2.30.4...v2.30.5) (2026-08-17)
+
+### Bug Fixes
+
+* **deps:** override undici to 7.29.0 in module-federation chain ([#246](https://github.com/JNZader/portfolio-2025/issues/246)) ([5c3d3e6](https://github.com/JNZader/portfolio-2025/commits/5c3d3e6ad5ccd1e5595c756c4275f4449d2ade27))
 ## [2.30.4](https://github.com/JNZader/portfolio-2025/compare/v2.30.3...v2.30.4) (2026-08-17)
 
 ### Bug Fixes
