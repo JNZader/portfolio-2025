@@ -5,6 +5,7 @@ import Container from '@/components/ui/Container';
 import { ExternalLink } from '@/components/ui/ExternalLink';
 import { Link } from '@/i18n/navigation';
 import { MAIN_NAVIGATION } from '@/lib/constants/navigation';
+import JzMark from './JzMark';
 
 export default async function Footer() {
   const currentYear = new Date().getFullYear();
@@ -25,14 +26,11 @@ export default async function Footer() {
       <Container>
         {/* Main Footer Content */}
         <div className="py-12 relative z-10">
-          <div data-footer-grid="primary" className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          <div data-footer-grid="primary" className="grid grid-cols-1 gap-8 md:grid-cols-[2fr_1fr]">
             {/* Brand & Contact Column */}
             <div data-footer-column="brand" className="min-w-0 space-y-4">
-              <Link
-                href="/"
-                className="inline-flex min-h-11 min-w-11 items-center text-xl font-bold text-primary"
-              >
-                JZ
+              <Link href="/" className="inline-flex min-h-11 min-w-11 items-center">
+                <JzMark className="text-xl" />
               </Link>
               <p className="text-sm text-muted-foreground leading-relaxed">{t('brand')}</p>
               <div className="flex gap-2">
@@ -68,7 +66,7 @@ export default async function Footer() {
               aria-label={t('navAria')}
             >
               <p className="font-semibold">{t('navHeading')}</p>
-              <ul>
+              <ul className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
                 {MAIN_NAVIGATION.map((item) => (
                   <li key={item.key}>
                     <Link

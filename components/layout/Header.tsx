@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import Container from '@/components/ui/Container';
 import { Link } from '@/i18n/navigation';
 import { MAIN_NAVIGATION } from '@/lib/constants/navigation';
+import JzMark from './JzMark';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { MobileMenuButton } from './MobileMenuButton';
 import { NavLink } from './NavLink';
@@ -31,7 +32,7 @@ export default async function Header() {
               className="group -m-1.5 p-1.5 flex items-center gap-1"
               aria-label={tHeader('logoAria')}
             >
-              <span className="text-2xl font-black tracking-tight gradient-text-accent">JZ</span>
+              <JzMark className="text-2xl" />
               <span className="hidden sm:inline text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors">
                 dev
               </span>

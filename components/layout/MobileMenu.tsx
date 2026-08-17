@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
 import { Link, usePathname } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
+import JzMark from './JzMark';
 
 interface MobileMenuProps {
   open: boolean;
@@ -89,9 +90,7 @@ export default function MobileMenu({ open, onClose, navigation }: Readonly<Mobil
             onClick={() => handleNavigation('/')}
             aria-label={t('homeAria')}
           >
-            <span className="text-xl font-bold text-primary" aria-hidden="true">
-              JZ
-            </span>
+            <JzMark className="text-xl" aria-hidden />
           </Link>
           <div id="mobile-menu-title" className="sr-only">
             {t('title')}
