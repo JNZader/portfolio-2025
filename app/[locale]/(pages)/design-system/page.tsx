@@ -22,7 +22,7 @@ import Section, {
 export const metadata = {
   title: 'Design System',
   description: 'Documentación de componentes shadcn/ui',
-  robots: { index: false, follow: false },
+  robots: { index: false, follow: true },
 };
 
 const TYPOGRAPHY_SIZES = [
