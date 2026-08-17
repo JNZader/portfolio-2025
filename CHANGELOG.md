@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.30.2](https://github.com/JNZader/portfolio-2025/compare/v2.30.1...v2.30.2) (2026-08-17)
+
+### Bug Fixes
+
+* **deps:** resolve high severity vulnerabilities via npm audit fix ([#242](https://github.com/JNZader/portfolio-2025/issues/242)) ([316ff07](https://github.com/JNZader/portfolio-2025/commits/316ff073390baadc9851cd5be2281281be508843))
 ## [2.30.1](https://github.com/JNZader/portfolio-2025/compare/v2.30.0...v2.30.1) (2026-08-17)
 ## [2.30.0](https://github.com/JNZader/portfolio-2025/compare/v2.29.0...v2.30.0) (2026-07-26)
 
