@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.30.4](https://github.com/JNZader/portfolio-2025/compare/v2.30.3...v2.30.4) (2026-08-17)
+
+### Bug Fixes
+
+* **seo:** noindex internal pages (design-system, secret-achievements) ([#245](https://github.com/JNZader/portfolio-2025/issues/245)) ([df39788](https://github.com/JNZader/portfolio-2025/commits/df397881d05337af2f5203f0df695273b7d31fac))
+* **ui:** visual feedback — JZ mark, favicon, OG image, footer layout ([#244](https://github.com/JNZader/portfolio-2025/issues/244)) ([1443c59](https://github.com/JNZader/portfolio-2025/commits/1443c593c95b6f86d850edc1ece53bcf7c9c58b0))
 ## [2.30.3](https://github.com/JNZader/portfolio-2025/compare/v2.30.2...v2.30.3) (2026-08-17)
 ## [2.30.2](https://github.com/JNZader/portfolio-2025/compare/v2.30.1...v2.30.2) (2026-08-17)
 
