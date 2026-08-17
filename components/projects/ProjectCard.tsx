@@ -4,6 +4,7 @@ import { ArrowRight, ExternalLink, Star } from 'lucide-react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { FaGithub } from 'react-icons/fa';
+import { ViewTransitionBoundary } from '@/components/page-transition';
 import { ProjectVisual } from '@/components/projects/ProjectVisual';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -27,14 +28,16 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
       <div className="relative h-48 overflow-hidden bg-muted">
         {project.image ? (
           <>
-            <Image
-              src={project.image}
-              alt=""
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              priority={priority}
-              className="object-cover"
-            />
+            <ViewTransitionBoundary name={`project-${project.id}`} share="morph" default="none">
+              <Image
+                src={project.image}
+                alt=""
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                priority={priority}
+                className="object-cover"
+              />
+            </ViewTransitionBoundary>
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent" />
           </>
         ) : (
@@ -71,6 +74,7 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
         <h3 className="mb-3 line-clamp-2 text-xl font-semibold">
           <Link
             href={`/proyectos/${project.id}`}
+            transitionTypes={['nav-forward']}
             className="after:absolute after:inset-0 after:content-['']"
           >
             {project.title}
@@ -109,7 +113,7 @@ export default function ProjectCard({ project, priority = false }: Readonly<Proj
 
         <div className="mt-auto flex items-center justify-between border-t border-border/50 pt-4">
           <Button variant="ghost" size="sm" asChild className="group/btn relative z-10">
-            <Link href={`/proyectos/${project.id}`}>
+            <Link href={`/proyectos/${project.id}`} transitionTypes={['nav-forward']}>
               {t('viewDetails')}
               <ArrowRight className="ml-1 size-4 transition-transform group-hover/btn:translate-x-1 motion-reduce:transition-none" />
             </Link>
