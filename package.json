@@ -170,7 +170,8 @@
       "adm-zip": "^0.6.0"
     },
     "@module-federation/dts-plugin": {
-      "adm-zip": "^0.6.0"
+      "adm-zip": "^0.6.0",
+      "undici": "7.29.0"
     },
     "@prisma/dev": {
       "@hono/node-server": "^2.0.5",
