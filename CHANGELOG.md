@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.31.0](https://github.com/JNZader/portfolio-2025/compare/v2.30.6...v2.31.0) (2026-08-17)
+
+### Features
+
+* **ui:** migrate route transitions to React ViewTransition on Next 16.3 ([#250](https://github.com/JNZader/portfolio-2025/issues/250)) ([bba1222](https://github.com/JNZader/portfolio-2025/commits/bba122276eb20e932084ca4d866ce6d940a4b7b3)), references [vercel/next.js#96098](https://github.com/JNZader/portfolio-2025/issues/96098)
 ## [2.30.6](https://github.com/JNZader/portfolio-2025/compare/v2.30.5...v2.30.6) (2026-08-17)
 ## [2.30.5](https://github.com/JNZader/portfolio-2025/compare/v2.30.4...v2.30.5) (2026-08-17)
 
