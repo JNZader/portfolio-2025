@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Suspense } from 'react';
 import { NewsletterSkeleton } from '@/components/newsletter/NewsletterSkeleton';
+import { PageTransition } from '@/components/page-transition';
 import { AboutProfile } from '@/components/sections/AboutProfile';
 import { FeaturedProjects } from '@/components/sections/FeaturedProjects';
 import { HeroSection } from '@/components/sections/hero-section';
@@ -44,7 +45,7 @@ export default async function HomePage({
   const featuredProjects = selectFeaturedProjects(projects);
   const scrollTargetId = featuredProjects.length > 0 ? 'featured-projects' : 'sobre-mi';
   return (
-    <>
+    <PageTransition>
       <JsonLd data={generatePersonSchema(locale)} />
       <JsonLd data={generateWebSiteSchema()} />
       <HeroSection
@@ -66,6 +67,6 @@ export default async function HomePage({
       <Suspense fallback={<NewsletterSkeleton />}>
         <NewsletterHero />
       </Suspense>
-    </>
+    </PageTransition>
   );
 }

@@ -10,6 +10,7 @@ import { PostHeader } from '@/components/blog/PostHeader';
 import { RelatedPosts } from '@/components/blog/RelatedPosts';
 import { ShareButtons } from '@/components/blog/ShareButtons';
 import { TableOfContents } from '@/components/blog/TableOfContents';
+import { PageTransition } from '@/components/page-transition';
 import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
 import { JsonLd } from '@/components/seo/JsonLd';
 import Container from '@/components/ui/Container';
@@ -193,7 +194,7 @@ export default async function PostPage({ params }: Readonly<PostPageProps>) {
   );
 
   return (
-    <>
+    <PageTransition>
       {/* Giscus solo carga en posts — el preconnect vive acá, no en el layout
           global (React hoistea el <link> al <head>) */}
       <link rel="preconnect" href="https://giscus.app" crossOrigin="anonymous" />
@@ -257,6 +258,6 @@ export default async function PostPage({ params }: Readonly<PostPageProps>) {
           </div>
         </div>
       </Container>
-    </>
+    </PageTransition>
   );
 }

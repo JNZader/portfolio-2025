@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { RevealOnScroll } from '@/components/animations';
+import { PageTransition } from '@/components/page-transition';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Container from '@/components/ui/Container';
@@ -43,7 +44,7 @@ export default function DesignSystemPage() {
     notFound();
   }
   return (
-    <>
+    <PageTransition>
       {/* Hero */}
       <Section background={SECTION_BG.GRADIENT} spacing="xl">
         <Container>
@@ -335,7 +336,7 @@ export default function DesignSystemPage() {
           </Card>
         </Container>
       </Section>
-    </>
+    </PageTransition>
   );
 }
 

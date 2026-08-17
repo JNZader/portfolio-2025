@@ -1,6 +1,7 @@
 import { Mail } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { PageTransition } from '@/components/page-transition';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { DownloadCVButton } from '@/components/ui/DownloadCVButton';
 import { ExternalLink } from '@/components/ui/ExternalLink';
@@ -66,7 +67,7 @@ export default async function CvPage({
   const pdfHref = locale === 'en' ? '/api/resume?locale=en' : '/api/resume';
 
   return (
-    <>
+    <PageTransition>
       <JsonLd data={schema} />
 
       {/* div, not <main>: the root layout already wraps children in <main id="main-content"> */}
@@ -262,6 +263,6 @@ export default async function CvPage({
           </ul>
         </section>
       </div>
-    </>
+    </PageTransition>
   );
 }

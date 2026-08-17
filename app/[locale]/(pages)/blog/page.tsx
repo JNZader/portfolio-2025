@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/blog/EmptyState';
 import { Pagination } from '@/components/blog/Pagination';
 import { PostGrid } from '@/components/blog/PostGrid';
 import { SearchTracker } from '@/components/blog/SearchTracker';
+import { PageTransition } from '@/components/page-transition';
 import Container from '@/components/ui/Container';
 import { InteriorHero } from '@/components/ui/InteriorHero';
 import Section from '@/components/ui/Section';
@@ -88,7 +89,7 @@ export default async function BlogPage({ params, searchParams }: Readonly<BlogPa
   }
 
   return (
-    <>
+    <PageTransition>
       {/* Track search query */}
       {searchTerm && normalizedSearch && <SearchTracker query={searchTerm} results={total} />}
 
@@ -128,6 +129,6 @@ export default async function BlogPage({ params, searchParams }: Readonly<BlogPa
           </div>
         </Container>
       </Section>
-    </>
+    </PageTransition>
   );
 }

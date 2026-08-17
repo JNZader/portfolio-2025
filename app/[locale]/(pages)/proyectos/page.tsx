@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Suspense } from 'react';
+import { PageTransition } from '@/components/page-transition';
 import ProjectsClient from '@/components/projects/ProjectsClient';
 import Container from '@/components/ui/Container';
 import { InteriorHero } from '@/components/ui/InteriorHero';
@@ -56,7 +57,7 @@ export default async function ProyectosPage({
   const allProjects = [...sanityProjects, ...dedupedGithubProjects];
 
   return (
-    <>
+    <PageTransition>
       <InteriorHero
         variant="projects"
         title={t('heroTitle')}
@@ -91,6 +92,6 @@ export default async function ProyectosPage({
           </Suspense>
         </Container>
       </Section>
-    </>
+    </PageTransition>
   );
 }

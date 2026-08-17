@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { RevealOnScroll } from '@/components/animations';
 import { ContactForm } from '@/components/forms/ContactForm';
+import { PageTransition } from '@/components/page-transition';
 import Container from '@/components/ui/Container';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ExternalLink } from '@/components/ui/ExternalLink';
@@ -28,7 +29,7 @@ export default async function ContactoPage({
   setRequestLocale(locale);
   const t = await getTranslations('Contact');
   return (
-    <>
+    <PageTransition>
       <InteriorHero variant="contact" title={t('heroTitle')} description={t('heroSubtitle')} />
 
       {/* Content */}
@@ -117,6 +118,6 @@ export default async function ContactoPage({
           </div>
         </Container>
       </Section>
-    </>
+    </PageTransition>
   );
 }
