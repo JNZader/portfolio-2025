@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { NewsletterForm } from '@/components/newsletter/NewsletterForm';
+import { PageTransition } from '@/components/page-transition';
 import Container from '@/components/ui/Container';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { InteriorHero } from '@/components/ui/InteriorHero';
@@ -25,7 +26,7 @@ export default async function NewsletterPage({
   setRequestLocale(locale);
   const t = await getTranslations('NewsletterPage');
   return (
-    <>
+    <PageTransition>
       {/* Hero — shared InteriorHero (same language as projects/contact/blog) */}
       <InteriorHero variant="newsletter" title={t('heroTitle')} description={t('heroSubtitle')} />
 
@@ -117,7 +118,7 @@ export default async function NewsletterPage({
           </div>
         </Container>
       </Section>
-    </>
+    </PageTransition>
   );
 }
 

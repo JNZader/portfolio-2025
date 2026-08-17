@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getLocale, getTranslations, setRequestLocale } from 'next-intl/server';
+import { PageTransition } from '@/components/page-transition';
 import { InteriorHero } from '@/components/ui/InteriorHero';
 import Section from '@/components/ui/Section';
 import { localeAlternates } from '@/lib/seo/alternates';
@@ -24,7 +25,7 @@ export default async function PrivacyPage({
   const t = await getTranslations('Privacy');
 
   return (
-    <>
+    <PageTransition>
       {/* Hero — shared InteriorHero (same language as projects/contact/blog) */}
       <InteriorHero variant="legal" title={t('heroTitle')} description={t('heroSubtitle')} />
 
@@ -33,6 +34,6 @@ export default async function PrivacyPage({
           {current === 'en' ? <PrivacyEn /> : <PrivacyEs />}
         </article>
       </Section>
-    </>
+    </PageTransition>
   );
 }

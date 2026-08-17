@@ -669,24 +669,36 @@
 }
 
 /*
- * Cross-route View Transitions — a subtle root cross-fade on navigation.
- * Enabled via experimental.viewTransition in next.config.ts; App Router wraps
- * navigations in startViewTransition automatically. Reduced-motion disables it
- * (the `*` rule below doesn't reach ::view-transition pseudo-elements).
+ * Cross-route View Transitions — a subtle page cross-fade on navigation.
+ *
+ * Model (Next.js 16.3): every <Link> navigation runs inside
+ * React.startTransition, so <ViewTransition enter="page-fade" exit="page-fade"
+ * default="none"> boundaries (one per public page, never in layouts) activate
+ * automatically — ZERO config, no experimental flag. The rules below target the
+ * `.page-fade` class emitted by those boundaries. Browsers without the View
+ * Transitions API simply skip the animation; the app works either way.
+ * Reduced-motion is respected via the `*` rules that zero out the pseudo-element
+ * animations (the global `*` reduce block doesn't reach ::view-transition-*).
  */
+::view-transition {
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: no-preference) {
-  ::view-transition-old(root) {
+  ::view-transition-old(.page-fade) {
     animation: 160ms ease both fadeOut;
   }
-  ::view-transition-new(root) {
+  ::view-transition-new(.page-fade) {
     animation: 220ms ease 40ms both fadeOut reverse;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0.01ms !important;
   }
 }
 

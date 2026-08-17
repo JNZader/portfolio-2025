@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { cache } from 'react';
 import type { CreativeWork, SoftwareSourceCode, WithContext } from 'schema-dts';
+import { PageTransition } from '@/components/page-transition';
 import { ProjectDetail } from '@/components/projects/ProjectDetail';
 import { SITE_URL } from '@/lib/config/site-config';
 import { mergeLocalAndSanityProjects } from '@/lib/data/projects';
@@ -219,17 +220,19 @@ export default async function ProjectPage({ params }: Readonly<ProjectPageProps>
   );
 
   return (
-    <ProjectDetail
-      project={project}
-      locale={locale}
-      t={t}
-      tMarkdown={tMarkdown}
-      body={body}
-      readme={readme}
-      repoInfo={repoInfo}
-      hasLinks={hasLinks}
-      projectSchema={projectSchema}
-      breadcrumbSchema={breadcrumbSchema}
-    />
+    <PageTransition>
+      <ProjectDetail
+        project={project}
+        locale={locale}
+        t={t}
+        tMarkdown={tMarkdown}
+        body={body}
+        readme={readme}
+        repoInfo={repoInfo}
+        hasLinks={hasLinks}
+        projectSchema={projectSchema}
+        breadcrumbSchema={breadcrumbSchema}
+      />
+    </PageTransition>
   );
 }

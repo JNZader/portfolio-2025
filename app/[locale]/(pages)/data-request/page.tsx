@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { DataDeletionForm } from '@/components/gdpr/DataDeletionForm';
 import { DataRequestForm } from '@/components/gdpr/DataRequestForm';
+import { PageTransition } from '@/components/page-transition';
 import { InteriorHero } from '@/components/ui/InteriorHero';
 import { ObfuscatedEmail } from '@/components/ui/ObfuscatedEmail';
 import Section from '@/components/ui/Section';
@@ -26,7 +27,7 @@ export default async function DataRequestPage({
   setRequestLocale(locale);
   const t = await getTranslations('DataRequest');
   return (
-    <>
+    <PageTransition>
       {/* Hero — shared InteriorHero (same language as projects/contact/blog) */}
       <InteriorHero variant="legal" title={t('heroTitle')} description={t('heroSubtitle')} />
 
@@ -98,6 +99,6 @@ export default async function DataRequestPage({
           </div>
         </div>
       </Section>
-    </>
+    </PageTransition>
   );
 }
