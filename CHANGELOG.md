@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.32.0](https://github.com/JNZader/portfolio-2025/compare/v2.31.0...v2.32.0) (2026-08-17)
+
+### Features
+
+* **ui:** shared-element morphs and directional view transitions ([#251](https://github.com/JNZader/portfolio-2025/issues/251)) ([10a3859](https://github.com/JNZader/portfolio-2025/commits/10a38599d2a2f59a18d4b62b59123e0250d11c7a))
 ## [2.31.0](https://github.com/JNZader/portfolio-2025/compare/v2.30.6...v2.31.0) (2026-08-17)
 
 ### Features
