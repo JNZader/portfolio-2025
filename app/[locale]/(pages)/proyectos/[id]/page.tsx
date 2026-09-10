@@ -131,16 +131,14 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
       url: localizedPath(`/proyectos/${id}`, locale),
       type: 'article',
       ...ogLocaleFields(locale),
-      images: project.image
-        ? [
-            {
-              url: project.image,
-              width: 1200,
-              height: 630,
-              alt: project.title,
-            },
-          ]
-        : undefined,
+      images: [
+        {
+          url: project.image ?? '/opengraph-image',
+          width: 1200,
+          height: 630,
+          alt: project.title,
+        },
+      ],
     },
   };
 }

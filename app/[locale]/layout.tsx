@@ -36,7 +36,18 @@ export async function generateMetadata({
 }: Pick<LocaleLayoutProps, 'params'>): Promise<Metadata> {
   const { locale } = await params;
   return {
-    openGraph: { locale: OG_LOCALE[locale] ?? 'es_AR' },
+    openGraph: {
+      locale: OG_LOCALE[locale] ?? 'es_AR',
+      siteName: 'Javier Zader — Backend Developer · Sistemas end-to-end',
+      images: [
+        {
+          url: '/opengraph-image',
+          width: 1200,
+          height: 630,
+          alt: 'Javier Zader — Backend Developer · Sistemas end-to-end',
+        },
+      ],
+    },
   };
 }
 
