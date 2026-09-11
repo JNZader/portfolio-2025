@@ -8,6 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('NotFound');
   return {
     title: t('metaTitle'),
+    description: t('description'),
   };
 }
 
@@ -19,8 +20,10 @@ export default async function NotFound() {
       <HeroBackground showBlobs showDotPattern={false} />
 
       <div className="text-center space-y-6 relative z-10">
-        <h1 className="text-9xl font-bold text-primary">404</h1>
-        <h2 className="text-3xl font-semibold text-foreground">{t('title')}</h2>
+        <p aria-hidden="true" className="text-9xl font-bold text-primary">
+          404
+        </p>
+        <h1 className="text-3xl font-semibold text-foreground">{t('title')}</h1>
         <p className="text-muted-foreground">{t('description')}</p>
         <Button asChild className="mt-8">
           <Link href="/">{tc('backHome')}</Link>

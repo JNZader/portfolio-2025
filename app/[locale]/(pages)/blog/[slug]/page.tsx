@@ -99,18 +99,16 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
       url: localizedPath(`/blog/${slug}`, locale),
       type: 'article',
       ...ogLocaleFields(locale),
+      images: [
+        {
+          url: ogImage ?? '/opengraph-image',
+          width: 1200,
+          height: 630,
+          alt: ogImage ? post.mainImage.alt || post.title : post.title,
+        },
+      ],
       publishedTime: post.publishedAt,
       authors: post.author ? [post.author.name] : undefined,
-      images: ogImage
-        ? [
-            {
-              url: ogImage,
-              width: 1200,
-              height: 630,
-              alt: post.mainImage.alt || post.title,
-            },
-          ]
-        : undefined,
     },
   };
 }

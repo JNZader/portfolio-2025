@@ -8,16 +8,15 @@ import { postsQuery, projectsQuery } from '@/sanity/lib/queries';
 import type { Post, Project } from '@/types/sanity';
 
 // es (default) URL is prefix-less; en lives under /en. Each bilingual page is
-// emitted once (es url) with its English alternate declared via hreflang.
+// emitted once with its English alternate declared via hreflang.
 const enUrl = (path: string) => `${SITE_URL}/en${path}`;
 const bilingualAlternates = (path: string) => ({
   languages: { es: `${SITE_URL}${path}`, en: enUrl(path) },
 });
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Static pages. The fully-translated pages (home, contacto, cv,
-  // proyectos) declare es+en hreflang. The blog stays Spanish-canonical by
-  // design (opt-in per post; see i18n phasing).
+  // Static pages. Every indexable localized page declares es+en hreflang,
+  // including the blog listing, whose English route is indexable and canonical.
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: SITE_URL,
@@ -35,6 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${SITE_URL}/blog`,
       changeFrequency: 'daily',
       priority: 0.9,
+      alternates: bilingualAlternates('/blog'),
     },
     {
       url: `${SITE_URL}/contacto`,
@@ -81,6 +81,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(post._updatedAt ?? post.publishedAt),
         changeFrequency: 'monthly',
         priority: 0.7,
+        alternates: bilingualAlternates(`/blog/${post.slug.current}`),
       }));
     } catch (error) {
       logger.warn('Failed to fetch blog posts for sitemap', {

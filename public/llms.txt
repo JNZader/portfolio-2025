@@ -1,0 +1,19 @@
+# Javier Zader
+
+> Backend developer building end-to-end systems with Java, Go, Rust, React, and edge ML.
+
+## Primary pages
+
+- [Home](https://javierzader.com/): Portfolio overview and current focus.
+- [Projects](https://javierzader.com/proyectos): Curated case studies and public projects.
+- [CV](https://javierzader.com/cv): Experience, education, skills, and contact links.
+- [About](https://javierzader.com/): Background and working approach, presented on the home page.
+- [Blog](https://javierzader.com/blog): Engineering notes and articles.
+- [Contact](https://javierzader.com/contacto): Contact form and professional links.
+
+## English
+
+- [English home](https://javierzader.com/en): English version of the portfolio.
+- [English projects](https://javierzader.com/en/proyectos): English project index.
+- [English CV](https://javierzader.com/en/cv): English resume.
+- [English contact](https://javierzader.com/en/contacto): English contact page.

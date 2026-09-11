@@ -24,7 +24,19 @@ export async function generateMetadata({
     title: t('metaTitle'),
     alternates: await localeAlternates('/'),
     description: t('metaDescription'),
-    openGraph: { title: t('ogTitle'), description: t('ogDescription'), ...ogLocaleFields(locale) },
+    openGraph: {
+      title: t('ogTitle'),
+      description: t('ogDescription'),
+      images: [
+        {
+          url: '/opengraph-image',
+          width: 1200,
+          height: 630,
+          alt: t('ogTitle'),
+        },
+      ],
+      ...ogLocaleFields(locale),
+    },
   };
 }
 
