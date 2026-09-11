@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.33.0](https://github.com/JNZader/portfolio-2025/compare/v2.32.3...v2.33.0) (2026-09-11)
+
+### Features
+
+* **seo:** complete portfolio discoverability baseline ([#261](https://github.com/JNZader/portfolio-2025/issues/261)) ([be145d0](https://github.com/JNZader/portfolio-2025/commits/be145d058976e9bcbbe2182286a7e308f1d74362))
 ## [2.32.3](https://github.com/JNZader/portfolio-2025/compare/v2.32.2...v2.32.3) (2026-09-11)
 ## [2.32.2](https://github.com/JNZader/portfolio-2025/compare/v2.32.1...v2.32.2) (2026-09-10)
 ## [2.32.1](https://github.com/JNZader/portfolio-2025/compare/v2.32.0...v2.32.1) (2026-09-10)
