@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.33.1](https://github.com/JNZader/portfolio-2025/compare/v2.33.0...v2.33.1) (2026-09-11)
+
+### Bug Fixes
+
+* **deps:** upgrade Sentry for happy-dom tests ([291f900](https://github.com/JNZader/portfolio-2025/commits/291f9001e6df643cf01ad16bcfcba37f5b62e037))
 ## [2.33.0](https://github.com/JNZader/portfolio-2025/compare/v2.32.3...v2.33.0) (2026-09-11)
 
 ### Features
