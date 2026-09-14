@@ -114,7 +114,7 @@
     "@types/sanitize-html": "^2.16.1",
     "@vitejs/plugin-react": "^5.2.0",
     "@vitest/coverage-v8": "^4.1.11",
-    "@vitest/ui": "^4.1.11",
+    "@vitest/ui": "^5.0.0",
     "axe-core": "^4.12.1",
     "babel-plugin-react-compiler": "1.0.0",
     "commit-and-tag-version": "^13.1.2",
