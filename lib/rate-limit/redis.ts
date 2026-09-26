@@ -123,6 +123,24 @@ export const resumeRateLimiter = redis
   : noopRateLimiter;
 
 /**
+ * Rate limiter for published Q&A: 10 requests per 10 minutes per IP (100 in dev).
+ * Separate from the proxy bucket so Gemini cannot be drained by ordinary page traffic.
+ */
+export const QA_RATE_LIMIT = { max: 10, window: '10 m' } as const;
+
+export const qaRateLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(
+        process.env.NODE_ENV === 'development' ? 100 : QA_RATE_LIMIT.max,
+        QA_RATE_LIMIT.window
+      ),
+      analytics: true,
+      prefix: 'ratelimit:qa',
+    })
+  : noopRateLimiter;
+
+/**
  * Rate limiter para confirmaciones (newsletter, GDPR): 20 por hora por IP
  * Previene enumeración de tokens de confirmación
  */
