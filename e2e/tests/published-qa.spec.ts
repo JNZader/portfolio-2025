@@ -8,6 +8,12 @@ async function gotoProyectos(page: import('@playwright/test').Page, path = '/pro
   await dismissCookieConsent(page);
 }
 
+async function openChat(page: import('@playwright/test').Page, locale: 'es' | 'en' = 'es') {
+  const openName = locale === 'es' ? /^preguntame$/i : /^ask me$/i;
+  await page.getByRole('button', { name: openName }).click();
+  await expect(page.getByRole('dialog', { name: openName })).toBeVisible();
+}
+
 function blockIfGeminiKeyMissing() {
   if (process.env.GOOGLE_GENERATIVE_AI_API_KEY) return;
   const reason = 'blocked: published QA chat requires a Gemini API key';
@@ -18,17 +24,17 @@ function blockIfGeminiKeyMissing() {
 test.describe('published QA on /proyectos', () => {
   test('control is visible on /proyectos and /en/proyectos', async ({ page }) => {
     await gotoProyectos(page);
-    await expect(
-      page.getByRole('textbox', { name: /preguntá sobre un proyecto o la formación/i })
-    ).toBeVisible();
-    await expect(page.getByRole('button', { name: /^consultar$/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /^preguntame$/i })).toBeVisible();
+    await openChat(page, 'es');
+    await expect(page.getByRole('textbox', { name: /^pregunta$/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /^enviar$/i })).toBeVisible();
     await expect(page.getByRole('searchbox', { name: /buscar proyectos/i })).toBeVisible();
 
     await gotoProyectos(page, '/en/proyectos');
-    await expect(
-      page.getByRole('textbox', { name: /ask about a project or the training/i })
-    ).toBeVisible();
-    await expect(page.getByRole('button', { name: /^ask$/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /^ask me$/i })).toBeVisible();
+    await openChat(page, 'en');
+    await expect(page.getByRole('textbox', { name: /^question$/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /^send$/i })).toBeVisible();
     await expect(page.getByRole('searchbox', { name: /search projects/i })).toBeVisible();
   });
 
@@ -37,10 +43,15 @@ test.describe('published QA on /proyectos', () => {
       await page.setViewportSize({ width, height: 720 });
       await gotoProyectos(page);
 
-      const input = page.getByRole('textbox', {
-        name: /preguntá sobre un proyecto o la formación/i,
-      });
-      const submit = page.getByRole('button', { name: /^consultar$/i });
+      const launcher = page.getByRole('button', { name: /^preguntame$/i });
+      await expect(launcher).toBeVisible();
+      const launcherBox = await launcher.boundingBox();
+      expect(launcherBox).not.toBeNull();
+      expect((launcherBox?.x ?? 0) + (launcherBox?.width ?? 0)).toBeLessThanOrEqual(width);
+
+      await openChat(page, 'es');
+      const input = page.getByRole('textbox', { name: /^pregunta$/i });
+      const submit = page.getByRole('button', { name: /^enviar$/i });
       await expect(input).toBeVisible();
       await expect(submit).toBeVisible();
       await expect(input).toBeEnabled();
@@ -58,11 +69,10 @@ test.describe('published QA on /proyectos', () => {
   test('a known education question yields a published answer in Spanish', async ({ page }) => {
     blockIfGeminiKeyMissing();
     await gotoProyectos(page);
+    await openChat(page, 'es');
 
-    await page
-      .getByRole('textbox', { name: /preguntá sobre un proyecto o la formación/i })
-      .fill('qué título tenés');
-    await page.getByRole('button', { name: /^consultar$/i }).click();
+    await page.getByRole('textbox', { name: /^pregunta$/i }).fill('qué título tenés');
+    await page.getByRole('button', { name: /^enviar$/i }).click();
 
     await expect(page.getByText(/Universidad Gastón Dachary|Técnico en Desarrollo de Software/i)).toBeVisible({
       timeout: 30_000,
@@ -73,11 +83,10 @@ test.describe('published QA on /proyectos', () => {
   test('a known education question yields a published answer in English', async ({ page }) => {
     blockIfGeminiKeyMissing();
     await gotoProyectos(page, '/en/proyectos');
+    await openChat(page, 'en');
 
-    await page
-      .getByRole('textbox', { name: /ask about a project or the training/i })
-      .fill('what degree do you have');
-    await page.getByRole('button', { name: /^ask$/i }).click();
+    await page.getByRole('textbox', { name: /^question$/i }).fill('what degree do you have');
+    await page.getByRole('button', { name: /^send$/i }).click();
 
     await expect(
       page.getByText(/Universidad Gastón Dachary|Software Development Technician/i)

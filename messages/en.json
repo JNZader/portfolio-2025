@@ -339,9 +339,10 @@
     "searchBadge": "Search: “{query}”"
   },
   "PublishedQa": {
-    "heading": "Published quotes",
-    "label": "Ask about a project or the training",
-    "submit": "Ask",
+    "heading": "Ask me",
+    "label": "Question",
+    "submit": "Send",
+    "close": "Close",
     "refused": "No published quote for that question.",
     "error": "The query failed. Try again."
   },

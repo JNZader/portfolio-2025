@@ -129,6 +129,62 @@ describe('retrievePublishedChunks', () => {
       )
     ).toEqual([]);
   });
+
+  it('puts preferSlug chunks first even when they sit below the lexical floor', () => {
+    const preferred = chunk({
+      id: 'es:case-study:apigen:0',
+      slug: 'apigen',
+      text: 'unrelated private note',
+    });
+    const other = chunk({
+      id: 'es:case-study:other:0',
+      slug: 'other',
+      text: 'shared marker extra extra',
+      heading: 'marker',
+    });
+
+    const retrieved = retrievePublishedChunks('shared marker', [other, preferred], QA_LOCALE.ES, {
+      preferSlug: 'apigen',
+    });
+
+    expect(retrieved.map((entry) => entry.id)).toEqual([
+      'es:case-study:apigen:0',
+      'es:case-study:other:0',
+    ]);
+  });
+
+  it('keeps site-wide ranking when preferSlug is omitted', () => {
+    const preferred = chunk({
+      id: 'es:case-study:apigen:0',
+      slug: 'apigen',
+      text: 'unrelated private note',
+    });
+    const other = chunk({
+      id: 'es:case-study:other:0',
+      slug: 'other',
+      text: 'shared marker extra extra',
+      heading: 'marker',
+    });
+
+    const retrieved = retrievePublishedChunks('shared marker', [other, preferred], QA_LOCALE.ES);
+
+    expect(retrieved.map((entry) => entry.id)).toEqual(['es:case-study:other:0']);
+  });
+
+  it('is a no-op when preferSlug matches no chunk', () => {
+    const other = chunk({
+      id: 'es:case-study:other:0',
+      slug: 'other',
+      text: 'shared marker extra extra',
+      heading: 'marker',
+    });
+
+    const retrieved = retrievePublishedChunks('shared marker', [other], QA_LOCALE.ES, {
+      preferSlug: 'missing-blog-slug',
+    });
+
+    expect(retrieved.map((entry) => entry.id)).toEqual(['es:case-study:other:0']);
+  });
 });
 
 describe('matchQuery', () => {

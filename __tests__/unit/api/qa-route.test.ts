@@ -32,10 +32,11 @@ const ORIGIN_MARKER = 'ORIGIN_LIBRARY_ONLY_DECEMBER_2014_BASE_CONTROLLER';
 const VAULT_MARKER = 'JNZader-Vault';
 const API_KEY = 'GOOGLE_GENERATIVE_AI_API_KEY';
 
-function chatBody(text: string, locale = 'es') {
+function chatBody(text: string, locale = 'es', path?: string) {
   return {
     messages: [{ id: 'u1', role: 'user', parts: [{ type: 'text', text }] }],
     locale,
+    ...(path === undefined ? {} : { path }),
   };
 }
 
@@ -129,6 +130,20 @@ describe('POST /api/qa', () => {
   it('returns 400 for oversized user text', async () => {
     const res = await POST(postRequest(chatBody('x'.repeat(10_000))));
     expect(res.status).toBe(400);
+  });
+
+  it('returns 400 for a path longer than 200 characters', async () => {
+    const res = await POST(postRequest(chatBody('qué título tenés', 'es', `/${'a'.repeat(200)}`)));
+    expect(res.status).toBe(400);
+  });
+
+  it('notes the viewing slug in the system prompt when path is a project detail', async () => {
+    const res = await POST(postRequest(chatBody('qué título tenés', 'es', '/proyectos/apigen')));
+    const payload = streamText.mock.calls[0]?.[0] as Record<string, unknown> | undefined;
+
+    expect(res.status).toBe(200);
+    expect(JSON.stringify(payload)).toContain('apigen');
+    expect(JSON.stringify(payload)).toMatch(/viewing/i);
   });
 
   it('returns 403 with CSRF_ERROR_RESPONSE when CSRF verification fails', async () => {

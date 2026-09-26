@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { EasterEggs } from '@/components/features/EasterEggs';
+import { PublishedQaForm } from '@/components/projects/PublishedQaForm';
 
 const MatrixRain = dynamic(
   () => import('@/components/features/MatrixRain').then((m) => m.MatrixRain),
@@ -35,6 +36,8 @@ export function ClientComponents() {
       <Suspense fallback={null}>
         <ScrollProgress />
       </Suspense>
+
+      <PublishedQaForm />
 
       {/* Easter Eggs */}
       <EasterEggs />

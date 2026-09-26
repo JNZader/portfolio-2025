@@ -39,18 +39,30 @@ function isFormalDegree(chunk: QaChunk): boolean {
 export function retrievePublishedChunks(
   query: string,
   chunks: readonly QaChunk[],
-  locale: QaLocale
+  locale: QaLocale,
+  options?: { preferSlug?: string | null }
 ): QaChunk[] {
   const scoped = chunks.filter((chunk) => chunk.locale === locale);
   const queryTokens = tokenize(query);
   if (queryTokens.length === 0 || scoped.length === 0) return [];
 
-  const ranked = scoped
-    .map((chunk) => ({ chunk, score: lexical(queryTokens, haystack(chunk)) }))
-    .filter((entry) => entry.score >= LEXICAL_FLOOR)
+  const scored = scoped.map((chunk) => ({
+    chunk,
+    score: lexical(queryTokens, haystack(chunk)),
+  }));
+  const preferSlug = options?.preferSlug ?? null;
+  const preferredIds = new Set(
+    preferSlug ? scoped.filter((chunk) => chunk.slug === preferSlug).map((chunk) => chunk.id) : []
+  );
+  const preferred = scored
+    .filter((entry) => preferredIds.has(entry.chunk.id))
     .sort((left, right) => right.score - left.score)
-    .slice(0, TOP_K)
     .map((entry) => entry.chunk);
+  const rest = scored
+    .filter((entry) => !preferredIds.has(entry.chunk.id) && entry.score >= LEXICAL_FLOOR)
+    .sort((left, right) => right.score - left.score)
+    .map((entry) => entry.chunk);
+  const ranked = [...preferred, ...rest].slice(0, TOP_K);
 
   const formalIntent = queryTokens.some((token) => FORMAL_INTENT.has(token));
   if (!formalIntent) return ranked;

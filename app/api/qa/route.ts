@@ -9,6 +9,7 @@ import {
 import { type NextRequest, NextResponse } from 'next/server';
 import {
   buildPublishedSnapshot,
+  parsePublishedQaPath,
   QA_NO_EVIDENCE,
   type QaChunk,
   type QaLocale,
@@ -61,17 +62,27 @@ function sourcePayload(chunk: QaChunk) {
   };
 }
 
-function systemPrompt(locale: QaLocale, chunks: readonly QaChunk[]): string {
+function systemPrompt(
+  locale: QaLocale,
+  chunks: readonly QaChunk[],
+  preferSlug: string | null
+): string {
   const language = locale === 'es' ? 'Spanish' : 'English';
+  const viewing = preferSlug
+    ? `The user is viewing ${preferSlug}. Prefer sources for that slug; you may still use the others.`
+    : null;
   return [
     'Answer ONLY from SOURCES.',
     'If the sources are insufficient, say you have no published quote.',
     'Cite only the provided hrefs as markdown links.',
     `Reply in ${language}.`,
     'Engineer-to-peer. No hype. Never invent repositories or private READMEs.',
+    viewing,
     'SOURCES:',
     JSON.stringify(chunks.map(sourcePayload)),
-  ].join('\n');
+  ]
+    .filter((line): line is string => line !== null)
+    .join('\n');
 }
 
 export function GET(_request: NextRequest) {
@@ -101,14 +112,15 @@ export async function POST(request: NextRequest) {
     return invalidRequest();
   }
 
-  const { messages, locale } = parsed.data;
+  const { messages, locale, path } = parsed.data;
   const query = latestUserText(messages);
   if (!query || query.length > QA_QUERY_MAX_LENGTH) {
     return invalidRequest();
   }
 
+  const preferSlug = path ? parsePublishedQaPath(path).preferSlug : null;
   const snapshot = buildPublishedSnapshot();
-  const chunks = retrievePublishedChunks(query, snapshot[locale], locale);
+  const chunks = retrievePublishedChunks(query, snapshot[locale], locale, { preferSlug });
   if (chunks.length === 0) {
     return refusedAssistantResponse();
   }
@@ -123,7 +135,7 @@ export async function POST(request: NextRequest) {
 
   const result = streamText({
     model: google('gemini-3.8-flash'),
-    system: systemPrompt(locale, chunks),
+    system: systemPrompt(locale, chunks, preferSlug),
     messages: await convertToModelMessages(messages as UIMessage[]),
     providerOptions: {
       google: {

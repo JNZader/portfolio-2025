@@ -20,6 +20,7 @@ const qaMessageSchema = z
 export const qaChatSchema = z.object({
   messages: z.array(qaMessageSchema).min(1),
   locale: z.enum([QA_LOCALE.ES, QA_LOCALE.EN]),
+  path: z.string().max(200).optional(),
 });
 
 export type QaChatInput = z.infer<typeof qaChatSchema>;

@@ -339,9 +339,10 @@
     "searchBadge": "Búsqueda: “{query}”"
   },
   "PublishedQa": {
-    "heading": "Citas publicadas",
-    "label": "Preguntá sobre un proyecto o la formación",
-    "submit": "Consultar",
+    "heading": "Preguntame",
+    "label": "Pregunta",
+    "submit": "Enviar",
+    "close": "Cerrar",
     "refused": "No hay una cita publicada para esa pregunta.",
     "error": "No se pudo consultar. Probá de nuevo."
   },
