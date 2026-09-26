@@ -344,6 +344,7 @@
     "submit": "Send",
     "close": "Close",
     "refused": "No published quote for that question.",
+    "hello": "Hi. Ask about a published project or the training.",
     "writing": "Writing…",
     "error": "The query failed. Try again."
   },

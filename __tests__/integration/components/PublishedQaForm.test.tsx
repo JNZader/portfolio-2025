@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { NextIntlClientProvider } from 'next-intl';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { PublishedQaForm } from '@/components/projects/PublishedQaForm';
-import { QA_NO_EVIDENCE } from '@/lib/qa/retrieve';
+import { QA_GREETING, QA_NO_EVIDENCE } from '@/lib/qa/retrieve';
 import enMessages from '@/messages/en.json';
 import esMessages from '@/messages/es.json';
 
@@ -161,6 +161,24 @@ describe('PublishedQaForm chat', () => {
 
     expect(screen.getByText('No hay una cita publicada para esa pregunta.')).toBeVisible();
     expect(screen.queryByText(QA_NO_EVIDENCE)).not.toBeInTheDocument();
+  });
+
+  it('shows hello catalogue copy for the greeting sentinel', async () => {
+    chat.messages = [
+      {
+        id: 'a1',
+        role: 'assistant',
+        parts: [{ type: 'text', text: QA_GREETING }],
+      },
+    ];
+    await openPanel('es');
+
+    expect(
+      screen.getByText('Hola. Preguntame por un proyecto publicado o por la formación.')
+    ).toBeVisible();
+    expect(screen.getByText('JZ')).toBeVisible();
+    expect(screen.queryByText('No hay una cita publicada para esa pregunta.')).not.toBeInTheDocument();
+    expect(screen.queryByText(QA_GREETING)).not.toBeInTheDocument();
   });
 
   it('shows error catalogue copy when the transport fails', async () => {

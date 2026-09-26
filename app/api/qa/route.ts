@@ -3,7 +3,9 @@ import { createUIMessageStream, createUIMessageStreamResponse, streamText } from
 import { type NextRequest, NextResponse } from 'next/server';
 import {
   buildPublishedSnapshot,
+  isGreeting,
   parsePublishedQaPath,
+  QA_GREETING,
   QA_NO_EVIDENCE,
   type QaChunk,
   type QaLocale,
@@ -41,16 +43,24 @@ function invalidRequest() {
   );
 }
 
-function refusedAssistantResponse() {
+function cannedAssistantResponse(delta: string) {
   const id = crypto.randomUUID();
   const stream = createUIMessageStream({
     execute({ writer }) {
       writer.write({ type: 'text-start', id });
-      writer.write({ type: 'text-delta', id, delta: QA_NO_EVIDENCE });
+      writer.write({ type: 'text-delta', id, delta });
       writer.write({ type: 'text-end', id });
     },
   });
   return createUIMessageStreamResponse({ stream });
+}
+
+function refusedAssistantResponse() {
+  return cannedAssistantResponse(QA_NO_EVIDENCE);
+}
+
+function greetingAssistantResponse() {
+  return cannedAssistantResponse(QA_GREETING);
 }
 
 function sourcePayload(chunk: QaChunk) {
@@ -136,6 +146,10 @@ export async function POST(request: NextRequest) {
         headers: { 'Retry-After': String(retryAfter) },
       }
     );
+  }
+
+  if (isGreeting(query)) {
+    return greetingAssistantResponse();
   }
 
   const preferSlug = path ? parsePublishedQaPath(path).preferSlug : null;

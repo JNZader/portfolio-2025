@@ -4,6 +4,9 @@ import { QA_KIND, type QaChunk, type QaLocale } from '@/lib/qa/types';
 /** Assistant text when retrieval is empty. UI maps this to catalogue copy. */
 export const QA_NO_EVIDENCE = 'NO_PUBLISHED_QUOTE';
 
+/** Assistant text for greeting-only questions. UI maps this to catalogue copy. */
+export const QA_GREETING = 'PUBLISHED_QA_GREETING';
+
 const FORMAL_INTENT = new Set([
   'titulo',
   'title',

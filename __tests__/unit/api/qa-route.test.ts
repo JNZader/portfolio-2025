@@ -33,6 +33,7 @@ vi.mock('@/lib/rate-limit/redis', () => ({
 
 import { NextRequest } from 'next/server';
 import { GET, POST } from '@/app/api/qa/route';
+import { QA_GREETING, QA_NO_EVIDENCE } from '@/lib/qa/retrieve';
 import { CSRF_ERROR_RESPONSE } from '@/lib/security/security-config';
 
 const ORIGIN_MARKER = 'ORIGIN_LIBRARY_ONLY_DECEMBER_2014_BASE_CONTROLLER';
@@ -87,11 +88,25 @@ describe('POST /api/qa', () => {
 
   it('does not call Google when retrieval is empty', async () => {
     const res = await POST(postRequest(chatBody('precio del dólar mañana')));
+    const body = await res.text();
 
     expect(res.status).toBe(200);
     expect(google).not.toHaveBeenCalled();
     expect(streamText).not.toHaveBeenCalled();
     expect(res.headers.get('content-type')).not.toMatch(/application\/json/);
+    expect(body).toContain(QA_NO_EVIDENCE);
+    expect(body).not.toContain(QA_GREETING);
+  });
+
+  it('streams the greeting sentinel for hola without calling Google', async () => {
+    const res = await POST(postRequest(chatBody('hola')));
+    const body = await res.text();
+
+    expect(res.status).toBe(200);
+    expect(google).not.toHaveBeenCalled();
+    expect(streamText).not.toHaveBeenCalled();
+    expect(body).toContain(QA_GREETING);
+    expect(body).not.toContain(QA_NO_EVIDENCE);
   });
 
   it('passes retrieved source hrefs into the model prompt on a hit', async () => {

@@ -2,9 +2,10 @@ export { assembleCorpus, toCorpusProject, toEducationRecord } from '@/lib/qa/chu
 export { matchQuery } from '@/lib/qa/match';
 export type { PublishedQaPathContext, PublishedQaPathKind } from '@/lib/qa/path';
 export { parsePublishedQaPath } from '@/lib/qa/path';
-export { QA_NO_EVIDENCE, retrievePublishedChunks } from '@/lib/qa/retrieve';
+export { QA_GREETING, QA_NO_EVIDENCE, retrievePublishedChunks } from '@/lib/qa/retrieve';
 export type { PublishedSnapshot, PublishedSnapshotInput } from '@/lib/qa/snapshot';
 export { buildPublishedSnapshot } from '@/lib/qa/snapshot';
+export { isGreeting } from '@/lib/qa/text';
 export type {
   CaseStudySource,
   CorpusInput,
