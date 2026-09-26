@@ -38,6 +38,8 @@
     "release:patch": "commit-and-tag-version --release-as patch"
   },
   "dependencies": {
+    "@ai-sdk/google": "^4.0.82",
+    "@ai-sdk/react": "^4.0.119",
     "@giscus/react": "^3.1.0",
     "@hookform/resolvers": "^5.9.1",
     "@next/third-parties": "^16.3.4",
@@ -58,6 +60,7 @@
     "@upstash/redis": "^1.38.4",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
+    "ai": "^7.0.116",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "easymde": "^2.21.0",

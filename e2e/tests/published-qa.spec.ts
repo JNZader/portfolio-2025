@@ -1,11 +1,18 @@
 import { expect, test } from '../fixtures/test';
-import { dismissCookieConsent } from '../fixtures/test-data';
 import { skipIfPortfolioServerBlocked } from '../fixtures/portfolio-server';
+import { dismissCookieConsent } from '../fixtures/test-data';
 
 async function gotoProyectos(page: import('@playwright/test').Page, path = '/proyectos') {
   await skipIfPortfolioServerBlocked();
   await page.goto(path);
   await dismissCookieConsent(page);
+}
+
+function blockIfGeminiKeyMissing() {
+  if (process.env.GOOGLE_GENERATIVE_AI_API_KEY) return;
+  const reason = 'blocked: published QA chat requires a Gemini API key';
+  test.info().annotations.push({ type: 'environment', description: reason });
+  test.skip(true, reason);
 }
 
 test.describe('published QA on /proyectos', () => {
@@ -48,7 +55,8 @@ test.describe('published QA on /proyectos', () => {
     });
   }
 
-  test('a known education question yields a citation link in Spanish', async ({ page }) => {
+  test('a known education question yields a published answer in Spanish', async ({ page }) => {
+    blockIfGeminiKeyMissing();
     await gotoProyectos(page);
 
     await page
@@ -56,12 +64,14 @@ test.describe('published QA on /proyectos', () => {
       .fill('qué título tenés');
     await page.getByRole('button', { name: /^consultar$/i }).click();
 
-    const citation = page.getByRole('link', { name: /Universidad Gastón Dachary/i });
-    await expect(citation).toBeVisible();
-    await expect(citation).toHaveAttribute('href', '/cv');
+    await expect(page.getByText(/Universidad Gastón Dachary|Técnico en Desarrollo de Software/i)).toBeVisible({
+      timeout: 30_000,
+    });
+    await expect(page.getByText('No hay una cita publicada para esa pregunta.')).toHaveCount(0);
   });
 
-  test('a known education question yields a citation link in English', async ({ page }) => {
+  test('a known education question yields a published answer in English', async ({ page }) => {
+    blockIfGeminiKeyMissing();
     await gotoProyectos(page, '/en/proyectos');
 
     await page
@@ -69,8 +79,9 @@ test.describe('published QA on /proyectos', () => {
       .fill('what degree do you have');
     await page.getByRole('button', { name: /^ask$/i }).click();
 
-    const citation = page.getByRole('link', { name: /Universidad Gastón Dachary/i });
-    await expect(citation).toBeVisible();
-    await expect(citation).toHaveAttribute('href', '/en/cv');
+    await expect(
+      page.getByText(/Universidad Gastón Dachary|Software Development Technician/i)
+    ).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByText('No published quote for that question.')).toHaveCount(0);
   });
 });

@@ -1,12 +1,40 @@
-import { render as rtlRender, screen, waitFor } from '@testing-library/react';
+import { render as rtlRender, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { NextIntlClientProvider } from 'next-intl';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { PublishedQaForm } from '@/components/projects/PublishedQaForm';
+import { QA_NO_EVIDENCE } from '@/lib/qa/retrieve';
 import enMessages from '@/messages/en.json';
 import esMessages from '@/messages/es.json';
 
-const fetchMock = vi.fn();
+const chat = vi.hoisted(() => ({
+  messages: [] as Array<{
+    id: string;
+    role: 'user' | 'assistant';
+    parts: Array<{ type: string; text?: string }>;
+  }>,
+  sendMessage: vi.fn(),
+  error: undefined as Error | undefined,
+  status: 'ready' as string,
+  transportOptions: undefined as { api?: string; body?: { locale?: string } } | undefined,
+}));
+
+vi.mock('@ai-sdk/react', () => ({
+  useChat: () => ({
+    messages: chat.messages,
+    sendMessage: chat.sendMessage,
+    error: chat.error,
+    status: chat.status,
+  }),
+}));
+
+vi.mock('ai', () => ({
+  DefaultChatTransport: class {
+    constructor(options: { api?: string; body?: { locale?: string } }) {
+      chat.transportOptions = options;
+    }
+  },
+}));
 
 function renderLocale(locale: 'es' | 'en') {
   const messages = locale === 'es' ? esMessages : enMessages;
@@ -17,33 +45,16 @@ function renderLocale(locale: 'es' | 'en') {
   );
 }
 
-function jsonResponse(body: unknown, ok = true) {
-  return {
-    ok,
-    json: () => Promise.resolve(body),
-  };
-}
-
-const HIT = {
-  status: 'hit',
-  text: 'Técnico en Desarrollo de Software. Universidad Gastón Dachary. 2023-12 — 2025-07.',
-  href: '/cv',
-  citation: 'CV · Educación',
-  title: 'Universidad Gastón Dachary',
-  heading: null,
-} as const;
-
 beforeEach(() => {
-  fetchMock.mockReset();
-  vi.stubGlobal('fetch', fetchMock);
-});
-
-afterEach(() => {
-  vi.unstubAllGlobals();
+  chat.messages = [];
+  chat.sendMessage.mockReset();
+  chat.error = undefined;
+  chat.status = 'ready';
+  chat.transportOptions = undefined;
 });
 
 describe('PublishedQaForm catalogues', () => {
-  it('renders the labelled input from the Spanish catalogue', () => {
+  it('renders the labelled chat input from the Spanish catalogue', () => {
     renderLocale('es');
 
     expect(
@@ -53,7 +64,7 @@ describe('PublishedQaForm catalogues', () => {
     expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
   });
 
-  it('renders the labelled input from the English catalogue', () => {
+  it('renders the labelled chat input from the English catalogue', () => {
     renderLocale('en');
 
     expect(
@@ -64,10 +75,9 @@ describe('PublishedQaForm catalogues', () => {
   });
 });
 
-describe('PublishedQaForm submit', () => {
-  it('POSTs { query, locale } to /api/qa for the active locale', async () => {
+describe('PublishedQaForm chat', () => {
+  it('sends the trimmed user text through useChat for the active locale', async () => {
     const user = userEvent.setup();
-    fetchMock.mockResolvedValueOnce(jsonResponse({ status: 'refused' }));
     renderLocale('en');
 
     await user.type(
@@ -76,84 +86,46 @@ describe('PublishedQaForm submit', () => {
     );
     await user.click(screen.getByRole('button', { name: 'Ask' }));
 
-    await waitFor(() => {
-      expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(chat.transportOptions).toEqual({
+      api: '/api/qa',
+      body: { locale: 'en' },
     });
-    expect(fetchMock).toHaveBeenCalledWith(
-      '/api/qa',
-      expect.objectContaining({
-        method: 'POST',
-        headers: expect.objectContaining({ 'Content-Type': 'application/json' }),
-        body: JSON.stringify({ query: 'what degree do you have', locale: 'en' }),
-      })
-    );
+    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'what degree do you have' });
   });
 
-  it('shows quote text and a citation link to href on HIT', async () => {
-    const user = userEvent.setup();
-    fetchMock.mockResolvedValueOnce(jsonResponse(HIT));
+  it('renders text parts from the thread', () => {
+    chat.messages = [
+      { id: 'u1', role: 'user', parts: [{ type: 'text', text: 'qué título tenés' }] },
+      {
+        id: 'a1',
+        role: 'assistant',
+        parts: [{ type: 'text', text: 'Técnico en Desarrollo de Software. [CV](/cv)' }],
+      },
+    ];
     renderLocale('es');
 
-    await user.type(
-      screen.getByRole('textbox', { name: 'Preguntá sobre un proyecto o la formación' }),
-      'qué título tenés'
-    );
-    await user.click(screen.getByRole('button', { name: 'Consultar' }));
-
-    expect(await screen.findByText(HIT.text)).toBeVisible();
-    const citation = screen.getByRole('link', { name: HIT.citation });
-    expect(citation).toHaveAttribute('href', HIT.href);
+    expect(screen.getByText('qué título tenés')).toBeVisible();
+    expect(screen.getByText('Técnico en Desarrollo de Software. [CV](/cv)')).toBeVisible();
   });
 
-  it('uses title as the citation link name when citation is empty', async () => {
-    const user = userEvent.setup();
-    fetchMock.mockResolvedValueOnce(
-      jsonResponse({ ...HIT, citation: '', title: 'Universidad Gastón Dachary' })
-    );
+  it('shows refused catalogue copy for the no-evidence sentinel', () => {
+    chat.messages = [
+      {
+        id: 'a1',
+        role: 'assistant',
+        parts: [{ type: 'text', text: QA_NO_EVIDENCE }],
+      },
+    ];
     renderLocale('es');
 
-    await user.type(
-      screen.getByRole('textbox', { name: 'Preguntá sobre un proyecto o la formación' }),
-      'qué título tenés'
-    );
-    await user.click(screen.getByRole('button', { name: 'Consultar' }));
-
-    expect(
-      await screen.findByRole('link', { name: 'Universidad Gastón Dachary' })
-    ).toHaveAttribute('href', HIT.href);
+    expect(screen.getByText('No hay una cita publicada para esa pregunta.')).toBeVisible();
+    expect(screen.queryByText(QA_NO_EVIDENCE)).not.toBeInTheDocument();
   });
 
-  it('shows refused copy and no citation link on REFUSED', async () => {
-    const user = userEvent.setup();
-    fetchMock.mockResolvedValueOnce(jsonResponse({ status: 'refused' }));
+  it('shows error catalogue copy when the transport fails', () => {
+    chat.error = new Error('network');
     renderLocale('es');
 
-    await user.type(
-      screen.getByRole('textbox', { name: 'Preguntá sobre un proyecto o la formación' }),
-      'precio del dólar mañana'
-    );
-    await user.click(screen.getByRole('button', { name: 'Consultar' }));
-
-    expect(
-      await screen.findByText('No hay una cita publicada para esa pregunta.')
-    ).toBeVisible();
-    expect(screen.queryByRole('link')).not.toBeInTheDocument();
-    expect(screen.queryByText(HIT.text)).not.toBeInTheDocument();
-  });
-
-  it('does not invent an answer when fetch fails', async () => {
-    const user = userEvent.setup();
-    fetchMock.mockRejectedValueOnce(new Error('network'));
-    renderLocale('es');
-
-    await user.type(
-      screen.getByRole('textbox', { name: 'Preguntá sobre un proyecto o la formación' }),
-      'qué título tenés'
-    );
-    await user.click(screen.getByRole('button', { name: 'Consultar' }));
-
-    expect(await screen.findByText('No se pudo consultar. Probá de nuevo.')).toBeVisible();
-    expect(screen.queryByText(HIT.text)).not.toBeInTheDocument();
-    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+    expect(screen.getByText('No se pudo consultar. Probá de nuevo.')).toBeVisible();
   });
 });

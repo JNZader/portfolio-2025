@@ -1,6 +1,8 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const verifyCsrf = vi.fn().mockReturnValue(true);
+const streamText = vi.fn();
+const google = vi.fn(() => 'gemini-2.5-flash-model');
 
 vi.mock('@/lib/security/security-config', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/lib/security/security-config')>();
@@ -10,14 +12,32 @@ vi.mock('@/lib/security/security-config', async (importOriginal) => {
   };
 });
 
+vi.mock('ai', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('ai')>();
+  return {
+    ...actual,
+    streamText: (...args: unknown[]) => streamText(...args),
+  };
+});
+
+vi.mock('@ai-sdk/google', () => ({
+  google: (...args: unknown[]) => google(...(args as [string])),
+}));
+
 import { NextRequest } from 'next/server';
 import { GET, POST } from '@/app/api/qa/route';
 import { CSRF_ERROR_RESPONSE } from '@/lib/security/security-config';
 
 const ORIGIN_MARKER = 'ORIGIN_LIBRARY_ONLY_DECEMBER_2014_BASE_CONTROLLER';
 const VAULT_MARKER = 'JNZader-Vault';
+const API_KEY = 'GOOGLE_GENERATIVE_AI_API_KEY';
 
-const HIT_FIELDS = ['citation', 'heading', 'href', 'status', 'text', 'title'] as const;
+function chatBody(text: string, locale = 'es') {
+  return {
+    messages: [{ id: 'u1', role: 'user', parts: [{ type: 'text', text }] }],
+    locale,
+  };
+}
 
 function postRequest(body: unknown) {
   return new NextRequest('http://localhost/api/qa', {
@@ -27,56 +47,75 @@ function postRequest(body: unknown) {
   });
 }
 
+function streamResult() {
+  return {
+    toUIMessageStreamResponse: () =>
+      new Response('streamed', { headers: { 'Content-Type': 'text/plain; charset=utf-8' } }),
+    toDataStreamResponse: () =>
+      new Response('streamed', { headers: { 'Content-Type': 'text/plain; charset=utf-8' } }),
+  };
+}
+
 describe('POST /api/qa', () => {
+  const previousKey = process.env[API_KEY];
+
   beforeEach(() => {
     verifyCsrf.mockReset().mockReturnValue(true);
+    streamText.mockReset().mockReturnValue(streamResult());
+    google.mockReset().mockReturnValue('gemini-2.5-flash-model');
+    process.env[API_KEY] = 'test-key';
   });
 
-  it('returns citation, href, and text for a known published education question', async () => {
-    const res = await POST(postRequest({ query: 'qué título tenés', locale: 'es' }));
+  afterEach(() => {
+    if (previousKey === undefined) delete process.env[API_KEY];
+    else process.env[API_KEY] = previousKey;
+  });
+
+  it('does not call Google when retrieval is empty', async () => {
+    const res = await POST(postRequest(chatBody('precio del dólar mañana')));
+
+    expect(res.status).toBe(200);
+    expect(google).not.toHaveBeenCalled();
+    expect(streamText).not.toHaveBeenCalled();
+    expect(res.headers.get('content-type')).not.toMatch(/application\/json/);
+  });
+
+  it('passes retrieved source hrefs into the model prompt on a hit', async () => {
+    const res = await POST(postRequest(chatBody('qué título tenés')));
+    const payload = streamText.mock.calls[0]?.[0] as Record<string, unknown> | undefined;
+
+    expect(res.status).toBe(200);
+    expect(google).toHaveBeenCalledWith('gemini-2.5-flash');
+    expect(streamText).toHaveBeenCalledTimes(1);
+    expect(JSON.stringify(payload)).toContain('/cv');
+    expect(JSON.stringify(payload)).not.toContain(ORIGIN_MARKER);
+    expect(JSON.stringify(payload)).not.toContain(VAULT_MARKER);
+  });
+
+  it('returns 503 JSON without leaking the env name when the API key is missing', async () => {
+    delete process.env[API_KEY];
+
+    const res = await POST(postRequest(chatBody('qué título tenés')));
     const json = (await res.json()) as Record<string, unknown>;
 
-    expect(res.status).toBe(200);
-    expect(json.status).toBe('hit');
-    expect(json.href).toBe('/cv');
-    expect(json.citation).toEqual(expect.any(String));
-    expect(json.title).toEqual(expect.any(String));
-    expect(json).toHaveProperty('heading');
-    expect(typeof json.text).toBe('string');
-    expect(json.text).toContain('Técnico en Desarrollo de Software');
-    expect(Object.keys(json).sort()).toEqual([...HIT_FIELDS]);
-    expect(JSON.stringify(json)).not.toContain(ORIGIN_MARKER);
-    expect(JSON.stringify(json)).not.toContain(VAULT_MARKER);
-  });
-
-  it('never includes origin or Vault README markers on a hit', async () => {
-    const res = await POST(postRequest({ query: 'apigen', locale: 'es' }));
-    const json = await res.json();
-
-    expect(res.status).toBe(200);
-    expect(json.status).toBe('hit');
-    expect(JSON.stringify(json)).not.toContain(ORIGIN_MARKER);
-    expect(JSON.stringify(json)).not.toContain(VAULT_MARKER);
-  });
-
-  it('returns 200 { status: "refused" } for a weak query', async () => {
-    const res = await POST(postRequest({ query: 'precio del dólar mañana', locale: 'es' }));
-
-    expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ status: 'refused' });
+    expect(res.status).toBe(503);
+    expect(json).toEqual({ message: expect.any(String) });
+    expect(String(json.message)).not.toContain(API_KEY);
+    expect(google).not.toHaveBeenCalled();
+    expect(streamText).not.toHaveBeenCalled();
   });
 
   it('returns 400 for an unknown locale', async () => {
-    const res = await POST(postRequest({ query: 'qué título tenés', locale: 'fr' }));
+    const res = await POST(postRequest(chatBody('qué título tenés', 'fr')));
     expect(res.status).toBe(400);
   });
 
-  it('returns 400 for an empty query', async () => {
-    const res = await POST(postRequest({ query: '   ', locale: 'es' }));
+  it('returns 400 for empty user text', async () => {
+    const res = await POST(postRequest(chatBody('   ')));
     expect(res.status).toBe(400);
   });
 
-  it('returns 400 for missing JSON fields', async () => {
+  it('returns 400 for missing messages', async () => {
     const res = await POST(postRequest({ locale: 'es' }));
     expect(res.status).toBe(400);
   });
@@ -86,19 +125,20 @@ describe('POST /api/qa', () => {
     expect(res.status).toBe(400);
   });
 
-  it('returns 400 for an oversized query', async () => {
-    const res = await POST(postRequest({ query: 'x'.repeat(10_000), locale: 'es' }));
+  it('returns 400 for oversized user text', async () => {
+    const res = await POST(postRequest(chatBody('x'.repeat(10_000))));
     expect(res.status).toBe(400);
   });
 
   it('returns 403 with CSRF_ERROR_RESPONSE when CSRF verification fails', async () => {
     verifyCsrf.mockReturnValue(false);
 
-    const res = await POST(postRequest({ query: 'qué título tenés', locale: 'es' }));
+    const res = await POST(postRequest(chatBody('qué título tenés')));
     const json = await res.json();
 
     expect(res.status).toBe(CSRF_ERROR_RESPONSE.status);
     expect(json).toEqual({ message: CSRF_ERROR_RESPONSE.message });
+    expect(streamText).not.toHaveBeenCalled();
   });
 });
 
