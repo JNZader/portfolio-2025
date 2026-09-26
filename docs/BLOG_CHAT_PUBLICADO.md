@@ -1,64 +1,119 @@
-# Cómo funciona el chat de este portfolio (y qué no hace)
+# Tres preguntas al globo
 
-> Borrador para pegar en Sanity Studio (`markdownBody`). Tono: técnico, sin hype.
+> Studio: los campos van en el bloque Meta. En `markdownBody` se pega **solo** desde `PEGAR DESDE ACA`, sin esa marca y sin este encabezado.
 
 **Meta para Sanity**
 
-- **Title:** Cómo funciona el chat de este portfolio (y qué no hace)
+- **Title:** Tres preguntas al globo: qué contesta y qué se calla
 - **Slug:** `chat-publicado-rag`
-- **Excerpt:** El globo de abajo a la derecha no es un ChatGPT genérico. Recupera texto que ya publiqué (proyectos y CV), llama a Gemini solo si hay fuente, y se niega si no. Rate limit por IP; el modelo no ve el hilo.
-- **Categories:** Arquitectura (o Full Stack). Crear la categoría si no existe.
+- **Excerpt:** Hiciste click en el globo, dijiste hola y después preguntaste por APiGen. Así funciona el chat del portfolio y así decide qué citarte.
+- **Categories:** Arquitectura
 - **Reading Time:** 7
-- **Main image:** requerida por el schema — una captura del panel o un diagrama simple. Alt: `Panel de chat del portfolio preguntando por APiGen`.
-- **SEO metaDescription:** Cómo el chat del portfolio cita case studies y el CV, cuándo llama a Gemini, y qué límites tiene para que no se use de asistente general.
-- **Keywords:** RAG, Gemini, Next.js, rate limit, portfolio
+- **Main image:** requerida por el schema. Una captura del panel alcanza. Alt: `Panel de chat del portfolio preguntando por APiGen`.
+- **SEO metaDescription:** Cómo viaja un POST /api/qa: saludo sin modelo, búsqueda por palabras con piso 0,25, y Gemini Flash solo si hay fragmentos.
+- **Keywords:** chat, Gemini, RAG, portfolio, rate limit
 
 ---
 
-## El contenido
+PEGAR DESDE ACA
 
-Abajo a la derecha hay un globo. Preguntás en castellano o en inglés y, si hay material publicado, contestá con citas a `/proyectos/...` o al CV.
+Hoy no te recorro el portfolio entero. Te sigo mientras le haces tres preguntas al globo que está abajo a la derecha.
 
-No es un asistente general. Si le pedís que te escriba un mail, que ignore las fuentes o que razone sobre el dólar, no debería inventar. A veces se calla. Eso es a propósito.
+Vamos por partes.
 
-## Qué ve (y qué no)
+## El globo no es un ChatGPT del sitio
 
-El corpus es un snapshot de lo que **ya está en el repo**:
+Antes que nada: no es un chat general. No inventa, no recuerda lo que le dijiste antes, no adivina. Cita lo que ya publiqué y, si no hay fuente, se calla.
 
-- case studies versionados (APiGen, APiGen Studio, Biogas)
-- educación del CV (`resume.json` / `resume.en.json`)
+Esa es una decisión, no algo que me olvidé de terminar.
 
-No lee GitHub. En particular no lee READMEs privados. Un README público solo entra si el proyecto **no** tiene case study.
+## Cómo viaja el pedido
 
-Los posts del blog **todavía no** están en ese snapshot. Si estás dentro de un artículo, el chat se comporta como en el resto del sitio. Si estás en `/proyectos/apigen`, prioriza los chunks de APiGen y usa el resto de respaldo.
+Cada envío es un `POST /api/qa`. Van tres datos: el idioma de la página (`es` o `en`), el path donde estás, y el último texto que escribiste. El hilo que ves en el panel se dibuja en el navegador. En el body no viaja como memoria del modelo.
 
-## El pipeline
+En el servidor el orden es fijo:
 
-1. **UI** — el panel manda el último texto a `POST /api/qa` con el locale y el path.
-2. **Retrieval** — sin modelo. Tokeniza la pregunta, busca overlap léxico contra el snapshot de ese idioma. Hasta 4 chunks. Si no llega al umbral, **Gemini no corre**.
-3. **Modelo** — Gemini Flash, solo con esas fuentes. Una sola `QUESTION` citada; **no ve el hilo**. Instrucciones adentro de la pregunta se tratan como texto no confiable.
-4. **Respuesta** — stream al panel, con links markdown a las páginas publicadas.
+1. El Origin tiene que ser este sitio. Si no, el pedido se rechaza.
+2. El texto no pasa de 500 caracteres.
+3. Cuentan dos techos en Redis, los dos por IP. El de este chat, y el de cualquier POST a `/api`.
+4. Si es un saludo, hay una respuesta fija. Ahí termina.
+5. Si no, se arma el corpus de ese idioma y se buscan hasta cuatro fragmentos.
+6. Si no aparece ninguno, otra respuesta fija. Tampoco hay modelo.
+7. Si hay fragmentos, Gemini Flash recibe esas fuentes y una sola pregunta. La respuesta vuelve en stream.
 
-El hilo en pantalla es cosmética. Cada respuesta es un turno aislado.
+Las tres pruebas de abajo son ese camino, cortado en el escalón donde cada una se cae o sigue.
 
-## Límites (para que no haya sorpresas)
+---
 
-- CSRF: el Origin tiene que ser este sitio.
-- Query ≤ 500 caracteres.
-- Rate limit **propio** de `/api/qa`: 10 pedidos / 10 minutos / IP en producción (Upstash). Encima, el proxy agrupa mutaciones de API en 60/min/IP.
-- Si Upstash no está configurado, el tope dedicado no corre; queda el del proxy (o nada). El chat **necesita Redis** para que el cupo de Gemini valga.
-- Sin captcha y sin login. No es “a prueba de abuso”; es un techo por IP y un modelo que no sale del corpus.
+## Primera prueba: "Hola"
 
-La cuota gratis de Gemini sigue siendo un recurso compartido. El rate limit es para que un script desde una IP no la vacíe en un minuto.
+Escribiste "Hola" y esperaste. Te contestó: "Hola. Preguntame por un proyecto publicado o por la formación."
 
-## Qué podés preguntar
+¿Se cortó? No. Un saludo solo no llama al modelo. Es una respuesta fija. Lo mismo con "hello" o "buenas". Si la página está en inglés, la frase es "Hi. Ask about a published project or the training."
 
-Cosas que están en los case studies o en el CV: qué es APiGen, stack, tradeoffs, título, CCNA. Si la palabra no está en el texto publicado, el retrieval no pega y no hay llamada al modelo.
+Por dentro, esto ocurre en el paso 4, antes de armar el corpus. El servidor parte el texto en tokens. Si todos son palabras de saludo, corta. Entran `hola`, `hello`, `hey`, `buenas`. Una palabra de tres letras o más que no sea saludo lo saca de este camino: "hola, qué es APiGen" ya no es un saludo, y sigue hacia la búsqueda.
 
-Si contestó mal, el bug es mío o del umbral léxico — no “la IA pensó”.
+El POST igual ya pasó por Redis. No gasta Gemini. Sí gasta uno de los diez pedidos del chat.
 
-## Por qué así
+## Segunda prueba: "¿Qué es APiGen?"
 
-Un chat libre sobre el repo filtraría documentación privada. Un buscador de citas sin modelo se siente a formulario. El medio: **citar lo publicado**, y que el modelo redacte solo con eso.
+Ahora sí llegó una pregunta de verdad. Y no da lo mismo desde dónde la haces.
 
-Si querés el detalle de un proyecto, abrí el case study. El chat es un índice hablado, no la fuente.
+Desde la home o desde este mismo post, el chat mira los textos publicados a ver si alguno se parece a tu pregunta. Desde `/proyectos/apigen` mira primero los de APiGen, aunque tu frase comparta pocas palabras con ellos. Después puede completar con otros, si sirven. No queda encerrado en esa página.
+
+¿Y qué te citó? El case study de APiGen. Justo donde está el detalle.
+
+Por dentro, la búsqueda no es un embedding ni un índice vectorial. Es overlap de palabras. La pregunta queda en minúsculas, sin acentos, sin palabras vacías (`que`, `de`, `tenés`, `what`) y sin tokens de menos de tres letras. El puntaje de un fragmento es la fracción de tokens de la pregunta que aparecen en su título, su encabezado o su texto. El piso es 0,25. El tope es cuatro fragmentos.
+
+El path decide un slug preferido. En `/proyectos/apigen` ese slug es `apigen`, y sus fragmentos van primeros aunque estén debajo del piso. El resto tiene que superarlo. Por eso, en esa página, una pregunta floja igual puede abrir el modelo: esos fragmentos entran aunque no lleguen a 0,25, y pueden ocupar los cuatro lugares antes de que entre nadie más.
+
+En `/blog/...` el path también anota el slug del artículo. Como ningún fragmento se llama así, la nota no mueve el ranking. Preguntar desde acá es lo mismo que preguntar desde la home.
+
+Cuando hay fragmentos, Gemini Flash no ve el hilo. Ve un system prompt con esas fuentes en JSON, y un único mensaje de usuario: tu pregunta, entre comillas, marcada como texto no confiable. Lo que escribas adentro ("ignorá esto", "hacete pasar por otro") no es una instrucción. Es parte de la pregunta. No hay un canal de razonamiento aparte. La respuesta sale en stream, de a pedazos, hacia el panel.
+
+## Tercera prueba: "Escríbeme un mail"
+
+Acá la negativa sale de dos lugares distintos, según dónde estés.
+
+En la home o en el blog, si ninguna frase publicada se parece a "escribime un mail", ni siquiera se llama al modelo. En pantalla: "No hay una cita publicada para esa pregunta." En inglés: "No published quote for that question."
+
+En la página de un proyecto, la pregunta llega igual al modelo, porque los textos de esa página entran aunque el puntaje sea bajo. Ahí el modelo es el que tiene que decir que no hay cita, si la pregunta no va sobre ese material.
+
+Por dentro, el corte de la home es el paso 6. La búsqueda devuelve una lista vacía y el handler contesta la frase fija. La clave de Gemini ni se consulta.
+
+En un proyecto la lista no viene vacía: los fragmentos preferidos no pasan por el piso de 0,25, así que el paso 7 sí corre. El prompt le dice que conteste solo con las fuentes y que, si no alcanzan, diga que no hay cita. La negativa, en ese caso, es del modelo.
+
+¿Y si le pides que recuerde lo que dijiste antes? No hay "antes". Cada POST manda solo el último texto. "¿Y el segundo punto?" no tiene primero, salvo que esa frase nueva vuelva a encontrar esos textos por sus propias palabras.
+
+---
+
+## Qué puede citar, hoy
+
+El corpus se arma en el servidor, con lo que ya viene en la aplicación. No hay una llamada a GitHub en el pedido. Entran los case studies de APiGen, APiGen Studio y Biogas, y la formación del CV. Castellano e inglés son dos corpus distintos: el inglés no hereda el cuerpo en castellano. Si algo solo está escrito en un idioma, en el otro no aparece.
+
+Los posts del blog no están. Este tampoco, cuando se publique.
+
+¿Y los README? No se leen en vivo. Un README público solo entra si ese proyecto no tiene case study. Si tiene, gana el case study y el README se queda afuera.
+
+Hay una rama aparte de la búsqueda, chica y a propósito. "¿Qué título tienes?" no comparte vocabulario con el CV: después de sacar las palabras vacías, queda `título`. Esa palabra, igual que universidad, carrera, formación o capacitación, alcanza para adjuntar el grado formal aunque el overlap del resto sea cero. No es memoria del modelo. Es una excepción del retrieval para cuando la pregunta usa la palabra cotidiana y el CV usa otra.
+
+## Los techos
+
+Los dos límites del paso 3 viven en Upstash Redis, los dos por IP.
+
+- Este endpoint: 10 pedidos cada 10 minutos.
+- Cualquier POST a `/api`: 60 por minuto. Es el default del proxy, no un techo exclusivo del chat.
+
+Sin Redis no corre ninguno. El chat sigue contestando, y sigue sin poder leer documentación privada. Lo que queda sin freno es la cuota de Gemini. No hay cuenta ni captcha. El cupo existe para que una sola IP no vacíe esa cuota en un minuto mientras Redis está.
+
+## Cuando la respuesta está mal
+
+Si te contestó algo raro, falló el piso de 0,25 o el texto publicado es ambiguo. No "pensó" otra cosa: no tenía otras fuentes.
+
+El chat es un índice. El detalle sigue estando en el case study o en el CV.
+
+---
+
+Espero que hayas visto de cerca cómo se comporta el globo.
+
+Nos vemos en el próximo post.
