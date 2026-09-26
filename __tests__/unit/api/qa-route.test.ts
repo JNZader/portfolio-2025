@@ -87,6 +87,7 @@ describe('POST /api/qa', () => {
     expect(res.status).toBe(200);
     expect(google).toHaveBeenCalledWith('gemini-3.8-flash');
     expect(streamText).toHaveBeenCalledTimes(1);
+    expect(JSON.stringify(payload)).toContain('thinkingBudget');
     expect(JSON.stringify(payload)).toContain('/cv');
     expect(JSON.stringify(payload)).not.toContain(ORIGIN_MARKER);
     expect(JSON.stringify(payload)).not.toContain(VAULT_MARKER);

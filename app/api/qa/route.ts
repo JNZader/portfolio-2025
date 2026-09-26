@@ -125,7 +125,64 @@ export async function POST(request: NextRequest) {
     model: google('gemini-3.8-flash'),
     system: systemPrompt(locale, chunks),
     messages: await convertToModelMessages(messages as UIMessage[]),
+    providerOptions: {
+      google: {
+        thinkingConfig: {
+          thinkingBudget: 0,
+          includeThoughts: false,
+        },
+      },
+    },
   });
 
-  return result.toUIMessageStreamResponse();
+  const response = result.toUIMessageStreamResponse({
+    sendReasoning: false,
+  });
+  return stripProviderMetadata(response);
+}
+
+function stripProviderMetadata(response: Response): Response {
+  if (!response.body) return response;
+  const decoder = new TextDecoder();
+  const encoder = new TextEncoder();
+  let buffer = '';
+  const stream = response.body.pipeThrough(
+    new TransformStream<Uint8Array, Uint8Array>({
+      transform(chunk, controller) {
+        buffer += decoder.decode(chunk, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() ?? '';
+        for (const line of lines) {
+          const next = stripMetadataLine(line);
+          if (next.length === 0) continue;
+          controller.enqueue(encoder.encode(`${next}\n`));
+        }
+      },
+      flush(controller) {
+        if (buffer.length > 0) {
+          controller.enqueue(encoder.encode(stripMetadataLine(buffer)));
+        }
+      },
+    })
+  );
+  return new Response(stream, {
+    status: response.status,
+    headers: response.headers,
+  });
+}
+
+function stripMetadataLine(line: string): string {
+  if (!line.startsWith('data: ') || line === 'data: [DONE]') return line;
+  try {
+    const payload: unknown = JSON.parse(line.slice(6));
+    if (!payload || typeof payload !== 'object') return line;
+    const record = payload as Record<string, unknown>;
+    if (record.type === 'text-delta' && record.delta === '') return '';
+    if (!('providerMetadata' in record)) return line;
+    const copy = { ...record };
+    delete copy.providerMetadata;
+    return `data: ${JSON.stringify(copy)}`;
+  } catch {
+    return line;
+  }
 }
