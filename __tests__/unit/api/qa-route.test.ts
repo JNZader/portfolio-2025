@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const verifyCsrf = vi.fn().mockReturnValue(true);
 const streamText = vi.fn();
-const google = vi.fn(() => 'gemini-2.5-flash-model');
+const google = vi.fn(() => 'gemini-3.8-flash-model');
 
 vi.mock('@/lib/security/security-config', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/lib/security/security-config')>();
@@ -62,7 +62,7 @@ describe('POST /api/qa', () => {
   beforeEach(() => {
     verifyCsrf.mockReset().mockReturnValue(true);
     streamText.mockReset().mockReturnValue(streamResult());
-    google.mockReset().mockReturnValue('gemini-2.5-flash-model');
+    google.mockReset().mockReturnValue('gemini-3.8-flash-model');
     process.env[API_KEY] = 'test-key';
   });
 
@@ -85,7 +85,7 @@ describe('POST /api/qa', () => {
     const payload = streamText.mock.calls[0]?.[0] as Record<string, unknown> | undefined;
 
     expect(res.status).toBe(200);
-    expect(google).toHaveBeenCalledWith('gemini-2.5-flash');
+    expect(google).toHaveBeenCalledWith('gemini-3.8-flash');
     expect(streamText).toHaveBeenCalledTimes(1);
     expect(JSON.stringify(payload)).toContain('/cv');
     expect(JSON.stringify(payload)).not.toContain(ORIGIN_MARKER);

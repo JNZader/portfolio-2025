@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
   }
 
   const result = streamText({
-    model: google('gemini-2.5-flash'),
+    model: google('gemini-3.8-flash'),
     system: systemPrompt(locale, chunks),
     messages: await convertToModelMessages(messages as UIMessage[]),
   });
