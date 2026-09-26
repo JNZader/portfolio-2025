@@ -137,6 +137,7 @@ export async function POST(request: NextRequest) {
 
   const response = result.toUIMessageStreamResponse({
     sendReasoning: false,
+    generateMessageId: () => crypto.randomUUID(),
   });
   return stripProviderMetadata(response);
 }
@@ -153,6 +154,10 @@ function stripProviderMetadata(response: Response): Response {
         const lines = buffer.split('\n');
         buffer = lines.pop() ?? '';
         for (const line of lines) {
+          if (line.length === 0) {
+            controller.enqueue(encoder.encode('\n'));
+            continue;
+          }
           const next = stripMetadataLine(line);
           if (next.length === 0) continue;
           controller.enqueue(encoder.encode(`${next}\n`));
