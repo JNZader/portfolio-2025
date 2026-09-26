@@ -2,9 +2,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const verifyCsrf = vi.fn().mockReturnValue(true);
 const streamText = vi.fn();
-const google = vi.fn(() => 'gemini-3.8-flash-model');
+const google = vi.fn((..._args: unknown[]) => 'gemini-3.8-flash-model');
 const qaLimit = vi.fn();
-const getClientIdentifier = vi.fn(() => '127.0.0.1');
+const getClientIdentifier = vi.fn((..._args: unknown[]) => '127.0.0.1');
 
 vi.mock('@/lib/security/security-config', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/lib/security/security-config')>();
