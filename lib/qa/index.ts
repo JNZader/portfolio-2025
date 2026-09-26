@@ -1,5 +1,7 @@
 export { assembleCorpus, toCorpusProject, toEducationRecord } from '@/lib/qa/chunk';
 export { matchQuery } from '@/lib/qa/match';
+export type { PublishedSnapshot, PublishedSnapshotInput } from '@/lib/qa/snapshot';
+export { buildPublishedSnapshot } from '@/lib/qa/snapshot';
 export type {
   CaseStudySource,
   CorpusInput,
