@@ -344,6 +344,7 @@
     "submit": "Enviar",
     "close": "Cerrar",
     "refused": "No hay una cita publicada para esa pregunta.",
+    "writing": "Escribiendo…",
     "error": "No se pudo consultar. Probá de nuevo."
   },
   "ProjectDetail": {

@@ -177,4 +177,45 @@ describe('PublishedQaForm chat', () => {
     await user.keyboard('{Escape}');
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
+
+  it.each(['submitted', 'streaming'] as const)(
+    'shows the writing catalogue line while status is %s',
+    async (status) => {
+      chat.status = status;
+      await openPanel('es');
+
+      expect(screen.getByText('Escribiendo…')).toBeVisible();
+    }
+  );
+
+  it('does not show the writing line when the chat is ready', async () => {
+    await openPanel('en');
+
+    expect(screen.queryByText('Writing…')).not.toBeInTheDocument();
+  });
+
+  it('labels assistant bubbles with JZ and leaves user bubbles unlabeled', async () => {
+    chat.messages = [
+      { id: 'u1', role: 'user', parts: [{ type: 'text', text: 'hola' }] },
+      { id: 'a1', role: 'assistant', parts: [{ type: 'text', text: 'respuesta' }] },
+    ];
+    await openPanel('es');
+
+    expect(screen.getByText('JZ')).toBeVisible();
+    expect(screen.getByText('hola')).toBeVisible();
+    expect(screen.getByText('hola').closest('div')?.textContent).not.toContain('JZ');
+  });
+
+  it('renders consecutive asterisk markdown lines as list items', async () => {
+    chat.messages = [
+      {
+        id: 'a1',
+        role: 'assistant',
+        parts: [{ type: 'text', text: '* item' }],
+      },
+    ];
+    await openPanel('en');
+
+    expect(screen.getByRole('listitem')).toHaveTextContent('item');
+  });
 });

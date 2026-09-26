@@ -23,9 +23,15 @@ function safeHref(href: string): string | null {
   return null;
 }
 
-function assistantCopy(text: string, refusedLabel: string): ReactNode {
-  if (text === QA_NO_EVIDENCE) return refusedLabel;
+function isListLine(line: string): boolean {
+  return line.startsWith('*') || line.startsWith('-');
+}
 
+function listItemText(line: string): string {
+  return line.slice(1).replace(/^\s/, '');
+}
+
+function inlineCopy(text: string): ReactNode {
   const nodes: ReactNode[] = [];
   let lastIndex = 0;
   let key = 0;
@@ -49,6 +55,52 @@ function assistantCopy(text: string, refusedLabel: string): ReactNode {
   return nodes;
 }
 
+function assistantCopy(text: string, refusedLabel: string): ReactNode {
+  if (text === QA_NO_EVIDENCE) return refusedLabel;
+
+  const lines = text.split('\n');
+  const blocks: ReactNode[] = [];
+  let index = 0;
+  let blockKey = 0;
+
+  while (index < lines.length) {
+    const line = lines[index] ?? '';
+    if (isListLine(line)) {
+      const items: string[] = [];
+      while (index < lines.length && isListLine(lines[index] ?? '')) {
+        items.push(listItemText(lines[index] ?? ''));
+        index += 1;
+      }
+      blocks.push(
+        <ul key={blockKey} className="list-disc space-y-1 pl-5">
+          {items.map((item) => (
+            <li key={`${blockKey}-${item}`}>{inlineCopy(item)}</li>
+          ))}
+        </ul>
+      );
+      blockKey += 1;
+      continue;
+    }
+
+    const paragraph: string[] = [];
+    while (index < lines.length && !isListLine(lines[index] ?? '')) {
+      paragraph.push(lines[index] ?? '');
+      index += 1;
+    }
+    const joined = paragraph.join('\n');
+    if (joined.length > 0) {
+      blocks.push(
+        <p key={blockKey} className="whitespace-pre-wrap leading-relaxed">
+          {inlineCopy(joined)}
+        </p>
+      );
+      blockKey += 1;
+    }
+  }
+
+  return blocks;
+}
+
 export function PublishedQaForm() {
   const t = useTranslations('PublishedQa');
   const locale = useLocale();
@@ -56,6 +108,7 @@ export function PublishedQaForm() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const requestRef = useRef({ locale, path: pathname });
+  const logRef = useRef<HTMLDivElement>(null);
   requestRef.current = { locale, path: pathname };
   const [transport] = useState(
     () =>
@@ -85,6 +138,13 @@ export function PublishedQaForm() {
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [open]);
+
+  useEffect(() => {
+    const log = logRef.current;
+    if (!log) return;
+    if (messages.length === 0 && !pending) return;
+    log.scrollTop = log.scrollHeight;
+  }, [messages, pending]);
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -118,6 +178,7 @@ export function PublishedQaForm() {
             </button>
           </div>
           <div
+            ref={logRef}
             className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-3"
             role="log"
             aria-live="polite"
@@ -128,22 +189,36 @@ export function PublishedQaForm() {
                 key={message.id}
                 className={
                   message.role === 'user'
-                    ? 'ml-8 rounded-md bg-primary/10 px-3 py-2 text-sm text-foreground'
-                    : 'mr-8 rounded-md bg-muted px-3 py-2 text-sm text-foreground'
+                    ? 'ml-8 rounded-md bg-primary/10 px-3 py-2 text-sm leading-relaxed text-foreground'
+                    : 'mr-8 rounded-md bg-muted px-3 py-2 text-sm leading-relaxed text-foreground'
                 }
               >
-                {message.parts.map((part, index) => {
+                {message.role === 'assistant' ? (
+                  <p className="text-display text-xs text-primary">JZ</p>
+                ) : null}
+                {message.parts.map((part) => {
                   if (part.type !== 'text') return null;
+                  if (message.role === 'assistant') {
+                    return (
+                      <div key={`${message.id}-assistant-${part.text}`}>
+                        {assistantCopy(part.text, t('refused'))}
+                      </div>
+                    );
+                  }
                   return (
-                    <p key={`${message.id}-${index}`} className="whitespace-pre-wrap">
-                      {message.role === 'assistant'
-                        ? assistantCopy(part.text, t('refused'))
-                        : part.text}
+                    <p
+                      key={`${message.id}-user-${part.text}`}
+                      className="whitespace-pre-wrap leading-relaxed"
+                    >
+                      {part.text}
                     </p>
                   );
                 })}
               </div>
             ))}
+            {pending ? (
+              <p className="text-sm leading-relaxed text-muted-foreground">{t('writing')}</p>
+            ) : null}
           </div>
           <form onSubmit={onSubmit} className="border-t border-border p-3">
             <div className="flex flex-col gap-2">

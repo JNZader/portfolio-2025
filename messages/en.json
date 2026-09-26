@@ -344,6 +344,7 @@
     "submit": "Send",
     "close": "Close",
     "refused": "No published quote for that question.",
+    "writing": "Writing…",
     "error": "The query failed. Try again."
   },
   "ProjectDetail": {
