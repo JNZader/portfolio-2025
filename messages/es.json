@@ -338,6 +338,13 @@
     "viewDemoAria": "Ver demo de {title}",
     "searchBadge": "Búsqueda: “{query}”"
   },
+  "PublishedQa": {
+    "heading": "Citas publicadas",
+    "label": "Preguntá sobre un proyecto o la formación",
+    "submit": "Consultar",
+    "refused": "No hay una cita publicada para esa pregunta.",
+    "error": "No se pudo consultar. Probá de nuevo."
+  },
   "ProjectDetail": {
     "backToProjects": "Volver a proyectos",
     "curated": "Curado",

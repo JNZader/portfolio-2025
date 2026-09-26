@@ -338,6 +338,13 @@
     "viewDemoAria": "View {title} demo",
     "searchBadge": "Search: “{query}”"
   },
+  "PublishedQa": {
+    "heading": "Published quotes",
+    "label": "Ask about a project or the training",
+    "submit": "Ask",
+    "refused": "No published quote for that question.",
+    "error": "The query failed. Try again."
+  },
   "ProjectDetail": {
     "backToProjects": "Back to projects",
     "curated": "Curated",

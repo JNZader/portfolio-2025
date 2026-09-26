@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Suspense } from 'react';
 import { PageTransition } from '@/components/page-transition';
 import ProjectsClient from '@/components/projects/ProjectsClient';
+import { PublishedQaForm } from '@/components/projects/PublishedQaForm';
 import Container from '@/components/ui/Container';
 import { InteriorHero } from '@/components/ui/InteriorHero';
 import Section from '@/components/ui/Section';
@@ -67,6 +68,7 @@ export default async function ProyectosPage({
       {/* Projects Section with Search */}
       <Section>
         <Container>
+          <PublishedQaForm />
           <Suspense
             fallback={
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
