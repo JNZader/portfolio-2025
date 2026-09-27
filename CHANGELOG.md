@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.34.3](https://github.com/JNZader/portfolio-2025/compare/v2.34.2...v2.34.3) (2026-09-27)
+
+### Bug Fixes
+
+* **deps:** keep TypeScript 6 so Vercel typecheck fits in 8GB ([#280](https://github.com/JNZader/portfolio-2025/issues/280)) ([c957530](https://github.com/JNZader/portfolio-2025/commits/c9575306b21421914d8c4a4bf535c1f924336845))
+
 ## [2.34.2](https://github.com/JNZader/portfolio-2025/compare/v2.34.1...v2.34.2) (2026-09-27)
 
 ## [2.34.1](https://github.com/JNZader/portfolio-2025/compare/v2.34.0...v2.34.1) (2026-09-27)
