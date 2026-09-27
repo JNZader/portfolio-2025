@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.34.0](https://github.com/JNZader/portfolio-2025/compare/v2.33.3...v2.34.0) (2026-09-27)
+
+### Features
+
+* **qa:** cite published case studies without sending the thread ([#275](https://github.com/JNZader/portfolio-2025/issues/275)) ([22c47f0](https://github.com/JNZader/portfolio-2025/commits/22c47f0ad1b55ba25f9dda038f104db7c6b908ec))
+
+### Bug Fixes
+
+* **deps:** align Vitest 5 coverage and UI peers ([#277](https://github.com/JNZader/portfolio-2025/issues/277)) ([e0bcecf](https://github.com/JNZader/portfolio-2025/commits/e0bcecf088eba4bc8c764e7c0033c3d8e36f42a1))
+
 ## [2.33.3](https://github.com/JNZader/portfolio-2025/compare/v2.33.2...v2.33.3) (2026-09-26)
 ## [2.33.2](https://github.com/JNZader/portfolio-2025/compare/v2.33.1...v2.33.2) (2026-09-11)
 ## [2.33.1](https://github.com/JNZader/portfolio-2025/compare/v2.33.0...v2.33.1) (2026-09-11)
