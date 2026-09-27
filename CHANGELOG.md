@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.34.4](https://github.com/JNZader/portfolio-2025/compare/v2.34.3...v2.34.4) (2026-09-27)
+
+### Bug Fixes
+
+* **deps:** close the open lodash, extract-zip, qs, and deepmerge alerts ([#281](https://github.com/JNZader/portfolio-2025/issues/281)) ([49bc60e](https://github.com/JNZader/portfolio-2025/commits/49bc60eacf1be3f53e164bfa2eccb2c5d7e567e2))
+
 ## [2.34.3](https://github.com/JNZader/portfolio-2025/compare/v2.34.2...v2.34.3) (2026-09-27)
 
 ### Bug Fixes
