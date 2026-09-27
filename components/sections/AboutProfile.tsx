@@ -116,14 +116,14 @@ export async function AboutProfile() {
                   <strong>{t('contactAvailabilityLabel')}</strong> {t('contactAvailability')}
                 </p>
               </div>
-              <div className="mt-6 flex flex-wrap gap-4">
+              <div className="mt-6 flex flex-wrap items-center gap-3">
                 <Link
                   href="/contacto"
-                  className="inline-flex min-h-11 items-center rounded-md bg-primary px-4 text-primary-foreground"
+                  className="inline-flex h-14 shrink-0 items-center rounded-lg bg-primary px-6 text-primary-foreground hover:bg-primary/90"
                 >
                   {t('contactHeading')}
                 </Link>
-                <CVButton variant="outline" fullWidth />
+                <CVButton variant="outline" />
               </div>
             </div>
           </RevealOnScroll>

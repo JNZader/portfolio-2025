@@ -27,11 +27,13 @@ describe('resolveRateLimitBucket', () => {
     expect(resolveRateLimitBucket('/api/newsletter/subscribe', 'POST')).toBe('api-mutation');
     expect(resolveRateLimitBucket('/api/data-deletion', 'DELETE')).toBe('api-mutation');
     expect(resolveRateLimitBucket('/api/data-export', 'PUT')).toBe('api-mutation');
+    expect(resolveRateLimitBucket('/api/qa', 'POST')).toBe('api-mutation');
   });
 
   it('applies a generous read bucket to API reads', () => {
     expect(resolveRateLimitBucket('/api/health', 'GET')).toBe('api-read');
     expect(resolveRateLimitBucket('/api/resume', 'GET')).toBe('api-read');
+    expect(resolveRateLimitBucket('/api/qa', 'GET')).toBe('api-read');
   });
 });
 
