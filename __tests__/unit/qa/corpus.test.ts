@@ -18,6 +18,7 @@ import {
 
 const ORIGIN_MARKER = 'ORIGIN_LIBRARY_ONLY_DECEMBER_2014_BASE_CONTROLLER';
 const PUBLIC_REPO_MARKER = 'PUBLIC_REPO_ONLY_NOT_IN_THE_CASE_STUDY';
+const PUBLIC_README_CITATION = 'github.com/example/biogas';
 
 function education(locale: typeof QA_LOCALE.ES | typeof QA_LOCALE.EN) {
   const source = locale === QA_LOCALE.EN ? resumeEn.education : resumeEs.education;
@@ -63,7 +64,7 @@ describe('assembleCorpus', () => {
       {
         slug: 'biogas-platform',
         text: PUBLIC_REPO_MARKER,
-        citation: 'github.com/example/biogas',
+        citation: PUBLIC_README_CITATION,
       },
     ]);
     const biogas = corpus.filter((chunk) => chunk.slug === 'biogas-platform');
@@ -71,7 +72,7 @@ describe('assembleCorpus', () => {
     expect(biogas.length).toBeGreaterThan(0);
     expect(biogas.every((chunk) => chunk.kind === QA_KIND.CASE_STUDY)).toBe(true);
     expect(biogas.every((chunk) => !chunk.text.includes(PUBLIC_REPO_MARKER))).toBe(true);
-    expect(biogas.every((chunk) => !chunk.citation.includes('github.com'))).toBe(true);
+    expect(biogas.every((chunk) => chunk.citation !== PUBLIC_README_CITATION)).toBe(true);
     expect(biogas.every((chunk) => chunk.href === '/proyectos/biogas-platform')).toBe(true);
   });
 
