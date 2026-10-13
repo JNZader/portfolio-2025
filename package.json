@@ -67,7 +67,7 @@
     "js-cookie": "^3.0.8",
     "jspdf": "^4.2.1",
     "lucide-react": "^1.52.0",
-    "mermaid": "^12.1.0",
+    "mermaid": "^12.2.0",
     "nanoid": "^6.0.2",
     "next": "^16.4.0",
     "next-auth": "^5.0.0-beta.31",
@@ -179,9 +179,10 @@
     "@sanity/runtime-cli": {
       "adm-zip": "^0.6.0"
     },
+    "undici": "7.30.0",
     "@module-federation/dts-plugin": {
       "adm-zip": "^0.6.0",
-      "undici": "7.29.0"
+      "undici": "7.30.0"
     },
     "@prisma/config": {
       "deepmerge-ts": "8.0.2"
