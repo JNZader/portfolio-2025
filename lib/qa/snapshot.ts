@@ -3,7 +3,12 @@ import { apigenStudio } from '@/lib/data/case-studies/apigen-studio';
 import { biogasPlatform } from '@/lib/data/case-studies/biogas-platform';
 import resumeEn from '@/lib/data/resume.en.json';
 import resumeEs from '@/lib/data/resume.json';
-import { assembleCorpus, toCorpusProject, toEducationRecord } from '@/lib/qa/chunk';
+import {
+  assembleCorpus,
+  toCorpusProject,
+  toCvProjectRecord,
+  toEducationRecord,
+} from '@/lib/qa/chunk';
 import {
   type CorpusProject,
   type CorpusReadme,
@@ -33,12 +38,19 @@ function projectsFor(locale: QaLocale, extra: readonly CorpusProject[]): CorpusP
   return [...LOCAL_CASE_STUDIES.map((project) => toCorpusProject(project, locale)), ...extra];
 }
 
+function resumeFor(locale: QaLocale) {
+  return locale === QA_LOCALE.EN ? resumeEn : resumeEs;
+}
+
 function corpusFor(locale: QaLocale, input?: PublishedSnapshotInput): QaChunk[] {
+  const resume = resumeFor(locale);
   return assembleCorpus({
     locale,
     projects: projectsFor(locale, input?.projects ?? []),
     education: educationFor(locale),
     readmes: input?.readmes,
+    summary: resume.summary,
+    cvProjects: resume.projects.map(toCvProjectRecord),
   });
 }
 

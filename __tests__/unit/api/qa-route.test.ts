@@ -58,6 +58,12 @@ function postRequest(body: unknown) {
 
 function streamResult() {
   return {
+    toUIMessageStream: () =>
+      new ReadableStream({
+        start(controller) {
+          controller.close();
+        },
+      }),
     toUIMessageStreamResponse: () =>
       new Response('streamed', { headers: { 'Content-Type': 'text/plain; charset=utf-8' } }),
     toDataStreamResponse: () =>
@@ -120,6 +126,18 @@ describe('POST /api/qa', () => {
     expect(JSON.stringify(payload)).toContain('/cv');
     expect(JSON.stringify(payload)).not.toContain(ORIGIN_MARKER);
     expect(JSON.stringify(payload)).not.toContain(VAULT_MARKER);
+  });
+
+  it('streams retrieved sources for a published CV project question', async () => {
+    const res = await POST(postRequest(chatBody('qué es consorcio canalero')));
+    const body = await res.text();
+    const payload = streamText.mock.calls[0]?.[0] as Record<string, unknown> | undefined;
+
+    expect(res.status).toBe(200);
+    expect(streamText).toHaveBeenCalledTimes(1);
+    expect(JSON.stringify(payload)).toContain('consorcio');
+    expect(body).toContain('qa-sources');
+    expect(body).toContain('/cv');
   });
 
   it('returns 503 JSON without leaking the env name when the API key is missing', async () => {

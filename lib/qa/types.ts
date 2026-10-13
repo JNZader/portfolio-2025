@@ -11,6 +11,8 @@ export const QA_KIND = {
   CASE_STUDY: 'case-study',
   README: 'readme',
   EDUCATION: 'education',
+  CV_PROJECT: 'cv-project',
+  CV_SUMMARY: 'cv-summary',
 } as const;
 
 export type QaKind = (typeof QA_KIND)[keyof typeof QA_KIND];
@@ -69,6 +71,19 @@ export interface EducationRecord {
   details: readonly string[];
 }
 
+/** Resume project card published on /cv. */
+export interface CvProjectSource {
+  name: string;
+  description: string;
+  highlights?: readonly string[];
+}
+
+export interface CvProjectRecord {
+  name: string;
+  description: string;
+  highlights: readonly string[];
+}
+
 export interface QaChunk {
   id: string;
   locale: QaLocale;
@@ -86,6 +101,8 @@ export interface CorpusInput {
   projects: readonly CorpusProject[];
   education: readonly EducationRecord[];
   readmes?: readonly CorpusReadme[];
+  summary?: string;
+  cvProjects?: readonly CvProjectRecord[];
 }
 
 export interface QaHit {

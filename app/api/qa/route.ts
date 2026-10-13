@@ -186,11 +186,27 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  const response = result.toUIMessageStreamResponse({
-    sendReasoning: false,
-    generateMessageId: () => crypto.randomUUID(),
+  const stream = createUIMessageStream({
+    execute({ writer }) {
+      writer.write({
+        type: 'data-qa-sources',
+        data: {
+          sources: chunks.map((chunk) => ({
+            title: chunk.title,
+            href: chunk.href,
+            citation: chunk.citation,
+          })),
+        },
+      });
+      writer.merge(
+        result.toUIMessageStream({
+          sendReasoning: false,
+          generateMessageId: () => crypto.randomUUID(),
+        })
+      );
+    },
   });
-  return stripProviderMetadata(response);
+  return stripProviderMetadata(createUIMessageStreamResponse({ stream }));
 }
 
 function stripProviderMetadata(response: Response): Response {

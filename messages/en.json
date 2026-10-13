@@ -346,7 +346,11 @@
     "refused": "No published quote for that question.",
     "hello": "Hi. Ask about a published project or the training.",
     "writing": "Writing…",
-    "error": "The query failed. Try again."
+    "error": "The query failed. Try again.",
+    "sources": "Sources",
+    "suggestionConsorcio": "What is Consorcio Canalero?",
+    "suggestionEducation": "Where did you study?",
+    "suggestionBiogas": "What problem does Biogas solve?"
   },
   "ProjectDetail": {
     "backToProjects": "Back to projects",
