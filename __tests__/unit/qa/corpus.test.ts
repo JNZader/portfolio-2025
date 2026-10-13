@@ -6,6 +6,7 @@ import resumeEn from '@/lib/data/resume.en.json';
 import resumeEs from '@/lib/data/resume.json';
 import {
   assembleCorpus,
+  buildPublishedSnapshot,
   matchQuery,
   QA_KIND,
   QA_LOCALE,
@@ -225,5 +226,21 @@ describe('matchQuery', () => {
     const match = matchQuery('what degree do you have', corpus, QA_LOCALE.EN);
 
     expect(match.status).toBe(QA_MATCH_STATUS.REFUSED);
+  });
+});
+
+describe('published CV corpus', () => {
+  it('quotes Consorcio and ghagga from the published CV, not GitHub', () => {
+    const snapshot = buildPublishedSnapshot();
+    const consorcio = snapshot.es.filter((chunk) =>
+      chunk.text.toLowerCase().includes('consorcio canalero')
+    );
+    const ghagga = snapshot.es.filter((chunk) => chunk.text.toLowerCase().includes('ghagga'));
+
+    expect(consorcio.length).toBeGreaterThan(0);
+    expect(consorcio.every((chunk) => chunk.href === '/cv')).toBe(true);
+    expect(consorcio.every((chunk) => chunk.kind === QA_KIND.CV_PROJECT)).toBe(true);
+    expect(ghagga.length).toBeGreaterThan(0);
+    expect(ghagga.every((chunk) => chunk.href === '/cv')).toBe(true);
   });
 });

@@ -4,6 +4,8 @@ import {
   type CorpusInput,
   type CorpusProject,
   type CorpusReadme,
+  type CvProjectRecord,
+  type CvProjectSource,
   type EducationRecord,
   type EducationSource,
   QA_KIND,
@@ -76,6 +78,23 @@ export function toEducationRecord(entry: EducationSource): EducationRecord {
     endDate: entry.endDate,
     details: entry.details ?? [],
   };
+}
+
+export function toCvProjectRecord(entry: CvProjectSource): CvProjectRecord {
+  return {
+    name: entry.name,
+    description: entry.description,
+    highlights: entry.highlights ?? [],
+  };
+}
+
+function cvSlug(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
 }
 
 function sectionText(heading: string | null, lines: readonly string[]): string {
@@ -179,13 +198,44 @@ function educationText(record: EducationRecord): string {
     .join('\n');
 }
 
+function chunkCvSummary(summary: string, locale: QaLocale): QaChunk | null {
+  const text = summary.trim();
+  if (!text) return null;
+  const title = locale === QA_LOCALE.EN ? 'Summary' : 'Resumen';
+  return {
+    id: `${locale}:${QA_KIND.CV_SUMMARY}:summary:0`,
+    locale,
+    kind: QA_KIND.CV_SUMMARY,
+    slug: 'summary',
+    title,
+    heading: null,
+    text,
+    href: localizedPath('/cv', locale),
+    citation: title,
+  };
+}
+
+function chunkCvProject(record: CvProjectRecord, locale: QaLocale, index: number): QaChunk {
+  const slug = cvSlug(record.name);
+  const text = [record.name, record.description, ...record.highlights]
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .join('\n');
+  return {
+    id: `${locale}:${QA_KIND.CV_PROJECT}:${slug}:${index}`,
+    locale,
+    kind: QA_KIND.CV_PROJECT,
+    slug,
+    title: record.name,
+    heading: null,
+    text,
+    href: localizedPath('/cv', locale),
+    citation: record.name,
+  };
+}
+
 function chunkEducation(record: EducationRecord, locale: QaLocale, index: number): QaChunk {
-  const slug = `${record.institution} ${record.degree}`
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+  const slug = cvSlug(`${record.institution} ${record.degree}`);
 
   return {
     id: `${locale}:${QA_KIND.EDUCATION}:${slug}:${index}`,
@@ -220,6 +270,13 @@ export function assembleCorpus(input: CorpusInput): QaChunk[] {
 
   input.education.forEach((record, index) => {
     chunks.push(chunkEducation(record, input.locale, index));
+  });
+
+  const summary = chunkCvSummary(input.summary ?? '', input.locale);
+  if (summary) chunks.push(summary);
+
+  (input.cvProjects ?? []).forEach((record, index) => {
+    chunks.push(chunkCvProject(record, input.locale, index));
   });
 
   return chunks;

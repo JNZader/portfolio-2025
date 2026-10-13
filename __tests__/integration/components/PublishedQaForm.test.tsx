@@ -11,7 +11,7 @@ const chat = vi.hoisted(() => ({
   messages: [] as Array<{
     id: string;
     role: 'user' | 'assistant';
-    parts: Array<{ type: string; text?: string }>;
+    parts: Array<{ type: string; text?: string; data?: unknown }>;
   }>,
   sendMessage: vi.fn(),
   error: undefined as Error | undefined,
@@ -235,5 +235,52 @@ describe('PublishedQaForm chat', () => {
     await openPanel('en');
 
     expect(screen.getByRole('listitem')).toHaveTextContent('item');
+  });
+
+  it('shows suggestion chips when the log is empty and sends one on click', async () => {
+    const user = await openPanel('es');
+
+    await user.click(screen.getByRole('button', { name: '¿Qué es Consorcio Canalero?' }));
+
+    expect(chat.sendMessage).toHaveBeenCalledWith({ text: '¿Qué es Consorcio Canalero?' });
+  });
+
+  it('hides suggestion chips after a message exists', async () => {
+    chat.messages = [{ id: 'u1', role: 'user', parts: [{ type: 'text', text: 'hola' }] }];
+    await openPanel('es');
+
+    expect(
+      screen.queryByRole('button', { name: '¿Qué es Consorcio Canalero?' })
+    ).not.toBeInTheDocument();
+  });
+
+  it('lists retrieved sources under the assistant bubble', async () => {
+    chat.messages = [
+      {
+        id: 'a1',
+        role: 'assistant',
+        parts: [
+          { type: 'text', text: 'Freelance para un cliente real.' },
+          {
+            type: 'data-qa-sources',
+            data: {
+              sources: [
+                {
+                  title: 'Consorcio Canalero — Sistema de gestión',
+                  href: '/cv',
+                  citation: 'Consorcio Canalero — Sistema de gestión',
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ];
+    await openPanel('es');
+
+    expect(screen.getByText('Fuentes')).toBeVisible();
+    expect(
+      screen.getByRole('link', { name: 'Consorcio Canalero — Sistema de gestión' })
+    ).toHaveAttribute('href', '/cv');
   });
 });

@@ -12,6 +12,37 @@ import { QA_GREETING, QA_NO_EVIDENCE } from '@/lib/qa/retrieve';
 
 const MARKDOWN_LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 
+const SUGGESTION_KEYS = ['suggestionConsorcio', 'suggestionEducation', 'suggestionBiogas'] as const;
+
+interface QaSource {
+  title: string;
+  href: string;
+  citation: string;
+}
+
+function isQaSource(value: unknown): value is QaSource {
+  if (!value || typeof value !== 'object') return false;
+  const record = value as Record<string, unknown>;
+  return (
+    typeof record.title === 'string' &&
+    typeof record.href === 'string' &&
+    typeof record.citation === 'string'
+  );
+}
+
+function sourcesFromParts(parts: readonly { type: string; data?: unknown }[]): QaSource[] {
+  const sources: QaSource[] = [];
+  for (const part of parts) {
+    if (part.type !== 'data-qa-sources' || !part.data || typeof part.data !== 'object') continue;
+    const raw = (part.data as { sources?: unknown }).sources;
+    if (!Array.isArray(raw)) continue;
+    for (const entry of raw) {
+      if (isQaSource(entry)) sources.push(entry);
+    }
+  }
+  return sources;
+}
+
 function safeHref(href: string): string | null {
   if (href.startsWith('/') && !href.startsWith('//')) return href;
   try {
@@ -185,38 +216,80 @@ export function PublishedQaForm() {
             aria-live="polite"
             aria-relevant="additions"
           >
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={
-                  message.role === 'user'
-                    ? 'ml-8 rounded-md bg-primary/10 px-3 py-2 text-sm leading-relaxed text-foreground'
-                    : 'mr-8 rounded-md bg-muted px-3 py-2 text-sm leading-relaxed text-foreground'
-                }
-              >
-                {message.role === 'assistant' ? (
-                  <p className="text-display text-xs text-primary">JZ</p>
-                ) : null}
-                {message.parts.map((part) => {
-                  if (part.type !== 'text') return null;
-                  if (message.role === 'assistant') {
-                    return (
-                      <div key={`${message.id}-assistant-${part.text}`}>
-                        {assistantCopy(part.text, t('refused'), t('hello'))}
-                      </div>
-                    );
-                  }
-                  return (
-                    <p
-                      key={`${message.id}-user-${part.text}`}
-                      className="whitespace-pre-wrap leading-relaxed"
-                    >
-                      {part.text}
-                    </p>
-                  );
-                })}
+            {messages.length === 0 && !pending ? (
+              <div className="flex flex-col gap-2">
+                {SUGGESTION_KEYS.map((key) => (
+                  <Button
+                    key={key}
+                    type="button"
+                    variant="outline"
+                    className="h-11 justify-start whitespace-normal text-left"
+                    onClick={() => sendMessage({ text: t(key) })}
+                  >
+                    {t(key)}
+                  </Button>
+                ))}
               </div>
-            ))}
+            ) : null}
+            {messages.map((message) => {
+              const cited = message.role === 'assistant' ? sourcesFromParts(message.parts) : [];
+              return (
+                <div
+                  key={message.id}
+                  className={
+                    message.role === 'user'
+                      ? 'ml-8 rounded-md bg-primary/10 px-3 py-2 text-sm leading-relaxed text-foreground'
+                      : 'mr-8 rounded-md bg-muted px-3 py-2 text-sm leading-relaxed text-foreground'
+                  }
+                >
+                  {message.role === 'assistant' ? (
+                    <p className="text-display text-xs text-primary">JZ</p>
+                  ) : null}
+                  {message.parts.map((part) => {
+                    if (part.type !== 'text') return null;
+                    if (message.role === 'assistant') {
+                      return (
+                        <div key={`${message.id}-assistant-${part.text}`}>
+                          {assistantCopy(part.text, t('refused'), t('hello'))}
+                        </div>
+                      );
+                    }
+                    return (
+                      <p
+                        key={`${message.id}-user-${part.text}`}
+                        className="whitespace-pre-wrap leading-relaxed"
+                      >
+                        {part.text}
+                      </p>
+                    );
+                  })}
+                  {cited.length > 0 ? (
+                    <div className="mt-2 border-t border-border pt-2">
+                      <p className="text-xs text-muted-foreground">{t('sources')}</p>
+                      <ul className="mt-1 list-disc space-y-1 pl-5">
+                        {cited.map((source) => {
+                          const href = safeHref(source.href);
+                          return (
+                            <li key={`${source.href}:${source.citation}`}>
+                              {href ? (
+                                <a
+                                  href={href}
+                                  className="text-primary underline underline-offset-2"
+                                >
+                                  {source.citation}
+                                </a>
+                              ) : (
+                                source.citation
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
             {pending ? (
               <p className="text-sm leading-relaxed text-muted-foreground">{t('writing')}</p>
             ) : null}

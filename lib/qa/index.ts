@@ -1,4 +1,9 @@
-export { assembleCorpus, toCorpusProject, toEducationRecord } from '@/lib/qa/chunk';
+export {
+  assembleCorpus,
+  toCorpusProject,
+  toCvProjectRecord,
+  toEducationRecord,
+} from '@/lib/qa/chunk';
 export { matchQuery } from '@/lib/qa/match';
 export type { PublishedQaPathContext, PublishedQaPathKind } from '@/lib/qa/path';
 export { parsePublishedQaPath } from '@/lib/qa/path';
@@ -11,6 +16,8 @@ export type {
   CorpusInput,
   CorpusProject,
   CorpusReadme,
+  CvProjectRecord,
+  CvProjectSource,
   EducationRecord,
   EducationSource,
   QaChunk,
