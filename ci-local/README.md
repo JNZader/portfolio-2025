@@ -4,7 +4,7 @@ Run this repo's CI gates inside a clean Docker container **before pushing**, so
 you catch failures locally instead of burning GitHub Actions minutes.
 
 It mirrors `.github/workflows`: `npm ci` → `prisma generate` → `biome check` →
-`tsc --noEmit` → `vitest run` → `next build`.
+`tsc --noEmit` → `vitest run` → `npm run build` (`next build --webpack`; Next 16.4 Turbopack panics on NFT tracing).
 
 ## Setup (once)
 
