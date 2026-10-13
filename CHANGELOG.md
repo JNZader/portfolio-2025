@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.35.0](https://github.com/JNZader/portfolio-2025/compare/v2.34.9...v2.35.0) (2026-10-13)
+
+### Features
+
+* **qa:** expand published corpus, suggestion chips, and source list ([#295](https://github.com/JNZader/portfolio-2025/issues/295)) ([05f915f](https://github.com/JNZader/portfolio-2025/commits/05f915f6088d9b9649d38237e0feab08f1785961))
+
 ## [2.34.9](https://github.com/JNZader/portfolio-2025/compare/v2.34.8...v2.34.9) (2026-10-13)
 
 ### Bug Fixes
