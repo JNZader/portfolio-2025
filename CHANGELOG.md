@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.34.9](https://github.com/JNZader/portfolio-2025/compare/v2.34.8...v2.34.9) (2026-10-13)
+
+### Bug Fixes
+
+* **deps:** override undici 7.30.0 (remaining safe security fixes) ([#294](https://github.com/JNZader/portfolio-2025/issues/294)) ([92fe23e](https://github.com/JNZader/portfolio-2025/commits/92fe23ea9cba01f6abe98f8cd0c0445e594faf52))
+
 ## [2.34.8](https://github.com/JNZader/portfolio-2025/compare/v2.34.7...v2.34.8) (2026-10-13)
 
 ## [2.34.7](https://github.com/JNZader/portfolio-2025/compare/v2.34.6...v2.34.7) (2026-10-13)
