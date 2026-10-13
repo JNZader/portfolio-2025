@@ -7,7 +7,7 @@ import { server } from '@/mocks/server';
 expect.extend(matchers);
 
 // Start MSW server
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+beforeAll(() => server.listen({ onUnhandledFrame: 'error' }));
 
 // Cleanup después de cada test
 afterEach(() => {
