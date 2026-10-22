@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.35.2](https://github.com/JNZader/portfolio-2025/compare/v2.35.1...v2.35.2) (2026-10-22)
+
 ## [2.35.1](https://github.com/JNZader/portfolio-2025/compare/v2.35.0...v2.35.1) (2026-10-22)
 
 ## [2.35.0](https://github.com/JNZader/portfolio-2025/compare/v2.34.9...v2.35.0) (2026-10-13)
