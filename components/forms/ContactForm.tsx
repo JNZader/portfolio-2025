@@ -123,7 +123,7 @@ export function ContactForm() {
     }
   };
 
-  const useSuggestedEmail = () => {
+  const applySuggestedEmail = () => {
     if (!emailSuggestion || !pendingData) return;
 
     // Actualizar el valor del email con la sugerencia
@@ -166,7 +166,7 @@ export function ContactForm() {
               <div className="flex gap-2 flex-wrap">
                 <Button
                   type="button"
-                  onClick={useSuggestedEmail}
+                  onClick={applySuggestedEmail}
                   size="sm"
                   className="flex-1 sm:flex-initial"
                 >
