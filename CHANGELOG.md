@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.35.4](https://github.com/JNZader/portfolio-2025/compare/v2.35.3...v2.35.4) (2026-10-27)
+
+### Bug Fixes
+
+* **deps:** override dompurify ^3.4.17 (critical sanitizer bypasses) ([#310](https://github.com/JNZader/portfolio-2025/issues/310)) ([19456eb](https://github.com/JNZader/portfolio-2025/commits/19456eb7f695a0af12360c4535b647b92c6e624d)), references [#304](https://github.com/JNZader/portfolio-2025/issues/304)
+
 ## [2.35.3](https://github.com/JNZader/portfolio-2025/compare/v2.35.2...v2.35.3) (2026-10-27)
 
 ## [2.35.2](https://github.com/JNZader/portfolio-2025/compare/v2.35.1...v2.35.2) (2026-10-22)
