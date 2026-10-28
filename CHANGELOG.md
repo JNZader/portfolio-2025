@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.35.9](https://github.com/JNZader/portfolio-2025/compare/v2.35.8...v2.35.9) (2026-10-28)
+
+### Bug Fixes
+
+* **qa:** restore the published Q&A model chain and retrieval quality ([#315](https://github.com/JNZader/portfolio-2025/issues/315)) ([de056d3](https://github.com/JNZader/portfolio-2025/commits/de056d31ebaa5462b9e9ae825c9eec9a5df63709))
+
 ## [2.35.8](https://github.com/JNZader/portfolio-2025/compare/v2.35.7...v2.35.8) (2026-10-27)
 
 ## [2.35.7](https://github.com/JNZader/portfolio-2025/compare/v2.35.6...v2.35.7) (2026-10-27)
