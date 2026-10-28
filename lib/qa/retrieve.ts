@@ -10,6 +10,12 @@ export const QA_GREETING = 'PUBLISHED_QA_GREETING';
 /** Assistant text when every configured model failed. UI maps this to catalogue copy. */
 export const QA_UNAVAILABLE = 'PUBLISHED_QA_UNAVAILABLE';
 
+/**
+ * Question wording that means education. Includes the study verb family
+ * ("¿dónde estudiaste?", "Where did you study?") because those questions
+ * carry a single informative token that matches no corpus text — the
+ * formal-degree shortcut is their only route to an answer.
+ */
 const FORMAL_INTENT = new Set([
   'titulo',
   'title',
@@ -22,6 +28,13 @@ const FORMAL_INTENT = new Set([
   'education',
   'educacion',
   'carrera',
+  'estudiaste',
+  'estudie',
+  'estudias',
+  'estudio',
+  'studied',
+  'study',
+  'studie',
 ]);
 
 /** Fraction of core query tokens that must appear in a chunk for it to qualify. */
@@ -140,18 +153,22 @@ export function retrievePublishedChunks(
   const formalIntent = coreTokens.some((token) => FORMAL_INTENT.has(token));
   if (!formalIntent) return ranked;
 
-  const education = scoped.filter((chunk) => chunk.kind === QA_KIND.EDUCATION);
-  const educationOverlap = education.reduce((best, chunk) => {
-    const terms = termFrequencies(haystack(chunk));
-    return Math.max(
-      best,
-      coreTokens.filter((token) => terms.has(token) || tokenize(chunk.title).includes(token)).length
-    );
-  }, 0);
-  if (educationOverlap !== 0) return ranked;
+  /**
+   * The formal-degree shortcut applies only to questions phrased purely
+   * about education ("¿dónde estudiaste?", "Where did you study?"): every
+   * informative token is education vocabulary, yet none of it matches the
+   * corpus records ("study" only appears inside "case study" prose). Hybrid
+   * questions ("estudio de caso de apigen") keep their project results, and
+   * questions that already surfaced an education chunk (the CCNA record)
+   * keep those.
+   */
+  const hasEducation = ranked.some((chunk) => chunk.kind === QA_KIND.EDUCATION);
+  if (hasEducation) return ranked;
+  const purelyEducation = coreTokens.every((token) => FORMAL_INTENT.has(token));
+  if (!purelyEducation) return ranked;
 
+  const education = scoped.filter((chunk) => chunk.kind === QA_KIND.EDUCATION);
   const formal = education.find(isFormalDegree);
   if (!formal) return ranked;
-  if (ranked.some((chunk) => chunk.id === formal.id)) return ranked;
-  return [...ranked, formal];
+  return [formal];
 }
