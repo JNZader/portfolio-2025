@@ -10,7 +10,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { QA_GREETING, QA_NO_EVIDENCE, QA_UNAVAILABLE } from '@/lib/qa/retrieve';
 
-const MARKDOWN_LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+/**
+ * Inline markdown the model actually emits: [text](href) links, bare
+ * [/path] citations, **bold**, *italic* and `code`. Anything else stays
+ * literal text.
+ */
+const INLINE_MD =
+  /\[([^\]]+)\]\(([^)\s]+)\)|\[(\/[^\]\s]+)\]|\*\*([^*]+)\*\*|\*([^*\s][^*]*?)\*|`([^`]+)`/g;
+
+const ORDERED_LIST_LINE = /^\d+\.\s+/;
 
 const SUGGESTION_KEYS = ['suggestionConsorcio', 'suggestionEducation', 'suggestionBiogas'] as const;
 
@@ -58,23 +66,61 @@ function isListLine(line: string): boolean {
   return line.startsWith('*') || line.startsWith('-');
 }
 
+function isOrderedListLine(line: string): boolean {
+  return ORDERED_LIST_LINE.test(line);
+}
+
 function listItemText(line: string): string {
   return line.slice(1).replace(/^\s/, '');
+}
+
+function orderedItemText(line: string): string {
+  return line.replace(ORDERED_LIST_LINE, '');
+}
+
+function bareHrefLabel(href: string): string {
+  return href.split('/').filter(Boolean).pop() ?? href;
 }
 
 function inlineCopy(text: string): ReactNode {
   const nodes: ReactNode[] = [];
   let lastIndex = 0;
   let key = 0;
-  for (const match of text.matchAll(MARKDOWN_LINK)) {
+  for (const match of text.matchAll(INLINE_MD)) {
     const index = match.index ?? 0;
     if (index > lastIndex) nodes.push(text.slice(lastIndex, index));
-    const href = safeHref(match[2] ?? '');
-    if (href) {
+    const [, linkText, linkHref, bareHref, bold, italic, code] = match;
+    if (typeof linkText === 'string' && typeof linkHref === 'string') {
+      const href = safeHref(linkHref);
       nodes.push(
-        <a key={key} href={href} className="text-primary underline underline-offset-2">
-          {match[1]}
-        </a>
+        href ? (
+          <a key={key} href={href} className="text-primary underline underline-offset-2">
+            {linkText}
+          </a>
+        ) : (
+          match[0]
+        )
+      );
+    } else if (typeof bareHref === 'string') {
+      const href = safeHref(bareHref);
+      nodes.push(
+        href ? (
+          <a key={key} href={href} className="text-primary underline underline-offset-2">
+            {bareHrefLabel(bareHref)}
+          </a>
+        ) : (
+          match[0]
+        )
+      );
+    } else if (typeof bold === 'string') {
+      nodes.push(<strong key={key}>{bold}</strong>);
+    } else if (typeof italic === 'string') {
+      nodes.push(<em key={key}>{italic}</em>);
+    } else if (typeof code === 'string') {
+      nodes.push(
+        <code key={key} className="font-mono text-[0.9em]">
+          {code}
+        </code>
       );
     } else {
       nodes.push(match[0]);
@@ -119,9 +165,29 @@ function assistantCopy(
       blockKey += 1;
       continue;
     }
+    if (isOrderedListLine(line)) {
+      const items: string[] = [];
+      while (index < lines.length && isOrderedListLine(lines[index] ?? '')) {
+        items.push(orderedItemText(lines[index] ?? ''));
+        index += 1;
+      }
+      blocks.push(
+        <ol key={blockKey} className="list-decimal space-y-1 pl-5">
+          {items.map((item) => (
+            <li key={`${blockKey}-${item}`}>{inlineCopy(item)}</li>
+          ))}
+        </ol>
+      );
+      blockKey += 1;
+      continue;
+    }
 
     const paragraph: string[] = [];
-    while (index < lines.length && !isListLine(lines[index] ?? '')) {
+    while (
+      index < lines.length &&
+      !isListLine(lines[index] ?? '') &&
+      !isOrderedListLine(lines[index] ?? '')
+    ) {
       paragraph.push(lines[index] ?? '');
       index += 1;
     }

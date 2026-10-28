@@ -149,6 +149,36 @@ describe('PublishedQaForm chat', () => {
     expect(screen.getByRole('link', { name: 'CV' })).toHaveAttribute('href', '/cv');
   });
 
+  it('renders bold, ordered lists and bare bracket citations from assistant answers', async () => {
+    chat.messages = [
+      { id: 'u1', role: 'user', parts: [{ type: 'text', text: '¿laburás con IA?' }] },
+      {
+        id: 'a1',
+        role: 'assistant',
+        parts: [
+          {
+            type: 'text',
+            text: 'Sí:\n1. **Biogas Platform**: arquitectura de IA de tres capas [/proyectos/biogas-platform]\n2. *ghagga*: review multi-agente [ghagga](/cv)',
+          },
+        ],
+      },
+    ];
+    await openPanel('es');
+
+    const listitems = screen.getAllByRole('listitem');
+    expect(listitems).toHaveLength(2);
+    expect(screen.getByText('Biogas Platform', { exact: false })).toBeInTheDocument();
+    const strong = document.querySelector('strong');
+    expect(strong?.textContent).toBe('Biogas Platform');
+    const em = document.querySelector('em');
+    expect(em?.textContent).toBe('ghagga');
+    expect(screen.getByRole('link', { name: 'biogas-platform' })).toHaveAttribute(
+      'href',
+      '/proyectos/biogas-platform'
+    );
+    expect(screen.getByRole('link', { name: 'ghagga' })).toHaveAttribute('href', '/cv');
+  });
+
   it('shows refused catalogue copy for the no-evidence sentinel', async () => {
     chat.messages = [
       {
