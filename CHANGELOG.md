@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.35.11](https://github.com/JNZader/portfolio-2025/compare/v2.35.10...v2.35.11) (2026-10-28)
+
+### Bug Fixes
+
+* **qa:** answer the education suggestion chips ([#317](https://github.com/JNZader/portfolio-2025/issues/317)) ([7a378e4](https://github.com/JNZader/portfolio-2025/commits/7a378e4f88f2ffc32c5256d803d625f69baadfb9))
+
 ## [2.35.10](https://github.com/JNZader/portfolio-2025/compare/v2.35.9...v2.35.10) (2026-10-28)
 
 ### Bug Fixes
