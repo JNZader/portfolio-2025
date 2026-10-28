@@ -344,6 +344,7 @@
     "submit": "Enviar",
     "close": "Cerrar",
     "refused": "No hay una cita publicada para esa pregunta.",
+    "unavailable": "El servicio no está disponible ahora. Probá de nuevo en un rato.",
     "hello": "Hola. Preguntame por un proyecto publicado o por la formación.",
     "writing": "Escribiendo…",
     "error": "No se pudo consultar. Probá de nuevo.",

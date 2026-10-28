@@ -37,3 +37,24 @@ export function latestUserText(messages: QaChatInput['messages']): string {
   }
   return '';
 }
+
+/**
+ * User text of the turn before the latest one, if any. Feeds retrieval only
+ * (never the model prompt) so pronoun-only follow-ups resolve their entities.
+ */
+export function previousUserText(messages: QaChatInput['messages']): string {
+  let seen = 0;
+  for (let index = messages.length - 1; index >= 0; index -= 1) {
+    const message = messages[index];
+    if (message?.role !== 'user') continue;
+    seen += 1;
+    if (seen < 2) continue;
+    return (message.parts ?? [])
+      .filter((part) => part.type === 'text' && typeof part.text === 'string')
+      .map((part) => part.text)
+      .join('')
+      .trim()
+      .slice(0, 300);
+  }
+  return '';
+}

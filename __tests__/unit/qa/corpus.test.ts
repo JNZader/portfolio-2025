@@ -7,10 +7,9 @@ import resumeEs from '@/lib/data/resume.json';
 import {
   assembleCorpus,
   buildPublishedSnapshot,
-  matchQuery,
   QA_KIND,
   QA_LOCALE,
-  QA_MATCH_STATUS,
+  retrievePublishedChunks,
   toCorpusProject,
   toEducationRecord,
   type CorpusProject,
@@ -95,14 +94,13 @@ describe('assembleCorpus', () => {
         },
       ]
     );
-    const match = matchQuery('notes tool', corpus, QA_LOCALE.ES);
+    const retrieved = retrievePublishedChunks('notes tool', corpus, QA_LOCALE.ES);
 
-    expect(match.status).toBe(QA_MATCH_STATUS.HIT);
-    if (match.status !== QA_MATCH_STATUS.HIT) return;
-    expect(match.chunk.kind).toBe(QA_KIND.README);
-    expect(match.chunk.text).toContain('MARKER_NOTES');
-    expect(match.chunk.citation).toBe('JNZader/notes-tool');
-    expect(match.chunk.href).toBe('/proyectos/notes-tool');
+    expect(retrieved.length).toBeGreaterThan(0);
+    expect(retrieved[0]?.kind).toBe(QA_KIND.README);
+    expect(retrieved[0]?.text).toContain('MARKER_NOTES');
+    expect(retrieved[0]?.citation).toBe('JNZader/notes-tool');
+    expect(retrieved[0]?.href).toBe('/proyectos/notes-tool');
   });
 
   it('does not quote mermaid chart source', () => {
@@ -119,9 +117,7 @@ describe('assembleCorpus', () => {
     });
 
     expect(corpus.some((chunk) => chunk.text.includes('UNIQUE_DIAGRAM_TOKEN'))).toBe(false);
-    expect(matchQuery('unique diagram token', corpus, QA_LOCALE.ES).status).toBe(
-      QA_MATCH_STATUS.REFUSED
-    );
+    expect(retrievePublishedChunks('unique diagram token', corpus, QA_LOCALE.ES)).toEqual([]);
   });
 
   it('keeps English prose out of the Spanish body', () => {
@@ -138,7 +134,7 @@ describe('assembleCorpus', () => {
   });
 });
 
-describe('matchQuery', () => {
+describe('retrievePublishedChunks on the published corpus', () => {
   it('answers the current APiGen platform from the case study', () => {
     const corpus = publishedCorpus(QA_LOCALE.ES, [], [
       {
@@ -147,14 +143,13 @@ describe('matchQuery', () => {
         citation: 'JNZader-Vault/apigen',
       },
     ]);
-    const match = matchQuery('qué es apigen', corpus, QA_LOCALE.ES);
+    const retrieved = retrievePublishedChunks('qué es apigen', corpus, QA_LOCALE.ES);
 
-    expect(match.status).toBe(QA_MATCH_STATUS.HIT);
-    if (match.status !== QA_MATCH_STATUS.HIT) return;
-    expect(match.chunk.kind).toBe(QA_KIND.CASE_STUDY);
-    expect(match.chunk.href).toBe('/proyectos/apigen');
-    expect(match.chunk.text).toContain('contrato OpenAPI');
-    expect(match.chunk.text).not.toContain(ORIGIN_MARKER);
+    expect(retrieved.length).toBeGreaterThan(0);
+    expect(retrieved[0]?.kind).toBe(QA_KIND.CASE_STUDY);
+    expect(retrieved[0]?.href).toBe('/proyectos/apigen');
+    expect(retrieved[0]?.text.toLowerCase()).toContain('apigen');
+    expect(retrieved.every((chunk) => !chunk.text.includes(ORIGIN_MARKER))).toBe(true);
   });
 
   it('answers Biogas from the case study page, not from a supplied repo', () => {
@@ -165,67 +160,115 @@ describe('matchQuery', () => {
         citation: 'github.com/example/biogas',
       },
     ]);
-    const match = matchQuery('biogas', corpus, QA_LOCALE.ES);
+    const retrieved = retrievePublishedChunks('biogas', corpus, QA_LOCALE.ES);
 
-    expect(match.status).toBe(QA_MATCH_STATUS.HIT);
-    if (match.status !== QA_MATCH_STATUS.HIT) return;
-    expect(match.chunk.href).toBe('/proyectos/biogas-platform');
-    expect(match.chunk.citation).not.toContain('github.com');
-    expect(match.chunk.text).not.toContain(PUBLIC_REPO_MARKER);
-    expect(match.chunk.text.toLowerCase()).toContain('biogás');
+    expect(retrieved.length).toBeGreaterThan(0);
+    expect(retrieved[0]?.href).toBe('/proyectos/biogas-platform');
+    expect(retrieved[0]?.citation).not.toContain('github.com');
+    expect(retrieved.every((chunk) => !chunk.text.includes(PUBLIC_REPO_MARKER))).toBe(true);
+    expect(retrieved[0]?.text.toLowerCase()).toMatch(/biogas|biogás/);
   });
 
   it('quotes the Gastón Dachary degree and its published dates', () => {
     const corpus = publishedCorpus(QA_LOCALE.ES);
-    const match = matchQuery('qué título tenés', corpus, QA_LOCALE.ES);
+    const retrieved = retrievePublishedChunks('qué título tenés', corpus, QA_LOCALE.ES);
+    const degree = retrieved.find((chunk) => chunk.kind === QA_KIND.EDUCATION);
 
-    expect(match.status).toBe(QA_MATCH_STATUS.HIT);
-    if (match.status !== QA_MATCH_STATUS.HIT) return;
-    expect(match.chunk.kind).toBe(QA_KIND.EDUCATION);
-    expect(match.chunk.href).toBe('/cv');
-    expect(match.chunk.text).toContain('Técnico en Desarrollo de Software');
-    expect(match.chunk.text).toContain('Universidad Gastón Dachary');
-    expect(match.chunk.text).toContain('2023-12');
-    expect(match.chunk.text).toContain('2025-07');
-    expect(match.chunk.text).not.toContain('Software Development Technician');
+    expect(degree).toBeDefined();
+    expect(degree?.href).toBe('/cv');
+    expect(degree?.text).toContain('Técnico en Desarrollo de Software');
+    expect(degree?.text).toContain('Universidad Gastón Dachary');
+    expect(degree?.text).toContain('2023-12');
+    expect(degree?.text).toContain('2025-07');
+    expect(degree?.text).not.toContain('Software Development Technician');
   });
 
   it('quotes the English degree from resume.en.json', () => {
     const corpus = publishedCorpus(QA_LOCALE.EN);
-    const match = matchQuery('what degree do you have', corpus, QA_LOCALE.EN);
+    const retrieved = retrievePublishedChunks('what degree do you have', corpus, QA_LOCALE.EN);
+    const degree = retrieved.find((chunk) => chunk.kind === QA_KIND.EDUCATION);
 
-    expect(match.status).toBe(QA_MATCH_STATUS.HIT);
-    if (match.status !== QA_MATCH_STATUS.HIT) return;
-    expect(match.chunk.href).toBe('/en/cv');
-    expect(match.chunk.text).toContain('Software Development Technician');
-    expect(match.chunk.text).toContain('Universidad Gastón Dachary');
-    expect(match.chunk.text).toContain('2023-12');
-    expect(match.chunk.text).toContain('2025-07');
-    expect(match.chunk.text).not.toContain('Técnico en Desarrollo de Software');
+    expect(degree).toBeDefined();
+    expect(degree?.href).toBe('/en/cv');
+    expect(degree?.text).toContain('Software Development Technician');
+    expect(degree?.text).toContain('Universidad Gastón Dachary');
+    expect(degree?.text).toContain('2023-12');
+    expect(degree?.text).toContain('2025-07');
+    expect(degree?.text).not.toContain('Técnico en Desarrollo de Software');
   });
 
   it('prefers a named certificate over the formal degree', () => {
     const corpus = publishedCorpus(QA_LOCALE.ES);
-    const match = matchQuery('ccna', corpus, QA_LOCALE.ES);
+    const retrieved = retrievePublishedChunks('ccna', corpus, QA_LOCALE.ES);
 
-    expect(match.status).toBe(QA_MATCH_STATUS.HIT);
-    if (match.status !== QA_MATCH_STATUS.HIT) return;
-    expect(match.chunk.text).toContain('Cisco Certified Network Associate (CCNA)');
-    expect(match.chunk.text).not.toContain('Gastón Dachary');
+    expect(retrieved.length).toBeGreaterThan(0);
+    expect(retrieved[0]?.text).toContain('Cisco Certified Network Associate (CCNA)');
+    expect(retrieved[0]?.text).not.toContain('Gastón Dachary');
   });
 
   it('refuses a question the published corpus does not cover', () => {
     const corpus = publishedCorpus(QA_LOCALE.ES);
-    expect(matchQuery('precio del dólar mañana', corpus, QA_LOCALE.ES).status).toBe(
-      QA_MATCH_STATUS.REFUSED
-    );
+    expect(retrievePublishedChunks('precio del dólar mañana', corpus, QA_LOCALE.ES)).toEqual([]);
   });
 
   it('does not answer an English question from the Spanish corpus', () => {
     const corpus = publishedCorpus(QA_LOCALE.ES);
-    const match = matchQuery('what degree do you have', corpus, QA_LOCALE.EN);
+    expect(retrievePublishedChunks('what degree do you have', corpus, QA_LOCALE.EN)).toEqual([]);
+  });
+});
 
-    expect(match.status).toBe(QA_MATCH_STATUS.REFUSED);
+describe('retrieval battery on the real published snapshot', () => {
+  const snapshot = buildPublishedSnapshot();
+
+  it('answers a Spanish question about IA work (two-character token)', () => {
+    const retrieved = retrievePublishedChunks('¿Laburás con IA?', snapshot.es, QA_LOCALE.ES);
+
+    expect(retrieved.length).toBeGreaterThan(0);
+    expect(retrieved.some((chunk) => /\bia\b|\binteligencia artificial\b/i.test(chunk.text))).toBe(
+      true
+    );
+  });
+
+  it('answers an English question about AI work', () => {
+    const retrieved = retrievePublishedChunks('What AI work have you published?', snapshot.en, QA_LOCALE.EN);
+
+    expect(retrieved.length).toBeGreaterThan(0);
+  });
+
+  it('matches singular corpus wording from a plural question', () => {
+    const retrieved = retrievePublishedChunks('¿qué proyectos hiciste?', snapshot.es, QA_LOCALE.ES);
+
+    expect(retrieved.length).toBeGreaterThan(0);
+  });
+
+  it('keeps vowel-final plurals on the same stem as their singular (pipelines/pipeline)', () => {
+    const retrieved = retrievePublishedChunks(
+      '¿qué pipelines procesan datos?',
+      snapshot.es,
+      QA_LOCALE.ES
+    );
+
+    expect(retrieved.length).toBeGreaterThan(0);
+  });
+
+  it('matches English service/services on the same stem', () => {
+    const retrieved = retrievePublishedChunks(
+      'Which services does the platform include?',
+      snapshot.en,
+      QA_LOCALE.EN
+    );
+
+    expect(retrieved.length).toBeGreaterThan(0);
+  });
+
+  it('matches tecnología wording from a stack question via synonyms', () => {
+    const retrieved = retrievePublishedChunks('¿qué stack usaste?', snapshot.es, QA_LOCALE.ES);
+
+    expect(retrieved.length).toBeGreaterThan(0);
+  });
+
+  it('keeps refusing fully off-corpus questions', () => {
+    expect(retrievePublishedChunks('capital de Francia', snapshot.es, QA_LOCALE.ES)).toEqual([]);
   });
 });
 

@@ -17,13 +17,6 @@ export const QA_KIND = {
 
 export type QaKind = (typeof QA_KIND)[keyof typeof QA_KIND];
 
-export const QA_MATCH_STATUS = {
-  HIT: 'hit',
-  REFUSED: 'refused',
-} as const;
-
-export type QaMatchStatus = (typeof QA_MATCH_STATUS)[keyof typeof QA_MATCH_STATUS];
-
 export interface SlugRef {
   current: string;
 }
@@ -104,14 +97,3 @@ export interface CorpusInput {
   summary?: string;
   cvProjects?: readonly CvProjectRecord[];
 }
-
-export interface QaHit {
-  status: typeof QA_MATCH_STATUS.HIT;
-  chunk: QaChunk;
-}
-
-export interface QaRefusal {
-  status: typeof QA_MATCH_STATUS.REFUSED;
-}
-
-export type QaMatch = QaHit | QaRefusal;
