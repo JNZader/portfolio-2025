@@ -8,7 +8,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, type ReactNode, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { QA_GREETING, QA_NO_EVIDENCE } from '@/lib/qa/retrieve';
+import { QA_GREETING, QA_NO_EVIDENCE, QA_UNAVAILABLE } from '@/lib/qa/retrieve';
 
 const MARKDOWN_LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 
@@ -86,9 +86,15 @@ function inlineCopy(text: string): ReactNode {
   return nodes;
 }
 
-function assistantCopy(text: string, refusedLabel: string, helloLabel: string): ReactNode {
+function assistantCopy(
+  text: string,
+  refusedLabel: string,
+  helloLabel: string,
+  unavailableLabel: string
+): ReactNode {
   if (text === QA_NO_EVIDENCE) return refusedLabel;
   if (text === QA_GREETING) return helloLabel;
+  if (text === QA_UNAVAILABLE) return unavailableLabel;
 
   const lines = text.split('\n');
   const blocks: ReactNode[] = [];
@@ -250,7 +256,7 @@ export function PublishedQaForm() {
                     if (message.role === 'assistant') {
                       return (
                         <div key={`${message.id}-assistant-${part.text}`}>
-                          {assistantCopy(part.text, t('refused'), t('hello'))}
+                          {assistantCopy(part.text, t('refused'), t('hello'), t('unavailable'))}
                         </div>
                       );
                     }

@@ -5,10 +5,8 @@ import resumeEn from '@/lib/data/resume.en.json';
 import resumeEs from '@/lib/data/resume.json';
 import {
   assembleCorpus,
-  matchQuery,
   QA_KIND,
   QA_LOCALE,
-  QA_MATCH_STATUS,
   retrievePublishedChunks,
   toCorpusProject,
   toEducationRecord,
@@ -130,11 +128,32 @@ describe('retrievePublishedChunks', () => {
     ).toEqual([]);
   });
 
-  it('puts preferSlug chunks first even when they sit below the lexical floor', () => {
+  it('excludes a below-floor preferSlug chunk instead of overriding the query', () => {
     const preferred = chunk({
       id: 'es:case-study:apigen:0',
       slug: 'apigen',
       text: 'unrelated private note',
+    });
+    const other = chunk({
+      id: 'es:case-study:other:0',
+      slug: 'other',
+      text: 'shared marker extra extra',
+      heading: 'marker',
+    });
+
+    const retrieved = retrievePublishedChunks('shared marker', [other, preferred], QA_LOCALE.ES, {
+      preferSlug: 'apigen',
+    });
+
+    expect(retrieved.map((entry) => entry.id)).toEqual(['es:case-study:other:0']);
+  });
+
+  it('ranks a matching preferSlug chunk above an equal non-preferred chunk', () => {
+    const preferred = chunk({
+      id: 'es:case-study:apigen:0',
+      slug: 'apigen',
+      text: 'shared marker extra extra',
+      heading: 'marker',
     });
     const other = chunk({
       id: 'es:case-study:other:0',
@@ -184,12 +203,5 @@ describe('retrievePublishedChunks', () => {
     });
 
     expect(retrieved.map((entry) => entry.id)).toEqual(['es:case-study:other:0']);
-  });
-});
-
-describe('matchQuery', () => {
-  it('still hits the published education shortcut', () => {
-    const match = matchQuery('qué título tenés', publishedCorpus(QA_LOCALE.ES), QA_LOCALE.ES);
-    expect(match.status).toBe(QA_MATCH_STATUS.HIT);
   });
 });
