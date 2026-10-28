@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.35.10](https://github.com/JNZader/portfolio-2025/compare/v2.35.9...v2.35.10) (2026-10-28)
+
+### Bug Fixes
+
+* **qa:** render assistant markdown instead of showing it literally ([#316](https://github.com/JNZader/portfolio-2025/issues/316)) ([5bede60](https://github.com/JNZader/portfolio-2025/commits/5bede60933f40ee55c987caf93db50a9ee366b9c))
+
 ## [2.35.9](https://github.com/JNZader/portfolio-2025/compare/v2.35.8...v2.35.9) (2026-10-28)
 
 ### Bug Fixes
