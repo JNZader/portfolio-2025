@@ -106,6 +106,53 @@ describe('retrievePublishedChunks', () => {
     expect(retrieved[0]?.text).toContain('Universidad Gastón Dachary');
   });
 
+  it('answers the Spanish education suggestion chip ¿Dónde estudiaste?', () => {
+    const retrieved = retrievePublishedChunks(
+      '¿Dónde estudiaste?',
+      publishedCorpus(QA_LOCALE.ES),
+      QA_LOCALE.ES
+    );
+
+    expect(retrieved.length).toBeGreaterThan(0);
+    expect(retrieved[0]?.kind).toBe(QA_KIND.EDUCATION);
+    expect(retrieved[0]?.text).toContain('Universidad Gastón Dachary');
+  });
+
+  it('answers qué estudiaste with the formal degree', () => {
+    const retrieved = retrievePublishedChunks(
+      '¿qué estudiaste?',
+      publishedCorpus(QA_LOCALE.ES),
+      QA_LOCALE.ES
+    );
+
+    expect(retrieved.length).toBeGreaterThan(0);
+    expect(retrieved[0]?.kind).toBe(QA_KIND.EDUCATION);
+  });
+
+  it('answers the English education suggestion chip Where did you study?', () => {
+    const retrieved = retrievePublishedChunks(
+      'Where did you study?',
+      publishedCorpus(QA_LOCALE.EN),
+      QA_LOCALE.EN
+    );
+
+    expect(retrieved.length).toBeGreaterThan(0);
+    expect(retrieved[0]?.kind).toBe(QA_KIND.EDUCATION);
+    expect(retrieved[0]?.href).toBe('/en/cv');
+    expect(retrieved[0]?.text).toContain('Software Development Technician');
+  });
+
+  it('does not append the degree when retrieval already found project material', () => {
+    const retrieved = retrievePublishedChunks(
+      'estudio de caso de apigen',
+      publishedCorpus(QA_LOCALE.ES),
+      QA_LOCALE.ES
+    );
+
+    expect(retrieved.length).toBeGreaterThan(0);
+    expect(retrieved.every((chunk) => chunk.kind !== QA_KIND.EDUCATION)).toBe(true);
+  });
+
   it('adds the English formal-degree chunk for the English education intent', () => {
     const retrieved = retrievePublishedChunks(
       'what degree do you have',
