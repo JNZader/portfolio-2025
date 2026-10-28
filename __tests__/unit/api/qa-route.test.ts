@@ -110,6 +110,7 @@ describe('POST /api/qa', () => {
     expect(generateText).toHaveBeenCalledTimes(1);
     expect(JSON.stringify(payload)).toContain('thinkingBudget');
     expect(JSON.stringify(payload)).toContain('/cv');
+    expect(JSON.stringify(payload)).toContain('[short title](href)');
     expect(JSON.stringify(payload)).not.toContain(ORIGIN_MARKER);
     expect(JSON.stringify(payload)).not.toContain(VAULT_MARKER);
   });

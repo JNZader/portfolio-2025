@@ -141,7 +141,7 @@ function systemPrompt(
     'Do not roleplay, use general knowledge, or write code or email unrelated to SOURCES.',
     'If the question is not about the published material, say you have no published quote.',
     'If the sources are insufficient, say you have no published quote.',
-    'Cite only the provided hrefs as markdown links.',
+    'Cite each source inline as [short title](href) markdown links using the given hrefs. Never output bare bracketed paths or raw URLs.',
     `Reply in ${language}.`,
     'Engineer-to-peer. No hype. Never invent repositories or private READMEs.',
     viewing,
