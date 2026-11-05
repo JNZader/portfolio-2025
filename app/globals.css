@@ -477,6 +477,34 @@
   .shine-effect:hover::before {
     left: 150%;
   }
+
+  /*
+   * Scroll-driven reveal subjects (applied by RevealOnScroll; the timeline
+   * animation lives in the top-level @supports block near the hero-mesh
+   * block below). Base state is DELIBERATELY empty: every reveal subject is
+   * fully visible by default — no-JS clients, crawlers, reduced-motion users
+   * and non-supporting browsers all see the content. Never set
+   * opacity/transform/visibility here; the hidden state exists only inside
+   * @keyframes revealUp, applied under @supports + no-preference.
+   *
+   * DISJOINTNESS RULE: never place a reveal subject inside a
+   * `content-visibility: auto` subtree (.content-auto) — view() geometry
+   * inside such containment uses the placeholder box.
+   */
+  .reveal {
+    /* intentionally empty — the comment above is the contract */
+  }
+
+  /*
+   * Scroll progress bar inner element (components/ui/ScrollProgress.tsx).
+   * Base state = no bar in browsers without scroll-timeline support (parity
+   * with the previous ssr:false mount, which also showed no bar without JS).
+   * The scroll(root) animation lives in the top-level @supports block below.
+   */
+  .scroll-progress-bar {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
 }
 
 /* Keyframe animations */
@@ -675,6 +703,111 @@
       animation-timeline: view();
       animation-range: cover;
       will-change: transform;
+    }
+  }
+}
+
+/*
+ * Scroll progress bar — progress mapped to the document scroll via a
+ * scroll(root) timeline. Compositor-only (transform: scaleX), replaces the
+ * former JS scroll listener that setState'd on every scroll event and
+ * animated `width` (a layout property). The server-rendered wrapper lives in
+ * components/ui/ScrollProgress.tsx.
+ *
+ * Deliberately NOT wrapped in prefers-reduced-motion: no-preference: the bar
+ * only moves while the user is scrolling — user-linked feedback, not
+ * autonomous motion — and it hides no content. (The global reduce clamp
+ * cannot REMOVE a timeline animation — but it is NOT inert: its nonzero
+ * duration+delay carve a sub-range out of the scroll (pixel-verified
+ * [50%,100%]); the counter-override below restores the full range with
+ * animation-duration: auto.)
+ */
+@keyframes scrollProgress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress-bar {
+    animation: scrollProgress linear both;
+    animation-timeline: scroll(root);
+  }
+
+  /*
+   * The bar is user-linked feedback (not decorative motion), so it stays
+   * active under reduced motion. But the global reduce clamp (0.01ms
+   * duration + delay) makes Chromium map a timeline animation to a
+   * sub-range of the scroll — the bar would not paint until ~50% scroll
+   * (a 0s duration is no better: the animation completes instantly and
+   * fill-mode pins it full-width). `auto` duration maps the animation to
+   * the entire timeline (pixel-verified: scaleX tracks scroll 1:1).
+   * !important + class specificity beats the universal clamp's !important.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-progress-bar {
+      animation-duration: auto !important;
+      animation-delay: 0s !important;
+    }
+  }
+}
+
+/*
+ * Scroll-driven reveals — the single content-reveal mechanism, replacing the
+ * former IntersectionObserver system (RevealOnScroll + useScrollReveal).
+ * Structure follows the hero-mesh block above: top-level keyframes; class
+ * application inside @supports; prefers-reduced-motion: no-preference gate
+ * INSIDE (structural reduce safety: the gate is the ONLY thing that removes
+ * the animation under reduce — the global duration clamp cannot remove a
+ * timeline animation, it only corrupts its range mapping).
+ *
+ * Stagger: RevealOnScroll maps its `delay` prop to a later range START via
+ * the unregistered custom properties --reveal-range-start /
+ * --reveal-tall-start (time-based animation-delay on a timeline shifts the
+ * mapped sub-range — delay/(delay+duration) — instead of offsetting the
+ * reveal, so the stagger is expressed as a range start);
+ * the 10% fallbacks below govern undelayed subjects.
+ *
+ * .reveal-tall (added at call sites for subjects taller than the scrollport,
+ * per the measurement protocol): cover-based range so the subject is fully
+ * opaque no later than viewport saturation. Declared after .reveal, same
+ * specificity — overrides animation-range ONLY.
+ */
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: revealUp var(--ease-spring) both;
+      animation-timeline: view();
+      animation-range: entry var(--reveal-range-start, 10%) entry 100%;
+    }
+
+    .reveal-tall {
+      animation-range: cover var(--reveal-tall-start, 10%) cover 40%;
+    }
+  }
+
+  /* Printing an unscrolled page must show everything: killing the animation
+     restores the visible base state. Must stay INSIDE @supports and AFTER
+     the no-preference block (equal specificity — later wins when both media
+     conditions match). Covers .reveal-tall too (never appears without
+     .reveal). */
+  @media print {
+    .reveal {
+      animation: none;
     }
   }
 }

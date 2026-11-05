@@ -36,7 +36,6 @@ vi.mock('next/dynamic', () => ({
 vi.mock('@/components/seo/JsonLd', () => ({ JsonLd: () => null }));
 vi.mock('@/components/animations', () => ({
   RevealOnScroll: ({ children }: { children: ReactNode }) => <>{children}</>,
-  StaggeredReveal: ({ children }: { children: ReactNode }) => <>{children}</>,
 }));
 vi.mock('@/components/newsletter/NewsletterSkeleton', () => ({ NewsletterSkeleton: () => null }));
 vi.mock('@/components/newsletter/NewsletterHero', () => ({

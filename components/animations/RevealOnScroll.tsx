@@ -1,147 +1,65 @@
-'use client';
-
-import type { ReactNode } from 'react';
-import { useScrollReveal } from '@/hooks/useScrollReveal';
+import type { CSSProperties, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
-/**
- * Animation variants type (kept for backwards compatibility)
- * Now maps to CSS animations instead of framer-motion
+/*
+ * Scroll-driven reveal wrapper — pure CSS, server component.
+ *
+ * The reveal itself lives in app/globals.css: `.reveal` runs the `revealUp`
+ * keyframe on a view() scroll timeline inside
+ * `@supports (animation-timeline: view())` +
+ * `@media (prefers-reduced-motion: no-preference)`. The base state is fully
+ * visible content, so no-JS clients, crawlers, reduced-motion users and
+ * non-supporting browsers all see everything — this wrapper renders NO
+ * inline opacity/transform.
+ *
+ * Stagger: `delay` (seconds) maps to a later animation-range start via the
+ * `--reveal-range-start` / `--reveal-tall-start` inline custom properties
+ * (time-based animation-delay on a timeline shifts the mapped sub-range —
+ * delay/(delay+duration) — rather than offsetting the reveal, so the
+ * stagger is expressed as a range start). Both are emitted
+ * together; whichever range the subject's classes select consumes its own
+ * variable. Derived proportionally from the retired 600ms transition: a
+ * delayed subject starts when the undelayed one is `delay / 0.6` through
+ * its reveal. Keep these constants in lockstep with the fallback
+ * percentages in globals.css (a source-guard test pins them). Do not nest
+ * RevealOnScroll inside another one: the emitted custom properties inherit,
+ * and a child would consume the parent's phantom stagger.
  */
-export interface Variants {
-  hidden: { opacity?: number; y?: number; x?: number; scale?: number };
-  visible: { opacity?: number; y?: number; x?: number; scale?: number };
-}
+
+/** Retired transition duration (s) the delay mapping derives from. */
+const RETIRED_TRANSITION_S = 0.6;
+/** Default range start (%) — must match the `10%` fallbacks in globals.css. */
+const RANGE_START_DEFAULT_PCT = 10;
+/** Standard range end: `entry 100%`. Tall range end: `cover 40%`. */
+const STANDARD_RANGE_END_PCT = 100;
+const TALL_RANGE_END_PCT = 40;
 
 interface RevealOnScrollProps {
   children: ReactNode;
   className?: string;
-  variants?: Variants;
+  /** Stagger offset in seconds (former transition delay). */
   delay?: number;
-  once?: boolean;
 }
 
-// Default variants (backwards compatible)
-// Travel reduced 75 → 40px so the spring easing's slight overshoot stays
-// subtle (and never clips large text). Elements "emerge", not "drop in".
-const defaultVariants: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0 },
-};
+function delayToRangeStart(delay: number, rangeEndPct: number): string {
+  const start =
+    RANGE_START_DEFAULT_PCT +
+    (delay / RETIRED_TRANSITION_S) * (rangeEndPct - RANGE_START_DEFAULT_PCT);
+  return `${Math.round(start)}%`;
+}
 
-/**
- * CSS-based reveal animation on scroll
- * Replaced framer-motion implementation for better performance (~60KB saved)
- * Uses shared useScrollReveal hook for IntersectionObserver + reduced motion
- */
-export function RevealOnScroll({
-  children,
-  className,
-  variants = defaultVariants,
-  delay = 0,
-  once = true,
-}: Readonly<RevealOnScrollProps>) {
-  const { ref, isVisible, prefersReducedMotion } = useScrollReveal<HTMLDivElement>({ once });
-
-  // Skip animation for reduced motion
-  if (prefersReducedMotion) {
-    return (
-      <div ref={ref} className={className}>
-        {children}
-      </div>
-    );
-  }
-
-  // Convert variants to CSS transform values
-  const getTransformStyle = (variant: Variants['hidden'] | Variants['visible']) => {
-    const transforms: string[] = [];
-
-    if (variant.y !== undefined && variant.y !== 0) {
-      transforms.push(`translateY(${variant.y}px)`);
-    }
-    if (variant.x !== undefined && variant.x !== 0) {
-      transforms.push(`translateX(${variant.x}px)`);
-    }
-    if (variant.scale !== undefined && variant.scale !== 1) {
-      transforms.push(`scale(${variant.scale})`);
-    }
-
-    return transforms.length > 0 ? transforms.join(' ') : 'none';
-  };
-
-  const currentVariant = isVisible ? variants.visible : variants.hidden;
+export function RevealOnScroll({ children, className, delay = 0 }: Readonly<RevealOnScrollProps>) {
+  const staggerStyle =
+    delay > 0
+      ? ({
+          '--reveal-range-start': delayToRangeStart(delay, STANDARD_RANGE_END_PCT),
+          '--reveal-tall-start': delayToRangeStart(delay, TALL_RANGE_END_PCT),
+        } as CSSProperties)
+      : undefined;
 
   return (
-    <div
-      ref={ref}
-      className={cn('transition-all duration-600 ease-out', className)}
-      style={{
-        opacity: currentVariant.opacity ?? 1,
-        transform: getTransformStyle(currentVariant),
-        transitionDelay: `${delay * 1000}ms`,
-        transitionDuration: '600ms',
-        // Spring easing (overshoot + settle) — was a dead token in globals.css.
-        // Replaces the prior curve which had a negative initial velocity
-        // (micro-hesitation that killed momentum on reveal).
-        transitionTimingFunction: 'var(--ease-spring)',
-      }}
-    >
+    <div className={cn('reveal', className)} data-slot="reveal" style={staggerStyle}>
       {children}
     </div>
   );
 }
-
-/**
- * Staggered reveal for multiple children
- */
-interface StaggeredRevealProps {
-  children: ReactNode[];
-  className?: string;
-  staggerDelay?: number;
-}
-
-export function StaggeredReveal({
-  children,
-  className,
-  staggerDelay = 0.1,
-}: Readonly<StaggeredRevealProps>) {
-  return (
-    <div className={className}>
-      {children.map((child, index) => (
-        <RevealOnScroll
-          // biome-ignore lint/suspicious/noArrayIndexKey: Children are stable and won't reorder
-          key={index} // NOSONAR S6479 - stable children array, no reordering
-          delay={index * staggerDelay}
-        >
-          {child}
-        </RevealOnScroll>
-      ))}
-    </div>
-  );
-}
-
-// Specific animation variants (backwards compatible exports)
-export const slideUpVariants: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0 },
-};
-
-export const slideLeftVariants: Variants = {
-  hidden: { opacity: 0, x: -60 },
-  visible: { opacity: 1, x: 0 },
-};
-
-export const slideRightVariants: Variants = {
-  hidden: { opacity: 0, x: 60 },
-  visible: { opacity: 1, x: 0 },
-};
-
-export const scaleVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: { opacity: 1, scale: 1 },
-};
-
-export const fadeVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
-};

@@ -13,6 +13,7 @@ import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { BackToTop } from '@/components/ui/BackToTop';
 import { RippleListener } from '@/components/ui/RippleListener';
+import { ScrollProgress } from '@/components/ui/ScrollProgress';
 import { routing } from '@/i18n/routing';
 import { VercelAnalyticsProvider } from '@/lib/analytics/vercel';
 import { ThemeProvider } from '@/lib/design/theme-provider';
@@ -77,6 +78,9 @@ export default async function LocaleLayout({ children, params }: Readonly<Locale
             disableTransitionOnChange
           >
             <AnnouncerProvider>
+              {/* Fixed scroll-progress overlay — pure CSS scroll(root) timeline, server-rendered */}
+              <ScrollProgress />
+
               {/* Client-only components (lazy loaded) */}
               <Suspense fallback={null}>
                 <ClientComponents />
