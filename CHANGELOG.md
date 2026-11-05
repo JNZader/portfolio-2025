@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.36.0](https://github.com/JNZader/portfolio-2025/compare/v2.35.11...v2.36.0) (2026-11-05)
+
+### Features
+
+* **motion:** replace JS scroll effects with CSS scroll-driven animations ([#320](https://github.com/JNZader/portfolio-2025/issues/320)) ([886b40d](https://github.com/JNZader/portfolio-2025/commits/886b40d8ca6606cb6df28f82507ec1f24b4fbc21))
+
 ## [2.35.11](https://github.com/JNZader/portfolio-2025/compare/v2.35.10...v2.35.11) (2026-10-28)
 
 ### Bug Fixes
