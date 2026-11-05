@@ -18,7 +18,7 @@ export async function AboutProfile() {
       </SectionHeader>
       <div className="mx-auto max-w-5xl">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
-          <RevealOnScroll className="space-y-8 lg:col-span-2">
+          <RevealOnScroll className="space-y-8 lg:col-span-2 reveal-tall">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
               <Image
                 src="/images/profile.jpg"
@@ -63,7 +63,7 @@ export async function AboutProfile() {
               </ul>
             </div>
           </RevealOnScroll>
-          <RevealOnScroll delay={0.2} className="space-y-8">
+          <RevealOnScroll delay={0.2} className="space-y-8 reveal-tall">
             <div className="rounded-lg border bg-card p-6">
               <h2 className="mb-4 text-xl font-bold">{t('skillsHeading')}</h2>
               <div className="space-y-4">

@@ -74,7 +74,7 @@ Next.js 16 (App Router), React 19 con React Compiler, TypeScript estricto, bilin
 - **Design System:** shadcn/ui
 - **Icons:** Lucide React + React Icons
 - **Image Optimization:** Next.js Image con blur placeholders
-- **Animations:** hook custom `useScrollReveal` + CSS (no usa Framer Motion)
+- **Animations:** CSS scroll-driven animations (`animation-timeline: scroll()/view()`, Baseline Oct 2026) — reveals y barra de progreso sin JS de cliente (no usa Framer Motion)
 
 ### Database y Backend
 - **Database:** PostgreSQL (vía Prisma; proveedor de hosting agnóstico)
@@ -352,7 +352,7 @@ portfolio/
 │   ├── a11y/                  # ScreenReaderAnnouncer, SkipLinks
 │   ├── admin/                  # AdminDashboard, NewsletterBroadcaster, UptimeStatus
 │   ├── analytics/              # GoogleAnalytics, ThirdPartyScripts
-│   ├── animations/             # AnimationProvider, RevealOnScroll (sin Framer Motion)
+│   ├── animations/             # RevealOnScroll (wrapper server, scroll-driven CSS)
 │   ├── blog/                   # BlogFilters, Comments (Giscus), MarkdownRenderer,
 │   │                           #   PortableTextRenderer, PostCard/Grid, TableOfContents, etc.
 │   ├── error/                  # ErrorFeedback
@@ -384,7 +384,7 @@ portfolio/
 │   └── validations/             # Schemas Zod (contact, gdpr, newsletter, email-validator)
 ├── i18n/                       # next-intl: routing.ts, navigation.ts, request.ts
 ├── messages/                   # es.json, en.json (diccionarios de traducción)
-├── hooks/                      # useGdprRequest, useNewsletterSubscription, useScrollReveal
+├── hooks/                      # useGdprRequest, useNewsletterSubscription
 ├── mocks/                      # MSW handlers para tests
 ├── ci-local/                   # Simulación local del pipeline de CI (Docker)
 ├── prisma/

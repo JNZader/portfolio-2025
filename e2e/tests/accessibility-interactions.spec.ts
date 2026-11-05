@@ -149,6 +149,19 @@ test.describe('Visual UX accessibility and interactions', () => {
       await expect(caseStudy).toBeEnabled();
     });
 
+    test(`${localeCase.name} reveal wrappers run no animation under reduced motion`, async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await page.goto(localeCase.path);
+      await dismissCookieConsent(page);
+
+      const state = await page.locator('[data-slot="reveal"]').first().evaluate((el) => {
+        const cs = window.getComputedStyle(el);
+        return { animationName: cs.animationName, opacity: cs.opacity };
+      });
+      expect(state.animationName).toBe('none'); // structural: no animation applied at all, not clamped
+      expect(state.opacity).toBe('1'); // base state visible by construction
+    });
+
     test(`${localeCase.name} homepage has no overflow at 320px after CTA focus`, async ({ page }) => {
       await page.setViewportSize({ width: 320, height: 720 });
       await page.goto(localeCase.path);

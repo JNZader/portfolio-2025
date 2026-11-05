@@ -10,12 +10,6 @@ const MatrixRain = dynamic(
   { ssr: false }
 );
 
-// Scroll Progress - Client only
-const ScrollProgress = dynamic(
-  () => import('@/components/ui/ScrollProgress').then((m) => m.ScrollProgress),
-  { ssr: false }
-);
-
 // Analytics Debug Panel - Only in development
 const AnalyticsDebugPanel =
   process.env.NODE_ENV === 'development'
@@ -32,11 +26,6 @@ const AnalyticsDebugPanel =
 export function ClientComponents() {
   return (
     <>
-      {/* UI Components - Lazy loaded */}
-      <Suspense fallback={null}>
-        <ScrollProgress />
-      </Suspense>
-
       <PublishedQaForm />
 
       {/* Easter Eggs */}
