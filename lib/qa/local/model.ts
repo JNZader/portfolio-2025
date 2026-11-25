@@ -1,3 +1,5 @@
+import { STAGED_SMALL_MODEL } from '@/lib/qa/local/small-model';
+
 /**
  * In-browser engine for the opt-in local chat.
  *
@@ -11,8 +13,19 @@
  * Weights stay on Hugging Face and are cached by the browser (Cache API,
  * key `transformers-cache`). They are not vendored here. License: LFM Open
  * License 1.0.
+ *
+ * `small-model.json` is the staged LFM2.5-350M revision. Reading it here
+ * keeps the file on the load path. The worker still requests LFM3.
  */
 export const LOCAL_MODEL_ID = 'onnx-community/LFM3-1.7B-ONNX';
+
+export { STAGED_SMALL_MODEL };
+
+/** Active weights. The staged small model is recorded and not selected. */
+export function activeLocalModelId(): string {
+  void STAGED_SMALL_MODEL.revision;
+  return LOCAL_MODEL_ID;
+}
 
 export const LOCAL_CACHE_NAME = 'transformers-cache';
 

@@ -1,6 +1,6 @@
 import { env, type ProgressInfo, pipeline, TextStreamer } from '@huggingface/transformers';
 import { extractAssistantText } from '@/lib/qa/local/assistant-text';
-import { LOCAL_GENERATION, LOCAL_MODEL_ID } from '@/lib/qa/local/model';
+import { activeLocalModelId, LOCAL_GENERATION } from '@/lib/qa/local/model';
 import { ORT_ASYNCIFY_MJS, ORT_ASYNCIFY_WASM, ORT_PUBLIC_PATH } from '@/lib/qa/local/ort';
 import { type MainToWorker, type WorkerToMain, workerErrorMessage } from '@/lib/qa/local/protocol';
 
@@ -47,7 +47,7 @@ function configureRuntime() {
 
 async function load(device: 'webgpu' | 'wasm', dtype: 'q4f16' | 'q4') {
   configureRuntime();
-  const loaded = await pipeline('text-generation', LOCAL_MODEL_ID, {
+  const loaded = await pipeline('text-generation', activeLocalModelId(), {
     device,
     dtype,
     progress_callback: (info: ProgressInfo) => {

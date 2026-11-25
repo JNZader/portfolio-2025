@@ -1,0 +1,141 @@
+name: Retrain chat model
+
+# Runs on main of this repository only. Fork jobs are not a trigger.
+# The GPU job stays on Javier's runner (self-hosted, linux, gpu).
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'lib/data/**'
+      - 'lib/qa/chunk.ts'
+      - 'lib/qa/snapshot.ts'
+      - 'lib/qa/retrieve.ts'
+      - 'lib/qa/prompt.ts'
+      - 'lib/qa/text.ts'
+      - 'lib/qa/types.ts'
+      - 'lib/qa/path.ts'
+      - 'lib/qa/local/prepare.ts'
+      - 'lib/seo/locale-url.ts'
+  workflow_dispatch:
+    inputs:
+      min_useful:
+        description: Puntaje útil mínimo sobre las 12 preguntas fijas
+        required: false
+        default: '8'
+
+concurrency:
+  group: retrain-portfolio-chat
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  retrain:
+    if: github.repository == 'JNZader/portfolio-2025' && github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, linux, gpu]
+    timeout-minutes: 360
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - uses: astral-sh/setup-uv@v10.4.0
+
+      - name: Ver la GPU
+        run: nvidia-smi
+
+      - name: Limpiar una corrida anterior
+        run: rm -rf ml/data ml/vendor
+
+      - name: Instalar Node y el entorno de entrenamiento
+        run: |
+          npm install -g npm@11
+          npm ci
+          uv python install 3.12
+          uv sync --directory ml --frozen --extra test --extra train --extra publish --extra export
+
+      - name: Corpus
+        run: uv run --directory ml python -m portfolio_ft.corpus
+
+      - name: Dataset
+        run: uv run --directory ml python -m portfolio_ft.dataset
+
+      - name: Entrenar LoRA
+        run: uv run --directory ml python -m portfolio_ft.train_lora
+
+      - name: Evaluar
+        run: uv run --directory ml python -m portfolio_ft.evaluate
+
+      - name: Gate, exportar y publicar
+        env:
+          FT_MIN_USEFUL: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.min_useful || '8' }}
+        run: uv run --directory ml python -m portfolio_ft.pipeline
+
+      - name: Subir el reporte
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: chat-eval-report
+          path: ml/data/eval-report.json
+          retention-days: 14
+
+      - name: Rama con la revisión nueva
+        if: success()
+        run: |
+          set -euo pipefail
+          REVISION=$(tr -d '[:space:]' < ml/data/revision.txt)
+          BRANCH="bot/chat-model-${REVISION}"
+          git checkout -B "$BRANCH"
+          uv run --directory ml python -m portfolio_ft.bump --revision "$REVISION"
+          npx biome check --write lib/qa/local/small-model.json
+          git add lib/qa/local/small-model.json
+          git -c user.name='Javier Zader' -c user.email='127463636+JNZader@users.noreply.github.com' \
+            commit -m "chore(qa): apunta el modelo chico a ${REVISION}"
+          git push -u origin "$BRANCH"
+          echo "REVISION=${REVISION}" >> "$GITHUB_ENV"
+
+      - name: Abrir el pull request
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const revision = process.env.REVISION;
+            const head = `bot/chat-model-${revision}`;
+            const existing = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.repo.owner}:${head}`,
+              state: 'open',
+            });
+            if (existing.data.length) {
+              core.info(existing.data[0].html_url);
+              return;
+            }
+            const report = JSON.parse(fs.readFileSync('ml/data/eval-report.json', 'utf8'));
+            const body = [
+              '## Modelo chico',
+              '',
+              `Revisión \`${revision}\` de \`${report.repoId}\`.`,
+              '',
+              `Útil ${report.fixed.useful}/${report.fixed.total}. Inventadas ${report.fixed.invented}.`,
+              '',
+              'El chat del sitio sigue en LFM3. Este PR solo actualiza `lib/qa/local/small-model.json`.',
+            ].join('\n');
+            const pr = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `chore(qa): modelo chico ${revision}`,
+              head,
+              base: 'main',
+              body,
+            });
+            core.info(pr.data.html_url);
