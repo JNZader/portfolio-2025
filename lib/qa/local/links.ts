@@ -17,6 +17,31 @@ function normalizeRef(value: string): string {
   return trimmed;
 }
 
+/** Schemes that must never survive, including ones a partial denylist would miss. */
+const BLOCKED_SCHEME = /^(?:javascript|data|vbscript):/i;
+
+/**
+ * Only http(s) and same-site paths may become links. Anything else,
+ * including vbscript:, javascript: and data:, is dropped even if a chunk
+ * happens to contain that string.
+ */
+function compactHref(href: string): string {
+  let compact = '';
+  for (const char of href) {
+    const code = char.charCodeAt(0);
+    if (code <= 31 || code === 127 || /\s/u.test(char)) continue;
+    compact += char;
+  }
+  return compact;
+}
+
+function isNavigableHref(href: string): boolean {
+  const compact = compactHref(href);
+  if (!compact || BLOCKED_SCHEME.test(compact)) return false;
+  if (compact.startsWith('/') && !compact.startsWith('//')) return true;
+  return /^https?:\/\//i.test(compact);
+}
+
 function boundedIncludes(blob: string, needle: string): boolean {
   if (!needle) return false;
   let from = 0;
@@ -32,7 +57,7 @@ function boundedIncludes(blob: string, needle: string): boolean {
 
 export function isGroundedHref(href: string, chunks: readonly GroundedSource[]): boolean {
   const norm = normalizeRef(href);
-  if (!norm || norm.startsWith('javascript:') || norm.startsWith('data:')) return false;
+  if (!isNavigableHref(norm)) return false;
   for (const chunk of chunks) {
     if (normalizeRef(chunk.href) === norm) return true;
     const blob = [chunk.text, chunk.citation, chunk.title, chunk.heading ?? ''].join('\n');

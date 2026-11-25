@@ -59,13 +59,21 @@ describe('filterUngroundedLinks', () => {
     expect(filtered).not.toContain('/secret');
   });
 
-  it('strips javascript and protocol-relative links to their labels', () => {
+  it('strips javascript, vbscript and protocol-relative links to their labels', () => {
     const filtered = filterUngroundedLinks(
-      'No [click](javascript:alert(1)) ni [ext](//evil.example/a).',
+      'No [click](javascript:alert(1)) ni [vb](vbscript:msgbox(1)) ni [ext](//evil.example/a).',
       chunks
     );
 
-    expect(filtered).toBe('No click ni ext.');
+    expect(filtered).toBe('No click ni vb ni ext.');
+    expect(isGroundedHref('JaVaScRiPt:alert(1)', chunks)).toBe(false);
+    expect(isGroundedHref('java\nscript:alert(1)', chunks)).toBe(false);
+    expect(isGroundedHref('vbscript:msgbox(1)', chunks)).toBe(false);
+    expect(
+      isGroundedHref('vbscript:msgbox(1)', [
+        { ...chunks[0], text: 'quoted vbscript:msgbox(1) in a source' },
+      ])
+    ).toBe(false);
   });
 
   it('accepts a trailing slash as the same source path', () => {
