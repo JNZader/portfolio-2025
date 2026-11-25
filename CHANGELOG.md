@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.37.0](https://github.com/JNZader/portfolio-2025/compare/v2.36.7...v2.37.0) (2026-11-25)
+
+### Features
+
+* **qa:** modo local en el navegador con LFM3-1.7B ([#329](https://github.com/JNZader/portfolio-2025/issues/329)) ([f2cdf46](https://github.com/JNZader/portfolio-2025/commits/f2cdf46602e979ab2fe759803074c33cbe0a29ac))
+
 ## [2.36.7](https://github.com/JNZader/portfolio-2025/compare/v2.36.6...v2.36.7) (2026-11-23)
 
 ## [2.36.6](https://github.com/JNZader/portfolio-2025/compare/v2.36.5...v2.36.6) (2026-11-20)
