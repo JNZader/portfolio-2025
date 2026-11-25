@@ -21,6 +21,7 @@ Next.js 16 (App Router), React 19 con React Compiler, TypeScript estricto, bilin
 - [Stack Tecnológico](#-stack-tecnológico)
 - [Setup y Desarrollo](#-setup-y-desarrollo)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
+- [Modo local del chat](#modo-local-del-chat-beta)
 - [Testing](#-testing)
 - [Deployment](#-deployment)
 - [Licencia](#-licencia)
@@ -41,6 +42,7 @@ Next.js 16 (App Router), React 19 con React Compiler, TypeScript estricto, bilin
 | **Accesibilidad** | WCAG 2.1 AA: skip links, focus trap, navegación por teclado, contraste de color |
 | **Performance** | React Server Components + React Compiler, ISR, code splitting, bundle analysis |
 | **Seguridad** | Rate limiting en API routes, sanitización de inputs, CSRF con tokens, security headers |
+| **Chat publicado** | Q&A con recuperación BM25 y Gemini. Modo local opt-in: LFM3-1.7B en el navegador |
 | **Testing** | Pirámide completa: Vitest (unit/integration), Playwright (E2E multi-browser + visual + a11y con axe-core) |
 | **Calidad / CI** | Biome, Husky, Commitlint, 6 workflows de GitHub Actions (CI, tests, E2E, Lighthouse, security, release) |
 
@@ -415,6 +417,34 @@ portfolio/
 └── package.json                # Dependencies y scripts
 ```
 
+## Modo local del chat (beta)
+
+El chat «Preguntame» responde, por defecto, en el servidor: recuperación lexical BM25 (top 4, umbral 0.25 sobre los tokens de la pregunta) y Gemini. El interruptor **Modo local (beta)** arranca apagado. Al encenderlo, el navegador comprueba WebGPU y, si los pesos no están en la caché, pide confirmación antes de descargar `onnx-community/LFM3-1.7B-ONNX`.
+
+La variante por defecto es **q4f16** (~1 GB de pesos; el modelo ocupa cerca de 1 GB en memoria). Queda en la Cache API del navegador (`transformers-cache`) y no se vuelve a bajar. La pregunta no se envía al servidor mientras el modo local está activo. Los tokens se van mostrando a medida que el modelo los genera.
+
+Si la carga o la generación fallan, el chat vuelve solo al camino de Gemini y lo avisa.
+
+### Cómo responde
+
+Usa el mismo corpus publicado, el mismo ranking y el mismo system prompt que Gemini: solo fuentes recuperadas, saludo enlatado, y negativa cuando no hay un fragmento relevante. No inventa URLs. Después de generar, se descartan los enlaces que no están en los fragmentos. Thinking apagado (`enable_thinking: false`), temperature 0.2, máximo 320 tokens nuevos.
+
+### Navegador
+
+Chrome o Edge de escritorio con WebGPU y la feature `shader-f16` es el camino previsto. Si hay WebGPU pero no f16, se usa la cuantización **q4** (~1.2 GB) en la GPU. Si no hay WebGPU, WASM de un solo hilo con q4 solo se intenta cuando el navegador no reporta menos de 8 GB (`deviceMemory`); si reporta poca memoria, no se descarga nada y se sigue con Gemini. No se activan hilos WASM: haría falta COOP/COEP en todo el sitio, y eso rompe Giscus y Vercel Analytics.
+
+Hace falta RAM libre para los pesos más las activaciones. No hace falta cuenta ni clave.
+
+### Motor
+
+[Transformers.js](https://huggingface.co/docs/transformers.js) 4.3.2, en un Web Worker, con el runtime de ONNX servido desde este mismo origen (`/ort/`). Ese release agregó LFM3 y es el que documenta la model card de `onnx-community/LFM3-1.7B-ONNX`. WebLLM (`mlc-ai/LFM3-1.7B-q4f16_1-MLC`) queda afuera: es otro runtime y suele querer `SharedArrayBuffer`, o sea COOP y COEP globales.
+
+La CSP solo suma `wasm-unsafe-eval`, `worker-src 'self' blob:` y los hosts de Hugging Face / Xet (`huggingface.co`, `*.hf.co`, `*.huggingface.co`). El código del modelo se carga recién cuando se activa el modo. El build de producción sube el heap de Node a 4 GB porque webpack compila ese chunk aparte del bundle de la página.
+
+### Licencia del modelo
+
+Los pesos de LFM3-1.7B se publican bajo la **LFM Open License 1.0** (Liquid AI). No es la licencia MIT de este repositorio. El sitio no redistribuye los pesos: el navegador los baja de Hugging Face.
+
 ## 🧪 Testing
 
 ### Unit e Integration Tests
@@ -489,6 +519,8 @@ Asegúrate de configurar todas las variables de `.env.local` en tu plataforma de
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia **MIT**. Ver el archivo [LICENSE](LICENSE) para más detalles.
+
+El modelo del modo local (LFM3-1.7B) se publica bajo la **LFM Open License 1.0**, no bajo MIT. Ver [Modo local del chat](#modo-local-del-chat-beta).
 
 ## 🙏 Créditos
 

@@ -69,6 +69,9 @@ next-env.d.ts
 !.vscode/settings.json
 !.vscode/extensions.json
 
+# ONNX Runtime wasm copied from node_modules at dev/build time (local QA mode)
+/public/ort/
+
 # Sanity
 sanity/dist
 

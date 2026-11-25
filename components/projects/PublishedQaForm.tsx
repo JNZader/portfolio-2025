@@ -8,6 +8,9 @@ import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, type ReactNode, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { mergeQaLog, type QaLogRef } from '@/lib/qa/local/log';
+import { priorQueryFromHistory } from '@/lib/qa/local/prepare';
+import { useLocalQa } from '@/lib/qa/local/use-local-qa';
 import { QA_GREETING, QA_NO_EVIDENCE, QA_UNAVAILABLE } from '@/lib/qa/retrieve';
 
 /**
@@ -132,6 +135,13 @@ function inlineCopy(text: string): ReactNode {
   return nodes;
 }
 
+function messageText(parts: readonly { type: string; text?: string }[]): string {
+  return parts
+    .filter((part) => part.type === 'text' && typeof part.text === 'string')
+    .map((part) => part.text ?? '')
+    .join('');
+}
+
 function assistantCopy(
   text: string,
   refusedLabel: string,
@@ -205,6 +215,78 @@ function assistantCopy(
   return blocks;
 }
 
+function RemoteMessage({
+  message,
+  refusedLabel,
+  helloLabel,
+  unavailableLabel,
+  sourcesLabel,
+}: {
+  message: {
+    id: string;
+    role: string;
+    parts: Array<{ type: string; text?: string; data?: unknown }>;
+  };
+  refusedLabel: string;
+  helloLabel: string;
+  unavailableLabel: string;
+  sourcesLabel: string;
+}) {
+  const cited = message.role === 'assistant' ? sourcesFromParts(message.parts) : [];
+  return (
+    <div
+      className={
+        message.role === 'user'
+          ? 'ml-8 rounded-md bg-primary/10 px-3 py-2 text-sm leading-relaxed text-foreground'
+          : 'mr-8 rounded-md bg-muted px-3 py-2 text-sm leading-relaxed text-foreground'
+      }
+    >
+      {message.role === 'assistant' ? (
+        <p className="text-display text-xs text-primary">JZ</p>
+      ) : null}
+      {message.parts.map((part) => {
+        if (part.type !== 'text' || typeof part.text !== 'string') return null;
+        if (message.role === 'assistant') {
+          return (
+            <div key={`${message.id}-assistant-${part.text}`}>
+              {assistantCopy(part.text, refusedLabel, helloLabel, unavailableLabel)}
+            </div>
+          );
+        }
+        return (
+          <p
+            key={`${message.id}-user-${part.text}`}
+            className="whitespace-pre-wrap leading-relaxed"
+          >
+            {part.text}
+          </p>
+        );
+      })}
+      {cited.length > 0 ? (
+        <div className="mt-2 border-t border-border pt-2">
+          <p className="text-xs text-muted-foreground">{sourcesLabel}</p>
+          <ul className="mt-1 list-disc space-y-1 pl-5">
+            {cited.map((source) => {
+              const href = safeHref(source.href);
+              return (
+                <li key={`${source.href}:${source.citation}`}>
+                  {href ? (
+                    <a href={href} className="text-primary underline underline-offset-2">
+                      {source.citation}
+                    </a>
+                  ) : (
+                    source.citation
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export function PublishedQaForm() {
   const t = useTranslations('PublishedQa');
   const locale = useLocale();
@@ -213,6 +295,8 @@ export function PublishedQaForm() {
   const [input, setInput] = useState('');
   const requestRef = useRef({ locale, path: pathname });
   const logRef = useRef<HTMLDivElement>(null);
+  const orderRef = useRef<QaLogRef[]>([]);
+  const local = useLocalQa();
   requestRef.current = { locale, path: pathname };
   const [transport] = useState(
     () =>
@@ -232,7 +316,32 @@ export function PublishedQaForm() {
       })
   );
   const { messages, sendMessage, status, error } = useChat({ transport });
-  const pending = status === 'submitted' || status === 'streaming';
+  const remotePending = status === 'submitted' || status === 'streaming';
+  const pending = remotePending || local.pending;
+  const order = mergeQaLog(
+    orderRef.current,
+    messages.map((message) => message.id),
+    local.turns.map((turn) => turn.id)
+  );
+  orderRef.current = order;
+  const history = order.flatMap((item) => {
+    if (item.origin === 'local') {
+      const turn = local.turns.find((entry) => entry.id === item.id);
+      return turn ? [{ role: turn.role, text: turn.text }] : [];
+    }
+    const message = messages.find((entry) => entry.id === item.id);
+    if (!message) return [];
+    return [{ role: message.role, text: messageText(message.parts) }];
+  });
+  const latest = order.at(-1);
+  const latestLocal =
+    latest?.origin === 'local' ? local.turns.find((turn) => turn.id === latest.id) : undefined;
+  const waitingForLocalTokens =
+    local.pending && (latestLocal?.role !== 'assistant' || latestLocal.text.length === 0);
+  const showWriting = remotePending || waitingForLocalTokens;
+  const transcriptSize =
+    messages.reduce((total, message) => total + messageText(message.parts).length, 0) +
+    local.turns.reduce((total, turn) => total + turn.text.length, 0);
 
   useEffect(() => {
     if (!open) return;
@@ -246,16 +355,31 @@ export function PublishedQaForm() {
   useEffect(() => {
     const log = logRef.current;
     if (!log) return;
-    if (messages.length === 0 && !pending) return;
+    if (transcriptSize === 0 && !pending) return;
     log.scrollTop = log.scrollHeight;
-  }, [messages, pending]);
+  }, [transcriptSize, pending]);
+
+  async function submitText(text: string) {
+    const trimmed = text.trim();
+    if (!trimmed || pending) return;
+    setInput('');
+    // Cloud path stays synchronous so the existing transport receives the turn
+    // before the handler yields. Local mode is the only await.
+    if (local.session.phase !== 'ready') {
+      sendMessage({ text: trimmed });
+      return;
+    }
+    const outcome = await local.ask(trimmed, {
+      locale,
+      path: pathname,
+      priorQuery: priorQueryFromHistory(history),
+    });
+    if (outcome === 'fallback') sendMessage({ text: trimmed });
+  }
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const trimmed = input.trim();
-    if (!trimmed || pending) return;
-    sendMessage({ text: trimmed });
-    setInput('');
+    void submitText(input);
   }
 
   return (
@@ -288,7 +412,7 @@ export function PublishedQaForm() {
             aria-live="polite"
             aria-relevant="additions"
           >
-            {messages.length === 0 && !pending ? (
+            {order.length === 0 && !pending ? (
               <div className="flex flex-col gap-2">
                 {SUGGESTION_KEYS.map((key) => (
                   <Button
@@ -296,74 +420,140 @@ export function PublishedQaForm() {
                     type="button"
                     variant="outline"
                     className="h-11 justify-start whitespace-normal text-left"
-                    onClick={() => sendMessage({ text: t(key) })}
+                    onClick={() => void submitText(t(key))}
                   >
                     {t(key)}
                   </Button>
                 ))}
               </div>
             ) : null}
-            {messages.map((message) => {
-              const cited = message.role === 'assistant' ? sourcesFromParts(message.parts) : [];
-              return (
-                <div
-                  key={message.id}
-                  className={
-                    message.role === 'user'
-                      ? 'ml-8 rounded-md bg-primary/10 px-3 py-2 text-sm leading-relaxed text-foreground'
-                      : 'mr-8 rounded-md bg-muted px-3 py-2 text-sm leading-relaxed text-foreground'
-                  }
-                >
-                  {message.role === 'assistant' ? (
-                    <p className="text-display text-xs text-primary">JZ</p>
-                  ) : null}
-                  {message.parts.map((part) => {
-                    if (part.type !== 'text') return null;
-                    if (message.role === 'assistant') {
-                      return (
-                        <div key={`${message.id}-assistant-${part.text}`}>
-                          {assistantCopy(part.text, t('refused'), t('hello'), t('unavailable'))}
-                        </div>
-                      );
+            {order.map((item) => {
+              if (item.origin === 'local') {
+                const turn = local.turns.find((entry) => entry.id === item.id);
+                if (!turn || (turn.role === 'assistant' && turn.text.length === 0)) return null;
+                return (
+                  <div
+                    key={`local-${turn.id}`}
+                    className={
+                      turn.role === 'user'
+                        ? 'ml-8 rounded-md bg-primary/10 px-3 py-2 text-sm leading-relaxed text-foreground'
+                        : 'mr-8 rounded-md bg-muted px-3 py-2 text-sm leading-relaxed text-foreground'
                     }
-                    return (
-                      <p
-                        key={`${message.id}-user-${part.text}`}
-                        className="whitespace-pre-wrap leading-relaxed"
-                      >
-                        {part.text}
-                      </p>
-                    );
-                  })}
-                  {cited.length > 0 ? (
-                    <div className="mt-2 border-t border-border pt-2">
-                      <p className="text-xs text-muted-foreground">{t('sources')}</p>
-                      <ul className="mt-1 list-disc space-y-1 pl-5">
-                        {cited.map((source) => {
-                          const href = safeHref(source.href);
-                          return (
-                            <li key={`${source.href}:${source.citation}`}>
-                              {href ? (
-                                <a
-                                  href={href}
-                                  className="text-primary underline underline-offset-2"
-                                >
-                                  {source.citation}
-                                </a>
-                              ) : (
-                                source.citation
-                              )}
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  ) : null}
-                </div>
+                  >
+                    {turn.role === 'assistant' ? (
+                      <p className="text-display text-xs text-primary">JZ</p>
+                    ) : null}
+                    {turn.role === 'assistant' ? (
+                      <div>
+                        {assistantCopy(turn.text, t('refused'), t('hello'), t('unavailable'))}
+                      </div>
+                    ) : (
+                      <p className="whitespace-pre-wrap leading-relaxed">{turn.text}</p>
+                    )}
+                    {turn.sources.length > 0 ? (
+                      <div className="mt-2 border-t border-border pt-2">
+                        <p className="text-xs text-muted-foreground">{t('sources')}</p>
+                        <ul className="mt-1 list-disc space-y-1 pl-5">
+                          {turn.sources.map((source) => {
+                            const href = safeHref(source.href);
+                            return (
+                              <li key={`${source.href}:${source.citation}`}>
+                                {href ? (
+                                  <a
+                                    href={href}
+                                    className="text-primary underline underline-offset-2"
+                                  >
+                                    {source.citation}
+                                  </a>
+                                ) : (
+                                  source.citation
+                                )}
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              }
+              const message = messages.find((entry) => entry.id === item.id);
+              if (!message) return null;
+              return (
+                <RemoteMessage
+                  key={`remote-${message.id}`}
+                  message={message}
+                  refusedLabel={t('refused')}
+                  helloLabel={t('hello')}
+                  unavailableLabel={t('unavailable')}
+                  sourcesLabel={t('sources')}
+                />
               );
             })}
-            {pending ? (
+            {showWriting ? (
               <p className="text-sm leading-relaxed text-muted-foreground">{t('writing')}</p>
+            ) : null}
+          </div>
+          <div className="border-t border-border px-3 py-2">
+            <div className="flex items-center justify-between gap-3">
+              <label htmlFor="published-qa-local" className="text-sm text-foreground">
+                {t('localToggle')}
+              </label>
+              <input
+                id="published-qa-local"
+                type="checkbox"
+                role="switch"
+                aria-checked={local.switchOn}
+                checked={local.switchOn}
+                disabled={local.session.phase === 'probing' || local.session.phase === 'loading'}
+                onChange={() => local.toggle()}
+                className="size-4 accent-primary"
+              />
+            </div>
+            {local.session.phase === 'probing' ? (
+              <p className="mt-2 text-sm text-muted-foreground">{t('localChecking')}</p>
+            ) : null}
+            {local.session.phase === 'confirm' ? (
+              <fieldset className="mt-2 flex min-w-0 flex-col gap-2 border-0 p-0">
+                <legend
+                  id="published-qa-local-confirm"
+                  className="text-sm font-medium text-foreground"
+                >
+                  {t('localConfirmTitle')}
+                </legend>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {t('localConfirmBody', { size: local.session.downloadLabel ?? '~1 GB' })}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <Button type="button" onClick={() => local.confirm()}>
+                    {t('localConfirm')}
+                  </Button>
+                  <Button type="button" variant="outline" onClick={() => local.cancel()}>
+                    {t('localCancel')}
+                  </Button>
+                </div>
+              </fieldset>
+            ) : null}
+            {local.session.phase === 'loading' ? (
+              <div className="mt-2 flex flex-col gap-2">
+                <p className="text-sm text-muted-foreground" role="status">
+                  {t(local.session.cached ? 'localCached' : 'localProgress', {
+                    percent: local.session.progress,
+                  })}
+                </p>
+                <progress className="w-full" max={100} value={local.session.progress} />
+                <Button type="button" variant="outline" onClick={() => local.cancel()}>
+                  {t('localCancel')}
+                </Button>
+              </div>
+            ) : null}
+            {local.session.phase === 'ready' ? (
+              <p className="mt-2 text-sm text-muted-foreground">{t('localReady')}</p>
+            ) : null}
+            {local.notice ? (
+              <p className="mt-2 text-sm text-muted-foreground" role="status">
+                {local.notice === 'unsupported' ? t('localUnsupported') : t('localFallback')}
+              </p>
             ) : null}
           </div>
           <form onSubmit={onSubmit} className="border-t border-border p-3">
