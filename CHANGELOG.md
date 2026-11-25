@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.38.0](https://github.com/JNZader/portfolio-2025/compare/v2.37.0...v2.38.0) (2026-11-25)
+
+### Features
+
+* **qa:** pipeline de fine-tune del modelo chico ([#330](https://github.com/JNZader/portfolio-2025/issues/330)) ([574e1aa](https://github.com/JNZader/portfolio-2025/commits/574e1aa365610a942150c858b374c2de7626ed77))
+
 ## [2.37.0](https://github.com/JNZader/portfolio-2025/compare/v2.36.7...v2.37.0) (2026-11-25)
 
 ### Features
