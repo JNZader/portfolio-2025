@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build --webpack",
+    "build": "prisma generate && NODE_OPTIONS=--max-old-space-size=4096 next build --webpack",
     "start": "next start",
     "analyze": "cross-env ANALYZE=true npm run build",
     "check": "biome check .",
@@ -42,6 +42,7 @@
     "@ai-sdk/react": "^4.0.180",
     "@giscus/react": "^3.1.0",
     "@hookform/resolvers": "^7.0.7",
+    "@huggingface/transformers": "^4.3.2",
     "@next/third-parties": "^16.4.6",
     "@portabletext/react": "^8.0.1",
     "@prisma/adapter-pg": "^7.10.1",

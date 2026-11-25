@@ -7,6 +7,14 @@ import { QA_GREETING, QA_NO_EVIDENCE } from '@/lib/qa/retrieve';
 import enMessages from '@/messages/en.json';
 import esMessages from '@/messages/es.json';
 
+const localEngine = vi.hoisted(() => ({
+  probe: vi.fn(),
+  cached: vi.fn(),
+  load: vi.fn(),
+  generate: vi.fn(),
+  dispose: vi.fn(),
+}));
+
 const chat = vi.hoisted(() => ({
   messages: [] as Array<{
     id: string;
@@ -37,6 +45,19 @@ vi.mock('@ai-sdk/react', () => ({
     sendMessage: chat.sendMessage,
     error: chat.error,
     status: chat.status,
+  }),
+}));
+
+vi.mock('@/lib/qa/local/capabilities', () => ({
+  probeLocalBackend: () => localEngine.probe(),
+  isModelCached: (dtype: string) => localEngine.cached(dtype),
+}));
+
+vi.mock('@/lib/qa/local/engine', () => ({
+  createLocalEngine: () => ({
+    load: (options: { onProgress: (progress: number) => void }) => localEngine.load(options),
+    generate: (options: { onToken: (text: string) => void }) => localEngine.generate(options),
+    dispose: () => localEngine.dispose(),
   }),
 }));
 
@@ -81,6 +102,22 @@ beforeEach(() => {
   chat.error = undefined;
   chat.status = 'ready';
   chat.transportOptions = undefined;
+  localEngine.probe.mockReset().mockResolvedValue({
+    supported: true,
+    device: 'webgpu',
+    dtype: 'q4f16',
+    downloadLabel: '~1 GB',
+  });
+  localEngine.cached.mockReset().mockResolvedValue(false);
+  localEngine.load.mockReset().mockImplementation(async ({ onProgress }) => {
+    onProgress(100);
+  });
+  localEngine.generate.mockReset().mockImplementation(async ({ onToken }) => {
+    onToken('Técnico ');
+    onToken('en [CV](/cv)');
+    return 'Técnico en [CV](/cv) y [phish](https://evil.example/x)';
+  });
+  localEngine.dispose.mockReset();
 });
 
 describe('PublishedQaForm catalogues', () => {
@@ -98,6 +135,7 @@ describe('PublishedQaForm catalogues', () => {
     expect(screen.getByRole('dialog', { name: 'Preguntame' })).toBeVisible();
     expect(screen.getByRole('textbox', { name: 'Pregunta' })).toBeVisible();
     expect(screen.getByRole('button', { name: 'Enviar' })).toBeVisible();
+    expect(screen.getByRole('switch', { name: 'Modo local (beta)' })).not.toBeChecked();
     expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
   });
 
@@ -107,7 +145,86 @@ describe('PublishedQaForm catalogues', () => {
     expect(screen.getByRole('dialog', { name: 'Ask me' })).toBeVisible();
     expect(screen.getByRole('textbox', { name: 'Question' })).toBeVisible();
     expect(screen.getByRole('button', { name: 'Send' })).toBeVisible();
+    expect(screen.getByRole('switch', { name: 'Local mode (beta)' })).not.toBeChecked();
     expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
+  });
+});
+
+describe('PublishedQaForm local mode', () => {
+  it('asks for confirmation and does not download until the visitor accepts', async () => {
+    const user = await openPanel('es');
+
+    await user.click(screen.getByRole('switch', { name: 'Modo local (beta)' }));
+
+    expect(await screen.findByRole('group', { name: 'Descargar el modelo local' })).toBeVisible();
+    expect(screen.getByText(/~1 GB/)).toBeVisible();
+    expect(localEngine.load).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole('button', { name: 'Ahora no' }));
+
+    expect(screen.queryByRole('group', { name: 'Descargar el modelo local' })).not.toBeInTheDocument();
+    expect(screen.getByRole('switch', { name: 'Modo local (beta)' })).not.toBeChecked();
+    expect(localEngine.load).not.toHaveBeenCalled();
+  });
+
+  it('loads from cache without asking to download again', async () => {
+    localEngine.cached.mockResolvedValue(true);
+    const user = await openPanel('es');
+
+    await user.click(screen.getByRole('switch', { name: 'Modo local (beta)' }));
+
+    expect(await screen.findByText('Modo local activo.')).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Descargar y activar' })).not.toBeInTheDocument();
+    expect(localEngine.load).toHaveBeenCalledOnce();
+  });
+
+  it('streams a grounded answer and strips links that are not in the sources', async () => {
+    const user = await openPanel('es');
+
+    await user.click(screen.getByRole('switch', { name: 'Modo local (beta)' }));
+    await user.click(await screen.findByRole('button', { name: 'Descargar y activar' }));
+    expect(await screen.findByText('Modo local activo.')).toBeVisible();
+
+    await user.type(screen.getByRole('textbox', { name: 'Pregunta' }), 'qué título tenés');
+    await user.click(screen.getByRole('button', { name: 'Enviar' }));
+
+    expect(await screen.findByRole('link', { name: 'CV' })).toHaveAttribute('href', '/cv');
+    expect(screen.queryByRole('link', { name: 'phish' })).not.toBeInTheDocument();
+    expect(screen.queryByText(/evil\.example/)).not.toBeInTheDocument();
+    expect(chat.sendMessage).not.toHaveBeenCalled();
+  });
+
+  it('falls back to the Gemini transport when local generation fails', async () => {
+    localEngine.generate.mockRejectedValue(new Error('oom'));
+    const user = await openPanel('es');
+
+    await user.click(screen.getByRole('switch', { name: 'Modo local (beta)' }));
+    await user.click(await screen.findByRole('button', { name: 'Descargar y activar' }));
+    expect(await screen.findByText('Modo local activo.')).toBeVisible();
+
+    await user.type(screen.getByRole('textbox', { name: 'Pregunta' }), 'qué título tenés');
+    await user.click(screen.getByRole('button', { name: 'Enviar' }));
+
+    expect(
+      await screen.findByText('El modo local falló. Sigo con el servicio en la nube.')
+    ).toBeVisible();
+    expect(chat.sendMessage).toHaveBeenCalledWith({ text: 'qué título tenés' });
+    expect(screen.getByRole('switch', { name: 'Modo local (beta)' })).not.toBeChecked();
+  });
+
+  it('keeps Gemini when the browser cannot run the model', async () => {
+    localEngine.probe.mockResolvedValue({ supported: false });
+    const user = await openPanel('es');
+
+    await user.click(screen.getByRole('switch', { name: 'Modo local (beta)' }));
+
+    expect(
+      await screen.findByText(
+        'Este navegador no puede ejecutar el modelo en local. Sigo con el servicio en la nube.'
+      )
+    ).toBeVisible();
+    expect(screen.getByRole('switch', { name: 'Modo local (beta)' })).not.toBeChecked();
+    expect(localEngine.load).not.toHaveBeenCalled();
   });
 });
 

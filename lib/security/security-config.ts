@@ -56,6 +56,11 @@ export const CSP_ALLOWED_DOMAINS = {
     'https://va.vercel-scripts.com',
     'https://www.google-analytics.com',
     'https://analytics.google.com',
+    // Modo local: Hub + Xet CDN. La política que se envía está en lib/security/csp.ts.
+    'https://huggingface.co',
+    'https://hf.co',
+    'https://*.huggingface.co',
+    'https://*.hf.co',
   ],
   frames: ['https://giscus.app'],
 };
