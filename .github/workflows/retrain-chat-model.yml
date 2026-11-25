@@ -47,7 +47,7 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - uses: astral-sh/setup-uv@v8
+      - uses: astral-sh/setup-uv@v10.4.0
 
       - name: Ver la GPU
         run: nvidia-smi

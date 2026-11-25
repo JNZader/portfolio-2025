@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: astral-sh/setup-uv@v8
+      - uses: astral-sh/setup-uv@v10.4.0
 
       - name: Probar el armado del dataset y el puntaje
         working-directory: ml
