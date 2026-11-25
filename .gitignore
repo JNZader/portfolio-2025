@@ -82,5 +82,13 @@ sanity/dist
 # Husky
 .husky/_
 /lib/generated/prisma
+
+# Fine-tune pipeline (corpus, weights, ONNX, exporter checkout)
+/ml/.venv/
+/ml/data/
+/ml/vendor/
+/ml/**/__pycache__/
+/ml/.pytest_cache/
+/ml/**/*.egg-info/
 /tests/manual/csrf-test.html
 /lighthouse-mobile-after.json

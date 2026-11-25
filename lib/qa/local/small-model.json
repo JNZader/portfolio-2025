@@ -1,0 +1,7 @@
+{
+  "id": "JNZader/portfolio-chat-lfm2.5-350m-ONNX",
+  "revision": "main",
+  "dtype": "q4f16",
+  "baseModel": "LiquidAI/LFM2.5-350M",
+  "publishedAt": null
+}

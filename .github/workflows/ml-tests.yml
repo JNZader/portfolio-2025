@@ -1,0 +1,32 @@
+name: ML tests
+
+# CPU runners only. The GPU machine is not a target of this file.
+on:
+  pull_request:
+    paths:
+      - 'ml/**'
+      - '.github/workflows/ml-tests.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'ml/**'
+      - '.github/workflows/ml-tests.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v8
+
+      - name: Probar el armado del dataset y el puntaje
+        working-directory: ml
+        run: |
+          uv python install 3.12
+          uv sync --frozen --extra test
+          uv run pytest
